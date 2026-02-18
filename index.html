@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
@@ -26,14 +26,11 @@
       --rented: #5B9BD5;
       --row-h: 75px;
       --thumb-w: 110px;
-      
-      /* ตัวคูณสเกลปกติ */
-      --line-scale: 1; 
     }
 
-    /* ✅ แก้ไขสัดส่วนเฉพาะเมื่อเปิดใน LINE */
+    /* Scaling for LINE Browser */
     body.is-line {
-      zoom: 0.92; /* ย่อหน้าจอโดยรวมลงเพื่อให้เล็กเท่า Chrome */
+      zoom: 0.92;
       -moz-transform: scale(0.92);
       -moz-transform-origin: 0 0;
     }
@@ -78,7 +75,6 @@
     .hero-title { font-size: 1.8rem; font-weight: 300; margin: 0; }
     .hero-title em { font-style: normal; color: var(--gold-lt); }
     
-    /* ปุ่ม Reset ดีไซน์ Luxury */
     .btn-reset {
       background: rgba(255,255,255,0.05); border: 1px solid var(--border);
       color: var(--gold); width: 32px; height: 32px; border-radius: 50%;
@@ -93,15 +89,16 @@
       width: 100%; background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border); border-radius: 50px;
       padding: 10px 15px 10px 40px; color: var(--white);
-      font-size: 0.85rem; font-family: 'Sarabun', sans-serif; outline: none;
+      font-size: 0.85rem; font-family: 'Montserrat', sans-serif; outline: none;
     }
+    .search-input:focus { border-color: var(--gold); background: rgba(255, 255, 255, 0.1); }
     .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 0.8rem; }
 
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select {
       background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border);
       border-radius: 8px; padding: 8px; color: var(--white);
-      font-size: 0.75rem; font-family: 'Sarabun', sans-serif; outline: none;
+      font-size: 0.75rem; font-family: 'Montserrat', sans-serif; outline: none;
       appearance: none;
     }
 
@@ -111,6 +108,7 @@
       white-space: nowrap; padding: 6px 14px; border-radius: 50px;
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
       color: var(--muted); font-size: 0.65rem; font-weight: 700; cursor: pointer;
+      text-transform: uppercase;
     }
     .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
 
@@ -134,7 +132,6 @@
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     
-    /* รหัส HP-ID ตัวบาง/จาง ตามโจทย์เดิม */
     .hp-id {
       position: absolute; top: 5px; left: 7px; 
       font-size: 0.48rem; font-weight: 300; 
@@ -176,43 +173,51 @@
   <section class="hero">
     <div class="hero-title-wrap">
       <h1 class="hero-title">Prime <em>Asset</em> Catalog</h1>
-      <button class="btn-reset" onclick="resetFilters()" title="ล้างการค้นหา">↻</button>
+      <button class="btn-reset" onclick="resetFilters()" title="Reset Filters">↻</button>
     </div>
     
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="พิมพ์ชื่อทำเล, รหัส, หรือโครงการ...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Location, ID, or Project...">
       </div>
 
       <div class="filters-grid">
         <select id="areaFilter" class="filter-select">
-          <option value="">ทุกโซน</option>
-          <option value="Hua Hin">หัวหิน</option>
-          <option value="Cha-am">ชะอำ</option>
-          <option value="Pranburi">ปราณบุรี</option>
+          <option value="">All Zones</option>
+          <option value="Hua Hin">Hua Hin</option>
+          <option value="Cha-am">Cha-am</option>
+          <option value="Pranburi">Pranburi</option>
         </select>
         <select id="sortFilter" class="filter-select">
-          <option value="">เรียงลำดับราคา</option>
-          <option value="low-high">ต่ำ ไป สูง</option>
-          <option value="high-low">สูง ไป ต่ำ</option>
+          <option value="">All Prices</option>
+          <option value="low-high">Price: Low to High</option>
+          <option value="high-low">Price: High to Low</option>
         </select>
         <select id="bedFilter" class="filter-select">
-          <option value="">ห้องนอน</option>
+          <option value="">Bedrooms</option>
           <option value="1">1</option>
           <option value="2">2</option>
-          <option value="3">3+</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="10plus">10+</option>
         </select>
       </div>
 
       <div class="pill-container" id="pillBox">
-        <div class="pill active" data-f="all">ทั้งหมด</div>
-        <div class="pill" data-f="Sale">ขาย</div>
-        <div class="pill" data-f="Rent">เช่า</div>
+        <div class="pill active" data-f="all">All</div>
+        <div class="pill" data-f="Sale">Sale</div>
+        <div class="pill" data-f="Rent">Rent</div>
         <div class="pill" data-f="Available">Available</div>
         <div class="pill" data-f="Pool Villa">Pool Villa</div>
         <div class="pill" data-f="Condo">Condo</div>
-        <div class="pill" data-f="Land">ที่ดิน (Land)</div>
+        <div class="pill" data-f="Land">Land</div>
       </div>
     </div>
   </section>
@@ -230,12 +235,10 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     let rawData = [];
 
-    // ✅ ฟังก์ชันตรวจจับแอป LINE และปรับสเกลอัตโนมัติ
     function checkLineBrowser() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       if (ua.indexOf("Line") > -1) {
         document.body.classList.add('is-line');
-        console.log("LINE Browser detected: Scaling applied.");
       }
     }
 
@@ -257,7 +260,7 @@
       const grid = document.getElementById('propGrid');
       document.getElementById('unitCount').textContent = `${items.length} UNITS`;
       if(items.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">ไม่พบข้อมูล</div>';
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No results found.</div>';
         return;
       }
       grid.innerHTML = items.map(p => {
@@ -267,7 +270,7 @@
           <a href="details.html?id=${p.HP_ID}" class="card">
             <div class="card-img">
               <span class="hp-id">#${p.HP_ID}</span>
-              <img src="${p.Thumbnail_Image}" alt="prop" loading="lazy">
+              <img src="${p.Thumbnail_Image}" alt="property" loading="lazy">
             </div>
             <div class="card-info">
               <div class="info-main">
@@ -287,7 +290,6 @@
       }).join('');
     }
 
-    // ✅ Instant Search Logic (พิมพ์แล้วขึ้นทันที)
     function filterData() {
       const q = document.getElementById('searchInput').value.trim().toLowerCase();
       const area = document.getElementById('areaFilter').value;
@@ -299,7 +301,15 @@
         const text = `${p.District} ${p.HP_ID} ${p.Project_Name} ${p.Zone}`.toLowerCase();
         const matchQ = q === "" || text.includes(q);
         const matchArea = area === "" || p.District === area || p.Zone === area;
-        const matchBed = bed === "" || (bed === "3" ? parseInt(p.Bedrooms) >= 3 : p.Bedrooms == bed);
+        
+        // Bed filter logic for 10+
+        let matchBed = true;
+        if (bed !== "") {
+          const b = parseInt(p.Bedrooms) || 0;
+          if (bed === "10plus") matchBed = b >= 10;
+          else matchBed = b == parseInt(bed);
+        }
+        
         const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
         return matchQ && matchArea && matchBed && matchPill;
       });
@@ -332,7 +342,6 @@
       }
     });
 
-    // เริ่มต้นระบบ
     checkLineBrowser();
     getProperties();
   </script>
