@@ -4,40 +4,56 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Hua Hin Properties · Details</title>
-  <meta name="description" content="Hua Hin Properties · Luxury Coastal Real Estate" />
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="preconnect" href="https://lh3.googleusercontent.com">
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
+    /* ═══════════════════════════════════════════
+       HUAHIN.PROPERTIES — DETAILS (FULL)
+       Theme matches your index + adds logo palette
+    ═══════════════════════════════════════════ */
+
     :root{
-      --navy:#0B1829;
-      --navy-mid:#112238;
-      --navy-soft:#1a3350;
-      --ocean:#1B4F72;
-      --teal:#1A7A8A;
-      --sand:#F5EDD8;
-      --sand-dim:#C8B898;
-      --gold:#C9A84C;
-      --gold-lt:#E4C46A;
-      --gold-glow:rgba(201,168,76,0.15);
-      --white:#FDFAF5;
-      --muted:#7A9BB5;
-      --border:rgba(255,255,255,0.09);
-      --card-bg:rgba(11,24,41,0.92);
-      --available:#2ECC8A;
-      --reserved:#E8A020;
-      --sold:#E05555;
-      --rented:#5B9BD5;
-      --trans:0.32s cubic-bezier(0.4,0,0.2,1);
-      --px:18px;
-      --px-lg:52px;
-      --radius:8px;
+      /* Base (index-style) */
+      --navy:      #0B1829;
+      --navy-mid:  #112238;
+      --navy-soft: #1a3350;
+      --ocean:     #1B4F72;
+      --teal:      #1A7A8A;
+      --muted:     #7A9BB5;
+      --border:    rgba(255,255,255,0.09);
+      --card-bg:   rgba(11,24,41,0.92);
+
+      /* Brand palette (measured from your logo) */
+      --brand-maroon: #7F2723;
+      --brand-maroon-deep:#78241E;
+      --brand-bronze:#9D5E3F;
+      --brand-gold:#CEA86C;
+      --brand-gold-hi:#EBD18E;
+      --brand-cream:#F8F3E2;
+
+      /* Mapping */
+      --gold:      var(--brand-gold);
+      --gold-lt:   var(--brand-gold-hi);
+      --sand:      var(--brand-cream);
+      --sand-dim:  #C8B898;
+      --white:     #FDFAF5;
+
+      --available: #2ECC8A;
+      --reserved:  #E8A020;
+      --sold:      #E05555;
+      --rented:    #5B9BD5;
+
+      --trans:     0.32s cubic-bezier(0.4,0,0.2,1);
+      --px:        18px;
+      --px-lg:     52px;
+      --radius:    10px;
+      --shadow:    0 16px 48px rgba(0,0,0,0.5);
     }
 
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     body{
       background:var(--navy);
@@ -48,6 +64,7 @@
       overflow-x:hidden;
     }
 
+    /* Ocean background like index */
     body::before{
       content:'';
       position:fixed;inset:0;
@@ -60,6 +77,20 @@
       z-index:0;
     }
 
+    body::after{
+      content:'';
+      position:fixed;bottom:0;left:-50%;
+      width:200%;height:200px;
+      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(27,79,114,0.08)' d='M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
+      background-size:800px 120px;
+      animation:wave 12s linear infinite;
+      pointer-events:none;
+      z-index:0;
+      opacity:0.6;
+    }
+    @keyframes wave{from{transform:translateX(0)}to{transform:translateX(50%)}}
+
+    /* Header */
     header{
       position:fixed;top:0;left:0;right:0;z-index:300;
       height:58px;
@@ -72,219 +103,385 @@
     }
     .logo{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.05rem;font-weight:400;
+      font-size:1.1rem;font-weight:400;
       letter-spacing:0.1em;text-transform:uppercase;
-      color:var(--gold);text-decoration:none;
-      line-height:1;
+      color:var(--gold);text-decoration:none;line-height:1;
     }
     .logo span{color:var(--sand);font-style:italic;font-weight:300}
     .header-nav{display:flex;align-items:center;gap:10px}
-
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      gap:8px;
-      padding:9px 14px;
+    .btn-top{
+      padding:9px 16px;
       border-radius:2px;
-      border:1px solid rgba(201,168,76,0.35);
-      color:var(--gold);
+      border:1px solid rgba(206,168,108,.35);
       background:transparent;
+      color:var(--gold);
       font-family:'Montserrat',sans-serif;
       font-size:0.62rem;font-weight:600;
       letter-spacing:0.16em;text-transform:uppercase;
       text-decoration:none;
       transition:all var(--trans);
       white-space:nowrap;
-      cursor:pointer;
     }
-    .btn.primary{
-      border-color:transparent;
+    .btn-top:hover{background:rgba(206,168,108,.14);transform:translateY(-1px)}
+    .btn-cta{
+      padding:9px 16px;
+      border-radius:2px;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       color:var(--navy);
+      font-family:'Montserrat',sans-serif;
+      font-size:0.62rem;font-weight:700;
+      letter-spacing:0.16em;text-transform:uppercase;
+      text-decoration:none;
+      transition:all var(--trans);
+      white-space:nowrap;
+      border:1px solid rgba(206,168,108,.25);
+    }
+    .btn-cta:hover{opacity:.9;transform:translateY(-1px)}
+
+    /* Main */
+    main{
+      position:relative;z-index:1;
+      padding:78px var(--px) 80px;
+      max-width:1100px;
+      margin:0 auto;
     }
 
-    main{position:relative;z-index:1;padding:86px var(--px) 80px}
     .err{
       display:none;
-      background:rgba(224,85,85,.1);
-      border:1px solid rgba(224,85,85,.3);
-      color:#ef9090;
+      margin:0 0 14px;
       padding:12px 14px;
+      background:rgba(224,85,85,.12);
+      border:1px solid rgba(224,85,85,.35);
       border-radius:var(--radius);
-      margin-bottom:14px;
-      font-size:.88rem;
-      line-height:1.4;
+      color:#ffb1b1;
+      font-size:.9rem;
     }
 
-    .wrap{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
-    .card{
+    /* Layout */
+    .wrap{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+
+    .panel{
       background:var(--card-bg);
-      border:1px solid var(--border);
+      border:1px solid rgba(206,168,108,.22);
       border-radius:var(--radius);
       overflow:hidden;
+      box-shadow:var(--shadow);
       backdrop-filter:blur(12px);
     }
 
-    /* ===== GALLERY ===== */
-    .gallery{position:relative}
-    .g-main{
-      position:relative;width:100%;
-      aspect-ratio:16/9;background:#060F1A;overflow:hidden;
+    /* Gallery panel */
+    .gallery{
+      position:relative;
+      padding:0;
     }
-    .g-main img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.9) saturate(1.05)}
-    .g-shade{
+    .hero-media{
+      position:relative;
+      width:100%;
+      aspect-ratio:16/9;
+      background:#060F1A;
+      overflow:hidden;
+    }
+    .hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:brightness(.92) saturate(1.06);
+    }
+
+    /* Light overlay for readability (keep image visible) */
+    .hero-shade{
       position:absolute;inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(11,24,41,0.45) 75%, rgba(11,24,41,0.85) 100%);
+      background:linear-gradient(
+        to bottom,
+        rgba(11,24,41,.12) 0%,
+        rgba(11,24,41,.08) 45%,
+        rgba(11,24,41,.24) 100%
+      );
       pointer-events:none;
     }
 
-    .g-badge{
-      position:absolute;top:10px;left:10px;
-      padding:4px 10px;border-radius:2px;
+    /* Nav arrows */
+    .navBtn{
+      position:absolute;top:50%;
+      transform:translateY(-50%);
+      width:44px;height:44px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(6,15,26,.18); /* thinner */
+      backdrop-filter:blur(6px);
+      color:rgba(248,243,226,.9);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:all var(--trans);
+      user-select:none;
+    }
+    .navBtn:hover{background:rgba(6,15,26,.28);border-color:rgba(206,168,108,.35)}
+    .navBtn:active{transform:translateY(-50%) scale(.98)}
+    .navL{left:14px}
+    .navR{right:14px}
+    .navBtn svg{width:18px;height:18px}
+
+    /* Badge + Status (make thinner / less blocking) */
+    .badge{
+      position:absolute;top:12px;left:12px;
+      padding:6px 10px;
+      border-radius:2px;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       color:var(--navy);
       font-family:'Montserrat',sans-serif;
-      font-size:0.5rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+      font-size:0.56rem;
+      font-weight:800;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      box-shadow:0 10px 26px rgba(0,0,0,.25);
     }
-
-    /* status บางๆ */
-    .g-status{
-      position:absolute;top:10px;right:10px;
-      display:flex;align-items:center;gap:6px;
-      padding:4px 10px;border-radius:20px;
-      background:rgba(6,15,26,0.18);
-      border:1px solid rgba(255,255,255,0.12);
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
+    .statusPill{
+      position:absolute;top:12px;right:12px;
+      display:flex;align-items:center;gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(6,15,26,.18); /* thinner */
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(6px);
     }
-    .dot{width:6px;height:6px;border-radius:50%}
-    .d-av{background:#2ECC8A;box-shadow:0 0 8px rgba(46,204,138,0.55)}
-    .d-rs{background:#E8A020;box-shadow:0 0 8px rgba(232,160,32,0.55)}
-    .d-sd{background:#E05555;box-shadow:0 0 8px rgba(224,85,85,0.55)}
-    .d-rt{background:#5B9BD5;box-shadow:0 0 8px rgba(91,155,213,0.55)}
-    .dot-lbl{
+    .dot{width:7px;height:7px;border-radius:50%}
+    .lbl{
       font-family:'Montserrat',sans-serif;
-      font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;
-      color:rgba(245,237,216,0.92);
-    }
-
-    .g-nav{
-      position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
-      padding:0 14px;pointer-events:none;
-    }
-    .g-btn{
-      pointer-events:auto;
-      width:42px;height:42px;border-radius:50%;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(6,15,26,0.35);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-      display:flex;align-items:center;justify-content:center;
-      color:var(--sand);
-      cursor:pointer;
-    }
-
-    /* ==============================
-       จุดที่ 1: ราคา = เหลือ "ตัวเลขอย่างเดียว"
-       - เอาคำว่า Sale Price ออก
-       - เอาแถบ/กล่องบางๆออก (ทำให้เป็น transparent)
-       - เปลี่ยน font เป็นแบบอ่านง่าย (Montserrat)
-       ============================== */
-    .g-price{
-      position:absolute;
-      left:12px;bottom:12px;
-      padding:0;               /* ไม่ใช้กล่อง */
-      min-width:0;
-      background:transparent;  /* เอาแถบบางๆออก */
-      border:none;
-      backdrop-filter:none;
-      -webkit-backdrop-filter:none;
-      text-shadow:0 2px 10px rgba(0,0,0,0.55);
-    }
-    .g-price .lbl{display:none !important;} /* เอา label ออก */
-    .g-price .val{
-      font-family:'Montserrat',sans-serif; /* font ใหม่ อ่านง่าย */
-      font-size:1.35rem;
-      font-weight:600;
-      line-height:1;
-      color:#ffffff;            /* อ่านง่ายที่สุด */
-      letter-spacing:0.01em;
-    }
-
-    /* ==============================
-       จุดที่ 2: แถบจำนวนรูป = เอากล่องออก + เปลี่ยนเป็น 1/2, 2/2, 1/10...
-       - คงขนาดตัวอักษรเท่าเดิม
-       ============================== */
-    .g-count{
-      position:absolute;
-      right:12px;bottom:12px;
-      padding:0;               /* ไม่ใช้กล่อง */
-      border:none;
-      background:transparent;  /* เอา Tab บางๆออก */
-      backdrop-filter:none;
-      -webkit-backdrop-filter:none;
-      font-family:'Montserrat',sans-serif;
-      font-size:0.55rem;       /* คงไว้เท่าเดิม */
+      font-size:0.56rem;
       letter-spacing:0.12em;
       text-transform:uppercase;
-      color:rgba(245,237,216,0.95);
-      text-shadow:0 2px 10px rgba(0,0,0,0.55);
+      color:rgba(248,243,226,.92);
+      font-weight:600;
+    }
+    .d-av{background:var(--available);box-shadow:0 0 8px rgba(46,204,138,.6)}
+    .d-rs{background:var(--reserved);box-shadow:0 0 8px rgba(232,160,32,.6)}
+    .d-sd{background:var(--sold);box-shadow:0 0 8px rgba(224,85,85,.6)}
+    .d-rt{background:var(--rented);box-shadow:0 0 8px rgba(91,155,213,.6)}
+
+    /* Price (REQ: no label, no bar, just number, easy font) */
+    .priceOnly{
+      position:absolute;left:14px;bottom:14px;
+      font-family:'Montserrat',sans-serif;
+      font-weight:700;
+      font-size:1.06rem;
+      letter-spacing:.02em;
+      color:rgba(248,243,226,.96);
+      text-shadow:0 10px 22px rgba(0,0,0,.65);
+      user-select:none;
     }
 
-    .thumbs{
-      display:flex;gap:8px;padding:10px 12px 12px;overflow-x:auto;scrollbar-width:none;
-      background:rgba(6,15,26,0.25);border-top:1px solid var(--border);
+    /* Counter (REQ: no tab, no "photos", use 1/10, keep size) */
+    .counterOnly{
+      position:absolute;right:14px;bottom:14px;
+      font-family:'Montserrat',sans-serif;
+      font-weight:600;
+      font-size:0.72rem; /* similar visual size to your current */
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(248,243,226,.9);
+      text-shadow:0 10px 22px rgba(0,0,0,.65);
+      user-select:none;
     }
-    .thumbs::-webkit-scrollbar{display:none}
-    .t{
-      flex:0 0 auto;width:86px;height:56px;border-radius:8px;overflow:hidden;
-      border:1px solid rgba(255,255,255,0.12);
-      background:#060F1A;cursor:pointer;opacity:.9;transition:all var(--trans);
-    }
-    .t img{width:100%;height:100%;object-fit:cover;display:block}
-    .t.active{border-color:rgba(201,168,76,0.7);box-shadow:0 0 0 3px var(--gold-glow);opacity:1;transform:translateY(-1px)}
 
-    /* ===== RIGHT SIDE (เดิม) ===== */
-    .pad{padding:14px 16px}
-    .kicker{font-family:'Montserrat',sans-serif;font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
-    .title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;line-height:1.2;color:var(--white);margin-bottom:8px}
-    .sub{font-size:.86rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
-    .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
-    .chip{
-      padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);color:rgba(245,237,216,0.82);
-      font-family:'Montserrat',sans-serif;font-size:0.56rem;letter-spacing:0.10em;text-transform:uppercase;
+    /* Thumbnails row */
+    .thumbRow{
+      display:flex;
+      gap:10px;
+      padding:12px 12px 14px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      background:rgba(6,15,26,.25);
+      border-top:1px solid rgba(255,255,255,.07);
     }
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-    .spec{border:1px solid rgba(255,255,255,0.10);background:rgba(6,15,26,0.35);border-radius:10px;padding:10px 10px;min-height:62px}
-    .spec .s-lbl{font-family:'Montserrat',sans-serif;font-size:0.52rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);opacity:.9;margin-bottom:6px}
-    .spec .s-val{font-size:.9rem;color:rgba(245,237,216,0.92);line-height:1.2;word-break:break-word}
-    .divider{height:1px;background:linear-gradient(to right, transparent, var(--border), transparent);margin:14px 0}
-    .smallCard{padding:14px 16px}
-    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;align-items:start}
-    .k{font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(201,168,76,0.92)}
-    .v{color:rgba(245,237,216,0.9);font-size:.92rem;line-height:1.35;word-break:break-word}
-    .desc{font-size:.92rem;color:rgba(245,237,216,0.88);line-height:1.8;white-space:pre-line}
+    .thumbRow::-webkit-scrollbar{display:none}
+    .thumb{
+      width:112px;
+      aspect-ratio:16/10;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      flex-shrink:0;
+      cursor:pointer;
+      position:relative;
+      transition:transform var(--trans),border-color var(--trans),box-shadow var(--trans);
+      background:#060F1A;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.95)}
+    .thumb.active{
+      border-color:rgba(206,168,108,.55);
+      box-shadow:0 0 0 2px rgba(206,168,108,.15);
+      transform:translateY(-1px);
+    }
 
-    .contactBox .pad{padding:14px 16px}
-    .contactGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    /* Details panel */
+    .info{
+      padding:18px 16px 16px;
+    }
+    .kicker{
+      font-family:'Montserrat',sans-serif;
+      font-size:.58rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--teal);
+      margin-bottom:10px;
+      opacity:.9;
+    }
+    .title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      font-weight:300;
+      line-height:1.1;
+      color:var(--white);
+      margin-bottom:10px;
+    }
+    .loc{
+      display:flex;align-items:center;gap:10px;
+      color:rgba(122,155,181,.95);
+      font-size:.95rem;
+      margin-bottom:12px;
+    }
+    .tags{
+      display:flex;flex-wrap:wrap;gap:8px;
+      margin:10px 0 14px;
+    }
+    .tag{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(6,15,26,.22);
+      color:rgba(248,243,226,.82);
+      font-family:'Montserrat',sans-serif;
+      font-size:.58rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .gridSpecs{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    .specBox{
+      padding:14px 14px 12px;
+      border-radius:14px;
+      border:1px solid rgba(206,168,108,.18);
+      background:rgba(6,15,26,.22);
+      min-height:72px;
+    }
+    .specLbl{
+      font-family:'Montserrat',sans-serif;
+      font-size:.56rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(206,168,108,.8);
+      margin-bottom:6px;
+    }
+    .specVal{
+      font-family:'Sarabun',sans-serif;
+      font-size:1.05rem;
+      color:rgba(248,243,226,.92);
+    }
+    .specVal small{opacity:.75;font-size:.9rem}
+
+    .section{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .secTitle{
+      font-family:'Montserrat',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:rgba(206,168,108,.9);
+      margin-bottom:10px;
+    }
+    .text{
+      color:rgba(122,155,181,.95);
+      font-size:.95rem;
+      line-height:1.75;
+      white-space:pre-line;
+    }
+
+    /* Contact panel (REQ: moved down below property details) */
+    .contact{
+      padding:16px;
+    }
+    .contactGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:10px;
+    }
     .cbtn{
-      display:flex;align-items:center;justify-content:center;height:36px;border-radius:2px;
-      border:1px solid rgba(201,168,76,0.35);color:var(--gold);
-      font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;
-      text-decoration:none;transition:all var(--trans);background:rgba(6,15,26,0.35);
+      display:flex;align-items:center;justify-content:center;
+      height:46px;
+      border-radius:10px;
+      text-decoration:none;
+      font-family:'Montserrat',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      transition:all var(--trans);
+      border:1px solid rgba(206,168,108,.22);
+      background:rgba(6,15,26,.18);
+      color:rgba(248,243,226,.9);
+      backdrop-filter:blur(10px);
     }
-    .cbtn.primary{border-color:transparent;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-weight:700}
-    .note{margin-top:10px;font-size:.84rem;color:var(--muted);line-height:1.55}
+    .cbtn:hover{transform:translateY(-1px);border-color:rgba(206,168,108,.45);background:rgba(206,168,108,.10)}
+    .cbtn.primary{
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      color:var(--navy);
+      border-color:rgba(206,168,108,.22);
+      font-weight:700;
+    }
+    .contactNote{
+      margin-top:10px;
+      font-size:.85rem;
+      color:rgba(122,155,181,.9);
+      line-height:1.6;
+    }
 
-    @media (min-width:900px){
-      header{padding:0 var(--px-lg)}
-      main{padding:92px var(--px-lg) 96px}
-      .wrap{grid-template-columns:1.2fr 0.8fr;gap:16px}
+    /* Map button */
+    .mapRow{
+      display:flex;gap:10px;flex-wrap:wrap;
+      margin-top:10px;
     }
-    @media (max-width:520px){
-      .g-price{left:10px;bottom:10px}
-      .g-price .val{font-size:1.18rem}
-      .g-count{right:10px;bottom:10px;font-size:0.55rem}
+    .linkBtn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid rgba(206,168,108,.20);
+      background:rgba(6,15,26,.18);
+      color:rgba(248,243,226,.9);
+      text-decoration:none;
+      font-family:'Montserrat',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      transition:all var(--trans);
+    }
+    .linkBtn:hover{border-color:rgba(206,168,108,.45);background:rgba(206,168,108,.10);transform:translateY(-1px)}
+    .linkBtn svg{width:16px;height:16px;opacity:.9}
+
+    /* Responsive */
+    @media(min-width:900px){
+      header{padding:0 var(--px-lg)}
+      main{padding:86px var(--px-lg) 100px}
+      .wrap{grid-template-columns:1.25fr .75fr;align-items:start}
+      .info{padding:18px}
+      .gridSpecs{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:420px){
+      .title{font-size:1.75rem}
+      .gridSpecs{grid-template-columns:repeat(2,1fr)}
+      .thumb{width:104px}
     }
   </style>
 </head>
@@ -293,8 +490,8 @@
   <header>
     <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
     <div class="header-nav">
-      <button class="btn" id="btnBack" type="button">← Back</button>
-      <a class="btn primary" href="contact.html">Contact</a>
+      <a href="index.html" class="btn-top">← Back</a>
+      <a href="#contact" class="btn-cta">Contact</a>
     </div>
   </header>
 
@@ -303,318 +500,442 @@
 
     <div class="wrap">
       <!-- LEFT: GALLERY -->
-      <section class="card gallery" aria-label="Gallery">
-        <div class="g-main" id="gMain">
-          <div class="g-shade"></div>
+      <section class="panel gallery" aria-label="Gallery">
+        <div class="hero-media">
+          <img id="heroImg" alt="Property photo" loading="eager" />
+          <div class="hero-shade"></div>
 
-          <div class="g-badge" id="gBadge" style="display:none"></div>
+          <button class="navBtn navL" id="btnPrev" aria-label="Previous photo">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="navBtn navR" id="btnNext" aria-label="Next photo">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
 
-          <div class="g-status" id="gStatus" style="display:none">
-            <span class="dot" id="gDot"></span>
-            <span class="dot-lbl" id="gStatusLbl">Available</span>
+          <div class="badge" id="badge" style="display:none"></div>
+
+          <div class="statusPill" id="statusPill">
+            <span class="dot d-av" id="statusDot"></span>
+            <span class="lbl" id="statusLbl">—</span>
           </div>
 
-          <div class="g-nav">
-            <button class="g-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
-            <button class="g-btn" id="nextBtn" type="button" aria-label="Next">›</button>
-          </div>
+          <!-- REQ: only price number, no label/tab -->
+          <div class="priceOnly" id="priceOnly">—</div>
 
-          <div class="g-price">
-            <div class="lbl" id="priceLbl">Sale Price</div>
-            <div class="val" id="priceVal">—</div>
-          </div>
-
-          <div class="g-count" id="gCount">1/1</div>
+          <!-- REQ: no tab, no word photos, use 1/10 -->
+          <div class="counterOnly" id="counterOnly">—</div>
         </div>
 
-        <div class="thumbs" id="thumbs"></div>
+        <div class="thumbRow" id="thumbRow"></div>
       </section>
 
-      <!-- RIGHT -->
-      <aside style="display:grid;gap:14px">
-        <section class="card">
-          <div class="pad">
-            <div class="kicker">Property</div>
-            <div class="title" id="ttl">—</div>
-            <div class="sub" id="sub">—</div>
-            <div class="chips" id="chips"></div>
+      <!-- RIGHT: DETAILS -->
+      <section class="panel">
+        <div class="info">
+          <div class="kicker" id="propIdLine">PROPERTY</div>
+          <div class="title" id="title">—</div>
+          <div class="loc" id="loc">📍 —</div>
 
-            <div class="grid3">
-              <div class="spec"><div class="s-lbl">Bedrooms</div><div class="s-val" id="bed">—</div></div>
-              <div class="spec"><div class="s-lbl">Bathrooms</div><div class="s-val" id="bath">—</div></div>
-              <div class="spec"><div class="s-lbl">Living Area</div><div class="s-val" id="liv">—</div></div>
+          <div class="tags" id="tags"></div>
+
+          <div class="gridSpecs">
+            <div class="specBox">
+              <div class="specLbl">Bedrooms</div>
+              <div class="specVal" id="vBeds">—</div>
             </div>
-
-            <div class="grid3" style="margin-top:10px">
-              <div class="spec"><div class="s-lbl">Land</div><div class="s-val" id="land">—</div></div>
-              <div class="spec"><div class="s-lbl">Pool</div><div class="s-val" id="pool">—</div></div>
-              <div class="spec"><div class="s-lbl">Ownership</div><div class="s-val" id="own">—</div></div>
+            <div class="specBox">
+              <div class="specLbl">Bathrooms</div>
+              <div class="specVal" id="vBaths">—</div>
             </div>
-
-            <div class="divider"></div>
-
-            <div class="kv">
-              <div class="k">Property ID</div><div class="v" id="pid">—</div>
-              <div class="k">Project</div><div class="v" id="proj">—</div>
-              <div class="k">Zone</div><div class="v" id="zone">—</div>
-              <div class="k">Map</div><div class="v"><a id="mapLink" href="#" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(201,168,76,0.6)">Open Map →</a></div>
-              <div class="k">Virtual Tour</div><div class="v"><a id="vtLink" href="#" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(201,168,76,0.6)">Open Tour →</a></div>
+            <div class="specBox">
+              <div class="specLbl">Living Area</div>
+              <div class="specVal" id="vLiving">—</div>
+            </div>
+            <div class="specBox">
+              <div class="specLbl">Land</div>
+              <div class="specVal" id="vLand">—</div>
+            </div>
+            <div class="specBox">
+              <div class="specLbl">Pool</div>
+              <div class="specVal" id="vPool">—</div>
+            </div>
+            <div class="specBox">
+              <div class="specLbl">Ownership</div>
+              <div class="specVal" id="vOwner">—</div>
             </div>
           </div>
-        </section>
 
-        <section class="card">
-          <div class="smallCard">
-            <div class="kicker">Key Selling Points</div>
-            <div class="desc" id="ksp">—</div>
-            <div class="divider"></div>
-            <div class="kicker">Description</div>
-            <div class="desc" id="desc">—</div>
+          <div class="section">
+            <div class="secTitle">Key Selling Points</div>
+            <div class="text" id="ksp">—</div>
           </div>
-        </section>
 
-        <section class="card contactBox">
-          <div class="pad">
-            <div class="kicker">Contact</div>
-            <div class="contactGrid">
-              <a class="cbtn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">Line OA</a>
-              <a class="cbtn" id="btnWa" href="https://wa.me/66805820777?text=Interested" target="_blank" rel="noopener">WhatsApp</a>
-              <a class="cbtn" id="btnFb" href="#" target="_blank" rel="noopener">Facebook</a>
-              <a class="cbtn" id="btnCall" href="tel:+66805820777">Call</a>
-            </div>
-            <div class="note">กดปุ่มด้านบนเพื่อสอบถามรายละเอียด / นัดชมบ้าน<br/>(ลิงก์จะเปิดแท็บใหม่)</div>
+          <div class="section">
+            <div class="secTitle">Description</div>
+            <div class="text" id="desc">—</div>
           </div>
-        </section>
-      </aside>
+
+          <div class="section">
+            <div class="secTitle">Links</div>
+            <div class="mapRow" id="linkRow"></div>
+          </div>
+        </div>
+      </section>
     </div>
+
+    <!-- CONTACT moved DOWN (REQ #4) -->
+    <section class="panel contact" id="contact" style="margin-top:14px">
+      <div class="kicker">CONTACT</div>
+      <div class="contactGrid">
+        <a class="cbtn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">LINE OA</a>
+        <a class="cbtn" id="btnWa" href="https://wa.me/66805820777?text=Interested" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="cbtn" id="btnFb" href="https://m.me/huahinpropertyhuahinrealestate/" target="_blank" rel="noopener">Facebook</a>
+        <a class="cbtn" id="btnCall" href="tel:+66805820777">Call</a>
+      </div>
+      <div class="contactNote" id="contactNote">
+        กดปุ่มด้านบนเพื่อสอบถามรายละเอียด / นัดชมบ้าน (ลิงก์จะเปิดแท็บใหม่)
+      </div>
+    </section>
   </main>
 
   <script>
+    // ==========================================================
+    // CONFIG — YOUR VALUES
+    // ==========================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
+    const SHEET_ID   = "1vFsPw6GRO8kd_vHDhbV-Y-t11WTOfyv0E18TH0Nuy74";
+    const SHEET_NAME = "properties";
+    const SHEET_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
+    // ==========================================================
+    // STATE
+    // ==========================================================
     const qs = new URLSearchParams(location.search);
-    const HP_ID = (qs.get("id") || "").trim();
+    const HP_ID = (qs.get("id") || qs.get("HP_ID") || "").trim();
 
-    document.getElementById("btnBack").addEventListener("click", () => {
-      if (history.length > 1) history.back();
-      else location.href = "index.html";
-    });
+    let photos = [];
+    let idx = 0;
+    let current = null;
 
-    function jsonp(url) {
-      return new Promise((resolve, reject) => {
-        const cb = "__cb_" + Math.random().toString(16).slice(2);
-        const s = document.createElement("script");
-        const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 9000);
+    // ==========================================================
+    // HELPERS
+    // ==========================================================
+    const $ = (id)=>document.getElementById(id);
 
-        function cleanup() {
-          clearTimeout(t);
-          if (s && s.parentNode) s.parentNode.removeChild(s);
-          try { delete window[cb]; } catch(_) { window[cb] = undefined; }
-        }
-
-        window[cb] = (data) => { cleanup(); resolve(data); };
-        s.onerror = () => { cleanup(); reject(new Error("jsonp_error")); };
-        s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + encodeURIComponent(cb);
-        document.body.appendChild(s);
-      });
+    function showErr(msg){
+      const box = $("errBox");
+      box.textContent = "⚠ " + msg;
+      box.style.display = "block";
     }
+    function hideErr(){ $("errBox").style.display = "none"; }
 
-    function showErr(msg) {
-      const e = document.getElementById("errBox");
-      e.textContent = "⚠ " + msg;
-      e.style.display = "block";
-    }
+    function safeStr(v){ return (v==null) ? "" : String(v).trim(); }
 
-    function safeText(v, fb="—") {
-      const s = (v==null) ? "" : String(v).trim();
-      return s ? s : fb;
-    }
-
-    function parseAlbum(v) {
-      const s = (v==null) ? "" : String(v).trim();
-      if (!s) return [];
-      return s.split(/[,|\n]/).map(x=>String(x).trim()).filter(Boolean);
-    }
-
-    function moneyFull(value){
-      const raw = (value==null) ? "" : String(value).trim();
-      if (!raw || raw === "#") return "";
-      const n = parseFloat(raw.replace(/[^\d.]/g,""));
-      if (!n || !isFinite(n)) return "";
-      return "฿" + Math.round(n).toLocaleString("en-US");
-    }
-
-    function pickPriceFull(sale, rent, listingType){
-      const lt = (listingType||"").toLowerCase();
-      if (lt === "rent") {
-        const r = moneyFull(rent);
-        return r ? (r + " / month") : "";
-      }
-      const s = moneyFull(sale);
-      if (s) return s;
-      const r = moneyFull(rent);
-      return r ? (r + " / month") : "";
-    }
-
-    function dotCls(s) {
+    function dotCls(s){
       return { Available:"d-av", Reserved:"d-rs", Sold:"d-sd", Rented:"d-rt" }[s] || "d-av";
     }
 
-    // ===== GALLERY STATE =====
-    let ALBUM = [];
-    let CUR = 0;
-
-    function updateCounter(){
-      // จุดที่ 2: 1/2, 2/2, 1/10...
-      const total = ALBUM.length || 1;
-      const current = Math.min(Math.max(CUR + 1, 1), total);
-      document.getElementById("gCount").textContent = `${current}/${total}`;
+    function parseMoney(s){
+      const t = safeStr(s).replace(/,/g,"");
+      const n = parseFloat(t.replace(/[^\d.]/g,""));
+      return isFinite(n) ? n : 0;
     }
 
-    function setMain(i) {
-      if (!ALBUM.length) {
-        CUR = 0;
-        updateCounter();
+    function fmtBahtFull(n){
+      if(!n) return "—";
+      return "฿" + new Intl.NumberFormat("en-US").format(Math.round(n));
+    }
+
+    function normalizeImageUrl(u){
+      let s = safeStr(u);
+      if(!s) return "";
+
+      // if already lh3 direct
+      if(/^https:\/\/lh3\.googleusercontent\.com\/d\//i.test(s)) return s;
+
+      // drive file view
+      const m1 = s.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if(m1) return "https://lh3.googleusercontent.com/d/" + m1[1];
+
+      // open?id=
+      const m2 = s.match(/open\?id=([a-zA-Z0-9_-]+)/);
+      if(m2) return "https://lh3.googleusercontent.com/d/" + m2[1];
+
+      // raw file id (looks like)
+      if(/^[a-zA-Z0-9_-]{20,}$/.test(s)) return "https://lh3.googleusercontent.com/d/" + s;
+
+      return s;
+    }
+
+    function splitAlbum(s){
+      const raw = safeStr(s);
+      if(!raw) return [];
+      return raw
+        .split(/[,\n]/g)
+        .map(x=>normalizeImageUrl(x))
+        .map(x=>x.trim())
+        .filter(Boolean);
+    }
+
+    function choosePrice(p){
+      const lt = safeStr(p["Listing_Type"]) || "Sale";
+      const sale = parseMoney(p["Sale_Price"]);
+      const rent = parseMoney(p["Monthly_Rent"]);
+
+      if(lt.toLowerCase().includes("rent")){
+        return rent ? (fmtBahtFull(rent) + "/mo") : (sale ? fmtBahtFull(sale) : "—");
+      }
+      // Sale or Sale/Rent
+      if(sale) return fmtBahtFull(sale);
+      if(rent) return fmtBahtFull(rent) + "/mo";
+      return "—";
+    }
+
+    function tag(text){
+      const t = document.createElement("span");
+      t.className = "tag";
+      t.textContent = text;
+      return t;
+    }
+
+    function addLinkBtn(container, label, href, icon){
+      const a = document.createElement("a");
+      a.className = "linkBtn";
+      a.href = href;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.innerHTML = `${icon}${label}`;
+      container.appendChild(a);
+    }
+
+    // ==========================================================
+    // RENDER
+    // ==========================================================
+    function setHero(i){
+      if(!photos.length){
+        $("heroImg").src = "";
+        $("counterOnly").textContent = "—";
         return;
       }
-      CUR = (i + ALBUM.length) % ALBUM.length;
+      idx = (i + photos.length) % photos.length;
+      $("heroImg").src = photos[idx];
+      $("counterOnly").textContent = `${idx+1}/${photos.length}`;
+      updateThumbActive();
+    }
 
-      const main = document.getElementById("gMain");
-      const old = main.querySelector("img");
-      if (old) old.remove();
-
-      const img = document.createElement("img");
-      img.src = ALBUM[CUR];
-      img.alt = "property image " + (CUR+1);
-      img.loading = "eager";
-      img.onerror = () => { img.style.display = "none"; };
-      main.insertBefore(img, main.firstChild);
-
-      updateCounter();
-
-      document.querySelectorAll(".t").forEach((el, idx) => {
-        if (idx === CUR) el.classList.add("active");
-        else el.classList.remove("active");
+    function updateThumbActive(){
+      const row = $("thumbRow");
+      [...row.children].forEach((el, k)=>{
+        el.classList.toggle("active", k===idx);
       });
     }
 
-    function buildThumbs() {
-      const wrap = document.getElementById("thumbs");
-      wrap.innerHTML = "";
+    function renderThumbs(){
+      const row = $("thumbRow");
+      row.innerHTML = "";
+      if(!photos.length) return;
 
-      if (!ALBUM.length) {
-        wrap.innerHTML = `<div style="padding:10px 4px;color:rgba(122,155,181,0.85);font-size:.9rem">No photos</div>`;
-        updateCounter();
-        return;
-      }
-
-      ALBUM.forEach((url, i) => {
-        const d = document.createElement("div");
-        d.className = "t" + (i===0 ? " active" : "");
-        d.innerHTML = `<img src="${url}" alt="thumb ${i+1}" loading="lazy">`;
-        d.addEventListener("click", () => setMain(i));
-        wrap.appendChild(d);
+      photos.forEach((src, i)=>{
+        const t = document.createElement("div");
+        t.className = "thumb" + (i===0 ? " active" : "");
+        t.innerHTML = `<img src="${src}" alt="thumb ${i+1}" loading="lazy">`;
+        t.addEventListener("click", ()=>setHero(i));
+        row.appendChild(t);
       });
     }
 
-    document.getElementById("prevBtn").addEventListener("click", () => setMain(CUR - 1));
-    document.getElementById("nextBtn").addEventListener("click", () => setMain(CUR + 1));
+    function render(p){
+      current = p;
 
-    function render(p) {
-      const name = [p.Project_Name, p.Type].filter(Boolean).join(" · ");
-      document.getElementById("ttl").textContent = safeText(name);
-      document.getElementById("sub").textContent = "📍 " + [p.Zone, p.District].filter(Boolean).join(" · ");
+      const id = safeStr(p["HP_ID"]) || HP_ID || "—";
+      const proj = safeStr(p["Project_Name"]);
+      const type = safeStr(p["Type"]);
+      const zone = safeStr(p["Zone"]) || safeStr(p["District"]) || "";
+      const dist = safeStr(p["District"]) || "";
+      const subd = safeStr(p["SubDistrict"]) || "";
+      const status = safeStr(p["Status"]) || "Available";
+      const badge = safeStr(p["Badge"]);
+      const view = safeStr(p["View_Type"]);
+      const deed = safeStr(p["Land_Title_Deed_Type"]);
+      const own = safeStr(p["Ownership_Type"]);
+      const lt = safeStr(p["Listing_Type"]);
 
-      const chips = document.getElementById("chips");
-      chips.innerHTML = "";
-      [p.Listing_Type, p.Status, p.View_Type, p.Land_Title_Deed_Type].filter(Boolean).slice(0,4).forEach(t=>{
-        const c = document.createElement("div");
-        c.className = "chip";
-        c.textContent = t;
-        chips.appendChild(c);
+      $("propIdLine").textContent = `PROPERTY ID · ${id}`;
+      $("title").textContent = [proj, type].filter(Boolean).join(" · ") || "—";
+      $("loc").textContent = `📍 ${[zone, subd, dist].filter(Boolean).join(" · ") || "—"}`;
+
+      // Status pill
+      $("statusLbl").textContent = status || "—";
+      $("statusDot").className = "dot " + dotCls(status);
+
+      // Badge
+      if(badge){
+        $("badge").style.display = "inline-block";
+        $("badge").textContent = badge;
+      }else{
+        $("badge").style.display = "none";
+      }
+
+      // Price (REQ: only number)
+      $("priceOnly").textContent = choosePrice(p);
+
+      // Tags
+      const tags = $("tags");
+      tags.innerHTML = "";
+      if(lt) tags.appendChild(tag(lt));
+      if(status) tags.appendChild(tag(status));
+      if(view) tags.appendChild(tag(view));
+      if(deed) tags.appendChild(tag(deed));
+      if(own) tags.appendChild(tag(own));
+
+      // Specs
+      $("vBeds").textContent  = safeStr(p["Bedrooms"]) || "—";
+      $("vBaths").textContent = safeStr(p["Bathrooms"]) || "—";
+
+      const living = safeStr(p["Living_Area_sq_m"]);
+      $("vLiving").innerHTML = living ? `${living} <small>m²</small>` : "—";
+
+      const lw = safeStr(p["Land_Area_sq_w"]);
+      const lm = safeStr(p["Land_Area_sq_m"]);
+      $("vLand").innerHTML = (lw || lm)
+        ? `${lw ? lw + " <small>sq.w</small>" : ""}${(lw && lm) ? " · " : ""}${lm ? lm + " <small>m²</small>" : ""}`
+        : "—";
+
+      const ps = safeStr(p["Pool_Size"]);
+      const pd = safeStr(p["Pool_Depth"]);
+      $("vPool").innerHTML = (ps || pd)
+        ? `${ps || "—"}${(ps && pd) ? " · " : ""}${pd || ""}`
+        : "—";
+
+      const transfer = safeStr(p["Transfer_Expenses"]);
+      $("vOwner").textContent = [own, transfer].filter(Boolean).join(" · ") || "—";
+
+      // Text
+      $("ksp").textContent  = safeStr(p["Key_Selling_Points"]) || "—";
+      $("desc").textContent = safeStr(p["Description"]) || "—";
+
+      // Links
+      const linkRow = $("linkRow");
+      linkRow.innerHTML = "";
+      const map = safeStr(p["Map_Link"]);
+      const vt  = safeStr(p["Virtual_Tour"]);
+      const fb  = safeStr(p["FB_Link"]);
+      const vid = safeStr(p["Video_Link"]);
+      const fp  = safeStr(p["FloorPlan_PDF"]);
+      const mp  = safeStr(p["Material_PDF"]);
+
+      const icoLink = `<svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007.07 0l1.41-1.41a5 5 0 00-7.07-7.07L10.5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 01-7.07 0L5.52 9.59a5 5 0 017.07-7.07L13.5 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+      const icoMap  = `<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-4.35 7-11a7 7 0 10-14 0c0 6.65 7 11 7 11z" stroke="currentColor" stroke-width="2"/><path d="M12 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="currentColor" stroke-width="2"/></svg>`;
+      const icoPlay = `<svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`;
+      const icoPdf  = `<svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l3 3v15H7V3z" stroke="currentColor" stroke-width="2"/><path d="M14 3v4h4" stroke="currentColor" stroke-width="2"/></svg>`;
+
+      if(map) addLinkBtn(linkRow, "Map", map, icoMap);
+      if(vt)  addLinkBtn(linkRow, "Virtual Tour", vt, icoPlay);
+      if(fb)  addLinkBtn(linkRow, "Facebook", fb, icoLink);
+      if(vid) addLinkBtn(linkRow, "Video", vid, icoPlay);
+      if(fp)  addLinkBtn(linkRow, "Floorplan", fp, icoPdf);
+      if(mp)  addLinkBtn(linkRow, "Material", mp, icoPdf);
+
+      // Album photos
+      const album = splitAlbum(p["Album_Image"]);
+      const thumb = normalizeImageUrl(p["Thumbnail_Image"]);
+
+      photos = album.length ? album : (thumb ? [thumb] : []);
+      renderThumbs();
+      setHero(0);
+
+      // Contact URLs (optional: override per listing)
+      // keep your defaults, but if sheet has custom links -> use them
+      // (FB_Link already used in Links; contact box stays your standard channels)
+    }
+
+    // ==========================================================
+    // FETCH DETAIL
+    // ==========================================================
+    async function fetchDetailFromScript(){
+      // Support common parameter names
+      const url1 = `${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(HP_ID)}`;
+      const url2 = `${SCRIPT_URL}?mode=getUnitDetail&HP_ID=${encodeURIComponent(HP_ID)}`;
+
+      let r = await fetch(url1, { signal: AbortSignal.timeout(9000) }).catch(()=>null);
+      if(!r || !r.ok){
+        r = await fetch(url2, { signal: AbortSignal.timeout(9000) }).catch(()=>null);
+      }
+      if(!r || !r.ok) throw new Error("SCRIPT_FETCH_FAILED");
+
+      const j = await r.json();
+      // Accept several shapes
+      const data = j?.data || j?.row || j?.item || j;
+      if(!data || typeof data !== "object") throw new Error("SCRIPT_BAD_JSON");
+      return data;
+    }
+
+    async function fetchDetailFromSheet(){
+      const r = await fetch(SHEET_URL, { signal: AbortSignal.timeout(9000) });
+      const t = await r.text();
+      const j = JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1));
+      const cols = j.table.cols.map(c=>c.label);
+
+      const rows = j.table.rows.map(row=>{
+        const o = {};
+        cols.forEach((c,i)=>{
+          o[c] = row.c?.[i]?.v != null ? String(row.c[i].v) : "";
+        });
+        return o;
       });
 
-      const badge = safeText(p.Badge, "");
-      const st = safeText(p.Status, "Available");
-      if (badge) {
-        const b = document.getElementById("gBadge");
-        b.style.display = "block";
-        b.textContent = badge;
-      }
-      const gs = document.getElementById("gStatus");
-      gs.style.display = "flex";
-      document.getElementById("gStatusLbl").textContent = st;
-      document.getElementById("gDot").className = "dot " + dotCls(st);
-
-      const lt = safeText(p.Listing_Type, "Sale");
-      const full = pickPriceFull(p.Sale_Price, p.Monthly_Rent, lt);
-      // จุดที่ 1: แสดงเฉพาะตัวเลข
-      document.getElementById("priceVal").textContent = full || "—";
-
-      document.getElementById("bed").textContent  = safeText(p.Bedrooms);
-      document.getElementById("bath").textContent = safeText(p.Bathrooms);
-      document.getElementById("liv").textContent  = p.Living_Area_sq_m ? `${p.Living_Area_sq_m} m²` : "—";
-
-      const landW = p.Land_Area_sq_w ? `${p.Land_Area_sq_w} sq.w` : "";
-      const landM = p.Land_Area_sq_m ? `${p.Land_Area_sq_m} m²` : "";
-      document.getElementById("land").textContent = [landW, landM].filter(Boolean).join(" · ") || "—";
-
-      const pool = [p.Pool_Size, p.Pool_Depth].filter(Boolean).join(" · ");
-      document.getElementById("pool").textContent = pool || "—";
-      document.getElementById("own").textContent  = [p.Ownership_Type, p.Transfer_Expenses].filter(Boolean).join(" · ") || "—";
-
-      document.getElementById("pid").textContent  = safeText(p.HP_ID);
-      document.getElementById("proj").textContent = safeText(p.Project_Name);
-      document.getElementById("zone").textContent = safeText(p.Zone);
-
-      const fb = safeText(p.FB_Link, "");
-      const map = safeText(p.Map_Link, "");
-      const vt  = safeText(p.Virtual_Tour, "");
-
-      const btnFb = document.getElementById("btnFb");
-      btnFb.style.opacity = fb ? "1" : ".45";
-      btnFb.style.pointerEvents = fb ? "auto" : "none";
-      btnFb.href = fb || "#";
-
-      const mapA = document.getElementById("mapLink");
-      mapA.style.opacity = map ? "1" : ".45";
-      mapA.style.pointerEvents = map ? "auto" : "none";
-      mapA.href = map || "#";
-
-      const vtA = document.getElementById("vtLink");
-      vtA.style.opacity = vt ? "1" : ".45";
-      vtA.style.pointerEvents = vt ? "auto" : "none";
-      vtA.href = vt || "#";
-
-      document.getElementById("ksp").textContent  = safeText(p.Key_Selling_Points);
-      document.getElementById("desc").textContent = safeText(p.Description);
-
-      const a2 = parseAlbum(p.Album_Image);
-      ALBUM = a2.filter(Boolean);
-
-      const thumb = safeText(p.Thumbnail_Image, "");
-      if (!ALBUM.length && thumb) ALBUM = [thumb];
-
-      buildThumbs();
-      setMain(0); // จะอัปเดต 1/total ให้เอง
+      const found = rows.find(x => safeStr(x["HP_ID"]) === HP_ID);
+      if(!found) throw new Error("NOT_FOUND_IN_SHEET");
+      return found;
     }
 
-    async function load() {
-      if (!HP_ID) {
-        showErr("ไม่มีพารามิเตอร์ id เช่น details.html?id=HP00-0001");
+    async function start(){
+      if(!HP_ID){
+        showErr("ไม่พบพารามิเตอร์ id ใน URL เช่น details.html?id=HP00-0001");
         return;
       }
-      try {
-        const url = `${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(HP_ID)}`;
-        const j = await jsonp(url);
-        if (!j || !j.ok) throw new Error((j && j.error) ? j.error : "load_failed");
-        render(j.data || {});
-      } catch (e) {
-        showErr("โหลดรายละเอียดไม่ได้ — ตรวจสอบ Deploy Web App (Anyone) และลองเปิด: SCRIPT_URL?mode=getUnitDetail&id=" + encodeURIComponent(HP_ID));
+      try{
+        hideErr();
+        const data = await fetchDetailFromScript();
+        render(data);
+      }catch(e1){
+        try{
+          const data2 = await fetchDetailFromSheet();
+          render(data2);
+        }catch(e2){
+          showErr("โหลดรายละเอียดไม่ได้ — ตรวจสอบว่า Apps Script Deploy เป็น Anyone และโหมด getUnitDetail ใช้งานได้ / หรือ Sheet ต้องเปิดเป็น Public");
+        }
       }
     }
 
-    load();
+    // ==========================================================
+    // EVENTS
+    // ==========================================================
+    $("btnPrev").addEventListener("click", ()=> setHero(idx - 1));
+    $("btnNext").addEventListener("click", ()=> setHero(idx + 1));
+
+    // Keyboard support (desktop)
+    window.addEventListener("keydown", (e)=>{
+      if(e.key==="ArrowLeft") setHero(idx-1);
+      if(e.key==="ArrowRight") setHero(idx+1);
+    });
+
+    // Touch swipe (mobile)
+    (function(){
+      const el = document.querySelector(".hero-media");
+      let x0 = null;
+      el.addEventListener("touchstart", (e)=>{ x0 = e.touches[0].clientX; }, {passive:true});
+      el.addEventListener("touchend", (e)=>{
+        if(x0==null) return;
+        const x1 = e.changedTouches[0].clientX;
+        const dx = x1 - x0;
+        x0 = null;
+        if(Math.abs(dx) < 38) return;
+        if(dx > 0) setHero(idx-1); else setHero(idx+1);
+      }, {passive:true});
+    })();
+
+    start();
   </script>
 </body>
 </html>
