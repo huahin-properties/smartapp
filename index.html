@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Hua Hin Properties | Exclusive Premium Real Estate</title>
+  <meta name="description" content="ค้นหาอสังหาริมทรัพย์ระดับพรีเมียมในหัวหิน — Pool Villa, Condo, Land ทำเลทอง" />
+  <meta name="keywords" content="hua hin property, หัวหิน, บ้านหัวหิน, pool villa hua hin, คอนโดหัวหิน, ที่ดินหัวหิน" />
+  <meta property="og:title" content="Hua Hin Properties | Exclusive Premium Real Estate" />
+  <meta property="og:description" content="ค้นหาบ้านในฝันที่หัวหิน — คัดสรรเฉพาะ Premium Listing" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Sarabun:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --black:     #080808;
+      --surface:   #111111;
+      --card:      #141414;
+      --border:    #252525;
+      --gold:      #C9A84C;
+      --gold-dim:  #8a6f2e;
+      --gold-glow: rgba(201,168,76,0.10);
+      --cream:     #F0E8D5;
+      --muted:     #6a6050;
+      --available: #3a9e6b;
+      --reserved:  #c8862a;
+      --sold:      #b84040;
+      --rented:    #4a7ab8;
+      --trans:     0.3s cubic-bezier(0.4,0,0.2,1);
+      --px:        16px;
+      --px-lg:     48px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Sarabun', sans-serif;
+      font-weight: 300;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--px);
+      background: rgba(8,8,8,0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 400;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+    }
+    .logo span { color: var(--cream); font-style: italic; font-weight: 300; }
+    .btn-contact {
+      padding: 7px 14px;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none;
+      transition: all var(--trans);
+    }
+    .btn-contact:hover, .btn-contact:active { background: var(--gold); color: var(--black); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 84px var(--px) 44px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+      top: 35%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 18px;
+      opacity: 0; animation: fadeUp 0.7s 0.2s ease forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 9vw, 4.5rem); font-weight: 300; line-height: 1.1;
+      color: var(--cream); margin-bottom: 14px;
+      opacity: 0; animation: fadeUp 0.7s 0.35s ease forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.7s 0.5s ease forwards;
+    }
+
+    /* ─── SEARCH ─── */
+    .search-wrap {
+      position: relative; max-width: 580px; margin: 0 auto 14px;
+      opacity: 0; animation: fadeUp 0.7s 0.65s ease forwards;
+    }
+    .search-input {
+      width: 100%; padding: 14px 46px 14px 16px;
+      background: rgba(20,20,20,0.98);
+      border: 1px solid var(--border); border-radius: 3px;
+      color: var(--cream);
+      font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 300;
+      outline: none; -webkit-appearance: none;
+      transition: border-color var(--trans), box-shadow var(--trans);
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--gold-dim); box-shadow: 0 0 0 3px var(--gold-glow); }
+    .search-ico {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--gold); pointer-events: none;
+    }
+
+    /* ─── FILTERS ─── */
+    .filter-wrap {
+      display: flex; gap: 7px; overflow-x: auto; padding: 0 0 2px;
+      max-width: 580px; margin: 0 auto;
+      scrollbar-width: none;
+      opacity: 0; animation: fadeUp 0.7s 0.8s ease forwards;
+    }
+    .filter-wrap::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      flex-shrink: 0; padding: 7px 13px;
+      background: transparent; border: 1px solid var(--border); border-radius: 2px;
+      color: var(--muted);
+      font-family: 'Montserrat', sans-serif; font-size: 0.57rem; font-weight: 400;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap;
+      transition: all var(--trans); -webkit-appearance: none;
+    }
+    .filter-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+
+    /* ─── STATS ─── */
+    .stats-row {
+      display: flex; justify-content: center; gap: 32px;
+      padding: 28px var(--px) 0;
+      opacity: 0; animation: fadeUp 0.7s 0.95s ease forwards;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .stat-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-top: 4px;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      padding: 36px var(--px) 18px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border));
+    }
+    .divider::after { background: linear-gradient(to left, transparent, var(--border)); }
+    .divider-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.54rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); white-space: nowrap;
+    }
+
+    /* ─── LISTINGS ─── */
+    .listings { padding: 0 var(--px) 80px; }
+    .listings-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .listings-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 300;
+    }
+    .listings-count {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.57rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ─── GRID ─── */
+    .grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 1px; background: var(--border);
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--card); display: block;
+      text-decoration: none; color: inherit;
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(14px);
+      animation: cardIn 0.5s ease forwards;
+      transition: box-shadow var(--trans);
+    }
+    .card:hover, .card:active { box-shadow: inset 0 0 0 1px var(--gold-dim); z-index: 2; }
+    .card:hover .c-img img { transform: scale(1.05); }
+
+    .c-img {
+      position: relative; width: 100%; aspect-ratio: 4/3;
+      overflow: hidden; background: #0d0d0d;
+    }
+    .c-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.88);
+      transition: transform 0.5s ease;
+    }
+    .c-shade {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.65) 0%, transparent 55%);
+    }
+    .c-badge {
+      position: absolute; top: 10px; left: 10px;
+      padding: 4px 9px;
+      background: rgba(8,8,8,0.9); border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-family: 'Montserrat', sans-serif; font-size: 0.5rem;
+      font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .c-status {
+      position: absolute; top: 10px; right: 10px;
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 9px;
+      background: rgba(8,8,8,0.9); border-radius: 2px;
+    }
+    .dot {
+      width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+    }
+    .d-av  { background: var(--available); box-shadow: 0 0 5px var(--available); }
+    .d-rs  { background: var(--reserved);  box-shadow: 0 0 5px var(--reserved); }
+    .d-sd  { background: var(--sold);      box-shadow: 0 0 5px var(--sold); }
+    .d-rt  { background: var(--rented);    box-shadow: 0 0 5px var(--rented); }
+    .c-status-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream);
+    }
+    .c-ltype {
+      position: absolute; bottom: 10px; right: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.48rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(240,232,213,0.55);
+      background: rgba(8,8,8,0.65); padding: 3px 7px;
+    }
+
+    .c-body { padding: 14px 14px 16px; }
+    .c-zone {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.54rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 5px;
+    }
+    .c-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.08rem; font-weight: 400; line-height: 1.25;
+      color: var(--cream); margin-bottom: 7px;
+    }
+    .c-pts {
+      font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin-bottom: 11px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .c-specs { display: flex; gap: 14px; margin-bottom: 11px; }
+    .spec {
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: var(--muted);
+    }
+    .c-foot {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-top: 11px; border-top: 1px solid var(--border);
+    }
+    .p-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.49rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 3px;
+    }
+    .p-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; font-weight: 400; color: var(--gold); line-height: 1;
+    }
+    .btn-view {
+      padding: 7px 12px; border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Montserrat', sans-serif; font-size: 0.54rem; letter-spacing: 0.15em;
+      text-transform: uppercase; white-space: nowrap;
+      transition: all var(--trans);
+    }
+    .card:hover .btn-view, .card:active .btn-view {
+      border-color: var(--gold); color: var(--gold); background: var(--gold-glow);
+    }
+
+    /* ─── SKELETON ─── */
+    .skel-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); }
+    .skel-card { background: var(--card); }
+    .skel-img {
+      width: 100%; aspect-ratio: 4/3;
+      background: linear-gradient(90deg,#141414 25%,#1c1c1c 50%,#141414 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite;
+    }
+    .skel-body { padding: 14px; }
+    .skel-ln {
+      height: 11px; border-radius: 2px; margin-bottom: 9px;
+      background: linear-gradient(90deg,#1c1c1c 25%,#242424 50%,#1c1c1c 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite;
+    }
+    .skel-ln.s  { width: 35%; }
+    .skel-ln.m  { width: 62%; }
+    .skel-ln.l  { width: 88%; }
+    .skel-ln.xl { height: 18px; width: 48%; margin-top: 12px; }
+
+    /* ─── EMPTY / ERROR ─── */
+    .empty { grid-column:1/-1; text-align:center; padding:60px 20px; }
+    .empty-icon { font-size:2rem; margin-bottom:12px; opacity:.2; }
+    .empty-title { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--muted); }
+    .empty-sub { font-size:.78rem; color:var(--muted); margin-top:6px; opacity:.55; }
+    .err-box {
+      background:rgba(184,64,64,.1); border:1px solid rgba(184,64,64,.28);
+      color:#e07070; padding:13px 14px; border-radius:3px;
+      font-size:.82rem; margin-bottom:14px; display:none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer { border-top:1px solid var(--border); padding:28px var(--px) 40px; }
+    .footer-brand {
+      font-family:'Cormorant Garamond',serif; font-size:1rem;
+      color:var(--gold); letter-spacing:.1em; margin-bottom:18px;
+    }
+    .footer-socials {
+      display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:20px;
+    }
+    .s-btn {
+      display:flex; align-items:center; justify-content:center; gap:7px;
+      padding:10px 12px; border:1px solid var(--border);
+      color:var(--muted); text-decoration:none;
+      font-family:'Montserrat',sans-serif; font-size:.57rem;
+      letter-spacing:.12em; text-transform:uppercase;
+      border-radius:2px; transition:all var(--trans);
+    }
+    .s-btn:hover, .s-btn:active { border-color:var(--gold); color:var(--gold); background:var(--gold-glow); }
+    .footer-copy { font-size:.65rem; color:var(--muted); opacity:.4; margin-top:4px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (min-width: 600px) {
+      .grid        { grid-template-columns: repeat(2,1fr); }
+      .skel-grid   { grid-template-columns: repeat(2,1fr); }
+      .footer-socials { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (min-width: 1024px) {
+      header       { padding: 0 var(--px-lg); height: 60px; }
+      .logo        { font-size: 1.12rem; }
+      .hero        { padding: 100px var(--px-lg) 52px; }
+      .divider     { padding: 44px var(--px-lg) 20px; }
+      .listings    { padding: 0 var(--px-lg) 100px; }
+      footer       { padding: 36px var(--px-lg) 48px; }
+      .grid        { grid-template-columns: repeat(3,1fr); }
+      .skel-grid   { grid-template-columns: repeat(3,1fr); }
+      .footer-socials { display:flex; flex-wrap:wrap; gap:10px; }
+      .s-btn       { justify-content:flex-start; }
+    }
+    @media (min-width: 1280px) {
+      .grid      { grid-template-columns: repeat(4,1fr); }
+      .skel-grid { grid-template-columns: repeat(4,1fr); }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes cardIn { to{opacity:1;transform:translateY(0)} }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
+    <a href="contact.html" class="btn-contact">Contact</a>
+  </header>
+
+  <section class="hero">
+    <p class="hero-eyebrow">Exclusive Premium Real Estate · Hua Hin</p>
+    <h1 class="hero-title">Find Your<br /><em>Perfect Home</em><br />in Hua Hin</h1>
+    <p class="hero-sub">คัดสรรอสังหาริมทรัพย์ระดับพรีเมียม<br />Pool Villa · Condo · Land · ทำเลทอง</p>
+
+    <div class="search-wrap">
+      <input id="searchInput" class="search-input" type="search"
+        placeholder="ค้นหา... Pool Villa, Sea View, Chanote, หัวหิน..."
+        autocomplete="off" autocorrect="off" spellcheck="false" />
+      <svg class="search-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+
+    <div class="filter-wrap" id="filterWrap">
+      <button class="filter-btn active" data-f="all">ทั้งหมด</button>
+      <button class="filter-btn" data-f="Sale">ขาย</button>
+      <button class="filter-btn" data-f="Rent">เช่า</button>
+      <button class="filter-btn" data-f="Available">Available</button>
+      <button class="filter-btn" data-f="Pool Villa">Pool Villa</button>
+      <button class="filter-btn" data-f="Condo">Condo</button>
+      <button class="filter-btn" data-f="Land">Land</button>
+      <button class="filter-btn" data-f="Sea">Sea View</button>
+      <button class="filter-btn" data-f="Freehold">Freehold</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="sTotal">—</div><div class="stat-lbl">Listings</div></div>
+      <div class="stat"><div class="stat-num" id="sAvail">—</div><div class="stat-lbl">Available</div></div>
+      <div class="stat"><div class="stat-num" id="sZones">—</div><div class="stat-lbl">Zones</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-lbl">Our Collection</span></div>
+
+  <section class="listings">
+    <div class="listings-bar">
+      <h2 class="listings-title">Premium Listings</h2>
+      <span class="listings-count" id="listCount">กำลังโหลด...</span>
+    </div>
+    <div class="err-box" id="errBox"></div>
+
+    <div class="skel-grid" id="skelGrid">
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+    </div>
+    <div class="grid" id="propGrid" style="display:none;"></div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">Hua Hin · Properties</div>
+    <div class="footer-socials">
+      <a href="https://wa.me/66XXXXXXXXXX" target="_blank" rel="noopener" class="s-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.857L0 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.877 9.877 0 01-5.034-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106c5.42 0 9.894 4.474 9.894 9.894 0 5.42-4.474 9.894-9.894 9.894z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://line.me/ti/p/~YOUR_LINE_ID" target="_blank" rel="noopener" class="s-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        LINE
+      </a>
+      <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener" class="s-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+      <a href="https://instagram.com/YOUR_IG" target="_blank" rel="noopener" class="s-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      <a href="https://tiktok.com/@YOUR_TIKTOK" target="_blank" rel="noopener" class="s-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        TikTok
+      </a>
+    </div>
+    <p class="footer-copy">© 2025 huahin.properties · All rights reserved</p>
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════
+    // CONFIG
+    // ══════════════════════════════════════════
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
+    const SHEET_ID   = '1vFsPw6GRO8kd_vHDhbV-Y-t11WTOfyv0E18TH0Nuy74';
+    const SHEET_NAME = 'DATA';
+    const SHEET_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+    let allProps = [], activeF = 'all', searchQ = '';
+
+    // ══════════════════════════════════════════
+    // FETCH — Script API → fallback Sheet
+    // ══════════════════════════════════════════
+    async function fetchData() {
+      try {
+        const r = await fetch(SCRIPT_URL + '?mode=getUnitList', { signal: AbortSignal.timeout(7000) });
+        if (!r.ok) throw new Error();
+        const j = await r.json();
+        if (j && Array.isArray(j.data) && j.data.length) {
+          allProps = j.data.filter(p => p['System_Status'] === 'Live');
+          return renderAll();
+        }
+        throw new Error();
+      } catch (_) {
+        try { await fetchSheet(); }
+        catch (_2) { showErr('ไม่สามารถโหลดข้อมูลได้ — กรุณาตรวจสอบว่า Google Sheet เปิดเป็น Public'); }
+      }
+    }
+
+    async function fetchSheet() {
+      const r = await fetch(SHEET_URL);
+      const t = await r.text();
+      const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
+      const cols = j.table.cols.map(c => c.label);
+      allProps = j.table.rows.map(row => {
+        const o = {};
+        cols.forEach((c, i) => { o[c] = row.c?.[i]?.v != null ? String(row.c[i].v) : ''; });
+        return o;
+      }).filter(p => p['System_Status'] === 'Live');
+      renderAll();
+    }
+
+    function renderAll() { updateStats(); applyFilters(); hideSkel(); }
+
+    // ══════════════════════════════════════════
+    // HELPERS
+    // ══════════════════════════════════════════
+    function fmtPrice(sale, rent, ltype) {
+      const src = ltype === 'Rent' ? rent : (sale && sale !== '#' ? sale : rent);
+      if (!src || src === '#') return '—';
+      const n = parseFloat(src.replace(/[^\d.]/g, ''));
+      if (!n) return '—';
+      const sfx = (ltype === 'Rent' || (!sale && rent)) ? '/mo' : '';
+      if (n >= 1e6) return '฿' + (n/1e6).toFixed(1) + 'M' + sfx;
+      if (n >= 1e3) return '฿' + Math.round(n/1e3) + 'K' + sfx;
+      return '฿' + n.toLocaleString() + sfx;
+    }
+
+    function dotCls(s) {
+      return { Available:'d-av', Reserved:'d-rs', Sold:'d-sd', Rented:'d-rt' }[s] || 'd-av';
+    }
+
+    // ══════════════════════════════════════════
+    // CARD
+    // ══════════════════════════════════════════
+    function cardHtml(p, i) {
+      const id    = p['HP_ID'] || '';
+      const badge = p['Badge'] || '';
+      const st    = p['Status'] || 'Available';
+      const lt    = p['Listing_Type'] || 'Sale';
+      const zone  = p['Zone'] || p['District'] || '';
+      const name  = [p['Project_Name'], p['Type']].filter(Boolean).join(' · ');
+      const pts   = p['Key_Selling_Points'] || '';
+      const thumb = (p['Thumbnail_Image'] || '').trim().replace(/^#$/, '');
+      const price = fmtPrice(p['Sale_Price'], p['Monthly_Rent'], lt);
+      const pLbl  = lt === 'Rent' ? 'Monthly Rent' : 'Sale Price';
+      const delay = Math.min(i * 0.06, 0.48).toFixed(2);
+
+      const img = thumb
+        ? `<img src="${thumb}" alt="${name}" loading="lazy" onerror="this.style.display='none'">`
+        : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:#222">⌂</div>`;
+
+      return `
+      <a class="card" href="details.html?id=${encodeURIComponent(id)}" style="animation-delay:${delay}s">
+        <div class="c-img">${img}<div class="c-shade"></div>
+          ${badge?`<div class="c-badge">${badge}</div>`:''}
+          <div class="c-status"><span class="dot ${dotCls(st)}"></span><span class="c-status-lbl">${st}</span></div>
+          <div class="c-ltype">${lt}</div>
+        </div>
+        <div class="c-body">
+          <div class="c-zone">${zone}</div>
+          <div class="c-name">${name}</div>
+          <div class="c-pts">${pts}</div>
+          <div class="c-specs">
+            <div class="spec">🛏 ${p['Bedrooms']||'—'}</div>
+            <div class="spec">🚿 ${p['Bathrooms']||'—'}</div>
+            <div class="spec">⊞ ${p['Living_Area_sq_m']?p['Living_Area_sq_m']+' m²':'—'}</div>
+          </div>
+          <div class="c-foot">
+            <div><div class="p-lbl">${pLbl}</div><div class="p-val">${price}</div></div>
+            <div class="btn-view">View →</div>
+          </div>
+        </div>
+      </a>`;
+    }
+
+    // ══════════════════════════════════════════
+    // FILTER + SEARCH
+    // ══════════════════════════════════════════
+    function applyFilters() {
+      let res = allProps.filter(p => {
+        if (searchQ) {
+          const q = searchQ.toLowerCase();
+          const match = ['HP_ID','Project_Name','Type','Zone','District',
+            'Key_Selling_Points','Badge','View_Type','Land_Title_Deed_Type',
+            'Listing_Type','Ownership_Type','SubDistrict']
+            .some(k => (p[k]||'').toLowerCase().includes(q));
+          if (!match) return false;
+        }
+        if (activeF !== 'all') {
+          return p['Listing_Type'] === activeF ||
+                 p['Status'] === activeF ||
+                 p['Type'] === activeF ||
+                 (p['View_Type']||'').includes(activeF) ||
+                 p['Ownership_Type'] === activeF;
+        }
+        return true;
+      });
+
+      const grid = document.getElementById('propGrid');
+      grid.style.display = 'grid';
+      grid.innerHTML = res.length
+        ? res.map(cardHtml).join('')
+        : `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">ไม่พบรายการที่ตรงกัน</div><div class="empty-sub">ลองค้นหาด้วยคำอื่น หรือเปลี่ยน filter</div></div>`;
+
+      document.getElementById('listCount').textContent = `${res.length} รายการ`;
+    }
+
+    // ══════════════════════════════════════════
+    // STATS
+    // ══════════════════════════════════════════
+    function updateStats() {
+      countUp('sTotal', allProps.length);
+      countUp('sAvail', allProps.filter(p => p['Status']==='Available').length);
+      countUp('sZones', new Set(allProps.map(p=>p['Zone']).filter(Boolean)).size);
+    }
+
+    function countUp(id, target) {
+      const el = document.getElementById(id);
+      let n = 0;
+      const step = Math.max(1, Math.ceil(target/20));
+      const t = setInterval(()=>{ n=Math.min(n+step,target); el.textContent=n; if(n>=target)clearInterval(t); }, 45);
+    }
+
+    function hideSkel() { document.getElementById('skelGrid').style.display = 'none'; }
+
+    function showErr(msg) {
+      hideSkel();
+      const e = document.getElementById('errBox');
+      e.textContent = '⚠ ' + msg; e.style.display = 'block';
+      document.getElementById('propGrid').style.display = 'grid';
+      document.getElementById('propGrid').innerHTML = '';
+      document.getElementById('listCount').textContent = '0 รายการ';
+    }
+
+    // ══════════════════════════════════════════
+    // EVENTS
+    // ══════════════════════════════════════════
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchQ = e.target.value.trim(); applyFilters();
+    });
+
+    document.getElementById('filterWrap').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeF = btn.dataset.f;
+      applyFilters();
+    });
+
+    fetchData();
+  </script>
+</body>
+</html>
