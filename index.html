@@ -20,12 +20,10 @@
       --border: rgba(255, 255, 255, 0.08);
       --card-bg: rgba(11, 24, 41, 0.9);
       --brand-red: #8B1F2D;
-      
       --available: #2ECC8A;
       --reserved: #E8A020;
       --sold: #E05555;
       --rented: #5B9BD5;
-
       --row-h: 75px;
       --thumb-w: 110px;
     }
@@ -60,31 +58,19 @@
       font-weight: 800; text-decoration: none; text-transform: uppercase;
     }
 
-    /* ✅ จุดที่ 2: ปรับแต่งหัวข้อและปุ่มรีเซ็ต */
+    /* จุดที่ 2 (เก่า): ปุ่ม Reset หัวข้อ */
     .hero { padding: 75px 15px 10px; text-align: center; }
     .hero-title-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; margin-bottom: 12px;
     }
     .hero-title { font-size: 1.8rem; font-weight: 300; margin: 0; }
     .hero-title em { font-style: normal; color: var(--gold-lt); }
     .btn-reset {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--gold);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: var(--gold); width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease;
     }
     .btn-reset:active { transform: rotate(-180deg); background: rgba(201,168,76,0.2); }
 
@@ -94,8 +80,7 @@
       width: 100%; background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border); border-radius: 50px;
       padding: 10px 15px 10px 40px; color: var(--white);
-      font-size: 0.85rem; font-family: 'Sarabun', sans-serif;
-      outline: none;
+      font-size: 0.85rem; font-family: 'Sarabun', sans-serif; outline: none;
     }
     .search-input:focus { border-color: var(--gold); background: rgba(255, 255, 255, 0.1); }
     .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 0.8rem; }
@@ -113,7 +98,6 @@
       white-space: nowrap; padding: 6px 14px; border-radius: 50px;
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
       color: var(--muted); font-size: 0.65rem; font-weight: 700; cursor: pointer;
-      transition: all 0.2s ease;
     }
     .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
 
@@ -179,13 +163,13 @@
   <section class="hero">
     <div class="hero-title-wrap">
       <h1 class="hero-title">Prime <em>Asset</em> Catalog</h1>
-      <button class="btn-reset" onclick="resetFilters()" title="ล้างการค้นหา">&#8634;</button>
+      <button class="btn-reset" onclick="resetFilters()" title="ล้างการค้นหา">↻</button>
     </div>
     
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="ค้นหา... โครงการ, รหัสทรัพย์, ทำเล, จุดเด่น">
+        <input type="text" id="searchInput" class="search-input" placeholder="พิมพ์ชื่อทำเล, รหัสทรัพย์, หรือโครงการ...">
       </div>
 
       <div class="filters-grid">
@@ -195,11 +179,10 @@
           <option value="Cha-am">ชะอำ</option>
           <option value="Pranburi">ปราณบุรี</option>
         </select>
-        <select id="priceFilter" class="filter-select">
-          <option value="">ทุกราคา</option>
-          <option value="0-5000000">ไม่เกิน 5M</option>
-          <option value="5000000-15000000">5M - 15M</option>
-          <option value="15000000-999999999">15M+</option>
+        <select id="sortFilter" class="filter-select">
+          <option value="">เรียงตามราคา</option>
+          <option value="low-high">ราคา: ต่ำ-สูง</option>
+          <option value="high-low">ราคา: สูง-ต่ำ</option>
         </select>
         <select id="bedFilter" class="filter-select">
           <option value="">ห้องนอน</option>
@@ -245,6 +228,11 @@
       }
     }
 
+    function getNumPrice(p) {
+      const priceVal = p.Listing_Type === 'Sale' ? p.Sale_Price : p.Monthly_Rent;
+      return parseFloat(String(priceVal || "0").replace(/[^0-9.]/g, '')) || 0;
+    }
+
     function renderList(items) {
       const grid = document.getElementById('propGrid');
       const countLabel = document.getElementById('unitCount');
@@ -256,10 +244,8 @@
       }
 
       grid.innerHTML = items.map(p => {
-        const priceVal = p.Listing_Type === 'Sale' ? p.Sale_Price : p.Monthly_Rent;
-        const numPrice = parseFloat(priceVal.replace(/[^0-9.]/g, ''));
-        const displayPrice = isNaN(numPrice) ? "—" : "฿" + numPrice.toLocaleString();
-        
+        const priceNum = getNumPrice(p);
+        const displayPrice = priceNum === 0 ? "—" : "฿" + priceNum.toLocaleString();
         const title = `${p.Listing_Type}: ${p.District}`;
         const specs = `${p.Bedrooms} Bed | ${p.Bathrooms} Bath | ${p.Living_Area_sq_m} sqm`;
 
@@ -288,22 +274,22 @@
       }).join('');
     }
 
-    // ✅ จุดที่ 1: ปรับปรุงความสัมพันธ์ของการ Search ให้แม่นยำและค้นหาได้กว้างขึ้น
+    // ✅ จุดที่ 1: ปรับ Instant Search ให้เร็วและแม่นยำขึ้น
     function filterData() {
       const q = document.getElementById('searchInput').value.trim().toLowerCase();
       const area = document.getElementById('areaFilter').value;
       const bed = document.getElementById('bedFilter').value;
+      const sort = document.getElementById('sortFilter').value;
       const activePill = document.querySelector('.pill.active').dataset.f;
 
-      const filtered = rawData.filter(p => {
-        // ค้นหาจากหลายฟิลด์: District, HP_ID, Project_Name, Zone, Key_Selling_Points
+      let filtered = rawData.filter(p => {
+        // ค้นหารายละเอียดหลายฟิลด์พร้อมกัน
         const searchableText = `${p.District} ${p.HP_ID} ${p.Project_Name} ${p.Zone} ${p.Key_Selling_Points || ''}`.toLowerCase();
         const matchQ = q === "" || searchableText.includes(q);
         
         const matchArea = area === "" || p.District === area || p.Zone === area;
         const matchBed = bed === "" || (bed === "3" ? parseInt(p.Bedrooms) >= 3 : p.Bedrooms == bed);
         
-        // กรองตามปุ่ม Pill
         const matchPill = activePill === "all" || 
                          p.Listing_Type === activePill || 
                          p.Type === activePill || 
@@ -312,52 +298,31 @@
         return matchQ && matchArea && matchBed && matchPill;
       });
 
+      // ✅ จุดที่ 2: ตรรกะการเรียงลำดับราคา
+      if (sort === "low-high") {
+        filtered.sort((a, b) => getNumPrice(a) - getNumPrice(b));
+      } else if (sort === "high-low") {
+        filtered.sort((a, b) => getNumPrice(b) - getNumPrice(a));
+      }
+
       renderList(filtered);
     }
 
-    // ✅ ฟังก์ชันสำหรับปุ่มรีเซ็ต
     function resetFilters() {
       document.getElementById('searchInput').value = "";
       document.getElementById('areaFilter').value = "";
-      document.getElementById('priceFilter').value = "";
+      document.getElementById('sortFilter').value = "";
       document.getElementById('bedFilter').value = "";
-      
       document.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
       document.querySelector('.pill[data-f="all"]').classList.add('active');
-      
       renderList(rawData);
     }
 
-    // EVENT LISTENERS
+    // ✅ ใส่ Listener ให้ค้นหาทันทีที่พิมพ์
     document.getElementById('searchInput').addEventListener('input', filterData);
     document.getElementById('areaFilter').addEventListener('change', filterData);
     document.getElementById('bedFilter').addEventListener('change', filterData);
-    document.getElementById('priceFilter').addEventListener('change', () => {
-        // กรองตามช่วงราคา
-        const range = document.getElementById('priceFilter').value;
-        if(!range) { filterData(); return; }
-        const [min, max] = range.split('-').map(Number);
-        
-        const q = document.getElementById('searchInput').value.trim().toLowerCase();
-        const area = document.getElementById('areaFilter').value;
-        const bed = document.getElementById('bedFilter').value;
-        const activePill = document.querySelector('.pill.active').dataset.f;
-
-        const filtered = rawData.filter(p => {
-            const priceVal = p.Listing_Type === 'Sale' ? p.Sale_Price : p.Monthly_Rent;
-            const numPrice = parseFloat(priceVal.replace(/[^0-9.]/g, ''));
-            const matchPrice = numPrice >= min && numPrice <= max;
-            
-            const searchableText = `${p.District} ${p.HP_ID} ${p.Project_Name} ${p.Zone}`.toLowerCase();
-            const matchQ = q === "" || searchableText.includes(q);
-            const matchArea = area === "" || p.District === area;
-            const matchBed = bed === "" || (bed === "3" ? parseInt(p.Bedrooms) >= 3 : p.Bedrooms == bed);
-            const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
-
-            return matchPrice && matchQ && matchArea && matchBed && matchPill;
-        });
-        renderList(filtered);
-    });
+    document.getElementById('sortFilter').addEventListener('change', filterData);
     
     document.getElementById('pillBox').addEventListener('click', (e) => {
       if (e.target.classList.contains('pill')) {
