@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 
   <style>
     /* ═══════════════════════════════════════════
@@ -38,7 +38,6 @@
       --px:10px;
       --radius:8px;
 
-      /* ✅ ปรับความสูงให้แน่นขึ้นเพื่อให้เห็น 10-12 รูปในหน้าเดียว */
       --row-h:70px;
       --thumb-w:100px;
     }
@@ -48,8 +47,9 @@
     body{
       background:var(--navy);
       color:var(--sand);
-      font-family:'Sarabun',sans-serif;
-      font-weight:300;
+      /* เปลี่ยนฟอนต์หลักเป็น Montserrat และ Sarabun ทั้งหมดเพื่อให้ดูเรียบง่าย */
+      font-family: 'Montserrat', 'Sarabun', sans-serif;
+      font-weight:400;
       min-height:100dvh;
       overflow-x:hidden;
     }
@@ -73,51 +73,51 @@
       border-bottom:1px solid var(--border);
     }
     .logo{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.05rem;color:var(--gold);text-decoration:none;letter-spacing:.05em;
+      font-family:'Montserrat', sans-serif;
+      font-size:1rem;color:var(--gold);text-decoration:none;letter-spacing:.02em;font-weight:700;
     }
     .logo span{color:var(--sand);font-weight:300}
     .btn-contact-header{
       padding:5px 10px;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      color:var(--navy);font-family:'Montserrat',sans-serif;
+      color:var(--navy);
       font-size:.58rem;font-weight:700;text-decoration:none;border-radius:3px;
     }
 
     /* ═══ HERO ═══ */
     .hero{position:relative;z-index:1;padding:65px var(--px) 5px;text-align:center}
     .hero-title{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.8rem;font-weight:300;color:var(--white);margin-bottom:5px;
+      font-size:1.6rem;font-weight:700;color:var(--white);margin-bottom:5px;
+      letter-spacing:-0.02em;
     }
     .hero-title em{
-      font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      font-style:normal;background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
 
-    /* ═══ SEARCH & FILTERS (Compact) ═══ */
+    /* ═══ SEARCH & FILTERS ═══ */
     .search-wrap{max-width:500px;margin:0 auto 8px;position:relative}
     .search-input{
       width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);
       border:1px solid var(--border);border-radius:var(--radius);
-      color:var(--white);font-size:.85rem;outline:none;
+      color:var(--white);font-size:.85rem;outline:none;font-family:'Sarabun', sans-serif;
     }
     .filters-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:500px;margin:0 auto 10px}
     .filter-select{
       width:100%;padding:6px;background:rgba(255,255,255,0.06);
       border:1px solid var(--border);border-radius:6px;
-      color:var(--sand);font-size:.75rem;outline:none;
+      color:var(--sand);font-size:.75rem;outline:none;font-family:'Sarabun', sans-serif;
     }
 
     /* ═══ LISTINGS ═══ */
     .listings{padding:0 var(--px) 20px;position:relative;z-index:1}
     .listings-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .listings-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--white)}
-    .listings-count{font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+    .listings-title{font-size:1rem;color:var(--white);font-weight:600}
+    .listings-count{font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
 
     .grid{display:grid;grid-template-columns:1fr;gap:5px}
 
-    /* ═══ CARD (COMPACT ROW) ═══ */
+    /* ═══ CARD ═══ */
     .card{
       background:rgba(11,24,41,0.85);
       border:1px solid var(--border);
@@ -129,65 +129,56 @@
     }
     .card:active{transform:scale(0.98);border-color:var(--gold)}
 
-    /* Image Box */
     .c-img-box{
       width:var(--thumb-w);flex:0 0 var(--thumb-w);
       position:relative;background:#060F1A;
     }
     .c-img-box img{width:100%;height:100%;object-fit:cover;display:block}
     
-    /* ✅ รหัส HP-ID บนรูป (ตัวเล็ก, ไม่มีพื้นหลัง) */
     .id-on-img{
       position:absolute;top:4px;left:6px;
-      font-family:'Montserrat',sans-serif;
-      font-size:.50rem;font-weight:600;
-      color:rgba(255,255,255,0.8);
-      text-shadow:0 1px 3px rgba(0,0,0,0.9);
+      font-size:.50rem;font-weight:700;
+      color:rgba(255,255,255,0.9);
+      text-shadow:0 1px 2px rgba(0,0,0,1);
       z-index:2;
     }
 
-    /* Body Box */
     .c-body{
       flex:1;padding:6px 10px;
-      display:grid;grid-template-columns:1fr auto; /* ✅ ซ้ายข้อความ / ขวาสถานะ+ราคา */
+      display:grid;grid-template-columns:1fr auto;
       align-items:center;min-width:0;
     }
 
-    /* Left Side: Info */
     .info-side{min-width:0;display:flex;flex-direction:column;justify-content:center}
     .main-title{
-      font-family:'Cormorant Garamond',serif;
-      font-size:.92rem;color:var(--white);font-weight:400;
+      font-size:.85rem;color:var(--white);font-weight:600;
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
     .sub-info{
-      font-size:.68rem;color:var(--muted);margin-top:2px;
+      font-size:.65rem;color:var(--muted);margin-top:2px;
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      font-family:'Sarabun', sans-serif;
     }
 
-    /* Right Side: Price & Status Tags */
     .status-side{
       display:flex;flex-direction:column;align-items:flex-end;
       justify-content:center;gap:3px;padding-left:8px;
     }
     .price-tag{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.05rem;font-weight:600;
-      background:linear-gradient(135deg,var(--brand-red2),var(--gold-lt));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      font-size:0.95rem;font-weight:700;
+      /* ปรับสีราคาให้เป็นสีทองสว่างเพื่อให้อ่านง่ายขึ้นบนพื้นหลังเข้ม */
+      color: var(--gold-lt);
+      letter-spacing: -0.01em;
     }
 
-    /* ✅ จัดระเบียบข้อความ Available/Badge ให้เล็กลงอยู่ด้านขวา */
     .tag-container{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:3px;max-width:80px}
     .mini-tag{
-      font-family:'Montserrat',sans-serif;
-      font-size:.45rem;font-weight:700;
+      font-size:.42rem;font-weight:700;
       padding:1px 5px;border-radius:3px;
       text-transform:uppercase;letter-spacing:0.5px;
     }
     .t-status{background:rgba(255,255,255,0.08);color:var(--sand);border:0.5px solid rgba(255,255,255,0.1)}
     .t-badge{background:var(--brand-red);color:white}
-    .status-dot{display:inline-block;width:4px;height:4px;border-radius:50%;margin-right:3px}
 
     /* ═══ SKELETON ═══ */
     .skel{height:var(--row-h);background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:5px;animation:pulse 1.5s infinite}
@@ -197,7 +188,8 @@
     @media (min-width:768px){
       :root{--row-h:85px;--thumb-w:130px;}
       .grid{grid-template-columns:repeat(2,1fr);gap:10px}
-      .main-title{font-size:1.05rem}
+      .main-title{font-size:1rem}
+      .price-tag{font-size:1.1rem}
       .tag-container{max-width:120px}
     }
   </style>
@@ -206,12 +198,12 @@
 <body>
 
   <header>
-    <a href="#" class="logo">Hua Hin<span>.Properties</span></a>
+    <a href="#" class="logo">HUA HIN<span>.PROPERTIES</span></a>
     <a href="#" class="btn-contact-header">CONTACT</a>
   </header>
 
   <section class="hero">
-    <h1 class="hero-title">Prime <em>Asset</em> Catalog</h1>
+    <h1 class="hero-title">PRIME <em>ASSET</em> CATALOG</h1>
     
     <div class="search-wrap">
       <input id="searchInput" class="search-input" type="text" placeholder="ค้นหาอสังหาฯ..."/>
@@ -258,7 +250,10 @@
       grid.innerHTML = data.map(p => {
         const id = p['HP_ID'] || '0000';
         const title = p['Listing_Type'] === 'Rent' ? `For Rent: ${p['District']}` : `For Sale: ${p['District']}`;
+        
+        // ส่งค่าราคาไปจัดฟอร์แมตแบบเต็ม
         const price = formatPrice(p['Sale_Price'] || p['Monthly_Rent']);
+        
         const thumb = p['Thumbnail_Image'] || 'https://via.placeholder.com/150x100?text=No+Image';
         const status = p['Status'] || 'Available';
         const badge = p['Badge'] || '';
@@ -289,20 +284,23 @@
       }).join('');
     }
 
+    // ✅ แก้ไขฟังก์ชันการจัดรูปแบบราคาให้แสดงตัวเลขเต็ม
     function formatPrice(val) {
       if(!val || val === '#') return '—';
+      // ดึงเฉพาะตัวเลขออกมา
       const n = parseFloat(String(val).replace(/[^\d.]/g, ''));
-      if(n >= 1e6) return '฿' + (n/1e6).toFixed(1) + 'M';
-      if(n >= 1e3) return '฿' + Math.round(n/1e3) + 'K';
+      if (isNaN(n)) return '—';
+      
+      // แสดงผลแบบใส่คอมม่า (เช่น 9,800,000)
       return '฿' + n.toLocaleString();
     }
 
-    // Basic Search Filter
     document.getElementById('searchInput').addEventListener('input', e => {
       const q = e.target.value.toLowerCase();
       const filtered = allProps.filter(p => 
         (p['District']||'').toLowerCase().includes(q) || 
-        (p['HP_ID']||'').toLowerCase().includes(q)
+        (p['HP_ID']||'').toLowerCase().includes(q) ||
+        (p['Zone']||'').toLowerCase().includes(q)
       );
       render(filtered);
     });
