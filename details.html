@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="th">
 <head>
@@ -152,10 +153,7 @@
     }
 
     /* ===== GALLERY ===== */
-    .gallery{
-      position:relative;
-      min-height:240px;
-    }
+    .gallery{position:relative;min-height:240px}
     .g-main{
       position:relative;
       width:100%;
@@ -175,8 +173,8 @@
       background:linear-gradient(
         to bottom,
         rgba(0,0,0,0.0) 40%,
-        rgba(11,24,41,0.55) 75%,
-        rgba(11,24,41,0.92) 100%
+        rgba(11,24,41,0.45) 75%,
+        rgba(11,24,41,0.85) 100%
       );
       pointer-events:none;
     }
@@ -192,26 +190,28 @@
       border-radius:2px;
     }
 
+    /* จุดที่ 2: ทำ status บางที่สุด */
     .g-status{
       position:absolute;top:10px;right:10px;
       display:flex;align-items:center;gap:6px;
       padding:4px 10px;
-      background:rgba(6,15,26,0.85);
-      backdrop-filter:blur(6px);
+      background:rgba(6,15,26,0.18);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius:20px;
-      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
     }
     .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-    .d-av{background:var(--available);box-shadow:0 0 8px var(--available)}
-    .d-rs{background:var(--reserved);box-shadow:0 0 8px var(--reserved)}
-    .d-sd{background:var(--sold);box-shadow:0 0 8px var(--sold)}
-    .d-rt{background:var(--rented);box-shadow:0 0 8px var(--rented)}
+    .d-av{background:var(--available);box-shadow:0 0 8px rgba(46,204,138,0.55)}
+    .d-rs{background:var(--reserved);box-shadow:0 0 8px rgba(232,160,32,0.55)}
+    .d-sd{background:var(--sold);box-shadow:0 0 8px rgba(224,85,85,0.55)}
+    .d-rt{background:var(--rented);box-shadow:0 0 8px rgba(91,155,213,0.55)}
     .dot-lbl{
       font-family:'Montserrat',sans-serif;
       font-size:0.52rem;
       letter-spacing:0.1em;
       text-transform:uppercase;
-      color:var(--sand);
+      color:rgba(245,237,216,0.92);
     }
 
     .g-nav{
@@ -227,8 +227,9 @@
       width:42px;height:42px;
       border-radius:50%;
       border:1px solid rgba(255,255,255,0.12);
-      background:rgba(6,15,26,0.55);
+      background:rgba(6,15,26,0.35);
       backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
       display:flex;align-items:center;justify-content:center;
       color:var(--sand);
       cursor:pointer;
@@ -236,28 +237,35 @@
       user-select:none;
     }
     .g-btn:hover{border-color:rgba(201,168,76,0.45);transform:translateY(-1px)}
+
+    /* จุดที่ 3: ทำแถบจำนวนรูปบางที่สุด */
     .g-count{
       position:absolute;
       right:12px;bottom:12px;
       padding:4px 10px;
       border-radius:18px;
-      background:rgba(6,15,26,0.75);
-      border:1px solid rgba(255,255,255,0.1);
+      background:rgba(6,15,26,0.16);
+      border:1px solid rgba(255,255,255,0.12);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
       font-family:'Montserrat',sans-serif;
       font-size:0.55rem;
       letter-spacing:0.12em;
       text-transform:uppercase;
-      color:rgba(245,237,216,0.8);
+      color:rgba(245,237,216,0.9);
     }
+
+    /* จุดที่ 1: ทำกล่องราคาเล็กลง + อ่านง่ายขึ้น */
     .g-price{
       position:absolute;
       left:12px;bottom:12px;
       min-width:160px;
       padding:10px 12px;
       border-radius:var(--radius);
-      border:1px solid var(--border);
-      background:rgba(6,15,26,0.55);
-      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(6,15,26,0.22);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
     }
     .g-price .lbl{
       font-family:'Montserrat',sans-serif;
@@ -333,10 +341,7 @@
       margin-bottom:12px;
     }
 
-    .chips{
-      display:flex;flex-wrap:wrap;gap:6px;
-      margin:10px 0 2px;
-    }
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
     .chip{
       padding:5px 10px;
       border-radius:999px;
@@ -385,11 +390,7 @@
     }
 
     .contactBox .pad{padding:14px 16px}
-    .contactGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-    }
+    .contactGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
     .cbtn{
       display:flex;align-items:center;justify-content:center;
       height:36px;
@@ -420,15 +421,8 @@
       line-height:1.55;
     }
 
-    .smallCard{
-      padding:14px 16px;
-    }
-    .kv{
-      display:grid;
-      grid-template-columns:140px 1fr;
-      gap:8px 12px;
-      align-items:start;
-    }
+    .smallCard{padding:14px 16px}
+    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;align-items:start}
     .k{
       font-family:'Montserrat',sans-serif;
       font-size:0.55rem;
@@ -450,6 +444,22 @@
       white-space:pre-line;
     }
 
+    /* จุดที่ 1: mobile price box smaller */
+    @media (max-width:520px){
+      .g-price{
+        left:10px;bottom:10px;
+        min-width:132px;
+        padding:8px 10px;
+        border-radius:8px;
+        background:rgba(6,15,26,0.18);
+      }
+      .g-price .lbl{font-size:0.50rem;letter-spacing:0.20em}
+      .g-price .val{font-size:1.15rem}
+      .g-count{right:10px;bottom:10px;padding:4px 9px;font-size:0.52rem}
+      .g-status{top:10px;right:10px;padding:4px 9px}
+      .dot-lbl{font-size:0.50rem}
+    }
+
     /* Responsive */
     @media (min-width:900px){
       header{padding:0 var(--px-lg)}
@@ -468,7 +478,6 @@
 </head>
 
 <body>
-  <!-- HEADER -->
   <header>
     <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
     <div class="header-nav">
@@ -481,7 +490,7 @@
     <div class="err" id="errBox">⚠ โหลดรายละเอียดไม่ได้ — ตรวจสอบ SCRIPT_URL / Deploy / Permission และโหมด getUnitDetail</div>
 
     <div class="wrap">
-      <!-- LEFT: GALLERY + DETAILS -->
+      <!-- LEFT: GALLERY -->
       <section class="card gallery" aria-label="Gallery">
         <div class="g-main" id="gMain">
           <div class="skeleton" style="width:100%;height:100%"></div>
@@ -500,7 +509,7 @@
           </div>
 
           <div class="g-price">
-            <div class="lbl" id="priceLbl">Price</div>
+            <div class="lbl" id="priceLbl">Sale Price</div>
             <div class="val" id="priceVal">—</div>
           </div>
 
@@ -510,21 +519,8 @@
         <div class="thumbs" id="thumbs"></div>
       </section>
 
-      <!-- RIGHT: CONTACT + SUMMARY -->
+      <!-- RIGHT: SUMMARY (ย้าย CONTACT ไปไว้ล่างสุด) -->
       <aside style="display:grid;gap:14px">
-        <section class="card contactBox">
-          <div class="pad">
-            <div class="kicker">Contact</div>
-            <div class="contactGrid">
-              <a class="cbtn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">Line OA</a>
-              <a class="cbtn" id="btnWa" href="https://wa.me/66805820777?text=Interested" target="_blank" rel="noopener">WhatsApp</a>
-              <a class="cbtn" id="btnFb" href="#" target="_blank" rel="noopener">Facebook</a>
-              <a class="cbtn" id="btnCall" href="tel:+66805820777">Call</a>
-            </div>
-            <div class="note">กดปุ่มด้านบนเพื่อสอบถามรายละเอียด / นัดชมบ้าน<br/>(ลิงก์จะเปิดแท็บใหม่)</div>
-          </div>
-        </section>
-
         <section class="card">
           <div class="pad">
             <div class="kicker">Property</div>
@@ -566,6 +562,20 @@
 
             <div class="kicker">Description</div>
             <div class="desc" id="desc">—</div>
+          </div>
+        </section>
+
+        <!-- จุดที่ 4: ย้าย CONTACT ลงล่างสุด -->
+        <section class="card contactBox">
+          <div class="pad">
+            <div class="kicker">Contact</div>
+            <div class="contactGrid">
+              <a class="cbtn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">Line OA</a>
+              <a class="cbtn" id="btnWa" href="https://wa.me/66805820777?text=Interested" target="_blank" rel="noopener">WhatsApp</a>
+              <a class="cbtn" id="btnFb" href="#" target="_blank" rel="noopener">Facebook</a>
+              <a class="cbtn" id="btnCall" href="tel:+66805820777">Call</a>
+            </div>
+            <div class="note">กดปุ่มด้านบนเพื่อสอบถามรายละเอียด / นัดชมบ้าน<br/>(ลิงก์จะเปิดแท็บใหม่)</div>
           </div>
         </section>
       </aside>
@@ -626,17 +636,6 @@
       return { Available:"d-av", Reserved:"d-rs", Sold:"d-sd", Rented:"d-rt" }[s] || "d-av";
     }
 
-    function fmtPrice(sale, rent, ltype) {
-      const src = (ltype === "Rent") ? rent : (sale && sale !== "#" ? sale : rent);
-      if (!src || src === "#") return "—";
-      const n = parseFloat(String(src).replace(/[^\d.]/g, ""));
-      if (!n) return "—";
-      const sfx = (ltype === "Rent" || (!sale && rent)) ? "/mo" : "";
-      if (n >= 1e6) return "฿" + (n/1e6).toFixed(1) + "M" + sfx;
-      if (n >= 1e3) return "฿" + Math.round(n/1e3) + "K" + sfx;
-      return "฿" + n.toLocaleString() + sfx;
-    }
-
     function safeText(v, fb="—") {
       const s = (v==null) ? "" : String(v).trim();
       return s ? s : fb;
@@ -646,6 +645,27 @@
       const s = (v==null) ? "" : String(v).trim();
       if (!s) return [];
       return s.split(/[,|\n]/).map(x=>String(x).trim()).filter(Boolean);
+    }
+
+    // จุดที่ 1: ราคา “แบบเต็ม” ไม่ย่อ
+    function moneyFull(value){
+      const raw = (value==null) ? "" : String(value).trim();
+      if (!raw || raw === "#") return "";
+      const n = parseFloat(raw.replace(/[^\d.]/g,""));
+      if (!n || !isFinite(n)) return "";
+      return "฿" + Math.round(n).toLocaleString("en-US");
+    }
+
+    function pickPriceFull(sale, rent, listingType){
+      const lt = (listingType||"").toLowerCase();
+      if (lt === "rent") {
+        const r = moneyFull(rent);
+        return r ? (r + " / month") : "";
+      }
+      const s = moneyFull(sale);
+      if (s) return s;
+      const r = moneyFull(rent);
+      return r ? (r + " / month") : "";
     }
 
     // =============================
@@ -670,10 +690,8 @@
 
       main.insertBefore(img, main.firstChild);
 
-      // counter
       document.getElementById("gCount").textContent = `${ALBUM.length} Photos`;
 
-      // thumbs active
       document.querySelectorAll(".t").forEach((el, idx) => {
         if (idx === CUR) el.classList.add("active");
         else el.classList.remove("active");
@@ -706,12 +724,10 @@
     // RENDER
     // =============================
     function render(p) {
-      // Title + sub
       const name = [p.Project_Name, p.Type].filter(Boolean).join(" · ");
       document.getElementById("ttl").textContent = safeText(name);
       document.getElementById("sub").textContent = "📍 " + [p.Zone, p.District].filter(Boolean).join(" · ");
 
-      // chips
       const chips = document.getElementById("chips");
       chips.innerHTML = "";
       [
@@ -740,11 +756,11 @@
       const dot = document.getElementById("gDot");
       dot.className = "dot " + dotCls(st);
 
-      // price
+      // price (FULL)
       const lt = safeText(p.Listing_Type, "Sale");
-      const price = fmtPrice(p.Sale_Price, p.Monthly_Rent, lt);
-      document.getElementById("priceVal").textContent = price;
-      document.getElementById("priceLbl").textContent = (lt === "Rent") ? "Monthly Rent" : "Sale Price";
+      const full = pickPriceFull(p.Sale_Price, p.Monthly_Rent, lt);
+      document.getElementById("priceVal").textContent = full || "—";
+      document.getElementById("priceLbl").textContent = (String(lt).toLowerCase() === "rent") ? "Monthly Rent" : "Sale Price";
 
       // specs
       document.getElementById("bed").textContent  = safeText(p.Bedrooms);
@@ -789,21 +805,17 @@
       document.getElementById("ksp").textContent  = safeText(p.Key_Selling_Points);
       document.getElementById("desc").textContent = safeText(p.Description);
 
-      // gallery sources (priority)
-      // 1) __album from GS
-      // 2) Album_Image column
+      // gallery sources
       const a1 = Array.isArray(p.__album) ? p.__album : [];
       const a2 = parseAlbum(p.Album_Image);
       ALBUM = (a1.length ? a1 : a2).filter(Boolean);
 
-      // fallback: use __thumb / Thumbnail_Image if no album
       const thumb = safeText(p.__thumb || p.Thumbnail_Image, "");
       if (!ALBUM.length && thumb) ALBUM = [thumb];
 
       buildThumbs();
       if (ALBUM.length) setMain(0);
       else {
-        // remove skeleton if no img
         const main = document.getElementById("gMain");
         const sk = main.querySelector(".skeleton");
         if (sk) sk.remove();
@@ -834,3 +846,4 @@
   </script>
 </body>
 </html>
+```
