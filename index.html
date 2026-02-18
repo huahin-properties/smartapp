@@ -28,24 +28,24 @@
       --thumb-w: 110px;
     }
 
-    /* ✅ ปรับลดขนาดเฉพาะการเปิดผ่านโปรแกรม LINE ตามที่เน้นในกรอบสีแดง */
+    /* Scaling for LINE Browser to fix the red-box clipping issue */
     body.is-line {
-      zoom: 0.88; /* ลดสเกลภาพรวมลงอีกเพื่อให้ภาพดูโปร่งเหมือน Chrome */
+      zoom: 0.88;
       -moz-transform: scale(0.88);
       -moz-transform-origin: 0 0;
     }
     body.is-line .prop-name { 
-      font-size: 0.78rem; /* ลดขนาดหัวข้อ */
+      font-size: 0.78rem;
       font-weight: 600; 
     }
     body.is-line .prop-specs { 
-      font-size: 0.62rem; /* ลดขนาด Bed/Bath/Sqm เพื่อไม่ให้เบียดราคา */
+      font-size: 0.62rem;
     }
     body.is-line .price { 
-      font-size: 0.88rem; /* ลดขนาดตัวเลขราคาเล็กน้อย */
+      font-size: 0.88rem;
     }
     body.is-line .tag { 
-      font-size: 0.4rem; /* ลดขนาดป้ายสถานะ */
+      font-size: 0.4rem;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -230,6 +230,9 @@
         <div class="pill" data-f="Pool Villa">Pool Villa</div>
         <div class="pill" data-f="Condo">Condo</div>
         <div class="pill" data-f="Land">Land</div>
+        <div class="pill" data-f="House">House</div>
+        <div class="pill" data-f="Commercial">Commercial</div>
+        <div class="pill" data-f="Others">Others</div>
       </div>
     </div>
   </section>
@@ -321,7 +324,12 @@
           else matchBed = b == parseInt(bed);
         }
         
-        const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
+        // Match Pill checks Listing_Type, Type, or Status from your spreadsheet
+        const matchPill = activePill === "all" || 
+                         p.Listing_Type === activePill || 
+                         p.Type === activePill || 
+                         p.Status === activePill;
+
         return matchQ && matchArea && matchBed && matchPill;
       });
 
