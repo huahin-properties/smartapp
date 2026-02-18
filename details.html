@@ -12,45 +12,42 @@
   <style>
     /* ═══════════════════════════════════════════
        HUAHIN.PROPERTIES — DETAILS (FULL)
-       Theme matches your index + adds logo palette
+       + Loading Skeleton / Working state
     ═══════════════════════════════════════════ */
 
     :root{
-      /* Base (index-style) */
-      --navy:      #0B1829;
-      --navy-mid:  #112238;
-      --navy-soft: #1a3350;
-      --ocean:     #1B4F72;
-      --teal:      #1A7A8A;
-      --muted:     #7A9BB5;
-      --border:    rgba(255,255,255,0.09);
-      --card-bg:   rgba(11,24,41,0.92);
+      --navy:#0B1829;
+      --navy-mid:#112238;
+      --navy-soft:#1a3350;
+      --ocean:#1B4F72;
+      --teal:#1A7A8A;
+      --muted:#7A9BB5;
+      --border:rgba(255,255,255,0.09);
+      --card-bg:rgba(11,24,41,0.92);
 
-      /* Brand palette (measured from your logo) */
-      --brand-maroon: #7F2723;
+      --brand-maroon:#7F2723;
       --brand-maroon-deep:#78241E;
       --brand-bronze:#9D5E3F;
       --brand-gold:#CEA86C;
       --brand-gold-hi:#EBD18E;
       --brand-cream:#F8F3E2;
 
-      /* Mapping */
-      --gold:      var(--brand-gold);
-      --gold-lt:   var(--brand-gold-hi);
-      --sand:      var(--brand-cream);
-      --sand-dim:  #C8B898;
-      --white:     #FDFAF5;
+      --gold:var(--brand-gold);
+      --gold-lt:var(--brand-gold-hi);
+      --sand:var(--brand-cream);
+      --sand-dim:#C8B898;
+      --white:#FDFAF5;
 
-      --available: #2ECC8A;
-      --reserved:  #E8A020;
-      --sold:      #E05555;
-      --rented:    #5B9BD5;
+      --available:#2ECC8A;
+      --reserved:#E8A020;
+      --sold:#E05555;
+      --rented:#5B9BD5;
 
-      --trans:     0.32s cubic-bezier(0.4,0,0.2,1);
-      --px:        18px;
-      --px-lg:     52px;
-      --radius:    10px;
-      --shadow:    0 16px 48px rgba(0,0,0,0.5);
+      --trans:0.32s cubic-bezier(0.4,0,0.2,1);
+      --px:18px;
+      --px-lg:52px;
+      --radius:10px;
+      --shadow:0 16px 48px rgba(0,0,0,0.5);
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -64,7 +61,6 @@
       overflow-x:hidden;
     }
 
-    /* Ocean background like index */
     body::before{
       content:'';
       position:fixed;inset:0;
@@ -90,7 +86,6 @@
     }
     @keyframes wave{from{transform:translateX(0)}to{transform:translateX(50%)}}
 
-    /* Header */
     header{
       position:fixed;top:0;left:0;right:0;z-index:300;
       height:58px;
@@ -138,7 +133,6 @@
     }
     .btn-cta:hover{opacity:.9;transform:translateY(-1px)}
 
-    /* Main */
     main{
       position:relative;z-index:1;
       padding:78px var(--px) 80px;
@@ -157,7 +151,6 @@
       font-size:.9rem;
     }
 
-    /* Layout */
     .wrap{
       display:grid;
       grid-template-columns:1fr;
@@ -173,11 +166,8 @@
       backdrop-filter:blur(12px);
     }
 
-    /* Gallery panel */
-    .gallery{
-      position:relative;
-      padding:0;
-    }
+    /* Gallery */
+    .gallery{position:relative;padding:0}
     .hero-media{
       position:relative;
       width:100%;
@@ -193,7 +183,39 @@
       filter:brightness(.92) saturate(1.06);
     }
 
-    /* Light overlay for readability (keep image visible) */
+    /* Image placeholder (prevents "broken image" look) */
+    .imgHold{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      background:
+        radial-gradient(ellipse 60% 60% at 40% 40%, rgba(206,168,108,.10) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(6,15,26,.55), rgba(6,15,26,.20));
+      border-bottom:1px solid rgba(255,255,255,.06);
+      color:rgba(248,243,226,.75);
+      text-align:center;
+      padding:18px;
+    }
+    .imgHold .holdTitle{
+      font-family:'Montserrat',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(206,168,108,.85);
+      margin-bottom:8px;
+    }
+    .imgHold .holdSub{
+      font-size:.92rem;
+      color:rgba(122,155,181,.95);
+      line-height:1.55;
+    }
+    .imgHold .miniSpin{
+      width:28px;height:28px;border-radius:999px;
+      border:2px solid rgba(206,168,108,.25);
+      border-top-color:rgba(206,168,108,.9);
+      animation:spin 0.9s linear infinite;
+      margin:0 auto 12px;
+    }
+
     .hero-shade{
       position:absolute;inset:0;
       background:linear-gradient(
@@ -205,14 +227,13 @@
       pointer-events:none;
     }
 
-    /* Nav arrows */
     .navBtn{
       position:absolute;top:50%;
       transform:translateY(-50%);
       width:44px;height:44px;
       border-radius:50%;
       border:1px solid rgba(255,255,255,.14);
-      background:rgba(6,15,26,.18); /* thinner */
+      background:rgba(6,15,26,.18);
       backdrop-filter:blur(6px);
       color:rgba(248,243,226,.9);
       display:flex;align-items:center;justify-content:center;
@@ -226,7 +247,6 @@
     .navR{right:14px}
     .navBtn svg{width:18px;height:18px}
 
-    /* Badge + Status (make thinner / less blocking) */
     .badge{
       position:absolute;top:12px;left:12px;
       padding:6px 10px;
@@ -239,13 +259,14 @@
       letter-spacing:0.18em;
       text-transform:uppercase;
       box-shadow:0 10px 26px rgba(0,0,0,.25);
+      display:none;
     }
     .statusPill{
       position:absolute;top:12px;right:12px;
       display:flex;align-items:center;gap:8px;
       padding:6px 10px;
       border-radius:999px;
-      background:rgba(6,15,26,.18); /* thinner */
+      background:rgba(6,15,26,.18);
       border:1px solid rgba(255,255,255,.14);
       backdrop-filter:blur(6px);
     }
@@ -263,7 +284,6 @@
     .d-sd{background:var(--sold);box-shadow:0 0 8px rgba(224,85,85,.6)}
     .d-rt{background:var(--rented);box-shadow:0 0 8px rgba(91,155,213,.6)}
 
-    /* Price (REQ: no label, no bar, just number, easy font) */
     .priceOnly{
       position:absolute;left:14px;bottom:14px;
       font-family:'Montserrat',sans-serif;
@@ -274,13 +294,11 @@
       text-shadow:0 10px 22px rgba(0,0,0,.65);
       user-select:none;
     }
-
-    /* Counter (REQ: no tab, no "photos", use 1/10, keep size) */
     .counterOnly{
       position:absolute;right:14px;bottom:14px;
       font-family:'Montserrat',sans-serif;
       font-weight:600;
-      font-size:0.72rem; /* similar visual size to your current */
+      font-size:0.72rem;
       letter-spacing:.14em;
       text-transform:uppercase;
       color:rgba(248,243,226,.9);
@@ -288,7 +306,6 @@
       user-select:none;
     }
 
-    /* Thumbnails row */
     .thumbRow{
       display:flex;
       gap:10px;
@@ -318,10 +335,8 @@
       transform:translateY(-1px);
     }
 
-    /* Details panel */
-    .info{
-      padding:18px 16px 16px;
-    }
+    /* Details */
+    .info{padding:18px 16px 16px}
     .kicker{
       font-family:'Montserrat',sans-serif;
       font-size:.58rem;
@@ -345,10 +360,7 @@
       font-size:.95rem;
       margin-bottom:12px;
     }
-    .tags{
-      display:flex;flex-wrap:wrap;gap:8px;
-      margin:10px 0 14px;
-    }
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
     .tag{
       padding:8px 12px;
       border-radius:999px;
@@ -389,11 +401,7 @@
     }
     .specVal small{opacity:.75;font-size:.9rem}
 
-    .section{
-      margin-top:14px;
-      padding-top:14px;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
+    .section{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
     .secTitle{
       font-family:'Montserrat',sans-serif;
       font-size:.62rem;
@@ -409,10 +417,7 @@
       white-space:pre-line;
     }
 
-    /* Contact panel (REQ: moved down below property details) */
-    .contact{
-      padding:16px;
-    }
+    .contact{padding:16px}
     .contactGrid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
@@ -448,11 +453,7 @@
       line-height:1.6;
     }
 
-    /* Map button */
-    .mapRow{
-      display:flex;gap:10px;flex-wrap:wrap;
-      margin-top:10px;
-    }
+    .mapRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .linkBtn{
       display:inline-flex;align-items:center;gap:10px;
       padding:11px 12px;
@@ -470,23 +471,143 @@
     .linkBtn:hover{border-color:rgba(206,168,108,.45);background:rgba(206,168,108,.10);transform:translateY(-1px)}
     .linkBtn svg{width:16px;height:16px;opacity:.9}
 
-    /* Responsive */
+    /* ==========================================================
+       LOADING OVERLAY (skeleton + "app working" feel)
+    ========================================================== */
+    .loadingOverlay{
+      position:fixed;inset:58px 0 0 0; /* below header */
+      z-index:250;
+      background:linear-gradient(180deg, rgba(6,15,26,.58), rgba(6,15,26,.18));
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      padding:18px var(--px) 28px;
+      overflow:auto;
+    }
+    .loadingWrap{
+      max-width:1100px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+    .loadCard{
+      border-radius:var(--radius);
+      border:1px solid rgba(206,168,108,.18);
+      background:rgba(11,24,41,.70);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .loadTop{
+      padding:16px 16px 10px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;
+    }
+    .loadBrand{
+      display:flex;align-items:center;gap:12px;
+      min-width:0;
+    }
+    .loadLogoDot{
+      width:34px;height:34px;border-radius:999px;
+      border:1px solid rgba(206,168,108,.35);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(235,209,142,.55), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(127,39,35,.35), transparent 60%),
+        linear-gradient(135deg, rgba(206,168,108,.18), rgba(6,15,26,.0));
+      flex:0 0 auto;
+    }
+    .loadText{
+      min-width:0;
+    }
+    .loadTitle{
+      font-family:'Montserrat',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(206,168,108,.95);
+      margin-bottom:6px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .loadSub{
+      color:rgba(122,155,181,.95);
+      font-size:.92rem;
+      line-height:1.5;
+    }
+    .spinner{
+      width:34px;height:34px;border-radius:999px;
+      border:2px solid rgba(206,168,108,.20);
+      border-top-color:rgba(206,168,108,.90);
+      animation:spin 0.9s linear infinite;
+      flex:0 0 auto;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .skeleton{
+      position:relative;
+      background:rgba(6,15,26,.24);
+      border:1px solid rgba(255,255,255,.06);
+      overflow:hidden;
+    }
+    .skeleton::after{
+      content:'';
+      position:absolute;inset:0;
+      background:linear-gradient(90deg,
+        transparent 0%,
+        rgba(235,209,142,.10) 35%,
+        rgba(235,209,142,.16) 50%,
+        rgba(235,209,142,.10) 65%,
+        transparent 100%
+      );
+      transform:translateX(-120%);
+      animation:shimmer 1.25s ease-in-out infinite;
+    }
+    @keyframes shimmer{to{transform:translateX(120%)}}
+
+    .skHero{aspect-ratio:16/9;border-radius:0}
+    .skThumbs{display:flex;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.06)}
+    .skThumb{width:112px;aspect-ratio:16/10;border-radius:10px}
+    .skInfo{padding:16px}
+    .skLine{height:12px;border-radius:8px;margin:10px 0}
+    .skLine.big{height:22px}
+    .skGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .skBox{height:78px;border-radius:14px}
+    .skSection{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+    .skP{height:12px;border-radius:8px;margin:10px 0}
+    .skP.short{width:70%}
+    .skP.mid{width:85%}
+
+    /* Hide real UI while loading */
+    .isLoading main{visibility:hidden}
+    .isLoading .loadingOverlay{display:block}
+    .loadingOverlay{display:none}
+
     @media(min-width:900px){
       header{padding:0 var(--px-lg)}
       main{padding:86px var(--px-lg) 100px}
       .wrap{grid-template-columns:1.25fr .75fr;align-items:start}
       .info{padding:18px}
       .gridSpecs{grid-template-columns:repeat(2,1fr)}
+      .loadingOverlay{padding:18px var(--px-lg) 28px}
+      .loadingWrap{grid-template-columns:1.25fr .75fr}
+      .skGrid{grid-template-columns:repeat(2,1fr)}
     }
     @media(max-width:420px){
       .title{font-size:1.75rem}
       .gridSpecs{grid-template-columns:repeat(2,1fr)}
       .thumb{width:104px}
+      .skGrid{grid-template-columns:repeat(2,1fr)}
+      .skThumb{width:104px}
     }
   </style>
 </head>
 
-<body>
+<body class="isLoading">
   <header>
     <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
     <div class="header-nav">
@@ -495,6 +616,62 @@
     </div>
   </header>
 
+  <!-- LOADING OVERLAY -->
+  <div class="loadingOverlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+    <div class="loadingWrap">
+      <section class="loadCard">
+        <div class="loadTop">
+          <div class="loadBrand">
+            <div class="loadLogoDot" aria-hidden="true"></div>
+            <div class="loadText">
+              <div class="loadTitle">Loading property details</div>
+              <div class="loadSub" id="loadingSub">กำลังโหลดข้อมูล… โปรดรอสักครู่</div>
+            </div>
+          </div>
+          <div class="spinner" aria-hidden="true"></div>
+        </div>
+
+        <div class="skeleton skHero"></div>
+        <div class="skThumbs">
+          <div class="skeleton skThumb"></div>
+          <div class="skeleton skThumb"></div>
+          <div class="skeleton skThumb"></div>
+        </div>
+      </section>
+
+      <section class="loadCard">
+        <div class="skInfo">
+          <div class="skeleton skLine" style="width:40%"></div>
+          <div class="skeleton skLine big" style="width:78%"></div>
+          <div class="skeleton skLine" style="width:62%"></div>
+
+          <div class="skGrid">
+            <div class="skeleton skBox"></div>
+            <div class="skeleton skBox"></div>
+            <div class="skeleton skBox"></div>
+            <div class="skeleton skBox"></div>
+            <div class="skeleton skBox"></div>
+            <div class="skeleton skBox"></div>
+          </div>
+
+          <div class="skSection">
+            <div class="skeleton skLine" style="width:45%"></div>
+            <div class="skeleton skP mid"></div>
+            <div class="skeleton skP"></div>
+            <div class="skeleton skP short"></div>
+          </div>
+
+          <div class="skSection">
+            <div class="skeleton skLine" style="width:35%"></div>
+            <div class="skeleton skP"></div>
+            <div class="skeleton skP mid"></div>
+            <div class="skeleton skP short"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
   <main>
     <div class="err" id="errBox">⚠ โหลดรายละเอียดไม่ได้ — ตรวจสอบ SCRIPT_URL / Deploy / Permission และโหมด getUnitDetail</div>
 
@@ -502,7 +679,16 @@
       <!-- LEFT: GALLERY -->
       <section class="panel gallery" aria-label="Gallery">
         <div class="hero-media">
-          <img id="heroImg" alt="Property photo" loading="eager" />
+          <!-- image placeholder -->
+          <div class="imgHold" id="imgHold">
+            <div>
+              <div class="miniSpin" aria-hidden="true"></div>
+              <div class="holdTitle">Loading photos</div>
+              <div class="holdSub">กำลังโหลดรูปภาพ…</div>
+            </div>
+          </div>
+
+          <img id="heroImg" alt="Property photo" loading="eager" style="opacity:0" />
           <div class="hero-shade"></div>
 
           <button class="navBtn navL" id="btnPrev" aria-label="Previous photo">
@@ -512,17 +698,14 @@
             <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
 
-          <div class="badge" id="badge" style="display:none"></div>
+          <div class="badge" id="badge"></div>
 
           <div class="statusPill" id="statusPill">
             <span class="dot d-av" id="statusDot"></span>
             <span class="lbl" id="statusLbl">—</span>
           </div>
 
-          <!-- REQ: only price number, no label/tab -->
           <div class="priceOnly" id="priceOnly">—</div>
-
-          <!-- REQ: no tab, no word photos, use 1/10 -->
           <div class="counterOnly" id="counterOnly">—</div>
         </div>
 
@@ -583,7 +766,7 @@
       </section>
     </div>
 
-    <!-- CONTACT moved DOWN (REQ #4) -->
+    <!-- CONTACT moved DOWN -->
     <section class="panel contact" id="contact" style="margin-top:14px">
       <div class="kicker">CONTACT</div>
       <div class="contactGrid">
@@ -615,12 +798,18 @@
 
     let photos = [];
     let idx = 0;
-    let current = null;
 
     // ==========================================================
     // HELPERS
     // ==========================================================
     const $ = (id)=>document.getElementById(id);
+
+    function setLoading(on, text){
+      document.body.classList.toggle("isLoading", !!on);
+      const ov = $("loadingOverlay");
+      if(ov) ov.setAttribute("aria-busy", on ? "true" : "false");
+      if(text && $("loadingSub")) $("loadingSub").textContent = text;
+    }
 
     function showErr(msg){
       const box = $("errBox");
@@ -649,21 +838,12 @@
     function normalizeImageUrl(u){
       let s = safeStr(u);
       if(!s) return "";
-
-      // if already lh3 direct
       if(/^https:\/\/lh3\.googleusercontent\.com\/d\//i.test(s)) return s;
-
-      // drive file view
       const m1 = s.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
       if(m1) return "https://lh3.googleusercontent.com/d/" + m1[1];
-
-      // open?id=
       const m2 = s.match(/open\?id=([a-zA-Z0-9_-]+)/);
       if(m2) return "https://lh3.googleusercontent.com/d/" + m2[1];
-
-      // raw file id (looks like)
       if(/^[a-zA-Z0-9_-]{20,}$/.test(s)) return "https://lh3.googleusercontent.com/d/" + s;
-
       return s;
     }
 
@@ -685,7 +865,6 @@
       if(lt.toLowerCase().includes("rent")){
         return rent ? (fmtBahtFull(rent) + "/mo") : (sale ? fmtBahtFull(sale) : "—");
       }
-      // Sale or Sale/Rent
       if(sale) return fmtBahtFull(sale);
       if(rent) return fmtBahtFull(rent) + "/mo";
       return "—";
@@ -709,25 +888,48 @@
     }
 
     // ==========================================================
+    // IMAGE LOADING UX (prevents broken icon)
+    // ==========================================================
+    function showImgHold(msg){
+      const h = $("imgHold");
+      if(!h) return;
+      const sub = h.querySelector(".holdSub");
+      if(sub && msg) sub.textContent = msg;
+      h.style.display = "flex";
+      $("heroImg").style.opacity = "0";
+    }
+    function hideImgHold(){
+      const h = $("imgHold");
+      if(!h) return;
+      h.style.display = "none";
+      $("heroImg").style.opacity = "1";
+    }
+
+    // ==========================================================
     // RENDER
     // ==========================================================
     function setHero(i){
       if(!photos.length){
         $("heroImg").src = "";
         $("counterOnly").textContent = "—";
+        showImgHold("ไม่พบรูปภาพในรายการนี้");
         return;
       }
+
       idx = (i + photos.length) % photos.length;
-      $("heroImg").src = photos[idx];
       $("counterOnly").textContent = `${idx+1}/${photos.length}`;
+
+      // show placeholder while image loads
+      showImgHold("กำลังโหลดรูปภาพ…");
+
+      const src = photos[idx];
+      $("heroImg").src = src;
       updateThumbActive();
     }
 
     function updateThumbActive(){
       const row = $("thumbRow");
-      [...row.children].forEach((el, k)=>{
-        el.classList.toggle("active", k===idx);
-      });
+      [...row.children].forEach((el, k)=> el.classList.toggle("active", k===idx));
     }
 
     function renderThumbs(){
@@ -745,8 +947,6 @@
     }
 
     function render(p){
-      current = p;
-
       const id = safeStr(p["HP_ID"]) || HP_ID || "—";
       const proj = safeStr(p["Project_Name"]);
       const type = safeStr(p["Type"]);
@@ -764,11 +964,9 @@
       $("title").textContent = [proj, type].filter(Boolean).join(" · ") || "—";
       $("loc").textContent = `📍 ${[zone, subd, dist].filter(Boolean).join(" · ") || "—"}`;
 
-      // Status pill
       $("statusLbl").textContent = status || "—";
       $("statusDot").className = "dot " + dotCls(status);
 
-      // Badge
       if(badge){
         $("badge").style.display = "inline-block";
         $("badge").textContent = badge;
@@ -776,10 +974,8 @@
         $("badge").style.display = "none";
       }
 
-      // Price (REQ: only number)
       $("priceOnly").textContent = choosePrice(p);
 
-      // Tags
       const tags = $("tags");
       tags.innerHTML = "";
       if(lt) tags.appendChild(tag(lt));
@@ -788,7 +984,6 @@
       if(deed) tags.appendChild(tag(deed));
       if(own) tags.appendChild(tag(own));
 
-      // Specs
       $("vBeds").textContent  = safeStr(p["Bedrooms"]) || "—";
       $("vBaths").textContent = safeStr(p["Bathrooms"]) || "—";
 
@@ -810,11 +1005,9 @@
       const transfer = safeStr(p["Transfer_Expenses"]);
       $("vOwner").textContent = [own, transfer].filter(Boolean).join(" · ") || "—";
 
-      // Text
       $("ksp").textContent  = safeStr(p["Key_Selling_Points"]) || "—";
       $("desc").textContent = safeStr(p["Description"]) || "—";
 
-      // Links
       const linkRow = $("linkRow");
       linkRow.innerHTML = "";
       const map = safeStr(p["Map_Link"]);
@@ -836,42 +1029,35 @@
       if(fp)  addLinkBtn(linkRow, "Floorplan", fp, icoPdf);
       if(mp)  addLinkBtn(linkRow, "Material", mp, icoPdf);
 
-      // Album photos
       const album = splitAlbum(p["Album_Image"]);
       const thumb = normalizeImageUrl(p["Thumbnail_Image"]);
-
       photos = album.length ? album : (thumb ? [thumb] : []);
+
       renderThumbs();
       setHero(0);
-
-      // Contact URLs (optional: override per listing)
-      // keep your defaults, but if sheet has custom links -> use them
-      // (FB_Link already used in Links; contact box stays your standard channels)
     }
 
     // ==========================================================
-    // FETCH DETAIL
+    // FETCH
     // ==========================================================
     async function fetchDetailFromScript(){
-      // Support common parameter names
       const url1 = `${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(HP_ID)}`;
       const url2 = `${SCRIPT_URL}?mode=getUnitDetail&HP_ID=${encodeURIComponent(HP_ID)}`;
 
-      let r = await fetch(url1, { signal: AbortSignal.timeout(9000) }).catch(()=>null);
+      let r = await fetch(url1, { signal: AbortSignal.timeout(12000) }).catch(()=>null);
       if(!r || !r.ok){
-        r = await fetch(url2, { signal: AbortSignal.timeout(9000) }).catch(()=>null);
+        r = await fetch(url2, { signal: AbortSignal.timeout(12000) }).catch(()=>null);
       }
       if(!r || !r.ok) throw new Error("SCRIPT_FETCH_FAILED");
 
       const j = await r.json();
-      // Accept several shapes
       const data = j?.data || j?.row || j?.item || j;
       if(!data || typeof data !== "object") throw new Error("SCRIPT_BAD_JSON");
       return data;
     }
 
     async function fetchDetailFromSheet(){
-      const r = await fetch(SHEET_URL, { signal: AbortSignal.timeout(9000) });
+      const r = await fetch(SHEET_URL, { signal: AbortSignal.timeout(12000) });
       const t = await r.text();
       const j = JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1));
       const cols = j.table.cols.map(c=>c.label);
@@ -891,19 +1077,30 @@
 
     async function start(){
       if(!HP_ID){
+        setLoading(false);
         showErr("ไม่พบพารามิเตอร์ id ใน URL เช่น details.html?id=HP00-0001");
         return;
       }
+
+      // loading message includes id (makes it feel alive)
+      setLoading(true, `กำลังโหลดข้อมูลของ ${HP_ID}…`);
+      hideErr();
+
       try{
-        hideErr();
         const data = await fetchDetailFromScript();
         render(data);
+        setLoading(false);
       }catch(e1){
+        // still show "working" while fallback to sheet
+        setLoading(true, "กำลังลองโหลดจากชีตสำรอง…");
         try{
           const data2 = await fetchDetailFromSheet();
           render(data2);
+          setLoading(false);
         }catch(e2){
+          setLoading(false);
           showErr("โหลดรายละเอียดไม่ได้ — ตรวจสอบว่า Apps Script Deploy เป็น Anyone และโหมด getUnitDetail ใช้งานได้ / หรือ Sheet ต้องเปิดเป็น Public");
+          showImgHold("ไม่สามารถโหลดรูปภาพได้");
         }
       }
     }
@@ -914,13 +1111,11 @@
     $("btnPrev").addEventListener("click", ()=> setHero(idx - 1));
     $("btnNext").addEventListener("click", ()=> setHero(idx + 1));
 
-    // Keyboard support (desktop)
     window.addEventListener("keydown", (e)=>{
       if(e.key==="ArrowLeft") setHero(idx-1);
       if(e.key==="ArrowRight") setHero(idx+1);
     });
 
-    // Touch swipe (mobile)
     (function(){
       const el = document.querySelector(".hero-media");
       let x0 = null;
@@ -934,6 +1129,12 @@
         if(dx > 0) setHero(idx-1); else setHero(idx+1);
       }, {passive:true});
     })();
+
+    // Image load success/fail
+    $("heroImg").addEventListener("load", ()=> hideImgHold());
+    $("heroImg").addEventListener("error", ()=>{
+      showImgHold("รูปภาพโหลดไม่สำเร็จ");
+    });
 
     start();
   </script>
