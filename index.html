@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-  <title>Hua Hin Properties | Prime Asset Catalog</title>
+  <title>Hua Hin Properties | Luxury Asset Catalog</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
   <style>
     :root {
@@ -18,17 +18,17 @@
       --white: #FDFAF5;
       --muted: #7A9BB5;
       --border: rgba(255, 255, 255, 0.08);
-      --card-bg: rgba(11, 24, 41, 0.92);
+      --card-bg: rgba(11, 24, 41, 0.9);
       --brand-red: #8B1F2D;
-      --brand-red-lt: #B12A3B;
       
       --available: #2ECC8A;
       --reserved: #E8A020;
       --sold: #E05555;
       --rented: #5B9BD5;
 
-      --px: 12px;
-      --radius: 8px;
+      /* Ratios based on 7.jpg */
+      --row-h: 75px;
+      --thumb-w: 110px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,27 +36,26 @@
       background-color: var(--navy-dark);
       color: var(--white);
       font-family: 'Montserrat', 'Sarabun', sans-serif;
-      line-height: 1.5;
       overflow-x: hidden;
     }
 
-    /* ═══ BACKGROUND ═══ */
+    /* BACKGROUND GRADIENT */
     body::before {
       content: '';
       position: fixed; inset: 0;
-      background: radial-gradient(circle at 50% -10%, rgba(27, 79, 114, 0.25) 0%, transparent 70%);
+      background: radial-gradient(circle at 50% -10%, rgba(27, 79, 114, 0.3) 0%, transparent 70%);
       z-index: -1;
     }
 
-    /* ═══ HEADER ═══ */
+    /* HEADER */
     header {
       position: fixed; top: 0; width: 100%; height: 55px;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--px); background: rgba(6, 15, 26, 0.95);
-      backdrop-filter: blur(10px); z-index: 1000;
+      padding: 0 15px; background: rgba(6, 15, 26, 0.95);
+      backdrop-filter: blur(15px); z-index: 1000;
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-size: 1.1rem; font-weight: 700; color: var(--gold); text-decoration: none; letter-spacing: 0.05em; }
+    .logo { font-size: 1.15rem; font-weight: 700; color: var(--gold); text-decoration: none; letter-spacing: 0.02em; }
     .logo span { color: var(--white); font-weight: 300; }
     .btn-contact {
       background: var(--gold); color: var(--navy-dark);
@@ -64,87 +63,89 @@
       font-weight: 800; text-decoration: none; text-transform: uppercase;
     }
 
-    /* ═══ HERO ═══ */
-    .hero { padding: 85px var(--px) 20px; text-align: center; }
-    .hero-title { font-size: 2.1rem; font-weight: 300; margin-bottom: 15px; letter-spacing: 0.02em; }
-    
-    /* ═══ SEARCH & FILTERS ═══ */
-    .search-container { max-width: 600px; margin: 0 auto; }
-    .search-box {
-      position: relative; margin-bottom: 12px;
-    }
+    /* SEARCH & HERO SECTION */
+    .hero { padding: 75px 15px 10px; text-align: center; }
+    .hero-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 12px; }
+    .hero-title em { font-style: normal; color: var(--gold-lt); }
+
+    .search-container { max-width: 550px; margin: 0 auto; }
+    .search-box { position: relative; margin-bottom: 10px; }
     .search-input {
-      width: 100%; background: rgba(255, 255, 255, 0.05);
+      width: 100%; background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border); border-radius: 50px;
-      padding: 10px 15px 10px 40px; color: var(--white);
-      font-size: 0.9rem; font-family: 'Sarabun', sans-serif;
+      padding: 9px 15px 9px 40px; color: var(--white);
+      font-size: 0.85rem; font-family: 'Sarabun', sans-serif;
     }
-    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 0.8rem; }
 
-    .dropdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select {
-      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border);
-      border-radius: 6px; padding: 8px; color: var(--sand); font-size: 0.75rem;
-      color: var(--white); outline: none; font-family: 'Sarabun', sans-serif;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px; color: var(--white);
+      font-size: 0.75rem; font-family: 'Sarabun', sans-serif; outline: none;
     }
 
-    .pill-scroll {
-      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;
-      scrollbar-width: none;
-    }
-    .pill-scroll::-webkit-scrollbar { display: none; }
+    .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+    .pill-container::-webkit-scrollbar { display: none; }
     .pill {
-      white-space: nowrap; padding: 6px 15px; border-radius: 50px;
+      white-space: nowrap; padding: 6px 14px; border-radius: 50px;
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-      color: var(--muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      cursor: pointer; transition: 0.3s;
+      color: var(--muted); font-size: 0.65rem; font-weight: 700; cursor: pointer;
     }
     .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
 
-    /* ═══ LISTINGS ═══ */
-    .section-title-bar {
+    /* LISTINGS BAR */
+    .section-bar {
       display: flex; justify-content: space-between; align-items: baseline;
-      padding: 25px var(--px) 10px; border-top: 1px solid var(--border); margin-top: 15px;
+      padding: 15px 15px 10px; border-top: 1px solid var(--border); margin-top: 10px;
     }
-    .section-title { font-size: 1.2rem; font-weight: 300; color: var(--white); }
-    .unit-count { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .section-title { font-size: 1.15rem; font-weight: 300; }
+    .unit-count { font-size: 0.65rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
 
-    .listing-grid { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 0 var(--px) 40px; }
+    /* PROPERTY LIST GRID */
+    .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 6px; }
 
-    /* ═══ PROPERTY CARD ═══ */
+    /* LUXURY CARD DESIGN - MATCHING 7.JPG */
     .card {
       background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 10px; display: flex; overflow: hidden;
-      text-decoration: none; color: inherit; height: 115px;
+      border-radius: 12px; display: flex; overflow: hidden;
+      text-decoration: none; color: inherit; height: var(--row-h);
+      transition: 0.2s ease;
     }
-    .card-img { width: 140px; position: relative; flex-shrink: 0; }
+    .card:active { transform: scale(0.98); border-color: var(--gold); }
+
+    .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
+    
     .hp-id {
-      position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.5);
-      color: white; font-size: 0.5rem; padding: 2px 5px; border-radius: 2px; font-weight: 700;
+      position: absolute; top: 4px; left: 6px; font-size: 0.55rem;
+      font-weight: 800; color: rgba(255,255,255,0.9);
+      text-shadow: 0 1px 3px rgba(0,0,0,1);
     }
 
-    .card-content { flex-grow: 1; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
-    .prop-title { font-size: 0.95rem; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prop-specs { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-    .prop-zone { font-size: 0.7rem; color: var(--muted); opacity: 0.7; }
+    .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; }
+    
+    .info-main { min-width: 0; }
+    .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; }
+    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; }
 
-    .price-side { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; padding: 10px 12px 10px 0; }
-    .price { font-size: 1.1rem; font-weight: 700; color: var(--gold-lt); }
-    .status-tags { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .price-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
+    
+    .status-group { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; }
     .tag { font-size: 0.45rem; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .tag-status { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+    .tag-status { background: rgba(255,255,255,0.08); color: var(--white); border: 0.5px solid rgba(255,255,255,0.15); }
     .tag-badge { background: var(--brand-red); color: white; }
 
-    /* ═══ SKELETON ═══ */
-    .skeleton { background: rgba(255,255,255,0.05); height: 115px; border-radius: 10px; animation: pulse 1.5s infinite; }
+    /* SKELETON */
+    .skel { height: var(--row-h); background: rgba(255,255,255,0.03); border-radius: 12px; animation: pulse 1.5s infinite; }
     @keyframes pulse { 50% { opacity: 0.5; } }
 
-    /* ═══ RESPONSIVE ═══ */
     @media (min-width: 768px) {
-      .listing-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-      .card { height: 130px; }
-      .card-img { width: 180px; }
+      :root { --row-h: 90px; --thumb-w: 140px; }
+      .prop-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .hero-title { font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -156,7 +157,7 @@
   </header>
 
   <section class="hero">
-    <h1 class="hero-title">Prime Asset Catalog</h1>
+    <h1 class="hero-title">Prime <em>Asset</em> Catalog</h1>
     
     <div class="search-container">
       <div class="search-box">
@@ -164,18 +165,18 @@
         <input type="text" id="searchInput" class="search-input" placeholder="ค้นหา... Pool Villa, Sea View, หัวหิน...">
       </div>
 
-      <div class="dropdown-grid">
+      <div class="filters-grid">
         <select id="areaFilter" class="filter-select">
-          <option value="">ทั้งหมด</option>
+          <option value="">ทุกโซน</option>
           <option value="Hua Hin">หัวหิน</option>
           <option value="Cha-am">ชะอำ</option>
           <option value="Pranburi">ปราณบุรี</option>
         </select>
         <select id="priceFilter" class="filter-select">
           <option value="">ทุกราคา</option>
-          <option value="0-5000000">ไม่เกิน 5 ล้าน</option>
-          <option value="5000000-15000000">5 - 15 ล้าน</option>
-          <option value="15000000-999999999">15 ล้านขึ้นไป</option>
+          <option value="0-5000000">ไม่เกิน 5M</option>
+          <option value="5000000-15000000">5M - 15M</option>
+          <option value="15000000-999999999">15M+</option>
         </select>
         <select id="bedFilter" class="filter-select">
           <option value="">ห้องนอน</option>
@@ -185,72 +186,73 @@
         </select>
       </div>
 
-      <div class="pill-scroll" id="pillContainer">
-        <div class="pill active" data-type="all">ทั้งหมด</div>
-        <div class="pill" data-type="Sale">ขาย</div>
-        <div class="pill" data-type="Rent">เช่า</div>
-        <div class="pill" data-type="Pool Villa">Pool Villa</div>
-        <div class="pill" data-type="Condo">Condo</div>
-        <div class="pill" data-type="Available">Available</div>
+      <div class="pill-container" id="pillBox">
+        <div class="pill active" data-f="all">ทั้งหมด</div>
+        <div class="pill" data-f="Sale">ขาย</div>
+        <div class="pill" data-f="Rent">เช่า</div>
+        <div class="pill" data-f="Available">Available</div>
+        <div class="pill" data-f="Pool Villa">Pool Villa</div>
+        <div class="pill" data-f="Condo">Condo</div>
       </div>
     </div>
   </section>
 
-  <div class="section-title-bar">
+  <div class="section-bar">
     <h2 class="section-title">Luxury Collections</h2>
-    <span class="unit-count" id="unitCount">0 Units</span>
+    <span class="unit-count" id="unitCount">Loading...</span>
   </div>
 
-  <section class="listing-grid" id="listingGrid">
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
+  <section class="prop-list" id="propGrid">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
   </section>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
-    let allProperties = [];
+    let rawData = [];
 
-    async function fetchProperties() {
+    async function getProperties() {
       try {
         const response = await fetch(SCRIPT_URL + '?mode=getUnitList');
-        const result = await response.json();
-        allProperties = result.data.filter(p => p.System_Status === 'Live');
-        renderProperties(allProperties);
-      } catch (error) {
-        console.error("Fetch error:", error);
+        const json = await response.json();
+        rawData = json.data.filter(item => item.System_Status === 'Live');
+        renderList(rawData);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     }
 
-    function renderProperties(data) {
-      const grid = document.getElementById('listingGrid');
-      const count = document.getElementById('unitCount');
-      count.innerText = `${data.length} UNITS`;
-      
-      grid.innerHTML = data.map(p => {
-        const price = p.Listing_Type === 'Sale' 
-          ? `฿${parseFloat(p.Sale_Price.replace(/,/g, '')).toLocaleString()}`
-          : `฿${parseFloat(p.Monthly_Rent.replace(/,/g, '')).toLocaleString()}/mo`;
+    function renderList(items) {
+      const grid = document.getElementById('propGrid');
+      const countLabel = document.getElementById('unitCount');
+      countLabel.textContent = `${items.length} UNITS`;
+
+      grid.innerHTML = items.map(p => {
+        // Full price formatting with commas
+        const priceVal = p.Listing_Type === 'Sale' ? p.Sale_Price : p.Monthly_Rent;
+        const numPrice = parseFloat(priceVal.replace(/[^0-9.]/g, ''));
+        const displayPrice = isNaN(numPrice) ? "—" : "฿" + numPrice.toLocaleString();
+        
+        const title = `${p.Listing_Type}: ${p.District}`;
+        const specs = `${p.Bedrooms} Bed | ${p.Bathrooms} Bath | ${p.Living_Area_sq_m} sqm`;
 
         return `
           <a href="details.html?id=${p.HP_ID}" class="card">
             <div class="card-img">
               <span class="hp-id">#${p.HP_ID}</span>
-              <img src="${p.Thumbnail_Image}" alt="${p.Project_Name}" loading="lazy">
+              <img src="${p.Thumbnail_Image}" alt="property" loading="lazy">
             </div>
-            <div class="card-content">
-              <div>
-                <div class="prop-title">${p.Listing_Type}: ${p.District}</div>
-                <div class="prop-specs">${p.Bedrooms} Bed | ${p.Bathrooms} Bath | ${p.Living_Area_sq_m} sqm</div>
+            <div class="card-info">
+              <div class="info-main">
+                <div class="prop-name">${title}</div>
+                <div class="prop-specs">${specs}</div>
+                <div class="prop-zone">Zone: ${p.Zone}</div>
               </div>
-              <div class="prop-zone">Zone: ${p.Zone}</div>
-            </div>
-            <div class="price-side">
-              <div class="price">${price}</div>
-              <div class="status-tags">
-                <span class="tag tag-status">${p.Status}</span>
-                ${p.Badge ? `<span class="tag tag-badge">${p.Badge}</span>` : ''}
+              <div class="price-side">
+                <div class="price">${displayPrice}</div>
+                <div class="status-group">
+                  <span class="tag tag-status">${p.Status}</span>
+                  ${p.Badge ? `<span class="tag tag-badge">${p.Badge}</span>` : ''}
+                </div>
               </div>
             </div>
           </a>
@@ -258,38 +260,39 @@
       }).join('');
     }
 
-    // ═══ FILTER LOGIC ═══
-    function applyFilters() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
+    // SEARCH & FILTER LOGIC
+    function filterData() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
       const area = document.getElementById('areaFilter').value;
       const bed = document.getElementById('bedFilter').value;
-      const typePill = document.querySelector('.pill.active').dataset.type;
+      const activePill = document.querySelector('.pill.active').dataset.f;
 
-      const filtered = allProperties.filter(p => {
-        const matchSearch = p.District.toLowerCase().includes(search) || p.HP_ID.toLowerCase().includes(search) || p.Project_Name.toLowerCase().includes(search);
+      const filtered = rawData.filter(p => {
+        const matchQ = p.District.toLowerCase().includes(q) || p.HP_ID.toLowerCase().includes(q) || p.Project_Name.toLowerCase().includes(q);
         const matchArea = area === "" || p.District === area;
         const matchBed = bed === "" || (bed === "3" ? parseInt(p.Bedrooms) >= 3 : p.Bedrooms == bed);
-        const matchType = typePill === "all" || p.Listing_Type === typePill || p.Type === typePill || p.Status === typePill;
+        const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
         
-        return matchSearch && matchArea && matchBed && matchType;
+        return matchQ && matchArea && matchBed && matchPill;
       });
 
-      renderProperties(filtered);
+      renderList(filtered);
     }
 
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('areaFilter').addEventListener('change', applyFilters);
-    document.getElementById('bedFilter').addEventListener('change', applyFilters);
+    // EVENT LISTENERS
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    document.getElementById('areaFilter').addEventListener('change', filterData);
+    document.getElementById('bedFilter').addEventListener('change', filterData);
     
-    document.getElementById('pillContainer').addEventListener('click', (e) => {
+    document.getElementById('pillBox').addEventListener('click', (e) => {
       if (e.target.classList.contains('pill')) {
-        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
         e.target.classList.add('active');
-        applyFilters();
+        filterData();
       }
     });
 
-    fetchProperties();
+    getProperties();
   </script>
 </body>
 </html>
