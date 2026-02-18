@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Property Details | Hua Hin Properties</title>
+  <meta name="description" content="รายละเอียดอสังหาริมทรัพย์ระดับ Luxury ในหัวหิน"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#0B1829;--navy-mid:#112238;--navy-soft:#1a3350;
+      --teal:#1A7A8A;--ocean:#1B4F72;
+      --sand:#F5EDD8;--sand-dim:#C8B898;
+      --gold:#C9A84C;--gold-lt:#E4C46A;--gold-glow:rgba(201,168,76,0.15);
+      --white:#FDFAF5;--muted:#7A9BB5;
+      --border:rgba(255,255,255,0.09);
+      --available:#2ECC8A;--reserved:#E8A020;--sold:#E05555;--rented:#5B9BD5;
+      --trans:0.3s cubic-bezier(0.4,0,0.2,1);
+      --px:18px;--px-lg:52px;--r:8px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+    body{background:var(--navy);color:var(--sand);font-family:'Sarabun',sans-serif;font-weight:300;min-height:100dvh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(27,79,114,0.4) 0%,transparent 60%),linear-gradient(180deg,#060F1A 0%,#0B1829 50%,#0D1F35 100%);pointer-events:none;z-index:0}
+
+    /* ─── HEADER ─── */
+    header{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);background:rgba(6,15,26,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .btn-back{display:flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-family:'Montserrat',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;transition:color var(--trans)}
+    .btn-back:hover{color:var(--gold)}
+    .logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+    .logo span{color:var(--sand);font-style:italic;font-weight:300}
+    .hdr-id{font-family:'Montserrat',sans-serif;font-size:0.55rem;color:var(--muted);letter-spacing:0.1em}
+
+    /* ─── LOADER ─── */
+    .loader{position:fixed;inset:0;z-index:500;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity 0.5s ease}
+    .loader.out{opacity:0;pointer-events:none}
+    .ring{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--gold);animation:spin 0.75s linear infinite}
+    .loader-txt{font-family:'Montserrat',sans-serif;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ─── DEBUG (shown when error occurs) ─── */
+    .debug-box{display:none;background:rgba(200,100,50,0.1);border:1px solid rgba(200,100,50,0.3);border-radius:6px;padding:12px 16px;margin:12px var(--px);font-size:0.78rem;color:#e8a070;font-family:monospace;line-height:1.6;position:relative;z-index:1}
+    .debug-box.show{display:block}
+
+    /* ─── ERROR ─── */
+    .error-pg{display:none;position:relative;z-index:1;text-align:center;padding:120px var(--px) 60px}
+    .error-pg.show{display:block}
+
+    /* ─── CONTENT ─── */
+    .content{position:relative;z-index:1;padding-top:56px;opacity:0;transition:opacity 0.5s ease}
+    .content.show{opacity:1}
+
+    /* ─── GALLERY ─── */
+    .gal-wrap{position:relative;background:#060F1A}
+    .gal-main{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;cursor:grab;user-select:none;background:#060F1A}
+    .gal-main:active{cursor:grabbing}
+    @media(min-width:600px){.gal-main{aspect-ratio:16/9}}
+    @media(min-width:1100px){.gal-main{aspect-ratio:21/9}}
+
+    .slides{display:flex;height:100%;transition:transform 0.38s cubic-bezier(0.4,0,0.2,1);will-change:transform}
+    .slide{min-width:100%;height:100%;flex-shrink:0;position:relative;background:#060F1A;display:flex;align-items:center;justify-content:center}
+    .slide img{width:100%;height:100%;object-fit:cover;filter:brightness(0.88);pointer-events:none;display:block}
+    .slide-ph{font-size:5rem;color:rgba(255,255,255,0.06)}
+    .gal-shade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(6,15,26,0.65) 100%);pointer-events:none}
+
+    /* Loading overlay inside gallery */
+    .gal-ld{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#060F1A;z-index:5}
+    .gal-ld .ring{width:26px;height:26px}
+    .gal-ld-txt{font-family:'Montserrat',sans-serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase}
+
+    .gal-btn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(6,15,26,0.75);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--sand);transition:all var(--trans);backdrop-filter:blur(8px);z-index:10}
+    .gal-prev{left:10px}.gal-next{right:10px}
+    .gal-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+
+    .gal-cnt{position:absolute;bottom:12px;right:12px;padding:3px 9px;background:rgba(6,15,26,0.78);border:1px solid var(--border);border-radius:20px;font-family:'Montserrat',sans-serif;font-size:0.53rem;letter-spacing:0.1em;color:var(--sand);backdrop-filter:blur(6px)}
+
+    /* Thumbnails */
+    .thumbs{display:flex;gap:4px;padding:5px;background:#060F1A;overflow-x:auto;scrollbar-width:none}
+    .thumbs::-webkit-scrollbar{display:none}
+    .thumb{flex-shrink:0;width:60px;height:44px;border-radius:3px;overflow:hidden;border:2px solid transparent;cursor:pointer;opacity:0.5;transition:all var(--trans)}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb.on{border-color:var(--gold);opacity:1}
+    .thumb:hover{opacity:0.8}
+
+    /* ─── PROP HEADER ─── */
+    .prop-hdr{padding:18px var(--px) 14px;border-bottom:1px solid var(--border)}
+    .prop-hp{font-family:'Montserrat',sans-serif;font-size:0.53rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--teal);margin-bottom:7px}
+    .prop-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,2.3rem);font-weight:300;line-height:1.2;color:var(--white);margin-bottom:6px}
+    .prop-loc{display:flex;align-items:center;gap:6px;font-size:0.86rem;color:var(--muted);margin-bottom:13px}
+    .prop-badges{display:flex;gap:7px;flex-wrap:wrap}
+
+    .badge{padding:4px 11px;border-radius:2px;font-family:'Montserrat',sans-serif;font-size:0.52rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase}
+    .b-gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy)}
+    .b-teal{background:rgba(27,122,138,0.18);border:1px solid rgba(26,122,138,0.35);color:var(--teal)}
+    .b-st{display:flex;align-items:center;gap:5px;border-radius:20px;border:1px solid}
+    .b-av{border-color:var(--available);color:var(--available)}.b-rs{border-color:var(--reserved);color:var(--reserved)}
+    .b-sd{border-color:var(--sold);color:var(--sold)}.b-rt{border-color:var(--rented);color:var(--rented)}
+    .dot{width:5px;height:5px;border-radius:50%}
+    .b-av .dot{background:var(--available);box-shadow:0 0 5px var(--available)}
+    .b-rs .dot{background:var(--reserved)}.b-sd .dot{background:var(--sold)}.b-rt .dot{background:var(--rented)}
+
+    /* ─── PRICE ─── */
+    .price-bar{padding:15px var(--px);background:rgba(17,34,56,0.55);border-bottom:1px solid var(--border);display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end}
+    .p-lbl{font-family:'Montserrat',sans-serif;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+    .p-val{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;background:linear-gradient(135deg,var(--gold),var(--gold-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+    .p-val.sec{font-size:1.25rem;-webkit-text-fill-color:var(--muted);background:none;color:var(--muted)}
+    .p-sqm{font-family:'Montserrat',sans-serif;font-size:0.67rem;color:var(--muted);margin-top:3px}
+
+    /* ─── QUICK SPECS ─── */
+    .qspecs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+    .qs{padding:12px 10px;background:rgba(17,34,56,0.5);text-align:center}
+    .qs-ico{font-size:1.1rem;margin-bottom:3px}
+    .qs-val{font-family:'Cormorant Garamond',serif;font-size:1.02rem;color:var(--white);line-height:1;margin-bottom:2px}
+    .qs-lbl{font-family:'Montserrat',sans-serif;font-size:0.47rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--muted)}
+
+    /* ─── SECTIONS ─── */
+    .sec{padding:18px var(--px);border-bottom:1px solid var(--border)}
+    .sec-ttl{font-family:'Montserrat',sans-serif;font-size:0.57rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--teal);margin-bottom:13px;display:flex;align-items:center;gap:9px}
+    .sec-ttl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
+
+    /* Description */
+    .desc-txt{font-size:0.9rem;line-height:1.85;color:var(--sand-dim)}
+
+    /* Key points */
+    .pts-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+    .pts-list li{display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--sand-dim);line-height:1.5}
+    .pts-list li::before{content:'✦';color:var(--gold);font-size:0.58rem;margin-top:3px;flex-shrink:0}
+
+    /* Detail grid */
+    .det-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .det-item{padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px}
+    .det-lbl{font-family:'Montserrat',sans-serif;font-size:0.49rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+    .det-val{font-size:0.87rem;color:var(--white);font-weight:400}
+
+    /* Facilities */
+    .fac-wrap{display:flex;flex-wrap:wrap;gap:7px}
+    .fac{padding:5px 11px;background:rgba(27,122,138,0.12);border:1px solid rgba(26,122,138,0.22);border-radius:20px;font-size:0.75rem;color:var(--teal)}
+
+    /* Virtual Tour */
+    .vtour-a{display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;background:linear-gradient(135deg,rgba(27,79,114,0.38),rgba(26,122,138,0.28));border:1px solid rgba(26,122,138,0.28);border-radius:var(--r);color:var(--white);text-decoration:none;font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;transition:all var(--trans)}
+    .vtour-a:hover{border-color:var(--teal)}
+
+    /* Video */
+    .vid-wrap{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;background:#060F1A}
+    .vid-wrap iframe{width:100%;height:100%;border:none}
+
+    /* Map */
+    .map-wrap{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);aspect-ratio:16/9;background:rgba(17,34,56,0.5)}
+    .map-wrap iframe{width:100%;height:100%;border:none;display:block}
+    .map-btn{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--gold);color:var(--navy);font-family:'Montserrat',sans-serif;font-size:0.57rem;font-weight:600;letter-spacing:0.11em;text-transform:uppercase;text-decoration:none;border-radius:4px;transition:opacity var(--trans)}
+    .map-btn:hover{opacity:0.85}
+
+    /* Distance */
+    .dist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .dist-item{display:flex;align-items:center;gap:9px;padding:9px 11px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px}
+    .dist-lbl{font-size:0.7rem;color:var(--muted)}
+    .dist-val{font-size:0.83rem;color:var(--white);font-weight:400}
+
+    /* Docs */
+    .doc-list{display:flex;flex-direction:column;gap:8px}
+    .doc-a{display:flex;align-items:center;gap:11px;padding:11px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--sand);text-decoration:none;transition:all var(--trans)}
+    .doc-a:hover{border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.07)}
+    .doc-ico{width:33px;height:33px;border-radius:4px;background:rgba(201,168,76,0.13);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.9rem;flex-shrink:0}
+    .doc-name{font-family:'Montserrat',sans-serif;font-size:0.68rem;font-weight:500;color:var(--white)}
+    .doc-sub{font-size:0.67rem;color:var(--muted);margin-top:2px}
+
+    /* ─── CTA ─── */
+    .cta{padding:22px var(--px) 28px;text-align:center}
+    .cta-ttl{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--white);margin-bottom:5px}
+    .cta-sub{font-size:0.82rem;color:var(--muted);margin-bottom:17px}
+    .cta-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px;margin:0 auto}
+    .cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 12px;border-radius:var(--r);font-family:'Montserrat',sans-serif;font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;transition:all var(--trans)}
+    .cta-primary{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);grid-column:1/-1}
+    .cta-line{background:#00B900;color:white}.cta-wa{background:#25D366;color:white}
+    .cta-btn:hover{opacity:0.87;transform:translateY(-2px)}
+
+    /* ─── SHARE ─── */
+    .share{padding:12px var(--px);border-top:1px solid var(--border);display:flex;gap:7px;align-items:center;overflow-x:auto;scrollbar-width:none}
+    .share::-webkit-scrollbar{display:none}
+    .share-lbl{font-family:'Montserrat',sans-serif;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;flex-shrink:0}
+    .share-btn{flex-shrink:0;padding:6px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;color:var(--muted);text-decoration:none;font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:0.09em;text-transform:uppercase;transition:all var(--trans);cursor:pointer}
+    .share-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(min-width:640px){
+      header,.cta,.share{padding-left:var(--px-lg);padding-right:var(--px-lg)}
+      .prop-hdr,.price-bar,.sec{padding-left:var(--px-lg);padding-right:var(--px-lg)}
+      .thumbs{padding:5px var(--px-lg)}.thumb{width:76px;height:56px}
+      .qspecs{grid-template-columns:repeat(6,1fr)}
+      .det-grid{grid-template-columns:repeat(3,1fr)}
+      .dist-grid{grid-template-columns:repeat(3,1fr)}
+      .cta-btns{grid-template-columns:1fr 1fr 1fr;max-width:500px}
+      .cta-primary{grid-column:1/-1}
+    }
+    @media(min-width:1100px){.det-grid{grid-template-columns:repeat(4,1fr)}}
+  </style>
+</head>
+<body>
+
+  <div class="loader" id="loader"><div class="ring"></div><div class="loader-txt">Loading Property</div></div>
+
+  <header>
+    <a href="index.html" class="btn-back">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+      Back
+    </a>
+    <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
+    <div class="hdr-id" id="hdrId">—</div>
+  </header>
+
+  <!-- DEBUG (hidden in production, shows error details) -->
+  <div class="debug-box" id="debugBox"></div>
+
+  <!-- ERROR STATE -->
+  <div class="error-pg" id="errPg">
+    <div style="font-size:3rem;margin-bottom:14px;opacity:0.15">⌂</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--white);margin-bottom:7px">ไม่พบรายการนี้</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:22px">Property อาจถูกนำออกแล้ว หรือรหัสไม่ถูกต้อง</div>
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-family:'Montserrat',sans-serif;font-size:0.62rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;border-radius:4px">← ดูรายการทั้งหมด</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content" id="content">
+
+    <!-- GALLERY -->
+    <div class="gal-wrap">
+      <div class="gal-main" id="galMain">
+        <div class="slides" id="slides">
+          <div class="slide"><div class="gal-ld" id="galLd"><div class="ring"></div><div class="gal-ld-txt">กำลังโหลดรูปภาพ</div></div></div>
+        </div>
+        <div class="gal-shade"></div>
+        <button class="gal-btn gal-prev" id="galPrev" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg></button>
+        <button class="gal-btn gal-next" id="galNext" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></button>
+        <div class="gal-cnt" id="galCnt" style="display:none">1 / 1</div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+
+    <!-- PROPERTY HEADER -->
+    <div class="prop-hdr">
+      <div class="prop-hp" id="pHpId"></div>
+      <h1 class="prop-title" id="pTitle">—</h1>
+      <div class="prop-loc" id="pLoc"></div>
+      <div class="prop-badges" id="pBadges"></div>
+    </div>
+
+    <!-- PRICE -->
+    <div class="price-bar" id="priceBar"></div>
+
+    <!-- QUICK SPECS -->
+    <div class="qspecs" id="qspecs"></div>
+
+    <!-- KEY HIGHLIGHTS -->
+    <div class="sec" id="secPts" style="display:none"><div class="sec-ttl">✦ Key Highlights</div><ul class="pts-list" id="ptsList"></ul></div>
+
+    <!-- DESCRIPTION -->
+    <div class="sec" id="secDesc" style="display:none"><div class="sec-ttl">📋 รายละเอียด</div><div class="desc-txt" id="descTxt"></div></div>
+
+    <!-- PROPERTY DETAILS -->
+    <div class="sec" id="secDet" style="display:none"><div class="sec-ttl">🏠 ข้อมูลทรัพย์สิน</div><div class="det-grid" id="detGrid"></div></div>
+
+    <!-- AREA -->
+    <div class="sec" id="secArea" style="display:none"><div class="sec-ttl">📐 ขนาดพื้นที่</div><div class="det-grid" id="areaGrid"></div></div>
+
+    <!-- OWNERSHIP -->
+    <div class="sec" id="secOwn" style="display:none"><div class="sec-ttl">📄 กรรมสิทธิ์</div><div class="det-grid" id="ownGrid"></div></div>
+
+    <!-- FACILITIES -->
+    <div class="sec" id="secFac" style="display:none"><div class="sec-ttl">✅ สิ่งอำนวยความสะดวก</div><div class="fac-wrap" id="facWrap"></div></div>
+
+    <!-- VIRTUAL TOUR -->
+    <div class="sec" id="secVt" style="display:none"><div class="sec-ttl">🌐 Virtual Tour</div><a href="#" class="vtour-a" id="vtBtn" target="_blank" rel="noopener">🥽 เปิด Virtual Tour 360°</a></div>
+
+    <!-- VIDEO -->
+    <div class="sec" id="secVid" style="display:none"><div class="sec-ttl">🎬 วิดีโอ</div><div class="vid-wrap" id="vidWrap"></div></div>
+
+    <!-- MAP -->
+    <div class="sec" id="secMap" style="display:none"><div class="sec-ttl">📍 ที่ตั้ง</div><div class="map-wrap" id="mapWrap"></div></div>
+
+    <!-- DISTANCES -->
+    <div class="sec" id="secDist" style="display:none"><div class="sec-ttl">📏 ระยะทาง</div><div class="dist-grid" id="distGrid"></div></div>
+
+    <!-- FACEBOOK -->
+    <div class="sec" id="secFb" style="display:none">
+      <div class="sec-ttl">📱 Facebook Post</div>
+      <a href="#" class="doc-a" id="fbLink" target="_blank" rel="noopener">
+        <div class="doc-ico">📘</div><div><div class="doc-name">ดูโพสต์บน Facebook</div><div class="doc-sub">คลิกเพื่อดูรายละเอียดเพิ่มเติม</div></div>
+      </a>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="sec" id="secDocs" style="display:none"><div class="sec-ttl">📁 เอกสาร</div><div class="doc-list" id="docList"></div></div>
+
+    <!-- CONTACT CTA -->
+    <div class="cta">
+      <div class="cta-ttl">สนใจทรัพย์สินนี้?</div>
+      <div class="cta-sub">ติดต่อเราได้เลย — ทีมงานพร้อมให้ข้อมูลทุกวัน</div>
+      <div class="cta-btns">
+        <a href="https://wa.me/66805820777" class="cta-btn cta-wa" id="ctaWa">📱 WhatsApp</a>
+        <a href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener" class="cta-btn cta-line">💬 LINE OA</a>
+        <a href="tel:+66805820777" class="cta-btn cta-primary">📞 โทรสายด่วน +66 80 582 0777</a>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="share">
+      <span class="share-lbl">Share:</span>
+      <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+      <a class="share-btn" id="sFb" href="#" target="_blank">📘 Facebook</a>
+      <a class="share-btn" id="sWa" href="#" target="_blank">📱 WhatsApp</a>
+      <a class="share-btn" id="sLine" href="#" target="_blank">💬 LINE</a>
+    </div>
+
+  </div><!-- /content -->
+
+  <script>
+  // ════════════════════════════════════════════
+  // CONFIG
+  // ════════════════════════════════════════════
+  const SCRIPT_URL      = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
+  const SHEET_ID        = '1vFsPw6GRO8kd_vHDhbV-Y-t11WTOfyv0E18TH0Nuy74';
+  const SHEET_NAME      = 'properties';
+  const ALBUM_FOLDER_ID = '1-DLZIYoGtDhRk5MKkWWZ05N_zv-XetJ4';
+  const THUMB_FOLDER_ID = '1IbPmIyxVAlHTk0fBkMzhcMLYEPyZdF1v';
+
+  // gviz URL — works when Sheet is set to "Anyone with link can View"
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+  // ── Public fields only (private fields EXCLUDED) ──
+  const PUBLIC = new Set([
+    'HP_ID','Listing_Type','Status','System_Status','Badge','Featured',
+    'Project_Name','Type','Plot','Bedrooms','Bathrooms','Parking',
+    'Furnishing','Kitchen_Type','Year_Built',
+    'Land_Area_sq_w','Land_Area_sq_m','Living_Area_sq_m',
+    'Pool_Size','Pool_Depth','Direction','View_Type',
+    'Pet_Friendly','Extras','Electricity','Water_Source',
+    'Sale_Price','Monthly_Rent','Price_sq_m',
+    'Ownership_Type','Land_Title_Deed_Type','Transfer_Expenses','Common_Fee',
+    'Address','District','SubDistrict','Zone',
+    'Map_Link','Distance_to_Beach','Key_Location_Distance',
+    'Thumbnail_Image','Album_Image','Virtual_Tour','Video_Link',
+    'FB_Link','FloorPlan_PDF','Material_PDF',
+    'Key_Selling_Points','Description','Customer_PDF'
+    // NOT included: Commission, Owner_Contact, Internal_Note,
+    //               Agent_PDF, Agent_Talking_Points, Comm_A/B/C/D/E_Rate
+    //               Merged_Doc_URL, Document_Merge_Status
+  ]);
+
+  // ════════════════════════════════════════════
+  // INIT — get id from URL
+  // ════════════════════════════════════════════
+  const params   = new URLSearchParams(location.search);
+  const targetId = decodeURIComponent(params.get('id') || '').trim();
+
+  dbg('Target HP_ID: ' + (targetId || '(none)'));
+
+  if (!targetId) {
+    showError('ไม่มี id ใน URL (ตัวอย่าง: details.html?id=HP00-0001)');
+  } else {
+    document.getElementById('hdrId').textContent = targetId;
+    fetchProp();
+  }
+
+  // ════════════════════════════════════════════
+  // FETCH — 3 strategies
+  // ════════════════════════════════════════════
+  async function fetchProp() {
+    let prop = null;
+
+    // ── Strategy 1: Apps Script getUnitDetail ──
+    try {
+      const url = `${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(targetId)}`;
+      dbg('Strategy 1: ' + url);
+      const r = await fetch(url, { signal: AbortSignal.timeout(7000) });
+      if (r.ok) {
+        const j = await r.json();
+        dbg('Script response: ' + JSON.stringify(j).slice(0, 120));
+        if (j && j.data && j.data['HP_ID']) prop = filterPublic(j.data);
+      }
+    } catch(e) { dbg('Strategy 1 failed: ' + e.message); }
+
+    // ── Strategy 2: gviz sheet scan ──
+    if (!prop) {
+      try {
+        dbg('Strategy 2: gviz sheet scan');
+        const r = await fetch(SHEET_URL, { signal: AbortSignal.timeout(10000) });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const t = await r.text();
+        const start = t.indexOf('{');
+        const end   = t.lastIndexOf('}');
+        if (start < 0 || end < 0) throw new Error('Bad gviz response');
+        const j    = JSON.parse(t.slice(start, end + 1));
+        const cols = j.table.cols.map(c => c.label.trim()).filter(Boolean);
+        dbg('Columns found: ' + cols.slice(0,8).join(', ') + '...');
+        const rows = j.table.rows.map(row => {
+          const o = {};
+          cols.forEach((c, i) => {
+            const cell = row.c && row.c[i];
+            o[c] = cell && cell.v != null ? String(cell.v).trim() : '';
+          });
+          return o;
+        });
+        dbg('Total rows: ' + rows.length);
+        // Try exact match first
+        let found = rows.find(r => r['HP_ID'] === targetId);
+        // Try case-insensitive / trimmed
+        if (!found) found = rows.find(r => (r['HP_ID']||'').trim().toLowerCase() === targetId.toLowerCase());
+        if (found) {
+          dbg('Found row: ' + JSON.stringify(found).slice(0, 100));
+          prop = filterPublic(found);
+        } else {
+          dbg('HP_IDs in sheet: ' + rows.map(r=>r['HP_ID']).join(', '));
+        }
+      } catch(e) { dbg('Strategy 2 failed: ' + e.message); }
+    }
+
+    // ── Result ──
+    if (!prop) {
+      showError('ไม่พบ ' + targetId + ' ใน Sheet (ตรวจสอบว่า Sheet เปิด Public แล้ว)');
+      return;
+    }
+
+    if (prop['System_Status'] !== 'Live') {
+      showError(targetId + ' มีสถานะ "' + prop['System_Status'] + '" — ไม่แสดงต่อ Public');
+      return;
+    }
+
+    render(prop);
+    fetchGallery(prop);
+  }
+
+  function filterPublic(p) {
+    const o = { System_Status: p['System_Status'] || '' };
+    PUBLIC.forEach(k => { if (p[k] !== undefined) o[k] = p[k]; });
+    return o;
+  }
+
+  // ════════════════════════════════════════════
+  // FETCH GALLERY
+  // ════════════════════════════════════════════
+  async function fetchGallery(prop) {
+    const hpId     = v(prop, 'HP_ID');
+    const thumbRaw = v(prop, 'Thumbnail_Image');
+    const albumRaw = v(prop, 'Album_Image');
+    let images = [];
+
+    // ── Strategy A: Apps Script getGallery ──
+    try {
+      const url = `${SCRIPT_URL}?mode=getGallery&id=${encodeURIComponent(hpId)}&folderId=${ALBUM_FOLDER_ID}`;
+      dbg('Gallery A: ' + url);
+      const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      if (r.ok) {
+        const j = await r.json();
+        if (j && Array.isArray(j.images) && j.images.length) {
+          images = j.images.map(id => toImgUrl(id));
+          dbg('Gallery from Drive: ' + images.length + ' images');
+        }
+      }
+    } catch(e) { dbg('Gallery A failed: ' + e.message); }
+
+    // ── Strategy B: Parse Album_Image field ──
+    if (!images.length && albumRaw) {
+      images = albumRaw.split(',').map(s => s.trim()).filter(Boolean).map(toImgUrl).filter(Boolean);
+      dbg('Gallery from Album_Image CSV: ' + images.length);
+    }
+
+    // ── Strategy C: Thumbnail only ──
+    const thumbUrl = toImgUrl(thumbRaw);
+    if (!images.length && thumbUrl) { images = [thumbUrl]; dbg('Gallery: thumbnail only'); }
+
+    // Prepend thumbnail if not already present
+    if (thumbUrl && !images.some(u => u === thumbUrl)) images.unshift(thumbUrl);
+
+    buildSlider(images.length ? images : [null]);
+  }
+
+  function toImgUrl(s) {
+    if (!s || s === '#') return null;
+    s = s.trim();
+    if (s.startsWith('http')) return s;
+    if (s.length > 10) return `https://lh3.googleusercontent.com/d/${s}`;
+    return null;
+  }
+
+  // ════════════════════════════════════════════
+  // SLIDER
+  // ════════════════════════════════════════════
+  let cur = 0, total = 0, sx = 0, dragging = false;
+
+  function buildSlider(images) {
+    total = images.length;
+    const track = document.getElementById('slides');
+    track.innerHTML = images.map((img, i) => `
+      <div class="slide">
+        ${img
+          ? `<img src="${img}" alt="Photo ${i+1}" loading="${i===0?'eager':'lazy'}"
+              onerror="this.style.display='none';this.parentElement.innerHTML+='<div class=\\'slide-ph\\'>⌂</div>'">`
+          : `<div class="slide-ph">⌂</div>`}
+      </div>`).join('');
+
+    document.getElementById('galLd')?.remove();
+
+    // Thumbs
+    const tb = document.getElementById('thumbs');
+    if (images.length > 1) {
+      tb.innerHTML = images.map((img, i) => `
+        <div class="thumb ${i===0?'on':''}" data-i="${i}">
+          ${img ? `<img src="${img}" alt="t${i}" loading="lazy">` : `<div style="height:100%;background:#1a3350;display:flex;align-items:center;justify-content:center;color:#333">⌂</div>`}
+        </div>`).join('');
+      tb.querySelectorAll('.thumb').forEach(t => t.addEventListener('click', () => go(+t.dataset.i)));
+    } else {
+      tb.style.display = 'none';
+    }
+
+    if (images.length > 1) {
+      document.getElementById('galPrev').style.display = '';
+      document.getElementById('galNext').style.display = '';
+      document.getElementById('galCnt').style.display  = '';
+    }
+    updateSlider();
+
+    document.getElementById('galPrev').onclick = () => go(cur - 1);
+    document.getElementById('galNext').onclick = () => go(cur + 1);
+
+    const m = document.getElementById('galMain');
+    m.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+    m.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sx; if(Math.abs(dx)>40) go(cur+(dx<0?1:-1)); });
+    m.addEventListener('mousedown',  e => { sx=e.clientX; dragging=true; });
+    window.addEventListener('mouseup', e => { if(!dragging)return; dragging=false; const dx=e.clientX-sx; if(Math.abs(dx)>40) go(cur+(dx<0?1:-1)); });
+    document.addEventListener('keydown', e => { if(e.key==='ArrowLeft') go(cur-1); if(e.key==='ArrowRight') go(cur+1); });
+  }
+
+  function go(i) { cur=(i+total)%total; updateSlider(); }
+  function updateSlider() {
+    document.getElementById('slides').style.transform = `translateX(-${cur*100}%)`;
+    document.getElementById('galCnt').textContent = `${cur+1} / ${total}`;
+    document.querySelectorAll('.thumb').forEach((t,i) => t.classList.toggle('on', i===cur));
+    document.querySelector('.thumb.on')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  }
+
+  // ════════════════════════════════════════════
+  // RENDER PROPERTY
+  // ════════════════════════════════════════════
+  function render(p) {
+    const proj = v(p,'Project_Name'), type = v(p,'Type');
+    const name = [proj,type].filter(Boolean).join(' · ');
+    document.title = `${name||targetId} | Hua Hin Properties`;
+
+    // Header
+    document.getElementById('pHpId').textContent  = v(p,'HP_ID');
+    document.getElementById('pTitle').textContent = name || 'Property';
+
+    const loc = [v(p,'SubDistrict'),v(p,'District'),v(p,'Zone')].filter(Boolean);
+    if (loc.length) document.getElementById('pLoc').innerHTML = `<span>📍</span> ${loc.join(' · ')}`;
+
+    // Badges
+    let bh = '';
+    if (has(p,'Badge'))        bh += `<div class="badge b-gold">${v(p,'Badge')}</div>`;
+    bh += stBadge(v(p,'Status')||'Available');
+    if (has(p,'Type'))         bh += `<div class="badge b-teal">${v(p,'Type')}</div>`;
+    if (has(p,'Listing_Type')) bh += `<div class="badge b-teal">${v(p,'Listing_Type')}</div>`;
+    document.getElementById('pBadges').innerHTML = bh;
+
+    // Price
+    const sp=v(p,'Sale_Price'), rp=v(p,'Monthly_Rent'), sqm=v(p,'Price_sq_m');
+    let ph='';
+    if(sp) ph+=`<div><div class="p-lbl">Sale Price</div><div class="p-val">${fmtP(sp)||sp}</div>${sqm?`<div class="p-sqm">฿${sqm}/m²</div>`:''}</div>`;
+    if(rp) ph+=`<div><div class="p-lbl">Monthly Rent</div><div class="p-val ${sp?'sec':''}">${fmtP(rp)||rp}<span style="font-size:.82rem;opacity:.6">/mo</span></div></div>`;
+    if(!ph) ph=`<div><div class="p-lbl">Price</div><div class="p-val">—</div></div>`;
+    document.getElementById('priceBar').innerHTML = ph;
+
+    // Quick specs
+    const specs=[
+      {ico:'🛏',val:v(p,'Bedrooms'),lbl:'Bedrooms'},
+      {ico:'🚿',val:v(p,'Bathrooms'),lbl:'Bathrooms'},
+      {ico:'🚗',val:v(p,'Parking'),lbl:'Parking'},
+      {ico:'🏊',val:v(p,'Pool_Size'),lbl:'Pool'},
+      {ico:'📐',val:has(p,'Living_Area_sq_m')?v(p,'Living_Area_sq_m')+'m²':'',lbl:'Living'},
+      {ico:'🌿',val:has(p,'Land_Area_sq_w')?v(p,'Land_Area_sq_w')+' sq.w':'',lbl:'Land'},
+    ].filter(s=>s.val);
+    document.getElementById('qspecs').innerHTML = specs.map(s=>
+      `<div class="qs"><div class="qs-ico">${s.ico}</div><div class="qs-val">${s.val}</div><div class="qs-lbl">${s.lbl}</div></div>`
+    ).join('');
+
+    // Key points
+    const pts=v(p,'Key_Selling_Points');
+    if(pts){const items=pts.split(/[,،]|\n/).map(s=>s.trim()).filter(Boolean);if(items.length){show('secPts');document.getElementById('ptsList').innerHTML=items.map(i=>`<li>${i}</li>`).join('');}}
+
+    // Description
+    if(has(p,'Description')){show('secDesc');document.getElementById('descTxt').textContent=v(p,'Description');}
+
+    // Property details
+    const det=[di('Type',v(p,'Type')),di('Furnishing',v(p,'Furnishing')),di('Kitchen',v(p,'Kitchen_Type')),di('Year Built',v(p,'Year_Built')),di('Direction',v(p,'Direction')),di('View',v(p,'View_Type')),di('Pet Friendly',v(p,'Pet_Friendly')),di('Electricity',v(p,'Electricity')),di('Water',v(p,'Water_Source')),di('Plot',v(p,'Plot'))].join('');
+    if(det){show('secDet');document.getElementById('detGrid').innerHTML=det;}
+
+    // Area
+    const area=[di('Land (sq.w)',has(p,'Land_Area_sq_w')?v(p,'Land_Area_sq_w')+' sq.w':''),di('Land (m²)',has(p,'Land_Area_sq_m')?v(p,'Land_Area_sq_m')+' m²':''),di('Living (m²)',has(p,'Living_Area_sq_m')?v(p,'Living_Area_sq_m')+' m²':''),di('Pool Size',v(p,'Pool_Size')),di('Pool Depth',v(p,'Pool_Depth'))].join('');
+    if(area){show('secArea');document.getElementById('areaGrid').innerHTML=area;}
+
+    // Ownership
+    const own=[di('Ownership',v(p,'Ownership_Type')),di('Title Deed',v(p,'Land_Title_Deed_Type')),di('Transfer',v(p,'Transfer_Expenses')),di('Common Fee',v(p,'Common_Fee'))].join('');
+    if(own){show('secOwn');document.getElementById('ownGrid').innerHTML=own;}
+
+    // Facilities
+    const ext=v(p,'Extras');
+    if(ext){const c=ext.split(',').map(s=>s.trim()).filter(Boolean);if(c.length){show('secFac');document.getElementById('facWrap').innerHTML=c.map(x=>`<div class="fac">✓ ${x}</div>`).join('');}}
+
+    // Virtual tour
+    if(has(p,'Virtual_Tour')){show('secVt');document.getElementById('vtBtn').href=v(p,'Virtual_Tour');}
+
+    // Video
+    const vid=v(p,'Video_Link');if(vid){const yt=ytId(vid);if(yt){show('secVid');document.getElementById('vidWrap').innerHTML=`<iframe src="https://www.youtube.com/embed/${yt}?rel=0" allowfullscreen loading="lazy"></iframe>`;}}
+
+    // Map
+    const mapUrl=v(p,'Map_Link');
+    if(mapUrl){
+      show('secMap');
+      const em=gmEmbed(mapUrl);
+      document.getElementById('mapWrap').innerHTML = em
+        ? `<iframe src="${em}" loading="lazy" allowfullscreen></iframe><a href="${mapUrl}" class="map-btn" target="_blank" rel="noopener">🗺 เปิดใน Google Maps</a>`
+        : `<div style="height:100%;display:flex;align-items:center;justify-content:center"><a href="${mapUrl}" class="map-btn" target="_blank" rel="noopener" style="position:static">🗺 เปิดใน Google Maps</a></div>`;
+    }
+
+    // Distances
+    const bch=v(p,'Distance_to_Beach'),kl=v(p,'Key_Location_Distance');
+    if(bch||kl){
+      const d=[];
+      if(bch) d.push({ico:'🏖',lbl:'ชายหาด',val:bch});
+      if(kl)  d.push({ico:'📍',lbl:'สถานที่ใกล้เคียง',val:kl});
+      show('secDist');
+      document.getElementById('distGrid').innerHTML=d.map(x=>`<div class="dist-item"><div style="font-size:1rem">${x.ico}</div><div><div class="dist-lbl">${x.lbl}</div><div class="dist-val">${x.val}</div></div></div>`).join('');
+    }
+
+    // Facebook
+    if(has(p,'FB_Link')){show('secFb');document.getElementById('fbLink').href=v(p,'FB_Link');}
+
+    // Documents
+    const docs=[];
+    if(has(p,'FloorPlan_PDF')) docs.push({ico:'📐',name:'Floor Plan',sub:'PDF',href:v(p,'FloorPlan_PDF')});
+    if(has(p,'Material_PDF'))  docs.push({ico:'📋',name:'Material Spec',sub:'PDF',href:v(p,'Material_PDF')});
+    if(has(p,'Customer_PDF'))  docs.push({ico:'📄',name:'Property Brochure',sub:'PDF',href:v(p,'Customer_PDF')});
+    if(docs.length){show('secDocs');document.getElementById('docList').innerHTML=docs.map(d=>`<a href="${d.href}" class="doc-a" target="_blank" rel="noopener"><div class="doc-ico">${d.ico}</div><div><div class="doc-name">${d.name}</div><div class="doc-sub">${d.sub}</div></div></a>`).join('');}
+
+    // CTA WhatsApp
+    const msg=`สนใจทรัพย์สิน ${v(p,'HP_ID')} — ${name} — ${location.href}`;
+    document.getElementById('ctaWa').href=`https://wa.me/66805820777?text=${encodeURIComponent(msg)}`;
+
+    // Share
+    const url=location.href;
+    document.getElementById('sFb').href=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    document.getElementById('sWa').href=`https://wa.me/?text=${encodeURIComponent(name+' '+url)}`;
+    document.getElementById('sLine').href=`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`;
+
+    // Show page
+    document.getElementById('loader').classList.add('out');
+    document.getElementById('content').classList.add('show');
+  }
+
+  // ════════════════════════════════════════════
+  // UTILS
+  // ════════════════════════════════════════════
+  const v   = (p,k)   => (p[k]||'').trim().replace(/^#$/,'');
+  const has = (p,k)   => { const x=v(p,k); return x!==''&&x!=='0'; };
+  const di  = (lbl,val) => (val&&val!=='#') ? `<div class="det-item"><div class="det-lbl">${lbl}</div><div class="det-val">${val}</div></div>` : '';
+
+  function fmtP(s){
+    if(!s||s==='#') return null;
+    const n=parseFloat(s.replace(/[^\d.]/g,''));
+    if(!n) return null;
+    if(n>=1e6) return '฿ '+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+' M';
+    if(n>=1e3) return '฿ '+Math.round(n/1e3).toLocaleString()+',000';
+    return '฿ '+n.toLocaleString();
+  }
+
+  function stBadge(st){
+    const map={Available:['av','Available'],Reserved:['rs','Reserved'],Sold:['sd','Sold'],Rented:['rt','Rented']};
+    const [c,l]=map[st]||['av',st];
+    return `<div class="badge b-st b-${c}"><span class="dot"></span>${l}</div>`;
+  }
+
+  function ytId(url){const m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\s]+)/);return m?m[1]:null;}
+  function gmEmbed(url){const q=url.match(/[?&]q=([^&]+)/);if(q)return `https://maps.google.com/maps?q=${q[1]}&output=embed`;const c=url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);if(c)return `https://maps.google.com/maps?q=${c[1]},${c[2]}&output=embed&zoom=15`;return null;}
+
+  function show(id){document.getElementById(id).style.display='';}
+
+  function showError(msg){
+    dbg('ERROR: '+msg);
+    document.getElementById('loader').classList.add('out');
+    document.getElementById('errPg').classList.add('show');
+  }
+
+  function dbg(msg){
+    const box=document.getElementById('debugBox');
+    // Show debug in development (when URL has ?debug=1)
+    if(location.search.includes('debug=1')){
+      box.classList.add('show');
+      box.innerHTML += msg+'<br>';
+    }
+    console.log('[HP]',msg);
+  }
+
+  async function copyLink(){
+    try{await navigator.clipboard.writeText(location.href);const b=document.querySelector('.share-btn');const o=b.textContent;b.textContent='✓ Copied!';setTimeout(()=>b.textContent=o,2000);}catch(_){}
+  }
+  </script>
+</body>
+</html>
