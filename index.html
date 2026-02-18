@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -12,14 +13,17 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
     /* ═══════════════════════════════════════════
-       TOKENS — Coastal Luxury + Logo Palette
-       Navy / Sand / Gold + Maroon (from logo)
-       Dominant logo maroon ≈ #7D2722
+       HUAHIN.PROPERTIES — INDEX (MOBILE-FIRST FIX)
+       - จัด typography ให้เป็นระเบียบ (มือถือเป็นหลัก)
+       - แก้ปัญหา “ตัวเลขใหญ่บ้างเล็กบ้าง/ซ้อนกัน”
+       - ทำ card เป็น “list row” บนมือถือ และเป็น grid บนจอใหญ่
+       - เติมโทนแดงจากโลโก้แบบกลมกลืน (maroon)
     ═══════════════════════════════════════════ */
+
     :root{
       --navy:#0B1829;
       --navy-mid:#112238;
@@ -29,19 +33,19 @@
 
       --sand:#F5EDD8;
       --sand-dim:#C8B898;
+
+      --gold:#C9A84C;
+      --gold-lt:#E4C46A;
+      --gold-glow:rgba(201,168,76,0.15);
+
+      /* Logo (measured/pulled tone) */
+      --brand-maroon:#7F2723;
+      --brand-maroon-deep:#78241E;
+      --brand-bronze:#9D5E3F;
+
       --white:#FDFAF5;
       --muted:#7A9BB5;
-
-      --gold:#CEA86C;
-      --gold-lt:#EBD18E;
-      --gold-glow:rgba(206,168,108,.14);
-
-      /* Logo maroon family */
-      --maroon:#7D2722;
-      --maroon-hi:#8B2D27;
-      --maroon-glow:rgba(125,39,34,.18);
-
-      --border:rgba(255,255,255,0.09);
+      --border:rgba(255,255,255,0.10);
       --card-bg:rgba(11,24,41,0.92);
 
       --available:#2ECC8A;
@@ -49,11 +53,19 @@
       --sold:#E05555;
       --rented:#5B9BD5;
 
-      --trans:0.32s cubic-bezier(0.4,0,0.2,1);
+      --trans:0.28s cubic-bezier(0.4,0,0.2,1);
       --px:18px;
       --px-lg:52px;
-      --radius:8px;
-      --shadow:0 16px 48px rgba(0,0,0,0.5);
+      --radius:14px; /* ให้ดูหรูและนุ่มขึ้น */
+
+      /* Mobile typography scale (คุมให้ไม่แกว่ง) */
+      --fs-xxs: 0.52rem;
+      --fs-xs:  0.62rem;
+      --fs-sm:  0.76rem;
+      --fs-md:  0.92rem;
+      --fs-lg:  1.06rem;
+      --fs-xl:  1.25rem;
+      --fs-2xl: 1.55rem;
     }
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -67,127 +79,108 @@
       overflow-x:hidden;
     }
 
-    /* Ocean background */
+    /* OCEAN BACKGROUND */
     body::before{
       content:'';
       position:fixed;inset:0;
       background:
         radial-gradient(ellipse 80% 60% at 50% -10%, rgba(27,79,114,0.5) 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 100% 80%, rgba(26,122,138,0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 50% at 0% 100%, rgba(11,24,41,0.8) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 0% 100%, rgba(11,24,41,0.85) 0%, transparent 60%),
         linear-gradient(180deg, #060F1A 0%, #0B1829 40%, #0D1F35 100%);
       pointer-events:none;
       z-index:0;
     }
+
     body::after{
       content:'';
       position:fixed;
       bottom:0;left:-50%;
       width:200%;height:200px;
-      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(27,79,114,0.08)' d='M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(27,79,114,0.08)' d='M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
       background-size:800px 120px;
       animation:wave 12s linear infinite;
       pointer-events:none;
       z-index:0;
-      opacity:.6;
+      opacity:0.6;
     }
     @keyframes wave{from{transform:translateX(0)}to{transform:translateX(50%)}}
 
-    /* Header */
+    /* HEADER */
     header{
       position:fixed;top:0;left:0;right:0;z-index:300;
       height:58px;
       display:flex;align-items:center;justify-content:space-between;
       padding:0 var(--px);
       background:rgba(6,15,26,0.88);
-      backdrop-filter:blur(20px);
-      -webkit-backdrop-filter:blur(20px);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
       border-bottom:1px solid var(--border);
     }
-    .brand{
-      display:flex;align-items:center;gap:10px;
-      text-decoration:none;color:inherit;
-      min-width:0;
-    }
-    .brandMark{
-      width:28px;height:28px;border-radius:999px;
-      border:1px solid rgba(206,168,108,.35);
-      background:rgba(255,255,255,.04);
-      display:flex;align-items:center;justify-content:center;
-      overflow:hidden;
-      box-shadow:0 10px 24px rgba(0,0,0,.22);
-      flex-shrink:0;
-    }
-    /* ✅ ใส่ไฟล์โลโก้ของคุณใน repo แล้วตั้งชื่อ logo.png */
-    .brandMark img{width:100%;height:100%;object-fit:cover;display:block}
-    .brandTxt{
-      min-width:0;
-      display:flex;flex-direction:column;line-height:1.05;
-    }
-    .brandName{
+
+    .brand-left{display:flex;align-items:center;gap:10px;min-width:0}
+    .logo{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.05rem;font-weight:400;
-      letter-spacing:.10em;text-transform:uppercase;
+      font-size:1.02rem;font-weight:400;
+      letter-spacing:0.10em;text-transform:uppercase;
       color:var(--gold);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      text-decoration:none;line-height:1;
+      white-space:nowrap;
     }
-    .brandName span{color:var(--sand);font-style:italic;font-weight:300}
-    .brandSub{
+    .logo span{color:var(--sand);font-style:italic;font-weight:300}
+    .subbrand{
       font-family:'Montserrat',sans-serif;
-      font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;
-      color:rgba(122,155,181,.9);
-      margin-top:2px;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:rgba(122,155,181,.85);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:46vw; /* กันล้นบนมือถือ */
     }
 
-    .header-nav{display:flex;align-items:center;gap:10px}
+    .header-nav{display:flex;align-items:center;gap:10px;flex-shrink:0}
     .btn-contact-header{
-      padding:7px 16px;
+      padding:9px 16px;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       color:var(--navy);
       font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;font-weight:700;
-      letter-spacing:0.16em;text-transform:uppercase;
-      text-decoration:none;border-radius:2px;
+      font-size:var(--fs-xs);
+      font-weight:600;
+      letter-spacing:0.16em;
+      text-transform:uppercase;
+      text-decoration:none;
+      border-radius:10px;
+      border:1px solid rgba(206,168,108,.18);
       transition:all var(--trans);
       white-space:nowrap;
-      border:1px solid rgba(206,168,108,.22);
     }
     .btn-contact-header:hover{opacity:0.9;transform:translateY(-1px)}
-    .btn-refresh{
-      width:36px;height:36px;border-radius:999px;
-      border:1px solid rgba(206,168,108,.22);
-      background:rgba(255,255,255,.04);
-      color:var(--gold);
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;
-      transition:all var(--trans);
-      backdrop-filter:blur(10px);
-    }
-    .btn-refresh:hover{transform:translateY(-1px);border-color:rgba(206,168,108,.45);background:rgba(206,168,108,.08)}
-    .btn-refresh svg{width:18px;height:18px}
 
-    /* Hero */
+    /* HERO */
     .hero{
       position:relative;z-index:1;
-      padding:92px var(--px) 18px;
+      padding:90px var(--px) 26px;
       text-align:center;
     }
+
     .hero-eyebrow{
       font-family:'Montserrat',sans-serif;
-      font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;
+      font-size:var(--fs-xs);
+      letter-spacing:0.30em;
+      text-transform:uppercase;
       color:var(--teal);
-      margin-bottom:10px;
-      opacity:0;animation:fadeUp .7s .12s ease forwards;
+      margin-bottom:12px;
+      opacity:0.92;
     }
     .hero-title{
       font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2.2rem,9.5vw,4rem);
+      font-size:clamp(2.15rem, 10vw, 3.9rem);
       font-weight:300;
       line-height:1.08;
       color:var(--white);
       margin-bottom:10px;
-      opacity:0;animation:fadeUp .7s .26s ease forwards;
     }
     .hero-title em{
       font-style:italic;
@@ -196,376 +189,439 @@
       background-clip:text;
     }
     .hero-sub{
-      font-size:.92rem;
-      color:var(--muted);
+      font-size:var(--fs-md);
+      color:rgba(122,155,181,0.96);
       line-height:1.7;
-      margin-bottom:16px;
-      opacity:0;animation:fadeUp .7s .4s ease forwards;
+      margin-bottom:18px;
     }
 
-    /* Search */
-    .search-wrap{position:relative;max-width:620px;margin:0 auto 14px;opacity:0;animation:fadeUp .7s .54s ease forwards}
+    /* SEARCH */
+    .search-wrap{position:relative;max-width:560px;margin:0 auto 14px}
     .search-input{
       width:100%;
-      padding:15px 50px 15px 18px;
+      padding:14px 44px 14px 16px;
       background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.15);
-      border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:16px;
       color:var(--white);
       font-family:'Sarabun',sans-serif;
-      font-size:1rem;font-weight:300;
-      outline:none;-webkit-appearance:none;
+      font-size:1rem;
+      font-weight:300;
+      outline:none;
+      -webkit-appearance:none;
       backdrop-filter:blur(10px);
       transition:border-color var(--trans),box-shadow var(--trans),background var(--trans);
     }
-    .search-input::placeholder{color:rgba(122,155,181,0.7)}
+    .search-input::placeholder{color:rgba(122,155,181,0.72)}
     .search-input:focus{
       background:rgba(255,255,255,0.09);
       border-color:var(--gold);
-      box-shadow:0 0 0 3px var(--gold-glow),0 8px 24px rgba(0,0,0,0.3);
+      box-shadow:0 0 0 3px var(--gold-glow),0 10px 26px rgba(0,0,0,0.35);
     }
-    .search-ico{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none}
+    .search-ico{
+      position:absolute;right:14px;top:50%;
+      transform:translateY(-50%);
+      color:var(--gold);
+      pointer-events:none;
+    }
 
-    /* Filters */
-    .filters-panel{max-width:620px;margin:0 auto;opacity:0;animation:fadeUp .7s .68s ease forwards}
-    .filters-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-    .filter-select-wrap{position:relative}
+    /* FILTERS */
+    .filters-panel{max-width:560px;margin:0 auto}
+    .filters-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-bottom:12px;
+    }
     .filter-label{
       display:block;
       font-family:'Montserrat',sans-serif;
-      font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.20em;
+      text-transform:uppercase;
       color:rgba(206,168,108,.95);
-      margin-bottom:5px;padding-left:2px;
+      margin-bottom:5px;
+      padding-left:2px;
     }
     .filter-select{
       width:100%;
       padding:10px 28px 10px 12px;
       background:rgba(255,255,255,0.06);
       border:1px solid rgba(255,255,255,0.14);
-      border-radius:var(--radius);
+      border-radius:14px;
       color:var(--sand);
-      font-family:'Sarabun',sans-serif;font-size:0.88rem;font-weight:400;
-      outline:none;-webkit-appearance:none;appearance:none;
+      font-family:'Sarabun',sans-serif;
+      font-size:var(--fs-sm);
+      font-weight:400;
+      outline:none;
+      -webkit-appearance:none;
+      appearance:none;
       cursor:pointer;
       transition:all var(--trans);
       backdrop-filter:blur(8px);
     }
     .filter-select:focus{border-color:var(--gold);background:rgba(255,255,255,0.09)}
     .filter-select option{background:#0B1829;color:var(--sand)}
-    .select-arrow{position:absolute;right:10px;bottom:11px;pointer-events:none;color:var(--gold);font-size:0.7rem}
+    .select-arrow{
+      position:absolute;right:10px;bottom:10px;
+      pointer-events:none;
+      color:var(--gold);
+      font-size:0.7rem;
+    }
 
-    /* Pills */
+    /* PILLS */
     .type-pills{
-      display:flex;gap:6px;overflow-x:auto;
-      padding:0 0 6px;scrollbar-width:none;
+      display:flex;gap:8px;overflow-x:auto;
+      padding:2px 0 6px;
+      scrollbar-width:none;
     }
     .type-pills::-webkit-scrollbar{display:none}
     .pill{
       flex-shrink:0;
-      padding:7px 14px;
-      background:transparent;
+      padding:8px 14px;
+      background:rgba(255,255,255,0.02);
       border:1px solid rgba(255,255,255,0.14);
       border-radius:999px;
-      color:var(--muted);
+      color:rgba(122,155,181,.95);
       font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;font-weight:500;
-      letter-spacing:0.12em;text-transform:uppercase;
-      cursor:pointer;white-space:nowrap;
+      font-size:var(--fs-xs);
+      font-weight:500;
+      letter-spacing:0.14em;
+      text-transform:uppercase;
+      cursor:pointer;
+      white-space:nowrap;
       transition:all var(--trans);
-      -webkit-appearance:none;
     }
     .pill.active{
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      border-color:rgba(206,168,108,.6);
+      border-color:rgba(206,168,108,.35);
       color:var(--navy);
-      font-weight:800;
-      box-shadow:0 0 0 3px rgba(206,168,108,.12);
+      font-weight:700;
     }
-    .pill:not(.active):hover{border-color:rgba(206,168,108,.55);color:var(--gold)}
-    /* ✅ เพิ่ม “แดง” แบบนุ่มๆ */
-    .pill.red{
-      border-color:rgba(125,39,34,.45);
-      color:rgba(235,209,142,.9);
-    }
-    .pill.red.active{
-      background:linear-gradient(135deg,var(--maroon-hi),var(--maroon));
-      color:var(--sand);
-      border-color:rgba(235,209,142,.35);
-      box-shadow:0 0 0 3px rgba(125,39,34,.12);
-    }
+    .pill:not(.active):hover{border-color:rgba(206,168,108,.55);color:rgba(206,168,108,.95)}
 
-    /* Stats */
+    /* STATS */
     .stats-row{
-      display:flex;justify-content:center;gap:34px;
-      padding:18px var(--px) 0;
-      opacity:0;animation:fadeUp .7s .84s ease forwards;
+      display:flex;justify-content:center;gap:26px;
+      padding:22px var(--px) 0;
     }
-    .stat{text-align:center}
+    .stat{text-align:center;min-width:88px}
     .stat-num{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.8rem;font-weight:300;
+      font-size:clamp(1.55rem, 7vw, 2.2rem);
+      font-weight:300;
+      line-height:1;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background-clip:text;
-      line-height:1;
     }
     .stat-lbl{
       font-family:'Montserrat',sans-serif;
-      font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;
-      color:var(--muted);margin-top:4px;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:rgba(122,155,181,.9);
+      margin-top:6px;
     }
 
-    /* Divider */
+    /* DIVIDER */
     .divider{
       display:flex;align-items:center;gap:14px;
-      padding:26px var(--px) 12px;
+      padding:26px var(--px) 14px;
       position:relative;z-index:1;
+      opacity:.95;
     }
     .divider::before,.divider::after{
       content:'';flex:1;height:1px;
-      background:linear-gradient(to right,transparent,var(--border));
+      background:linear-gradient(to right,transparent,rgba(255,255,255,.10));
     }
-    .divider::after{background:linear-gradient(to left,transparent,var(--border))}
+    .divider::after{background:linear-gradient(to left,transparent,rgba(255,255,255,.10))}
     .divider-lbl{
       font-family:'Montserrat',sans-serif;
-      font-size:0.55rem;letter-spacing:0.32em;text-transform:uppercase;
-      color:var(--teal);white-space:nowrap;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.30em;
+      text-transform:uppercase;
+      color:rgba(26,122,138,.95);
+      white-space:nowrap;
     }
 
-    /* Listings */
+    /* LISTINGS */
     .listings{
       padding:0 var(--px) 80px;
       position:relative;z-index:1;
-      max-width:980px;
+      max-width:1100px;
       margin:0 auto;
     }
     .listings-bar{
       display:flex;justify-content:space-between;align-items:flex-end;
       margin-bottom:12px;
+      gap:10px;
     }
     .listings-title{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.25rem;font-weight:300;color:var(--white);
+      font-size:clamp(1.55rem, 7vw, 2.25rem);
+      font-weight:300;
+      color:var(--white);
+      line-height:1.05;
     }
     .listings-count{
       font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);
+      font-size:var(--fs-xs);
+      letter-spacing:0.14em;
+      text-transform:uppercase;
+      color:rgba(122,155,181,.85);
+      white-space:nowrap;
     }
 
-    /* ✅ LIST = 1 column (เหมือนภาพตัวอย่าง) */
-    .grid{display:grid;grid-template-columns:1fr;gap:10px}
+    /* ERROR */
+    .err-box{
+      background:rgba(224,85,85,.10);
+      border:1px solid rgba(224,85,85,.30);
+      color:#ef9090;
+      padding:13px 16px;
+      border-radius:16px;
+      font-size:var(--fs-sm);
+      margin-bottom:14px;
+      display:none;
+    }
 
-    /* ✅ ROW CARD (thumb left / info middle / price right) */
-    .card{
-      background:var(--card-bg);
-      border:1px solid rgba(206,168,108,.16);
-      border-radius:var(--radius);
-      display:flex;
-      gap:12px;
-      align-items:stretch;
-      text-decoration:none;color:inherit;
+    /* SKELETON */
+    .skel-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .skel-card{
+      background:rgba(17,34,56,0.8);
+      border:1px solid var(--border);
+      border-radius:16px;
       overflow:hidden;
-      position:relative;
-      opacity:0;transform:translateY(12px);
-      animation:cardIn .45s ease forwards;
-      transition:transform var(--trans),box-shadow var(--trans),border-color var(--trans),background var(--trans);
+    }
+    .skel-img{
+      width:100%;height:112px;
+      background:linear-gradient(90deg,#112238 25%,#1a3350 50%,#112238 75%);
+      background-size:200% 100%;
+      animation:shimmer 1.4s infinite;
+    }
+    .skel-body{padding:14px 16px}
+    .skel-ln{
+      height:11px;border-radius:3px;margin-bottom:9px;
+      background:linear-gradient(90deg,#1a3350 25%,#243f5a 50%,#1a3350 75%);
+      background-size:200% 100%;
+      animation:shimmer 1.4s infinite;
+    }
+    .skel-ln.s{width:35%}.skel-ln.m{width:58%}.skel-ln.l{width:85%}
+    .skel-ln.xl{height:18px;width:42%;margin-top:10px}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* GRID (มือถือเป็น list-row; เดสก์ท็อปเป็น grid) */
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+
+    /* CARD — MOBILE ROW LAYOUT (แก้ปัญหาซ้อนกัน) */
+    .card{
+      display:grid;
+      grid-template-columns:118px 1fr;
+      gap:0;
+      background:var(--card-bg);
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:18px;
+      overflow:hidden;
+      text-decoration:none;
+      color:inherit;
       backdrop-filter:blur(12px);
-      box-shadow:0 10px 28px rgba(0,0,0,.28);
+      transition:transform var(--trans), box-shadow var(--trans), border-color var(--trans);
+      box-shadow:0 16px 44px rgba(0,0,0,0.45);
     }
     .card:hover,.card:active{
       transform:translateY(-2px);
-      border-color:rgba(206,168,108,.38);
-      box-shadow:0 18px 52px rgba(0,0,0,.52),0 0 0 1px rgba(206,168,108,.14);
+      border-color:rgba(206,168,108,.35);
+      box-shadow:0 18px 52px rgba(0,0,0,0.55),0 0 0 1px rgba(206,168,108,0.10);
     }
 
-    .thumb{
-      width:92px;
-      flex-shrink:0;
-      background:#060F1A;
+    .c-img{
       position:relative;
+      height:100%;
+      min-height:118px;
+      background:#060F1A;
+      overflow:hidden;
     }
-    .thumb::after{
-      content:'';
-      position:absolute;inset:0;
-      background:
-        linear-gradient(180deg, rgba(125,39,34,.10) 0%, transparent 45%),
-        linear-gradient(90deg, rgba(206,168,108,.12) 0%, transparent 40%);
-      pointer-events:none;
-    }
-    .thumb img{
+    .c-img img{
       width:100%;height:100%;
       object-fit:cover;
       display:block;
-      filter:brightness(.92) saturate(1.05);
+      filter:brightness(0.90) saturate(1.08);
+      transition:transform 0.55s ease;
+    }
+    .card:hover .c-img img{transform:scale(1.06)}
+    .c-shade{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,
+        rgba(11,24,41,0.05) 0%,
+        rgba(11,24,41,0.22) 55%,
+        rgba(11,24,41,0.55) 100%);
+      pointer-events:none;
     }
 
-    .rowBody{
-      flex:1;
-      padding:10px 0 10px 2px;
+    /* badge — เล็กลง ไม่รบกวน */
+    .c-badge{
+      position:absolute;top:10px;left:10px;
+      padding:5px 10px;
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      color:var(--navy);
+      font-family:'Montserrat',sans-serif;
+      font-size:var(--fs-xxs);
+      font-weight:800;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      border-radius:10px;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+
+    /* BODY */
+    .c-body{
+      padding:12px 12px 12px;
       display:flex;
       flex-direction:column;
-      justify-content:center;
-      min-width:0;
+      min-width:0; /* กันตัวอักษรดันล้น */
     }
 
-    /* Line 1: #HP0001 For Sale Hua Hin */
-    .line1{
+    /* top row: id + status + price (ไม่ให้ซ้อน) */
+    .c-top{
       display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap:10px;
-      align-items:baseline;
-      flex-wrap:wrap;
+      margin-bottom:6px;
       min-width:0;
     }
-    .idTag{
+    .c-top-left{min-width:0}
+    .c-id{
       font-family:'Montserrat',sans-serif;
-      font-size:.72rem;
-      letter-spacing:.08em;
-      color:rgba(248,243,226,.92);
-      font-weight:700;
-      white-space:nowrap;
-    }
-    .saleTag{
-      font-family:'Montserrat',sans-serif;
-      font-size:.74rem;
-      letter-spacing:.10em;
+      font-size:var(--fs-sm);
+      font-weight:600;
+      letter-spacing:0.12em;
       text-transform:uppercase;
-      color:rgba(235,209,142,.95);
-      font-weight:800;
-      white-space:nowrap;
-    }
-    .saleTag.sale{color:rgba(235,209,142,.95)}
-    .saleTag.rent{color:rgba(122,155,181,.95)}
-    .zoneTag{
-      font-family:'Montserrat',sans-serif;
-      font-size:.74rem;
-      letter-spacing:.08em;
-      color:rgba(206,168,108,.9);
-      font-weight:700;
-      white-space:nowrap;
-    }
-    /* Line 2: specs */
-    .line2{
-      margin-top:5px;
-      font-size:.92rem;
-      color:rgba(248,243,226,.86);
-      line-height:1.35;
+      color:rgba(253,250,245,.92);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+      max-width:38vw;
     }
-    .line2 span{
-      color:rgba(122,155,181,.95);
-    }
-
-    /* Right price */
-    .priceCol{
-      width:min(42%, 220px);
-      padding:10px 12px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:flex-end;
-      position:relative;
-      border-left:1px solid rgba(255,255,255,.06);
-      background:
-        linear-gradient(180deg, rgba(125,39,34,.10) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 60% at 70% 20%, rgba(206,168,108,.12) 0%, transparent 60%);
-    }
-    .price{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.35rem;
-      font-weight:600;
-      letter-spacing:.02em;
-      color:var(--white);
-      text-align:right;
-      line-height:1;
-      text-shadow:0 10px 22px rgba(0,0,0,.55);
-      white-space:nowrap;
-    }
-    /* ✅ ราคาโทนแดง-หรู */
-    .price.maroon{
-      color:var(--white);
-      background:linear-gradient(135deg, var(--maroon-hi), var(--maroon), var(--gold-lt));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    .priceSub{
+    .c-status{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
       margin-top:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(6,15,26,0.35);
+      backdrop-filter:blur(6px);
+      width:max-content;
+    }
+    .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .d-av{background:var(--available);box-shadow:0 0 10px rgba(46,204,138,.45)}
+    .d-rs{background:var(--reserved);box-shadow:0 0 10px rgba(232,160,32,.45)}
+    .d-sd{background:var(--sold);box-shadow:0 0 10px rgba(224,85,85,.45)}
+    .d-rt{background:var(--rented);box-shadow:0 0 10px rgba(91,155,213,.45)}
+    .dot-lbl{
       font-family:'Montserrat',sans-serif;
-      font-size:.55rem;
-      letter-spacing:.22em;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.14em;
       text-transform:uppercase;
-      color:rgba(122,155,181,.85);
-      text-align:right;
+      color:rgba(245,237,216,.88);
+      font-weight:600;
       white-space:nowrap;
     }
 
-    /* Status dot small in price corner */
-    .stDot{
-      position:absolute;left:10px;top:12px;
-      width:8px;height:8px;border-radius:50%;
-      box-shadow:0 0 10px rgba(0,0,0,.35);
-      opacity:.95;
+    /* price box — คุมขนาด/ไม่ทับ */
+    .c-price{
+      text-align:right;
+      flex-shrink:0;
+      min-width:120px;
     }
-    .d-av{background:var(--available);box-shadow:0 0 8px rgba(46,204,138,.55)}
-    .d-rs{background:var(--reserved);box-shadow:0 0 8px rgba(232,160,32,.55)}
-    .d-sd{background:var(--sold);box-shadow:0 0 8px rgba(224,85,85,.55)}
-    .d-rt{background:var(--rented);box-shadow:0 0 8px rgba(91,155,213,.55)}
+    .p-val{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.15rem, 5.2vw, 1.55rem); /* มือถือไม่ให้ใหญ่เกิน */
+      font-weight:600;
+      line-height:1.05;
+      background:linear-gradient(135deg,var(--brand-maroon),var(--gold-lt));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      white-space:nowrap;
+    }
+    .p-lbl{
+      margin-top:5px;
+      font-family:'Montserrat',sans-serif;
+      font-size:var(--fs-xxs);
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:rgba(122,155,181,.70);
+      white-space:nowrap;
+    }
 
-    /* Skeleton (row) */
-    .skel-grid{display:grid;grid-template-columns:1fr;gap:10px}
-    .skel-card{
-      background:rgba(17,34,56,0.72);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius);
+    /* main info */
+    .c-ltype{
+      font-family:'Montserrat',sans-serif;
+      font-size:var(--fs-sm);
+      font-weight:700;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      margin:4px 0 6px;
+      color:rgba(122,155,181,.92);
+    }
+    .c-zone{
+      font-family:'Montserrat',sans-serif;
+      font-size:var(--fs-sm);
+      letter-spacing:0.08em;
+      color:rgba(206,168,108,.92);
+      font-weight:600;
+      white-space:nowrap;
       overflow:hidden;
+      text-overflow:ellipsis;
+      margin-bottom:4px;
+    }
+    .c-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.08rem, 4.8vw, 1.35rem);
+      font-weight:400;
+      line-height:1.15;
+      color:var(--white);
+      margin-bottom:6px;
+
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .c-specs{
       display:flex;
-      gap:12px;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:auto;
+      padding-top:8px;
+      border-top:1px solid rgba(255,255,255,0.08);
     }
-    .skel-thumb{
-      width:92px;min-height:74px;
-      background:linear-gradient(90deg,#112238 25%,#1a3350 50%,#112238 75%);
-      background-size:200% 100%;
-      animation:shimmer 1.3s infinite;
-    }
-    .skel-body{flex:1;padding:10px 0}
-    .skel-ln{
-      height:10px;border-radius:3px;margin:0 12px 8px 0;
-      background:linear-gradient(90deg,#1a3350 25%,#243f5a 50%,#1a3350 75%);
-      background-size:200% 100%;
-      animation:shimmer 1.3s infinite;
-    }
-    .skel-ln.s{width:38%}
-    .skel-ln.m{width:62%}
-    .skel-ln.l{width:80%}
-    .skel-price{
-      width:min(42%, 220px);
-      border-left:1px solid rgba(255,255,255,.06);
-      background:linear-gradient(90deg,#112238 25%,#1a3350 50%,#112238 75%);
-      background-size:200% 100%;
-      animation:shimmer 1.3s infinite;
+    .spec{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-family:'Montserrat',sans-serif;
+      font-size:var(--fs-xs);
+      color:rgba(122,155,181,.92);
+      letter-spacing:0.06em;
+      white-space:nowrap;
     }
 
-    /* Empty / Error */
-    .empty{grid-column:1/-1;text-align:center;padding:52px 16px}
+    /* EMPTY */
+    .empty{text-align:center;padding:56px 20px}
     .empty-icon{font-size:2.2rem;margin-bottom:12px;opacity:.25}
-    .empty-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--muted)}
-    .empty-sub{font-size:.85rem;color:var(--muted);margin-top:6px;opacity:.55}
-    .err-box{
-      background:rgba(224,85,85,.1);
-      border:1px solid rgba(224,85,85,.3);
-      color:#ef9090;
-      padding:13px 16px;border-radius:var(--radius);
-      font-size:.86rem;margin-bottom:14px;display:none;
-    }
+    .empty-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--muted)}
+    .empty-sub{font-size:.8rem;color:var(--muted);margin-top:6px;opacity:.55}
 
-    /* Footer */
+    /* FOOTER */
     footer{
       border-top:1px solid var(--border);
-      padding:34px var(--px) 48px;
+      padding:36px var(--px) 48px;
       position:relative;z-index:1;
       background:rgba(6,15,26,0.6);
-      margin-top:10px;
     }
     .footer-brand{
       font-family:'Cormorant Garamond',serif;
@@ -574,38 +630,35 @@
       margin-bottom:6px;
     }
     .footer-tagline{
-      font-size:.78rem;color:var(--muted);margin-bottom:18px;
-      font-family:'Montserrat',sans-serif;font-weight:300;letter-spacing:.05em;
+      font-size:.78rem;
+      color:rgba(122,155,181,.92);
+      margin-bottom:24px;
+      font-family:'Montserrat',sans-serif;
+      font-weight:300;
+      letter-spacing:.05em;
     }
-    .footer-copy{
-      font-size:.65rem;color:var(--muted);opacity:.4;padding-top:16px;
-      border-top:1px solid var(--border);
-    }
-
-    /* Contact mini */
     .contact-section-title{
       font-family:'Montserrat',sans-serif;
       font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;
-      color:var(--teal);margin-bottom:12px;
+      color:rgba(26,122,138,.95);margin-bottom:12px;
     }
     .contact-grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
-      gap:8px;margin-bottom:18px;
+      gap:8px;margin-bottom:28px;
     }
     .c-btn{
       display:flex;align-items:center;gap:10px;
       padding:13px 14px;
       background:rgba(255,255,255,0.04);
       border:1px solid var(--border);
-      border-radius:var(--radius);
-      color:var(--sand);
-      text-decoration:none;
+      border-radius:16px;
+      color:var(--sand);text-decoration:none;
       transition:all var(--trans);
     }
     .c-btn:hover,.c-btn:active{
-      background:rgba(206,168,108,0.10);
-      border-color:rgba(206,168,108,0.40);
+      background:rgba(201,168,76,0.10);
+      border-color:rgba(201,168,76,0.35);
       transform:translateY(-2px);
     }
     .c-btn-ico{
@@ -617,56 +670,74 @@
     .ico-wa{background:linear-gradient(135deg,#25D366,#128C7E)}
     .ico-fb{background:linear-gradient(135deg,#1877F2,#0c5fcc)}
     .ico-call{background:linear-gradient(135deg,var(--teal),var(--ocean))}
+    .ico-tiktok{background:linear-gradient(135deg,#010101,#333)}
+    .ico-ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+    .ico-ecard{background:linear-gradient(135deg,var(--gold),var(--gold-lt))}
     .c-btn-name{
       font-family:'Montserrat',sans-serif;
       font-size:.68rem;font-weight:600;color:var(--white);
       letter-spacing:.04em;margin-bottom:2px;
     }
-    .c-btn-desc{
-      font-size:.72rem;color:var(--muted);
-      font-weight:300;
+    .c-btn-desc{font-size:.72rem;color:rgba(122,155,181,.9);font-weight:300}
+    .footer-copy{
+      font-size:.65rem;color:rgba(122,155,181,.8);
+      opacity:.55;padding-top:16px;
+      border-top:1px solid rgba(255,255,255,0.08);
     }
 
-    /* Responsive */
-    @media(min-width:1100px){
+    /* RESPONSIVE */
+    @media(min-width:600px){
+      .filters-grid{grid-template-columns:repeat(3,1fr)}
+      .skel-grid{grid-template-columns:repeat(2,1fr)}
+      .contact-grid{grid-template-columns:repeat(3,1fr)}
+
+      /* ให้ card ยังเป็น row แต่กว้างขึ้น */
+      .card{grid-template-columns:140px 1fr}
+      .c-img{min-height:140px}
+      .c-id{max-width:320px}
+    }
+
+    @media(min-width:900px){
       header{padding:0 var(--px-lg)}
-      .hero{padding:104px var(--px-lg) 20px}
-      .divider{padding:28px var(--px-lg) 12px}
+      .hero{padding:100px var(--px-lg) 34px}
+      .divider{padding:34px var(--px-lg) 16px}
       .listings{padding:0 var(--px-lg) 100px}
       footer{padding:44px var(--px-lg) 56px}
-      .contact-grid{grid-template-columns:repeat(4,1fr)}
+
+      /* Desktop: เปลี่ยนเป็น grid card แบบ “ภาพบน” เพื่อดูหรู */
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .card{
+        display:block;
+      }
+      .c-img{
+        min-height:auto;
+        aspect-ratio:16/10;
+      }
+      .c-body{padding:14px 16px 16px}
+      .c-top{margin-bottom:10px}
+      .c-id{max-width:none}
+      .c-price{min-width:auto}
+      .c-specs{margin-top:12px}
     }
 
-    /* Animations */
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes cardIn{to{opacity:1;transform:translateY(0)}}
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    @media(min-width:1100px){
+      .grid{grid-template-columns:repeat(3,1fr)}
+      .skel-grid{grid-template-columns:repeat(3,1fr)}
+      .contact-grid{grid-template-columns:repeat(4,1fr)}
+      .subbrand{max-width:520px}
+    }
   </style>
 </head>
 
 <body>
-
   <!-- HEADER -->
   <header>
-    <a href="index.html" class="brand" aria-label="Hua Hin Properties Home">
-      <div class="brandMark">
-        <!-- ✅ วางโลโก้ของคุณชื่อ logo.png ไว้ที่โฟลเดอร์เดียวกับไฟล์นี้ -->
-        <img src="logo.png" alt="Hua Hin Properties Logo" onerror="this.style.display='none'">
-      </div>
-      <div class="brandTxt">
-        <div class="brandName">Hua Hin<span>.Properties</span></div>
-        <div class="brandSub">Prime Asset Catalog</div>
-      </div>
-    </a>
-
+    <div class="brand-left">
+      <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
+      <div class="subbrand">Prime Asset Catalog</div>
+    </div>
     <div class="header-nav">
-      <button class="btn-refresh" id="btnReload" title="Reload" aria-label="Reload">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M21 12a9 9 0 10-3 6.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M21 8v4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <a href="#contact" class="btn-contact-header">Contact</a>
+      <a href="contact.html" class="btn-contact-header">Contact</a>
     </div>
   </header>
 
@@ -674,26 +745,27 @@
   <section class="hero">
     <p class="hero-eyebrow">🌊 Luxury Coastal Real Estate · Hua Hin</p>
     <h1 class="hero-title">
-      Prime<br/>
-      <em>Asset Catalog</em>
+      Find Your<br/>
+      <em>Dream Home</em><br/>
+      by the Sea
     </h1>
     <p class="hero-sub">
-      คัดสรรอสังหาริมทรัพย์ระดับ Luxury เมืองชายทะเลหัวหิน · ชะอำ · ปราณบุรี<br/>
-      Pool Villa · Condo · Land
+      คัดสรรอสังหาริมทรัพย์ระดับ Luxury เมืองชายทะเลหัวหิน<br/>
+      Pool Villa · Condo · Land · หัวหิน · ชะอำ · ปราณบุรี
     </p>
 
     <!-- SEARCH -->
     <div class="search-wrap">
       <input id="searchInput" class="search-input" type="search"
-        placeholder="🔍  ค้นหา... Pool Villa, Sea View, Chanote, Hua Hin..."
+        placeholder="🔍  ค้นหา... Pool Villa, Sea View, Chanote, หัวหิน..."
         autocomplete="off" autocorrect="off" spellcheck="false"/>
-      <span class="search-ico">⌕</span>
+      <span class="search-ico">🔎</span>
     </div>
 
-    <!-- SMART FILTERS -->
+    <!-- FILTERS -->
     <div class="filters-panel">
       <div class="filters-grid">
-        <div class="filter-select-wrap">
+        <div style="position:relative">
           <label class="filter-label">📍 Area / โซน</label>
           <div style="position:relative">
             <select id="selArea" class="filter-select">
@@ -706,21 +778,21 @@
           </div>
         </div>
 
-        <div class="filter-select-wrap">
+        <div style="position:relative">
           <label class="filter-label">💰 Price / ราคา</label>
           <div style="position:relative">
             <select id="selPrice" class="filter-select">
               <option value="">ทุกราคา</option>
-              <option value="0-5">ไม่เกิน ฿5,000,000</option>
-              <option value="5-10">฿5,000,000 – ฿10,000,000</option>
-              <option value="10-20">฿10,000,000 – ฿20,000,000</option>
-              <option value="20-999">มากกว่า ฿20,000,000</option>
+              <option value="0-5">ไม่เกิน ฿5M</option>
+              <option value="5-10">฿5M – ฿10M</option>
+              <option value="10-20">฿10M – ฿20M</option>
+              <option value="20-999">มากกว่า ฿20M</option>
             </select>
             <span class="select-arrow">▾</span>
           </div>
         </div>
 
-        <div class="filter-select-wrap">
+        <div style="position:relative">
           <label class="filter-label">🛏 Beds / ห้องนอน</label>
           <div style="position:relative">
             <select id="selBeds" class="filter-select">
@@ -741,7 +813,6 @@
         <button class="pill" data-f="Sale">Sale</button>
         <button class="pill" data-f="Rent">Rent</button>
         <button class="pill" data-f="Available">Available</button>
-        <button class="pill red" data-f="Sold">Sold</button>
         <button class="pill" data-f="Pool Villa">Pool Villa</button>
         <button class="pill" data-f="Condo">Condo</button>
         <button class="pill" data-f="Land">Land</button>
@@ -751,6 +822,7 @@
       </div>
     </div>
 
+    <!-- STATS -->
     <div class="stats-row">
       <div class="stat"><div class="stat-num" id="sTotal">—</div><div class="stat-lbl">Listings</div></div>
       <div class="stat"><div class="stat-num" id="sAvail">—</div><div class="stat-lbl">Available</div></div>
@@ -763,24 +835,23 @@
   <section class="listings">
     <div class="listings-bar">
       <h2 class="listings-title">Luxury Listings</h2>
-      <span class="listings-count" id="listCount">Loading…</span>
+      <span class="listings-count" id="listCount">กำลังโหลด...</span>
     </div>
-
     <div class="err-box" id="errBox"></div>
 
     <!-- Skeleton -->
     <div class="skel-grid" id="skelGrid">
-      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div></div><div class="skel-price"></div></div>
-      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div></div><div class="skel-price"></div></div>
-      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div></div><div class="skel-price"></div></div>
-      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div></div><div class="skel-price"></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
+      <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-ln s"></div><div class="skel-ln m"></div><div class="skel-ln l"></div><div class="skel-ln xl"></div></div></div>
     </div>
 
     <div class="grid" id="propGrid" style="display:none"></div>
   </section>
 
   <!-- FOOTER / CONTACT -->
-  <footer id="contact">
+  <footer>
     <div class="footer-brand">Hua Hin · Properties</div>
     <p class="footer-tagline">Luxury Coastal Real Estate · หัวหิน ชะอำ ปราณบุรี</p>
 
@@ -788,7 +859,9 @@
 
     <div class="contact-grid">
       <a href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener" class="c-btn">
-        <div class="c-btn-ico ico-line">💬</div>
+        <div class="c-btn-ico ico-line">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        </div>
         <div>
           <div class="c-btn-name">LINE OA</div>
           <div class="c-btn-desc">ติดต่อผ่าน LINE</div>
@@ -796,31 +869,67 @@
       </a>
 
       <a href="https://wa.me/66805820777?text=Interested" target="_blank" rel="noopener" class="c-btn">
-        <div class="c-btn-ico ico-wa">🟢</div>
+        <div class="c-btn-ico ico-wa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.857L0 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.877 9.877 0 01-5.034-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106c5.42 0 9.894 4.474 9.894 9.894 0 5.42-4.474 9.894-9.894 9.894z"/></svg>
+        </div>
         <div>
           <div class="c-btn-name">WhatsApp</div>
-          <div class="c-btn-desc">For international buyers</div>
+          <div class="c-btn-desc">WhatsApp (Foreigner)</div>
         </div>
       </a>
 
       <a href="https://m.me/huahinpropertyhuahinrealestate/" target="_blank" rel="noopener" class="c-btn">
-        <div class="c-btn-ico ico-fb">f</div>
+        <div class="c-btn-ico ico-fb">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073 24 5.446 18.627 0 12 0z"/></svg>
+        </div>
         <div>
           <div class="c-btn-name">Facebook</div>
-          <div class="c-btn-desc">Messenger</div>
+          <div class="c-btn-desc">Facebook Messenger</div>
         </div>
       </a>
 
       <a href="tel:+66805820777" class="c-btn">
-        <div class="c-btn-ico ico-call">☎</div>
+        <div class="c-btn-ico ico-call">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
         <div>
           <div class="c-btn-name">Call</div>
-          <div class="c-btn-desc">Hotline</div>
+          <div class="c-btn-desc">โทรสายด่วน</div>
+        </div>
+      </a>
+
+      <a href="https://www.tiktok.com/@huahin.properties" target="_blank" rel="noopener" class="c-btn">
+        <div class="c-btn-ico ico-tiktok">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </div>
+        <div>
+          <div class="c-btn-name">TikTok</div>
+          <div class="c-btn-desc">ติดตามทาง TikTok</div>
+        </div>
+      </a>
+
+      <a href="https://www.instagram.com/huahin.properties" target="_blank" rel="noopener" class="c-btn">
+        <div class="c-btn-ico ico-ig">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        <div>
+          <div class="c-btn-name">Instagram</div>
+          <div class="c-btn-desc">@huahin.properties</div>
+        </div>
+      </a>
+
+      <a href="https://your-link.com" target="_blank" rel="noopener" class="c-btn">
+        <div class="c-btn-ico ico-ecard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0B1829"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        </div>
+        <div>
+          <div class="c-btn-name">E-Card</div>
+          <div class="c-btn-desc">นามบัตรดิจิทัล</div>
         </div>
       </a>
     </div>
 
-    <p class="footer-copy">© 2026 huahin.properties · Luxury Coastal Real Estate · All rights reserved</p>
+    <p class="footer-copy">© 2025 huahin.properties · Luxury Coastal Real Estate · All rights reserved</p>
   </footer>
 
   <script>
@@ -843,240 +952,169 @@
     // FETCH
     // ══════════════════════════════════════════
     async function fetchData() {
-      showSkel();
-      hideErr();
-
-      try{
-        const r = await fetch(SCRIPT_URL + '?mode=getUnitList', { signal: AbortSignal.timeout(8000) });
-        if(!r.ok) throw new Error('bad');
+      try {
+        const r = await fetch(SCRIPT_URL + '?mode=getUnitList', { signal: AbortSignal.timeout(7000) });
+        if (!r.ok) throw new Error();
         const j = await r.json();
-        if(j && Array.isArray(j.data)){
-          allProps = j.data.filter(p => (p['System_Status'] || '').trim() === 'Live');
+        if (j && Array.isArray(j.data) && j.data.length) {
+          allProps = j.data.filter(p => p['System_Status'] === 'Live');
           return renderAll();
         }
-        throw new Error('shape');
-      }catch(_){
-        try{
-          await fetchSheet();
-        }catch(_2){
-          showErr('ไม่สามารถโหลดข้อมูลได้ — ตรวจสอบ Apps Script Deploy / หรือ Sheet ต้องเปิดเป็น Public');
-        }
+        throw new Error();
+      } catch (_) {
+        try { await fetchSheet(); }
+        catch (_2) { showErr('ไม่สามารถโหลดข้อมูลได้ — กรุณาตรวจสอบว่า Google Sheet เปิดเป็น Public'); }
       }
     }
 
-    async function fetchSheet(){
-      const r = await fetch(SHEET_URL, { signal: AbortSignal.timeout(9000) });
+    async function fetchSheet() {
+      const r = await fetch(SHEET_URL);
       const t = await r.text();
       const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
       const cols = j.table.cols.map(c => c.label);
-
       allProps = j.table.rows.map(row => {
         const o = {};
         cols.forEach((c, i) => { o[c] = row.c?.[i]?.v != null ? String(row.c[i].v) : ''; });
         return o;
-      }).filter(p => (p['System_Status'] || '').trim() === 'Live');
-
+      }).filter(p => p['System_Status'] === 'Live');
       renderAll();
     }
 
-    function renderAll(){
-      updateStats();
-      applyFilters();
-      hideSkel();
-    }
+    function renderAll() { updateStats(); applyFilters(); hideSkel(); }
 
     // ══════════════════════════════════════════
     // HELPERS
     // ══════════════════════════════════════════
-    function safeStr(v){ return (v==null) ? '' : String(v).trim(); }
-
-    function normalizeImageUrl(u){
-      let s = safeStr(u);
-      if(!s || s === '#') return '';
-      if(/^https:\/\/lh3\.googleusercontent\.com\/d\//i.test(s)) return s;
-
-      const m1 = s.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if(m1) return 'https://lh3.googleusercontent.com/d/' + m1[1];
-
-      const m2 = s.match(/open\?id=([a-zA-Z0-9_-]+)/);
-      if(m2) return 'https://lh3.googleusercontent.com/d/' + m2[1];
-
-      if(/^[a-zA-Z0-9_-]{20,}$/.test(s)) return 'https://lh3.googleusercontent.com/d/' + s;
-
-      return s;
+    function fmtPrice(sale, rent, ltype) {
+      const src = ltype === 'Rent' ? rent : (sale && sale !== '#' ? sale : rent);
+      if (!src || src === '#') return '—';
+      const n = parseFloat(String(src).replace(/[^\d.]/g, ''));
+      if (!n) return '—';
+      const sfx = (ltype === 'Rent' || (!sale && rent)) ? '/mo' : '';
+      if (n >= 1e6) return '฿' + (n/1e6).toFixed(1) + 'M' + sfx;
+      if (n >= 1e3) return '฿' + Math.round(n/1e3) + 'K' + sfx;
+      return '฿' + n.toLocaleString() + sfx;
     }
 
-    function parseMoney(s){
-      const t = safeStr(s).replace(/,/g,'');
-      const n = parseFloat(t.replace(/[^\d.]/g,''));
-      return isFinite(n) ? n : 0;
+    function getPriceNum(p) {
+      const s = p['Sale_Price'] || p['Monthly_Rent'] || '';
+      return parseFloat(String(s).replace(/[^\d.]/g, '')) || 0;
     }
 
-    // ✅ ราคา “เต็ม” ไม่ย่อ (ตามที่คุณต้องการ)
-    function fmtPriceFull(sale, rent, ltype){
-      const lt = safeStr(ltype);
-      const saleN = parseMoney(sale);
-      const rentN = parseMoney(rent);
-
-      const useRent = lt.toLowerCase().includes('rent');
-      if(useRent){
-        if(!rentN && saleN) return '฿' + saleN.toLocaleString('en-US');
-        if(!rentN) return '—';
-        return '฿' + rentN.toLocaleString('en-US') + '/mo';
-      }
-
-      // Sale (default)
-      if(saleN) return '฿' + saleN.toLocaleString('en-US');
-      if(rentN) return '฿' + rentN.toLocaleString('en-US') + '/mo';
-      return '—';
-    }
-
-    function getPriceNum(p){
-      // ใช้ราคาขายก่อน ถ้าไม่มีค่อยใช้เช่า
-      const s = safeStr(p['Sale_Price']) || safeStr(p['Monthly_Rent']) || '';
-      return parseMoney(s);
-    }
-
-    function dotCls(s){
+    function dotCls(s) {
       return { Available:'d-av', Reserved:'d-rs', Sold:'d-sd', Rented:'d-rt' }[s] || 'd-av';
     }
 
-    function zoneLabel(p){
-      return safeStr(p['Zone']) || safeStr(p['District']) || '—';
-    }
-
-    function saleRentLabel(lt){
-      const x = safeStr(lt).toLowerCase();
-      if(x.includes('rent')) return 'For Rent';
-      return 'For Sale';
+    function normalizeThumb(u){
+      const s = String(u||'').trim();
+      if(!s || s==='#') return '';
+      return s;
     }
 
     // ══════════════════════════════════════════
-    // CARD (ROW)
+    // CARD (ปรับใหม่เพื่อ “ไม่ซ้อนกัน” บนมือถือ)
     // ══════════════════════════════════════════
-    function cardHtml(p, i){
-      const id = safeStr(p['HP_ID']) || '—';
-      const lt = safeStr(p['Listing_Type']) || 'Sale';
-      const st = safeStr(p['Status']) || 'Available';
-
-      const saleTag = saleRentLabel(lt);
-      const zone = zoneLabel(p);
-
-      const beds = safeStr(p['Bedrooms']) || '—';
-      const baths = safeStr(p['Bathrooms']) || '—';
-      const landW = safeStr(p['Land_Area_sq_w']);
-      const living = safeStr(p['Living_Area_sq_m']);
-
-      const landText = landW ? `Land: <span>${landW} sq.w.</span>` : `Land: <span>—</span>`;
-      const livingText = living ? `Living: <span>${living} sqm</span>` : `Living: <span>—</span>`;
-
-      const thumbRaw = normalizeImageUrl(p['Thumbnail_Image']);
-      const thumb = thumbRaw || '';
-
-      const price = fmtPriceFull(p['Sale_Price'], p['Monthly_Rent'], lt);
-      const priceLbl = (safeStr(lt).toLowerCase().includes('rent')) ? 'Monthly Rent' : 'Sale Price';
-
-      const delay = Math.min(i * 0.03, 0.36).toFixed(2);
+    function cardHtml(p, i) {
+      const id    = p['HP_ID'] || '';
+      const badge = p['Badge'] || '';
+      const st    = p['Status'] || 'Available';
+      const lt    = p['Listing_Type'] || 'Sale';
+      const zone  = p['Zone'] || p['District'] || '';
+      const name  = [p['Project_Name'], p['Type']].filter(Boolean).join(' · ') || '—';
+      const thumb = normalizeThumb(p['Thumbnail_Image']);
+      const price = fmtPrice(p['Sale_Price'], p['Monthly_Rent'], lt);
+      const pLbl  = (lt === 'Rent') ? 'Monthly Rent' : 'Sale Price';
 
       const img = thumb
-        ? `<img src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none'">`
-        : '';
-
-      const saleCls = safeStr(lt).toLowerCase().includes('rent') ? 'rent' : 'sale';
+        ? `<img src="${thumb}" alt="${name}" loading="lazy" onerror="this.style.display='none'">`
+        : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,0.10)">⌂</div>`;
 
       return `
-        <a class="card" href="details.html?id=${encodeURIComponent(id)}" style="animation-delay:${delay}s">
-          <div class="thumb">${img}</div>
+      <a class="card" href="details.html?id=${encodeURIComponent(id)}">
+        <div class="c-img">
+          ${img}
+          <div class="c-shade"></div>
+          ${badge ? `<div class="c-badge">${badge}</div>` : ``}
+        </div>
 
-          <div class="rowBody">
-            <div class="line1">
-              <div class="idTag">#${id}</div>
-              <div class="saleTag ${saleCls}">${saleTag}</div>
-              <div class="zoneTag">${zone}</div>
+        <div class="c-body">
+          <div class="c-top">
+            <div class="c-top-left">
+              <div class="c-id">${id}</div>
+              <div class="c-status">
+                <span class="dot ${dotCls(st)}"></span>
+                <span class="dot-lbl">${st}</span>
+              </div>
             </div>
-            <div class="line2">
-              ${beds} Bed | ${baths} Bath&nbsp;&nbsp;${landText}&nbsp;&nbsp;${livingText}
+
+            <div class="c-price">
+              <div class="p-val">${price}</div>
+              <div class="p-lbl">${pLbl}</div>
             </div>
           </div>
 
-          <div class="priceCol">
-            <span class="stDot ${dotCls(st)}" title="${st}"></span>
-            <div style="text-align:right">
-              <div class="price maroon">${price}</div>
-              <div class="priceSub">${priceLbl}</div>
-            </div>
+          <div class="c-ltype">${(lt||'').toUpperCase()}</div>
+          <div class="c-zone">📍 ${zone || '—'}</div>
+          <div class="c-name">${name}</div>
+
+          <div class="c-specs">
+            <div class="spec">🛏 ${p['Bedrooms']||'—'} Bed</div>
+            <div class="spec">🚿 ${p['Bathrooms']||'—'} Bath</div>
+            <div class="spec">⊞ ${p['Living_Area_sq_m'] ? (p['Living_Area_sq_m']+' m²') : '—'}</div>
           </div>
-        </a>
-      `;
+        </div>
+      </a>`;
     }
 
     // ══════════════════════════════════════════
     // APPLY FILTERS
     // ══════════════════════════════════════════
-    function applyFilters(){
+    function applyFilters() {
       let res = allProps.filter(p => {
-        // Search
-        if(searchQ){
+
+        if (searchQ) {
           const q = searchQ.toLowerCase();
-          const match = [
-            'HP_ID','Project_Name','Type','Zone','District','SubDistrict',
+          const match = ['HP_ID','Project_Name','Type','Zone','District','SubDistrict',
             'Key_Selling_Points','Badge','View_Type','Land_Title_Deed_Type',
-            'Listing_Type','Ownership_Type','Status'
-          ].some(k => (safeStr(p[k])).toLowerCase().includes(q));
-          if(!match) return false;
+            'Listing_Type','Ownership_Type','Distance_to_Beach']
+            .some(k => (p[k]||'').toLowerCase().includes(q));
+          if (!match) return false;
         }
 
-        // Area
-        if(areaF){
-          const loc = (safeStr(p['District']) + ' ' + safeStr(p['Zone']) + ' ' + safeStr(p['SubDistrict'])).toLowerCase();
-          if(!loc.includes(areaF)) return false;
+        if (areaF) {
+          const loc = ((p['District']||'')+(p['Zone']||'')+(p['SubDistrict']||'')).toLowerCase();
+          if (!loc.includes(areaF)) return false;
         }
 
-        // Price
-        if(priceF){
+        if (priceF) {
           const [mn, mx] = priceF.split('-').map(Number);
           const pn = getPriceNum(p) / 1e6;
-          if(pn < mn || pn > mx) return false;
+          if (pn < mn || pn > mx) return false;
         }
 
-        // Beds
-        if(bedsF){
-          const b = parseInt(safeStr(p['Bedrooms']) || '0', 10);
-          if(bedsF === '5'){ if(b < 5) return false; }
-          else { if(b !== parseInt(bedsF,10)) return false; }
+        if (bedsF) {
+          const beds = parseInt(p['Bedrooms']||'0');
+          if (bedsF === '5') { if (beds < 5) return false; }
+          else { if (beds !== parseInt(bedsF)) return false; }
         }
 
-        // Pill
-        if(activeF !== 'all'){
-          const af = activeF.toLowerCase();
-          const t = safeStr(p['Type']).toLowerCase();
-          const v = safeStr(p['View_Type']).toLowerCase();
-          const st = safeStr(p['Status']);
-          const lt = safeStr(p['Listing_Type']);
-          const own = safeStr(p['Ownership_Type']);
-
-          return lt === activeF ||
-                 st === activeF ||
-                 own === activeF ||
-                 t.includes(af) ||
-                 v.includes(af);
+        if (activeF !== 'all') {
+          return p['Listing_Type'] === activeF ||
+                 p['Status'] === activeF ||
+                 p['Type'] === activeF ||
+                 (p['View_Type']||'').toLowerCase().includes(activeF.toLowerCase()) ||
+                 (p['Type']||'').toLowerCase().includes(activeF.toLowerCase()) ||
+                 p['Ownership_Type'] === activeF;
         }
 
         return true;
       });
 
-      // Sort by price desc (เหมือน “catalog” หรูๆ)
-      res.sort((a,b)=> getPriceNum(b) - getPriceNum(a));
-
       const grid = document.getElementById('propGrid');
       grid.style.display = 'grid';
       grid.innerHTML = res.length
         ? res.map(cardHtml).join('')
-        : `<div class="empty">
-            <div class="empty-icon">🔍</div>
-            <div class="empty-title">ไม่พบรายการที่ตรงกัน</div>
-            <div class="empty-sub">ลองปรับ filter หรือค้นหาด้วยคำอื่น</div>
-           </div>`;
+        : `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">ไม่พบรายการที่ตรงกัน</div><div class="empty-sub">ลองปรับ filter หรือค้นหาด้วยคำอื่น</div></div>`;
 
       document.getElementById('listCount').textContent = `${res.length} รายการ`;
     }
@@ -1084,13 +1122,13 @@
     // ══════════════════════════════════════════
     // STATS
     // ══════════════════════════════════════════
-    function updateStats(){
+    function updateStats() {
       countUp('sTotal', allProps.length);
-      countUp('sAvail', allProps.filter(p => safeStr(p['Status']) === 'Available').length);
-      countUp('sZones', new Set(allProps.map(p => zoneLabel(p)).filter(z => z && z !== '—')).size);
+      countUp('sAvail', allProps.filter(p => p['Status']==='Available').length);
+      countUp('sZones', new Set(allProps.map(p=>p['Zone']||p['District']).filter(Boolean)).size);
     }
 
-    function countUp(id, target){
+    function countUp(id, target) {
       const el = document.getElementById(id);
       let n = 0;
       const step = Math.max(1, Math.ceil(target/22));
@@ -1101,18 +1139,11 @@
       }, 40);
     }
 
-    // ══════════════════════════════════════════
-    // UI helpers
-    // ══════════════════════════════════════════
-    function showSkel(){
-      document.getElementById('skelGrid').style.display = 'grid';
-      document.getElementById('propGrid').style.display = 'none';
-    }
-    function hideSkel(){
+    function hideSkel() {
       document.getElementById('skelGrid').style.display = 'none';
-      document.getElementById('propGrid').style.display = 'grid';
     }
-    function showErr(msg){
+
+    function showErr(msg) {
       hideSkel();
       const e = document.getElementById('errBox');
       e.textContent = '⚠ ' + msg;
@@ -1121,50 +1152,38 @@
       document.getElementById('propGrid').innerHTML = '';
       document.getElementById('listCount').textContent = '0 รายการ';
     }
-    function hideErr(){
-      const e = document.getElementById('errBox');
-      e.style.display = 'none';
-      e.textContent = '';
-    }
 
     // ══════════════════════════════════════════
     // EVENTS
     // ══════════════════════════════════════════
     document.getElementById('searchInput').addEventListener('input', e => {
-      searchQ = e.target.value.trim();
-      applyFilters();
+      searchQ = e.target.value.trim(); applyFilters();
     });
 
     document.getElementById('selArea').addEventListener('change', e => {
-      areaF = safeStr(e.target.value).toLowerCase();
-      applyFilters();
+      areaF = e.target.value.toLowerCase(); applyFilters();
     });
 
     document.getElementById('selPrice').addEventListener('change', e => {
-      priceF = safeStr(e.target.value);
-      applyFilters();
+      priceF = e.target.value; applyFilters();
     });
 
     document.getElementById('selBeds').addEventListener('change', e => {
-      bedsF = safeStr(e.target.value);
-      applyFilters();
+      bedsF = e.target.value; applyFilters();
     });
 
     document.getElementById('pillWrap').addEventListener('click', e => {
       const btn = e.target.closest('.pill');
-      if(!btn) return;
+      if (!btn) return;
       document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeF = btn.dataset.f;
       applyFilters();
     });
 
-    document.getElementById('btnReload').addEventListener('click', () => fetchData());
-
-    // ══════════════════════════════════════════
     // START
-    // ══════════════════════════════════════════
     fetchData();
   </script>
 </body>
 </html>
+```
