@@ -1,45 +1,32 @@
+```html
 <!doctype html>
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
-  <title>Hua Hin Properties | Listing Details</title>
-  <meta name="description" content="รายละเอียดอสังหาริมทรัพย์ระดับ Luxury ในหัวหิน ชะอำ ปราณบุรี — รูปภาพ อัลบั้ม แผนที่ วิดีโอ และข้อมูลสำคัญครบถ้วน" />
-  <meta property="og:title" content="Hua Hin Properties | Listing Details" />
-  <meta property="og:description" content="ดูรายละเอียดบ้าน/คอนโด/ที่ดิน พร้อมรูปภาพ อัลบั้ม และข้อมูลสำคัญ" />
-  <meta property="og:type" content="website" />
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Hua Hin Properties · Details</title>
+  <meta name="description" content="รายละเอียดอสังหาริมทรัพย์ระดับ Luxury ในหัวหิน ชะอำ ปราณบุรี — Pool Villa, Condo, Land" />
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
     /* ═══════════════════════════════════════════
-       TOKENS — Coastal Luxury (match index)
+       TOKENS — Coastal Luxury (same as index)
     ═══════════════════════════════════════════ */
     :root{
-      --navy:#0B1829;
-      --navy-mid:#112238;
-      --navy-soft:#1a3350;
-      --ocean:#1B4F72;
-      --teal:#1A7A8A;
-      --sand:#F5EDD8;
-      --sand-dim:#C8B898;
-      --gold:#C9A84C;
-      --gold-lt:#E4C46A;
-      --gold-glow:rgba(201,168,76,0.15);
-      --white:#FDFAF5;
-      --muted:#7A9BB5;
+      --navy:#0B1829; --navy-mid:#112238; --navy-soft:#1a3350;
+      --ocean:#1B4F72; --teal:#1A7A8A;
+      --sand:#F5EDD8; --sand-dim:#C8B898;
+      --gold:#C9A84C; --gold-lt:#E4C46A; --gold-glow:rgba(201,168,76,0.15);
+      --white:#FDFAF5; --muted:#7A9BB5;
       --border:rgba(255,255,255,0.09);
       --card-bg:rgba(11,24,41,0.92);
-      --available:#2ECC8A;
-      --reserved:#E8A020;
-      --sold:#E05555;
-      --rented:#5B9BD5;
+      --available:#2ECC8A; --reserved:#E8A020; --sold:#E05555; --rented:#5B9BD5;
       --trans:0.32s cubic-bezier(0.4,0,0.2,1);
-      --px:18px;
-      --px-lg:52px;
+      --px:18px; --px-lg:52px;
       --radius:6px;
+      --shadow:0 12px 30px rgba(0,0,0,.18);
     }
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -53,7 +40,7 @@
       overflow-x:hidden;
     }
 
-    /* ═══ OCEAN BACKGROUND (match index) ═══ */
+    /* ═══ OCEAN BACKGROUND ═══ */
     body::before{
       content:'';
       position:fixed;inset:0;
@@ -62,8 +49,7 @@
         radial-gradient(ellipse 60% 40% at 100% 80%, rgba(26,122,138,0.2) 0%, transparent 50%),
         radial-gradient(ellipse 50% 50% at 0% 100%, rgba(11,24,41,0.8) 0%, transparent 60%),
         linear-gradient(180deg, #060F1A 0%, #0B1829 40%, #0D1F35 100%);
-      pointer-events:none;
-      z-index:0;
+      pointer-events:none; z-index:0;
     }
     body::after{
       content:'';
@@ -79,7 +65,7 @@
     }
     @keyframes wave{from{transform:translateX(0)}to{transform:translateX(50%)}}
 
-    /* ═══ HEADER (match index) ═══ */
+    /* ═══ HEADER ═══ */
     header{
       position:fixed;top:0;left:0;right:0;z-index:300;
       height:58px;
@@ -92,459 +78,376 @@
     }
     .logo{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.1rem;font-weight:400;
+      font-size:1.05rem;font-weight:400;
       letter-spacing:0.1em;text-transform:uppercase;
-      color:var(--gold);text-decoration:none;
-      line-height:1;
+      color:var(--gold);text-decoration:none;line-height:1;
+      display:flex;align-items:center;gap:10px;
     }
     .logo span{color:var(--sand);font-style:italic;font-weight:300}
-    .header-nav{display:flex;align-items:center;gap:10px}
-    .btn-contact-header{
-      padding:7px 16px;
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .btn{
+      border:1px solid rgba(201,168,76,0.35);
+      color:var(--gold);
+      font-family:'Montserrat',sans-serif;
+      font-size:0.58rem;font-weight:600;
+      letter-spacing:0.16em;text-transform:uppercase;
+      padding:8px 12px;border-radius:2px;
+      background:transparent;
+      transition:all var(--trans);
+      text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+      white-space:nowrap;
+    }
+    .btn:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);transform:translateY(-1px)}
+    .btn-solid{
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       color:var(--navy);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;font-weight:600;
-      letter-spacing:0.16em;text-transform:uppercase;
-      text-decoration:none;border-radius:2px;
-      transition:all var(--trans);
-      white-space:nowrap;
+      border-color:transparent;
     }
-    .btn-contact-header:hover{opacity:0.88;transform:translateY(-1px)}
+    .btn-solid:hover{opacity:.9}
 
     /* ═══ PAGE WRAP ═══ */
-    main{
+    .wrap{
       position:relative;z-index:1;
-      padding:78px var(--px) 64px;
-    }
-    @media(min-width:1100px){
-      header{padding:0 var(--px-lg)}
-      main{padding:86px var(--px-lg) 90px}
+      padding:86px var(--px) 90px;
+      max-width:1160px;margin:0 auto;
     }
 
-    /* ═══ TOP BAR ═══ */
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:10px;
-      margin-bottom:16px;
-    }
-    .back-btn{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:10px 12px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid var(--border);
-      color:var(--sand);
-      text-decoration:none;
-      border-radius:var(--radius);
-      transition:all var(--trans);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;
-      letter-spacing:0.14em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-    .back-btn:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-1px)}
+    /* ═══ TOP TITLE ═══ */
     .crumb{
-      font-family:'Montserrat',sans-serif;
-      font-size:0.55rem;
-      letter-spacing:0.26em;
-      text-transform:uppercase;
+      display:flex;align-items:center;gap:10px;
       color:var(--muted);
-      opacity:.9;
-      text-align:right;
-      line-height:1.2;
-    }
-
-    /* ═══ TITLE BLOCK ═══ */
-    .title-wrap{
-      margin:8px 0 18px;
-    }
-    .eyebrow{
       font-family:'Montserrat',sans-serif;
-      font-size:0.6rem;
-      letter-spacing:0.32em;
-      text-transform:uppercase;
-      color:var(--teal);
-      margin-bottom:10px;
-      opacity:0;
-      animation:fadeUp .7s .05s ease forwards;
+      font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;
+      margin-bottom:14px;
+      opacity:0;animation:fadeUp .7s .08s ease forwards;
     }
+    .crumb a{color:var(--teal);text-decoration:none}
+    .crumb a:hover{color:var(--gold)}
     .h1{
       font-family:'Cormorant Garamond',serif;
-      font-size:clamp(1.9rem,6.5vw,3.2rem);
-      font-weight:300;
-      line-height:1.1;
+      font-size:clamp(2.0rem,6.5vw,3.2rem);
+      font-weight:300;line-height:1.12;
       color:var(--white);
       margin-bottom:10px;
-      opacity:0;
-      animation:fadeUp .7s .15s ease forwards;
+      opacity:0;animation:fadeUp .7s .18s ease forwards;
     }
-    .h1 em{
-      font-style:italic;
-      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    .subline{
+    .sub{
       color:var(--muted);
-      font-size:0.9rem;
-      line-height:1.7;
-      max-width:920px;
-      opacity:0;
-      animation:fadeUp .7s .25s ease forwards;
+      font-size:0.92rem;line-height:1.7;
+      max-width:780px;
+      opacity:0;animation:fadeUp .7s .28s ease forwards;
     }
-
-    /* ═══ BADGES ═══ */
-    .badgerow{
-      display:flex;flex-wrap:wrap;gap:8px;
-      margin-top:14px;
-      opacity:0;
-      animation:fadeUp .7s .35s ease forwards;
-    }
-    .chip{
-      display:inline-flex;align-items:center;gap:7px;
-      padding:7px 10px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid var(--border);
-      border-radius:999px;
-      color:var(--sand);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.56rem;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-    .chip strong{
-      font-weight:600;
-      letter-spacing:0.16em;
-      color:var(--gold);
-    }
-    .dot{width:6px;height:6px;border-radius:50%}
-    .d-av{background:var(--available);box-shadow:0 0 7px var(--available)}
-    .d-rs{background:var(--reserved);box-shadow:0 0 7px var(--reserved)}
-    .d-sd{background:var(--sold);box-shadow:0 0 7px var(--sold)}
-    .d-rt{background:var(--rented);box-shadow:0 0 7px var(--rented)}
 
     /* ═══ LAYOUT GRID ═══ */
-    .layout{
+    .grid{
+      margin-top:22px;
       display:grid;
       grid-template-columns:1fr;
       gap:14px;
-      margin-top:18px;
     }
     @media(min-width:980px){
-      .layout{
-        grid-template-columns: 1.4fr 0.9fr;
-        align-items:start;
-        gap:16px;
-      }
+      .grid{grid-template-columns:1.35fr .9fr; gap:18px;}
     }
 
-    /* ═══ CARD BASE ═══ */
+    /* ═══ CARD ═══ */
     .card{
       background:var(--card-bg);
       border:1px solid var(--border);
       border-radius:var(--radius);
       overflow:hidden;
+      box-shadow:var(--shadow);
       backdrop-filter:blur(12px);
-      box-shadow:0 12px 30px rgba(0,0,0,.12);
     }
     .card-h{
-      padding:14px 16px;
+      padding:14px 16px 12px;
       border-bottom:1px solid var(--border);
       display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
     }
-    .card-title{
+    .tag-zone{
       font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;
-      letter-spacing:0.28em;
-      text-transform:uppercase;
+      font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;
       color:var(--teal);
-      margin-top:2px;
-      white-space:nowrap;
+      margin-bottom:6px;
     }
-    .card-sub{
-      font-size:.82rem;color:var(--muted);line-height:1.55;
+    .name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.35rem;font-weight:400;line-height:1.2;
+      color:var(--white);
+    }
+    .mini{
       margin-top:6px;
-    }
-    .card-b{
-      padding:14px 16px 16px;
+      font-size:0.82rem;color:var(--muted);line-height:1.5;
     }
 
-    /* ═══ GALLERY ═══ */
-    .gallery{
-      position:relative;
+    /* Status + Badge */
+    .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .chip{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;
+      background:rgba(6,15,26,0.75);
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:999px;
+      font-family:'Montserrat',sans-serif;
+      font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;
+      color:var(--sand);
+      white-space:nowrap;
     }
-    .stage{
+    .dot{width:6px;height:6px;border-radius:50%}
+    .d-av{background:var(--available);box-shadow:0 0 6px var(--available)}
+    .d-rs{background:var(--reserved);box-shadow:0 0 6px var(--reserved)}
+    .d-sd{background:var(--sold);box-shadow:0 0 6px var(--sold)}
+    .d-rt{background:var(--rented);box-shadow:0 0 6px var(--rented)}
+    .chip-badge{
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      color:var(--navy);
+      border-color:transparent;
+      font-weight:700;
+    }
+
+    /* ═══ ALBUM ═══ */
+    .album{
+      position:relative;
+      background:#060F1A;
+    }
+    .viewer{
       position:relative;
       width:100%;
-      aspect-ratio: 16/10;
-      background:#060F1A;
+      aspect-ratio:16/9;
       overflow:hidden;
+      background:#060F1A;
     }
-    .stage img{
+    .viewer img{
       width:100%;height:100%;
-      object-fit:cover;
-      display:block;
-      filter:brightness(.9) saturate(1.1);
-      transform:scale(1.01);
-      transition:transform .7s ease;
+      object-fit:cover;display:block;
+      filter:brightness(0.9) saturate(1.08);
+      transform:scale(1.001);
     }
-    .stage:hover img{transform:scale(1.05)}
     .shade{
       position:absolute;inset:0;
-      background:linear-gradient(to bottom, transparent 40%, rgba(11,24,41,.55) 72%, rgba(11,24,41,.92) 100%);
+      background:linear-gradient(to bottom, transparent 45%, rgba(11,24,41,0.55) 72%, rgba(11,24,41,0.95) 100%);
       pointer-events:none;
     }
-    .navbtn{
-      position:absolute;top:50%;
-      transform:translateY(-50%);
-      width:44px;height:44px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
+    .nav{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 10px;
+      pointer-events:none;
+    }
+    .nav button{
+      pointer-events:auto;
+      width:42px;height:42px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
       background:rgba(6,15,26,0.55);
-      backdrop-filter:blur(8px);
       color:var(--sand);
       display:flex;align-items:center;justify-content:center;
       cursor:pointer;
-      transition:all var(--trans);
-      user-select:none;
-    }
-    .navbtn:hover{border-color:rgba(201,168,76,0.5);color:var(--gold)}
-    .navbtn:active{transform:translateY(-50%) scale(0.98)}
-    .navbtn.left{left:10px}
-    .navbtn.right{right:10px}
-
-    .stage-meta{
-      position:absolute;left:12px;bottom:12px;
-      display:flex;flex-wrap:wrap;gap:8px;
-      align-items:center;
-      padding:8px 10px;
-      background:rgba(6,15,26,0.65);
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius:999px;
       backdrop-filter:blur(8px);
+      transition:all var(--trans);
     }
-    .stage-meta .m1{
-      font-family:'Montserrat',sans-serif;
-      font-size:.54rem;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(245,237,216,0.82);
-      white-space:nowrap;
+    .nav button:hover{border-color:rgba(201,168,76,0.55);transform:translateY(-1px)}
+    .nav button:active{transform:translateY(0)}
+    .nav svg{opacity:.9}
+
+    .topline{
+      position:absolute;left:12px;right:12px;bottom:12px;
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
     }
-    .stage-meta .m2{
+    .pricebox{
+      background:rgba(6,15,26,0.55);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:var(--radius);
+      padding:10px 12px;
+      backdrop-filter:blur(10px);
+      min-width:180px;
+    }
+    .plbl{
       font-family:'Montserrat',sans-serif;
-      font-size:.54rem;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:var(--gold);
+      font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;
+      color:rgba(122,155,181,0.85);
+      margin-bottom:4px;
+    }
+    .pval{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.7rem;font-weight:400;line-height:1;
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .count{
+      font-family:'Montserrat',sans-serif;
+      font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;
+      color:rgba(245,237,216,0.65);
+      background:rgba(6,15,26,0.45);
+      border:1px solid rgba(255,255,255,0.10);
+      padding:8px 10px;border-radius:999px;
+      backdrop-filter:blur(10px);
       white-space:nowrap;
     }
 
     .thumbs{
       display:flex;gap:8px;
-      padding:12px 12px 14px;
-      overflow:auto;
+      overflow-x:auto;
+      padding:10px 12px 12px;
+      background:rgba(6,15,26,0.55);
+      border-top:1px solid rgba(255,255,255,0.08);
       scrollbar-width:none;
-      border-top:1px solid var(--border);
-      background:rgba(6,15,26,0.35);
     }
     .thumbs::-webkit-scrollbar{display:none}
-    .thumb{
-      width:86px;height:56px;flex:0 0 auto;
+    .t{
+      width:86px;height:54px;
+      flex:0 0 auto;
       border-radius:4px;
+      overflow:hidden;
       border:1px solid rgba(255,255,255,0.12);
-      overflow:hidden;
-      background:#060F1A;
       cursor:pointer;
-      transition:all var(--trans);
       position:relative;
+      background:#091425;
+      transition:transform var(--trans), border-color var(--trans), opacity var(--trans);
+      opacity:.85;
     }
-    .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85)}
-    .thumb.active{border-color:rgba(201,168,76,0.65);box-shadow:0 0 0 3px var(--gold-glow)}
-    .thumb:hover{transform:translateY(-1px);border-color:rgba(201,168,76,0.45)}
+    .t:hover{border-color:rgba(201,168,76,0.55);opacity:1}
+    .t.active{border-color:rgba(201,168,76,0.95);opacity:1;transform:translateY(-1px)}
+    .t img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.92) saturate(1.05)}
 
-    /* ═══ QUICK SPECS ═══ */
-    .grid2{
+    /* ═══ CONTENT SECTIONS ═══ */
+    .card-b{padding:14px 16px 16px}
+    .section{padding:14px 0;border-top:1px solid var(--border)}
+    .section:first-child{border-top:none;padding-top:0}
+    .stitle{
+      font-family:'Montserrat',sans-serif;
+      font-size:0.55rem;letter-spacing:0.28em;text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:10px;
+    }
+    .desc{
+      color:rgba(245,237,216,0.9);
+      font-size:0.95rem;line-height:1.85;
+      white-space:pre-line;
+    }
+
+    .specgrid{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(2,1fr);
       gap:10px;
     }
-    .kpi{
-      padding:12px 12px;
+    @media(min-width:520px){
+      .specgrid{grid-template-columns:repeat(3,1fr)}
+    }
+    .spec{
       background:rgba(255,255,255,0.04);
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,0.10);
       border-radius:var(--radius);
+      padding:10px 10px;
+      display:flex;flex-direction:column;gap:4px;
+      min-height:64px;
     }
-    .kpi-lbl{
+    .sk{
       font-family:'Montserrat',sans-serif;
-      font-size:0.52rem;
-      letter-spacing:0.2em;
-      text-transform:uppercase;
+      font-size:0.52rem;letter-spacing:0.16em;text-transform:uppercase;
+      color:rgba(122,155,181,0.9);
+    }
+    .sv{
+      color:var(--white);
+      font-size:0.95rem;
+    }
+
+    /* ═══ SIDE PANEL ═══ */
+    .side{display:flex;flex-direction:column;gap:14px}
+    .quick{
+      padding:14px 16px 16px;
+    }
+    .qrow{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-wide{flex:1 1 160px;justify-content:center}
+    .hint{
+      margin-top:10px;
+      font-size:0.82rem;line-height:1.6;
       color:var(--muted);
-      margin-bottom:6px;
-    }
-    .kpi-val{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.55rem;
-      font-weight:400;
-      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
-      line-height:1;
-    }
-    .kpi-sub{
-      margin-top:6px;
-      font-size:.78rem;
-      color:rgba(122,155,181,0.92);
-      line-height:1.45;
     }
 
-    /* ═══ TABLE SPECS ═══ */
-    .spec-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0 10px;
-      margin-top:2px;
+    .map{
+      padding:14px 16px 16px;
     }
-    .spec-row td{
-      padding:11px 12px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid var(--border);
-    }
-    .spec-row td:first-child{
-      border-right:none;
-      border-top-left-radius:var(--radius);
-      border-bottom-left-radius:var(--radius);
-      width:42%;
-      color:var(--muted);
-      font-family:'Montserrat',sans-serif;
-      font-size:.56rem;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-    .spec-row td:last-child{
-      border-left:none;
-      border-top-right-radius:var(--radius);
-      border-bottom-right-radius:var(--radius);
-      font-size:.9rem;
-      color:var(--sand);
-      line-height:1.45;
-      word-break:break-word;
-    }
-
-    /* ═══ CTA BUTTONS ═══ */
-    .cta{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-    }
-    @media(min-width:520px){ .cta{grid-template-columns:1fr 1fr} }
-    @media(min-width:980px){ .cta{grid-template-columns:1fr} }
-
-    .btn{
-      display:flex;align-items:center;justify-content:center;
-      gap:10px;
-      padding:14px 14px;
-      border-radius:var(--radius);
-      border:1px solid rgba(201,168,76,0.35);
-      background:rgba(255,255,255,0.04);
-      color:var(--sand);
-      text-decoration:none;
-      font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;
-      letter-spacing:0.16em;
-      text-transform:uppercase;
-      transition:all var(--trans);
-      text-align:center;
-    }
-    .btn:hover{background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.55);transform:translateY(-2px)}
-    .btn.primary{
-      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      color:var(--navy);
-      border-color:transparent;
-    }
-    .btn.primary:hover{opacity:.92}
-    .btn .hint{
-      font-family:'Sarabun',sans-serif;
-      letter-spacing:0;
-      text-transform:none;
-      font-size:.84rem;
-      font-weight:300;
-      color:rgba(11,24,41,0.9);
-    }
-
-    /* ═══ MAP / IFRAME ═══ */
-    .iframe{
-      width:100%;
-      height:320px;
-      border:1px solid var(--border);
+    .mapbox{
       border-radius:var(--radius);
       overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
       background:#060F1A;
+      height:260px;
     }
-    .iframe iframe{
-      width:100%;height:100%;
-      border:0;
-    }
-    @media(min-width:980px){ .iframe{height:360px} }
+    .mapbox iframe{width:100%;height:100%;border:0;display:block}
+    .map-links{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
 
-    /* ═══ SKELETON / ERROR ═══ */
-    .err-box{
-      background:rgba(224,85,85,.1);
-      border:1px solid rgba(224,85,85,.3);
-      color:#ef9090;
-      padding:13px 16px;
-      border-radius:var(--radius);
-      font-size:.84rem;
-      margin:14px 0 0;
-      display:none;
-    }
-    .skel{
-      display:grid;
-      gap:12px;
-    }
-    .sk-card{
-      background:rgba(17,34,56,0.8);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      overflow:hidden;
-    }
-    .sk-img{
-      width:100%;aspect-ratio:16/10;
+    /* ═══ LOADING / ERROR ═══ */
+    .skeleton{
       background:linear-gradient(90deg,#112238 25%,#1a3350 50%,#112238 75%);
       background-size:200% 100%;
       animation:shimmer 1.4s infinite;
+      border-radius:var(--radius);
     }
-    .sk-body{padding:14px 16px}
-    .sk-ln{
-      height:11px;border-radius:3px;margin-bottom:9px;
-      background:linear-gradient(90deg,#1a3350 25%,#243f5a 50%,#1a3350 75%);
-      background-size:200% 100%;
-      animation:shimmer 1.4s infinite;
-    }
-    .sk-ln.s{width:38%}
-    .sk-ln.m{width:60%}
-    .sk-ln.l{width:85%}
-    .sk-ln.xl{height:20px;width:46%;margin-top:14px}
+    .sk-img{aspect-ratio:16/9}
+    .sk-ln{height:12px;margin:10px 0}
+    .sk-ln.s{width:35%} .sk-ln.m{width:60%} .sk-ln.l{width:85%}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
     @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ═══ FOOTER (light, simple) ═══ */
-    footer{
-      border-top:1px solid var(--border);
-      padding:28px var(--px) 44px;
-      position:relative;z-index:1;
-      background:rgba(6,15,26,0.6);
-      margin-top:28px;
+    .err{
+      display:none;
+      padding:12px 14px;
+      border-radius:var(--radius);
+      background:rgba(224,85,85,.10);
+      border:1px solid rgba(224,85,85,.30);
+      color:#ef9090;
+      font-size:.9rem;
+      margin-top:16px;
     }
-    @media(min-width:1100px){ footer{padding:36px var(--px-lg) 54px} }
-    .footer-copy{
-      font-size:.65rem;color:var(--muted);opacity:.45;
+
+    /* ═══ LIGHTBOX ═══ */
+    .lb{
+      position:fixed;inset:0;z-index:999;
+      background:rgba(0,0,0,0.72);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:18px;
+    }
+    .lb.on{display:flex}
+    .lb-inner{
+      width:min(1100px,100%);
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
+      background:#050B12;
+      box-shadow:0 26px 80px rgba(0,0,0,.55);
+      position:relative;
+    }
+    .lb-top{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background:rgba(6,15,26,0.7);
+      color:var(--sand);
+    }
+    .lb-title{
       font-family:'Montserrat',sans-serif;
-      letter-spacing:.06em;
+      font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;
+      color:rgba(245,237,216,0.75);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      max-width:75%;
+    }
+    .lb-close{
+      width:38px;height:38px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(6,15,26,0.55);
+      color:var(--sand);
+      cursor:pointer;
+      transition:all var(--trans);
+    }
+    .lb-close:hover{border-color:rgba(201,168,76,0.55);transform:translateY(-1px)}
+    .lb-img{
+      width:100%;
+      max-height:78vh;
+      object-fit:contain;
+      display:block;
+      background:#050B12;
     }
   </style>
 </head>
@@ -553,144 +456,581 @@
   <!-- HEADER -->
   <header>
     <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
-    <div class="header-nav">
-      <a href="contact.html" class="btn-contact-header">ติดต่อเรา</a>
+    <div class="nav-right">
+      <a id="btnBack" class="btn" href="index.html">← Back</a>
+      <a id="btnContactTop" class="btn btn-solid" href="#contact">Contact</a>
     </div>
   </header>
 
-  <main>
-    <!-- TOP BAR -->
-    <div class="topbar">
-      <a class="back-btn" href="index.html" id="backBtn">← Back</a>
-      <div class="crumb" id="crumb">Listing Details</div>
+  <main class="wrap">
+    <div class="crumb">
+      <a href="index.html">Listings</a>
+      <span>›</span>
+      <span id="crumbId">—</span>
     </div>
 
-    <!-- TITLE -->
-    <section class="title-wrap">
-      <div class="eyebrow" id="eyebrow">🌊 Luxury Coastal Real Estate · Hua Hin</div>
-      <h1 class="h1" id="titleH1">กำลังโหลดรายละเอียด…</h1>
-      <p class="subline" id="subtitle">โปรดรอสักครู่ ระบบกำลังดึงข้อมูลจากฐานข้อมูล</p>
+    <h1 class="h1" id="title">Loading…</h1>
+    <p class="sub" id="subtitle">กำลังโหลดรายละเอียด…</p>
 
-      <div class="badgerow" id="badgeRow" style="display:none"></div>
-      <div class="err-box" id="errBox"></div>
-    </section>
+    <div class="err" id="errBox"></div>
 
-    <!-- SKELETON -->
-    <div class="skel" id="skelWrap">
-      <div class="sk-card"><div class="sk-img"></div><div class="sk-body"><div class="sk-ln s"></div><div class="sk-ln m"></div><div class="sk-ln l"></div><div class="sk-ln xl"></div></div></div>
-      <div class="sk-card"><div class="sk-body"><div class="sk-ln s"></div><div class="sk-ln l"></div><div class="sk-ln m"></div><div class="sk-ln xl"></div></div></div>
-    </div>
-
-    <!-- CONTENT -->
-    <section class="layout" id="contentWrap" style="display:none">
-      <!-- LEFT: GALLERY + DETAILS -->
-      <div class="leftcol">
-
-        <!-- GALLERY -->
-        <div class="card gallery" id="galleryCard">
-          <div class="stage" id="stage">
-            <img id="stageImg" alt="Listing image" />
+    <section class="grid" id="mainGrid">
+      <!-- LEFT: album + details -->
+      <div class="card" id="leftCard">
+        <div class="album">
+          <div class="viewer" id="viewer">
+            <div class="skeleton sk-img" id="skImg"></div>
+            <img id="mainImg" alt="" style="display:none" />
             <div class="shade"></div>
 
-            <button class="navbtn left" id="btnPrev" aria-label="Previous">‹</button>
-            <button class="navbtn right" id="btnNext" aria-label="Next">›</button>
+            <div class="nav">
+              <button id="prevBtn" aria-label="Previous image" title="Previous">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button id="nextBtn" aria-label="Next image" title="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
 
-            <div class="stage-meta">
-              <div class="m1" id="imgCount">Image 1/1</div>
-              <div class="m2" id="imgHint">Swipe / Click</div>
+            <div class="topline">
+              <div class="pricebox">
+                <div class="plbl" id="priceLbl">Price</div>
+                <div class="pval" id="priceVal">—</div>
+              </div>
+              <div class="count" id="imgCount">0 Photos</div>
             </div>
           </div>
+
           <div class="thumbs" id="thumbs"></div>
         </div>
 
-        <!-- DESCRIPTION -->
-        <div class="card" style="margin-top:14px" id="descCard">
-          <div class="card-h">
-            <div>
-              <div class="card-title">Overview</div>
-              <div class="card-sub" id="ksp">—</div>
-            </div>
+        <div class="card-h">
+          <div>
+            <div class="tag-zone" id="zone">—</div>
+            <div class="name" id="name">—</div>
+            <div class="mini" id="mini">—</div>
           </div>
-          <div class="card-b">
-            <div id="descText" style="font-size:.95rem;line-height:1.85;color:rgba(245,237,216,0.92);white-space:pre-wrap">—</div>
-          </div>
+          <div class="chips" id="chips"></div>
         </div>
 
-        <!-- MAP -->
-        <div class="card" style="margin-top:14px" id="mapCard">
-          <div class="card-h">
-            <div>
-              <div class="card-title">Map</div>
-              <div class="card-sub">แผนที่ / พิกัด (ถ้ามีลิงก์ Map)</div>
+        <div class="card-b">
+          <div class="section">
+            <div class="stitle">Key Specs</div>
+            <div class="specgrid" id="specGrid">
+              <div class="spec"><div class="sk">Bedrooms</div><div class="sv" id="vBeds">—</div></div>
+              <div class="spec"><div class="sk">Bathrooms</div><div class="sv" id="vBaths">—</div></div>
+              <div class="spec"><div class="sk">Living Area</div><div class="sv" id="vLiving">—</div></div>
+              <div class="spec"><div class="sk">Land</div><div class="sv" id="vLand">—</div></div>
+              <div class="spec"><div class="sk">Pool</div><div class="sv" id="vPool">—</div></div>
+              <div class="spec"><div class="sk">Ownership</div><div class="sv" id="vOwn">—</div></div>
             </div>
           </div>
-          <div class="card-b">
-            <div class="iframe" id="mapFrameWrap" style="display:none">
-              <iframe id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-              <a class="btn" id="btnMap" href="#" target="_blank" rel="noopener" style="display:none">Open Map</a>
-              <a class="btn" id="btnTour" href="#" target="_blank" rel="noopener" style="display:none">Virtual Tour</a>
-              <a class="btn" id="btnFB" href="#" target="_blank" rel="noopener" style="display:none">Facebook Post</a>
-            </div>
-            <div id="noMapNote" style="margin-top:10px;color:rgba(122,155,181,0.9);font-size:.85rem;display:none">
-              ไม่มี Map_Link ในรายการนี้
-            </div>
+
+          <div class="section">
+            <div class="stitle">Description</div>
+            <div class="desc" id="desc">—</div>
+          </div>
+
+          <div class="section" id="extrasSec" style="display:none">
+            <div class="stitle">Extras</div>
+            <div class="desc" id="extras">—</div>
+          </div>
+
+          <div class="section" id="linksSec" style="display:none">
+            <div class="stitle">Links</div>
+            <div class="qrow" id="linksRow"></div>
+          </div>
+
+          <div class="section" id="pdfSec" style="display:none">
+            <div class="stitle">PDF</div>
+            <div class="qrow" id="pdfRow"></div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: PRICE + SPECS + CTA -->
-      <aside class="rightcol">
-
-        <!-- PRICE -->
-        <div class="card" id="priceCard">
-          <div class="card-h">
-            <div>
-              <div class="card-title">Pricing</div>
-              <div class="card-sub" id="priceSub">—</div>
-            </div>
+      <!-- RIGHT: quick actions + map -->
+      <aside class="side">
+        <div class="card quick" id="contact">
+          <div class="stitle">Contact</div>
+          <div class="qrow">
+            <a class="btn btn-solid btn-wide" id="btnLine" href="#" target="_blank" rel="noopener">LINE OA</a>
+            <a class="btn btn-wide" id="btnWa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+            <a class="btn btn-wide" id="btnFb" href="#" target="_blank" rel="noopener">Facebook</a>
+            <a class="btn btn-wide" id="btnCall" href="#" >Call</a>
           </div>
-          <div class="card-b">
-            <div class="grid2">
-              <div class="kpi">
-                <div class="kpi-lbl" id="priceLbl">Sale Price</div>
-                <div class="kpi-val" id="priceVal">—</div>
-                <div class="kpi-sub" id="priceNote">*ราคาอาจเปลี่ยนแปลงได้</div>
-              </div>
-              <div class="kpi">
-                <div class="kpi-lbl">Listing ID</div>
-                <div class="kpi-val" id="hpIdVal">—</div>
-                <div class="kpi-sub" id="zoneVal">—</div>
-              </div>
-            </div>
+          <div class="hint" id="hint">
+            กดปุ่มด้านบนเพื่อสอบถามรายละเอียด / นัดชมบ้าน<br/>
+            (ลิงก์จะเปิดแท็บใหม่)
           </div>
         </div>
 
-        <!-- SPECS -->
-        <div class="card" style="margin-top:14px" id="specCard">
-          <div class="card-h">
-            <div>
-              <div class="card-title">Key Specs</div>
-              <div class="card-sub">ข้อมูลสำคัญของรายการ</div>
-            </div>
-          </div>
-          <div class="card-b">
-            <table class="spec-table" id="specTable">
-              <!-- rows injected -->
-            </table>
+        <div class="card map" id="mapCard" style="display:none">
+          <div class="stitle">Map</div>
+          <div class="mapbox" id="mapBox"></div>
+          <div class="map-links">
+            <a class="btn btn-wide" id="btnMap" href="#" target="_blank" rel="noopener">Open Google Maps</a>
+            <a class="btn btn-wide" id="btnTour" href="#" target="_blank" rel="noopener" style="display:none">Virtual Tour</a>
           </div>
         </div>
 
-        <!-- CONTACT CTA -->
-        <div class="card" style="margin-top:14px" id="ctaCard">
-          <div class="card-h">
-            <div>
-              <div class="card-title">Contact</div>
-              <div class="card-sub">ติดต่อเพื่อรับรายละเอียด / นัดดูบ้าน</div>
-            </div>
-          </div>
-          <div class="card-b">
-            <div class="cta">
-              <a class="btn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">
-                LINE OA <span class="hint
+        <div class="card map" id="metaCard">
+          <div class="stitle">Property ID</div>
+          <div class="desc" id="pidBox">—</div>
+          <div style="height:10px"></div>
+          <div class="stitle">Project</div>
+          <div class="desc" id="projBox">—</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lb" id="lb">
+    <div class="lb-inner">
+      <div class="lb-top">
+        <div class="lb-title" id="lbTitle">Photo</div>
+        <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      </div>
+      <img class="lb-img" id="lbImg" alt=""/>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════
+    // CONFIG (same pattern as your index)
+    // ══════════════════════════════════════════
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
+
+    // Album Drive Folder ID (your new app)
+    const ALBUM_FOLDER_ID = '1-DLZIYoGtDhRk5MKkWWZ05N_zv-XetJ4';
+
+    // Contact defaults (edit if you want)
+    const CONTACT = {
+      line: 'https://line.me/R/ti/p/@qap7218t',
+      wa:   'https://wa.me/66805820777?text=Interested',
+      fb:   'https://m.me/huahinpropertyhuahinrealestate/',
+      tel:  'tel:+66805820777'
+    };
+
+    // ══════════════════════════════════════════
+    // GET PARAMS
+    // ══════════════════════════════════════════
+    const qp = new URLSearchParams(location.search);
+    const HP_ID = (qp.get('id') || '').trim();
+    document.getElementById('crumbId').textContent = HP_ID || '—';
+    document.getElementById('pidBox').textContent  = HP_ID || '—';
+
+    // back link preserves possible filters (simple)
+    const btnBack = document.getElementById('btnBack');
+    if (document.referrer && document.referrer.includes('index.html')) btnBack.href = document.referrer;
+
+    // ══════════════════════════════════════════
+    // HELPERS — image rules (important for "รูปไม่ขึ้น")
+    // - Accept:
+    //   1) already a full url (http)
+    //   2) a Google Drive fileId -> convert to lh3
+    //   3) comma/newline separated list
+    // ══════════════════════════════════════════
+    function isLikelyFileId(s){
+      if (!s) return false;
+      const x = String(s).trim();
+      if (x.startsWith('http')) return false;
+      // common Drive fileId length 20-80, letters digits - _
+      return /^[a-zA-Z0-9_-]{20,120}$/.test(x);
+    }
+    function toLh3(s){
+      const x = String(s||'').trim();
+      if (!x) return '';
+      if (x.startsWith('http')) return x;
+      if (isLikelyFileId(x)) return 'https://lh3.googleusercontent.com/d/' + x;
+      return x;
+    }
+    function splitList(s){
+      const x = String(s||'').trim();
+      if (!x) return [];
+      // support CSV, newline, pipe
+      return x.split(/[\n,|]+/).map(v=>v.trim()).filter(Boolean);
+    }
+
+    function fmtPrice(sale, rent, ltype){
+      const src = (ltype === 'Rent') ? rent : (sale && sale !== '#' ? sale : rent);
+      if (!src || src === '#') return '—';
+      const n = parseFloat(String(src).replace(/[^\d.]/g,''));
+      if (!n) return '—';
+      const sfx = (ltype === 'Rent' || (!sale && rent)) ? '/mo' : '';
+      if (n >= 1e6) return '฿' + (n/1e6).toFixed(1) + 'M' + sfx;
+      if (n >= 1e3) return '฿' + Math.round(n/1e3) + 'K' + sfx;
+      return '฿' + n.toLocaleString() + sfx;
+    }
+    function dotCls(st){
+      return { Available:'d-av', Reserved:'d-rs', Sold:'d-sd', Rented:'d-rt' }[st] || 'd-av';
+    }
+
+    function showErr(msg){
+      const e = document.getElementById('errBox');
+      e.textContent = '⚠ ' + msg;
+      e.style.display = 'block';
+    }
+
+    // ══════════════════════════════════════════
+    // ALBUM UI
+    // ══════════════════════════════════════════
+    let imgs = [];
+    let idx  = 0;
+    const mainImg = document.getElementById('mainImg');
+    const skImg   = document.getElementById('skImg');
+    const thumbs  = document.getElementById('thumbs');
+    const imgCount= document.getElementById('imgCount');
+
+    function setMain(i){
+      if (!imgs.length) return;
+      idx = (i + imgs.length) % imgs.length;
+
+      // active thumb
+      [...thumbs.querySelectorAll('.t')].forEach((el, k)=>el.classList.toggle('active', k===idx));
+
+      const url = imgs[idx];
+      skImg.style.display = 'block';
+      mainImg.style.display = 'none';
+
+      // preload then swap (prevents flash)
+      const im = new Image();
+      im.onload = () => {
+        mainImg.src = url;
+        mainImg.style.display = 'block';
+        skImg.style.display = 'none';
+      };
+      im.onerror = () => {
+        // if fail: still hide skeleton but show empty
+        skImg.style.display = 'none';
+        mainImg.style.display = 'none';
+      };
+      im.src = url;
+
+      imgCount.textContent = `${idx+1} / ${imgs.length} Photos`;
+    }
+
+    function renderThumbs(){
+      thumbs.innerHTML = imgs.map((u,i)=>`
+        <div class="t ${i===0?'active':''}" data-i="${i}" title="Photo ${i+1}">
+          <img src="${u}" alt="thumb ${i+1}" loading="lazy" onerror="this.style.display='none'">
+        </div>
+      `).join('');
+      thumbs.addEventListener('click', (e)=>{
+        const t = e.target.closest('.t');
+        if(!t) return;
+        setMain(parseInt(t.dataset.i,10));
+      });
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', ()=>setMain(idx-1));
+    document.getElementById('nextBtn').addEventListener('click', ()=>setMain(idx+1));
+
+    // swipe on viewer
+    (function enableSwipe(){
+      const viewer = document.getElementById('viewer');
+      let sx=0, sy=0, active=false;
+      viewer.addEventListener('touchstart', (e)=>{
+        if(!imgs.length) return;
+        const t=e.touches[0];
+        sx=t.clientX; sy=t.clientY; active=true;
+      }, {passive:true});
+      viewer.addEventListener('touchmove', (e)=>{
+        if(!active) return;
+        const t=e.touches[0];
+        const dx=t.clientX-sx;
+        const dy=t.clientY-sy;
+        if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>18){
+          active=false;
+          if(dx<0) setMain(idx+1); else setMain(idx-1);
+        }
+      }, {passive:true});
+      viewer.addEventListener('touchend', ()=>active=false, {passive:true});
+    })();
+
+    // lightbox
+    const lb = document.getElementById('lb');
+    const lbImg = document.getElementById('lbImg');
+    const lbTitle = document.getElementById('lbTitle');
+    document.getElementById('lbClose').addEventListener('click', ()=>lb.classList.remove('on'));
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.classList.remove('on'); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') lb.classList.remove('on'); });
+
+    mainImg.addEventListener('click', ()=>{
+      if(!imgs.length) return;
+      lbTitle.textContent = `${HP_ID || 'Property'} · Photo ${idx+1}/${imgs.length}`;
+      lbImg.src = imgs[idx];
+      lb.classList.add('on');
+    });
+
+    // ══════════════════════════════════════════
+    // DATA RENDER
+    // ══════════════════════════════════════════
+    function render(p){
+      const id    = p['HP_ID'] || HP_ID || '—';
+      const badge = (p['Badge'] || '').trim();
+      const st    = (p['Status'] || 'Available').trim();
+      const lt    = (p['Listing_Type'] || 'Sale').trim();
+
+      const zone  = p['Zone'] || p['District'] || '';
+      const proj  = p['Project_Name'] || '';
+      const type  = p['Type'] || '';
+      const name  = [proj, type].filter(Boolean).join(' · ') || id;
+
+      const pts   = p['Key_Selling_Points'] || p['Description_Short'] || '';
+      const desc  = p['Description'] || p['Full_Description'] || '';
+
+      // header texts
+      document.getElementById('title').textContent    = name;
+      document.getElementById('subtitle').textContent = pts ? pts : 'Luxury Coastal Real Estate · Hua Hin';
+      document.getElementById('zone').textContent     = zone ? ('📍 ' + zone) : '—';
+      document.getElementById('name').textContent     = name;
+      document.getElementById('mini').textContent     = [p['Address'], p['SubDistrict'], p['District']].filter(Boolean).join(' · ') || '—';
+
+      // meta
+      document.getElementById('pidBox').textContent   = id;
+      document.getElementById('projBox').textContent  = proj || '—';
+
+      // chips
+      const chips = document.getElementById('chips');
+      chips.innerHTML = `
+        ${badge ? `<span class="chip chip-badge">★ ${escapeHtml(badge)}</span>` : ''}
+        <span class="chip"><span class="dot ${dotCls(st)}"></span>${escapeHtml(st)}</span>
+        <span class="chip">${escapeHtml(lt)}</span>
+      `;
+
+      // price
+      const pv = fmtPrice(p['Sale_Price'], p['Monthly_Rent'], lt);
+      document.getElementById('priceVal').textContent = pv;
+      document.getElementById('priceLbl').textContent = (lt === 'Rent') ? 'Monthly Rent' : 'Sale Price';
+
+      // specs
+      document.getElementById('vBeds').textContent   = (p['Bedrooms'] || '—') + (p['Bedrooms'] ? ' Bed' : '');
+      document.getElementById('vBaths').textContent  = (p['Bathrooms'] || '—') + (p['Bathrooms'] ? ' Bath' : '');
+      document.getElementById('vLiving').textContent = p['Living_Area_sq_m'] ? (p['Living_Area_sq_m'] + ' m²') : (p['Living Area (sq.m)'] ? (p['Living Area (sq.m)']+' m²') : '—');
+
+      const landW = p['Land_Area_sq_w'] || p['Land Area (sq.w)'] || '';
+      const landM = p['Land_Area_sq_m'] || p['Land Area (sq.m)'] || '';
+      document.getElementById('vLand').textContent = landW ? (landW + ' sq.w' + (landM ? (' · ' + landM + ' m²') : '')) : (landM ? (landM + ' m²') : '—');
+
+      const poolS = p['Pool_Size'] || p['Pool Size'] || '';
+      const poolD = p['Pool_Depth'] || p['Pool Depth'] || '';
+      document.getElementById('vPool').textContent = poolS ? (poolS + (poolD ? (' · ' + poolD) : '')) : (p['Pool'] || '—');
+
+      document.getElementById('vOwn').textContent = p['Ownership_Type'] || p['Ownership'] || '—';
+
+      // description
+      document.getElementById('desc').textContent = desc || '—';
+
+      // extras
+      const ex = p['Extras'] || p['Facilities'] || '';
+      if (String(ex||'').trim()){
+        document.getElementById('extrasSec').style.display = '';
+        document.getElementById('extras').textContent = ex;
+      }
+
+      // links (FB / Map / Tour)
+      const fb  = (p['FB_Link'] || '').trim();
+      const map = (p['Map_Link'] || '').trim();
+      const tour= (p['Virtual_Tour'] || '').trim();
+
+      const linksRow = document.getElementById('linksRow');
+      const linksSec = document.getElementById('linksSec');
+      linksRow.innerHTML = '';
+
+      const addLinkBtn = (label, url) => {
+        const a = document.createElement('a');
+        a.className = 'btn btn-wide';
+        a.textContent = label;
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        linksRow.appendChild(a);
+      };
+
+      if (fb) addLinkBtn('Facebook Post', fb);
+      if (map) addLinkBtn('Google Maps', map);
+      if (tour) addLinkBtn('Virtual Tour', tour);
+
+      if (linksRow.children.length) linksSec.style.display = '';
+
+      // PDFs
+      const pdfRow = document.getElementById('pdfRow');
+      const pdfSec = document.getElementById('pdfSec');
+      pdfRow.innerHTML = '';
+      const pdf1 = (p['Material_PDF'] || '').trim();
+      const pdf2 = (p['FloorPlan_PDF'] || '').trim();
+
+      function addPdf(label, url){
+        const a = document.createElement('a');
+        a.className='btn btn-wide';
+        a.textContent=label;
+        a.href=url;
+        a.target='_blank';
+        a.rel='noopener';
+        pdfRow.appendChild(a);
+      }
+      if (pdf1) addPdf('Material PDF', pdf1);
+      if (pdf2) addPdf('Floor Plan PDF', pdf2);
+      if (pdfRow.children.length) pdfSec.style.display = '';
+
+      // right contact buttons (defaults, but if you have per-listing phone/line you can map here)
+      document.getElementById('btnLine').href = CONTACT.line;
+      document.getElementById('btnWa').href   = CONTACT.wa;
+      document.getElementById('btnFb').href   = fb || CONTACT.fb;
+      document.getElementById('btnCall').href = CONTACT.tel;
+
+      // map card
+      const mapCard = document.getElementById('mapCard');
+      const mapBox  = document.getElementById('mapBox');
+      const btnMap  = document.getElementById('btnMap');
+      const btnTour = document.getElementById('btnTour');
+
+      if (map){
+        mapCard.style.display = '';
+        btnMap.href = map;
+
+        // embed: if link is not embeddable, we still show iframe with a safe fallback
+        const embed = makeGoogleMapsEmbed(map);
+        mapBox.innerHTML = embed
+          ? `<iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen src="${embed}"></iframe>`
+          : `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:rgba(245,237,216,0.65);padding:14px;text-align:center;line-height:1.6">
+               Map link is available.<br/>Tap “Open Google Maps”.
+             </div>`;
+      }
+
+      if (tour){
+        btnTour.style.display = '';
+        btnTour.href = tour;
+      }
+
+      // album images:
+      // Priority:
+      // 1) API returns Image_List (links or fileIds)
+      // 2) API returns Album_Images / Gallery / files_gallery etc (array)
+      // 3) Fallback: Thumbnail_Image
+      const listRaw =
+        p['Image_List'] ||
+        p['Album_Images'] ||
+        p['Gallery'] ||
+        p['files_gallery'] ||
+        '';
+
+      let arr = [];
+      if (Array.isArray(listRaw)) arr = listRaw;
+      else arr = splitList(listRaw);
+
+      arr = arr.map(toLh3).filter(Boolean);
+
+      // if empty: try thumbnail
+      const thumb = toLh3((p['Thumbnail_Image'] || '').trim().replace(/^#$/,''));
+      if (!arr.length && thumb) arr = [thumb];
+
+      // if still empty: show empty state
+      imgs = arr;
+
+      if (!imgs.length){
+        // no images
+        skImg.style.display = 'none';
+        mainImg.style.display = 'none';
+        document.getElementById('imgCount').textContent = '0 Photos';
+        thumbs.innerHTML = `<div style="color:rgba(245,237,216,0.55);font-size:.85rem;padding:2px 4px">No images</div>`;
+      } else {
+        renderThumbs();
+        setMain(0);
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s||'').replace(/[&<>"']/g, (m)=>(
+        {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
+      ));
+    }
+
+    // Convert many Google Maps links into an embed URL (best-effort)
+    function makeGoogleMapsEmbed(url){
+      const u = String(url||'').trim();
+      if(!u) return '';
+
+      // already embed
+      if (u.includes('google.com/maps/embed')) return u;
+
+      // Short maps.app.goo.gl cannot be embedded reliably without resolving redirects (client-side can’t).
+      // We still show "Open Google Maps" button; iframe fallback will be disabled.
+      if (u.includes('maps.app.goo.gl')) return '';
+
+      // Place / search / query
+      // If link has "q=" or "query=" we can embed via "search"
+      try{
+        const pu = new URL(u);
+        const q = pu.searchParams.get('q') || pu.searchParams.get('query');
+        if (q){
+          return 'https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed';
+        }
+        // if has @lat,lng
+        const at = u.match(/@(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)/);
+        if (at){
+          const lat = at[1], lng = at[3];
+          return `https://www.google.com/maps?q=${encodeURIComponent(lat+','+lng)}&output=embed`;
+        }
+        // if has "place" path, embed with same URL + output=embed
+        if (u.includes('google.com/maps')){
+          return u + (u.includes('?') ? '&' : '?') + 'output=embed';
+        }
+      }catch(_){}
+      return '';
+    }
+
+    // ══════════════════════════════════════════
+    // FETCH DETAIL
+    // รองรับ 2 แบบ:
+    // 1) mode=getUnitDetail&id=HP-xxxx  -> {ok:true,data:{...}}
+    // 2) fallback: sheet/public not used here (detail needs backend)
+    // ══════════════════════════════════════════
+    async function fetchDetail(){
+      if(!HP_ID){
+        showErr('ไม่พบรหัสบ้านใน URL เช่น details.html?id=HP-0001');
+        document.getElementById('title').textContent = 'Missing ID';
+        document.getElementById('subtitle').textContent = 'กรุณาเปิดจากหน้า index แล้วกดรายการบ้าน';
+        return;
+      }
+
+      try{
+        const url = SCRIPT_URL + '?mode=getUnitDetail&id=' + encodeURIComponent(HP_ID) + '&albumFolderId=' + encodeURIComponent(ALBUM_FOLDER_ID);
+        const r = await fetch(url, { signal: AbortSignal.timeout(9000) });
+        if(!r.ok) throw new Error('http');
+        const j = await r.json();
+
+        // normalize payload
+        const p = (j && (j.data || j.item || j.row || j.property)) ? (j.data || j.item || j.row || j.property) : null;
+        if(!p || typeof p !== 'object') throw new Error('bad_payload');
+
+        // IMPORTANT: If backend returns fileIds, this page converts to lh3 automatically via toLh3().
+        render(p);
+      }catch(err){
+        showErr('โหลดรายละเอียดไม่ได้ — ตรวจสอบ SCRIPT_URL / Deploy / Permission และโหมด getUnitDetail');
+        document.getElementById('title').textContent = 'Load failed';
+        document.getElementById('subtitle').textContent = 'หากต้องการให้รูปขึ้น ต้องให้ API ส่ง Image_List เป็นลิงก์หรือ File ID';
+        // keep skeleton off
+        skImg.style.display = 'none';
+      }
+    }
+
+    // start
+    fetchDetail();
+  </script>
+
+  <!--
+    NOTE สำคัญเรื่อง “รูปไม่ขึ้น” (แก้ด้วยโค้ดนี้แล้ว):
+    - ถ้า API ส่ง "File ID" มา (เช่น 1AbC...xyz) โค้ดจะเปลี่ยนเป็น:
+      https://lh3.googleusercontent.com/d/FILE_ID
+    - ถ้า API ส่งลิงก์เต็ม (http...) ก็ใช้ได้เลย
+    - ถ้ารูปยังไม่ขึ้น แปลว่าไฟล์ใน Drive ยังไม่ได้แชร์ “Anyone with the link” หรืออยู่ใน Shared Drive ที่นโยบายบล็อก
+  -->
+</body>
+</html>
+```
