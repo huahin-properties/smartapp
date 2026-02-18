@@ -1,14 +1,14 @@
-```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-  <title>Hua Hin Properties | Property Details</title>
-  <meta name="description" content="รายละเอียดอสังหาริมทรัพย์ระดับ Luxury ในหัวหิน ชะอำ ปราณบุรี — รูปภาพ แผนที่ สเปก และข้อมูลครบถ้วน"/>
-  <meta property="og:title" content="Hua Hin Properties | Property Details"/>
-  <meta property="og:description" content="ดูรายละเอียดบ้าน/คอนโด/ที่ดิน คัดสรรระดับ Premium เมืองชายทะเลหัวหิน"/>
-  <meta property="og:type" content="website"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+  <title>Hua Hin Properties | Listing Details</title>
+  <meta name="description" content="รายละเอียดอสังหาริมทรัพย์ระดับ Luxury ในหัวหิน ชะอำ ปราณบุรี — รูปภาพ อัลบั้ม แผนที่ วิดีโอ และข้อมูลสำคัญครบถ้วน" />
+  <meta property="og:title" content="Hua Hin Properties | Listing Details" />
+  <meta property="og:description" content="ดูรายละเอียดบ้าน/คอนโด/ที่ดิน พร้อมรูปภาพ อัลบั้ม และข้อมูลสำคัญ" />
+  <meta property="og:type" content="website" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Sarabun:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -40,7 +40,6 @@
       --px:18px;
       --px-lg:52px;
       --radius:6px;
-      --shadow:0 18px 60px rgba(0,0,0,0.55);
     }
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -54,7 +53,7 @@
       overflow-x:hidden;
     }
 
-    /* ═══ OCEAN BACKGROUND ═══ */
+    /* ═══ OCEAN BACKGROUND (match index) ═══ */
     body::before{
       content:'';
       position:fixed;inset:0;
@@ -68,7 +67,8 @@
     }
     body::after{
       content:'';
-      position:fixed;bottom:0;left:-50%;
+      position:fixed;
+      bottom:0;left:-50%;
       width:200%;height:200px;
       background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(27,79,114,0.08)' d='M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
       background-size:800px 120px;
@@ -94,23 +94,11 @@
       font-family:'Cormorant Garamond',serif;
       font-size:1.1rem;font-weight:400;
       letter-spacing:0.1em;text-transform:uppercase;
-      color:var(--gold);text-decoration:none;line-height:1;
+      color:var(--gold);text-decoration:none;
+      line-height:1;
     }
     .logo span{color:var(--sand);font-style:italic;font-weight:300}
     .header-nav{display:flex;align-items:center;gap:10px}
-    .btn-header{
-      padding:7px 14px;
-      border:1px solid rgba(201,168,76,0.35);
-      color:var(--gold);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;font-weight:600;
-      letter-spacing:0.16em;text-transform:uppercase;
-      text-decoration:none;border-radius:2px;
-      transition:all var(--trans);
-      white-space:nowrap;
-      background:transparent;
-    }
-    .btn-header:hover{background:rgba(201,168,76,0.12);transform:translateY(-1px)}
     .btn-contact-header{
       padding:7px 16px;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
@@ -125,371 +113,439 @@
     .btn-contact-header:hover{opacity:0.88;transform:translateY(-1px)}
 
     /* ═══ PAGE WRAP ═══ */
-    .wrap{
+    main{
       position:relative;z-index:1;
-      padding:86px var(--px) 70px;
-      max-width:1200px;
-      margin:0 auto;
+      padding:78px var(--px) 64px;
+    }
+    @media(min-width:1100px){
+      header{padding:0 var(--px-lg)}
+      main{padding:86px var(--px-lg) 90px}
     }
 
     /* ═══ TOP BAR ═══ */
-    .crumbs{
+    .topbar{
       display:flex;align-items:center;justify-content:space-between;
       gap:10px;
-      margin-bottom:18px;
-      opacity:0;animation:fadeUp .6s .05s ease forwards;
+      margin-bottom:16px;
     }
-    .crumb-left{
-      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-      color:var(--muted);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;letter-spacing:.14em;text-transform:uppercase;
-    }
-    .crumb-pill{
-      padding:6px 10px;
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius:999px;
-      background:rgba(255,255,255,0.04);
-    }
-    .id-pill{
-      border-color:rgba(201,168,76,0.25);
-      color:var(--gold);
-      background:rgba(201,168,76,0.08);
-    }
-
-    /* ═══ HERO CARD ═══ */
-    .hero-card{
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:var(--card-bg);
-      overflow:hidden;
-      backdrop-filter:blur(12px);
-      box-shadow:var(--shadow);
-      opacity:0;transform:translateY(14px);
-      animation:cardIn .55s .12s ease forwards;
-    }
-
-    /* Gallery */
-    .gal{
-      position:relative;
-      background:#060F1A;
-      aspect-ratio:16/10;
-      overflow:hidden;
-    }
-    .gal img{
-      width:100%;height:100%;
-      object-fit:cover;display:block;
-      filter:brightness(.88) saturate(1.1);
-      transform:scale(1.02);
-      transition:transform .7s ease;
-    }
-    .gal:hover img{transform:scale(1.06)}
-    .gal-shade{
-      position:absolute;inset:0;
-      background:linear-gradient(to bottom, transparent 35%, rgba(11,24,41,.55) 70%, rgba(11,24,41,.92) 100%);
-      pointer-events:none;
-    }
-
-    .badge{
-      position:absolute;top:12px;left:12px;
-      padding:5px 11px;
-      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      color:var(--navy);
-      font-family:'Montserrat',sans-serif;font-size:0.52rem;
-      font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
-      border-radius:2px;
-    }
-    .status{
-      position:absolute;top:12px;right:12px;
-      display:flex;align-items:center;gap:6px;
-      padding:5px 10px;
-      background:rgba(6,15,26,0.86);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:20px;
-      backdrop-filter:blur(8px);
-    }
-    .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-    .d-av{background:var(--available);box-shadow:0 0 8px var(--available)}
-    .d-rs{background:var(--reserved);box-shadow:0 0 8px var(--reserved)}
-    .d-sd{background:var(--sold);box-shadow:0 0 8px var(--sold)}
-    .d-rt{background:var(--rented);box-shadow:0 0 8px var(--rented)}
-    .status span{
-      font-family:'Montserrat',sans-serif;
-      font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;
-      color:var(--sand);
-    }
-
-    .gal-nav{
-      position:absolute;left:12px;right:12px;bottom:12px;
-      display:flex;justify-content:space-between;align-items:center;
-      gap:10px;
-    }
-    .nav-btn{
+    .back-btn{
       display:inline-flex;align-items:center;gap:8px;
       padding:10px 12px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(6,15,26,0.6);
-      color:var(--sand);
-      border-radius:999px;
-      cursor:pointer;
-      transition:all var(--trans);
-      user-select:none;
-      font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;letter-spacing:.12em;text-transform:uppercase;
-    }
-    .nav-btn:hover{border-color:rgba(201,168,76,0.45);color:var(--gold);transform:translateY(-1px)}
-    .nav-btn:active{transform:translateY(0)}
-    .nav-btn:disabled{opacity:.35;cursor:not-allowed}
-    .gal-counter{
-      margin-left:auto;
-      padding:8px 12px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(6,15,26,0.6);
-      border-radius:999px;
-      color:rgba(245,237,216,0.75);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.56rem;letter-spacing:.14em;text-transform:uppercase;
-      backdrop-filter:blur(8px);
-      white-space:nowrap;
-    }
-
-    /* Content */
-    .hero-body{
-      padding:18px 18px 20px;
-    }
-    .zone{
-      font-family:'Montserrat',sans-serif;
-      font-size:0.6rem;letter-spacing:.22em;text-transform:uppercase;
-      color:var(--teal);margin-bottom:8px;
-      opacity:0;animation:fadeUp .55s .18s ease forwards;
-    }
-    .title{
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(1.9rem,3.8vw,2.75rem);
-      font-weight:300;line-height:1.1;
-      color:var(--white);margin-bottom:10px;
-      opacity:0;animation:fadeUp .55s .22s ease forwards;
-    }
-    .subtitle{
-      font-size:0.92rem;color:var(--muted);
-      line-height:1.7;margin-bottom:16px;
-      opacity:0;animation:fadeUp .55s .26s ease forwards;
-    }
-
-    .cta-row{
-      display:flex;flex-wrap:wrap;gap:10px;
-      margin:12px 0 18px;
-      opacity:0;animation:fadeUp .55s .30s ease forwards;
-    }
-    .cta{
-      display:inline-flex;align-items:center;gap:9px;
-      padding:12px 14px;
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
       color:var(--sand);
       text-decoration:none;
+      border-radius:var(--radius);
       transition:all var(--trans);
       font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;font-weight:600;
-      letter-spacing:0.14em;text-transform:uppercase;
+      font-size:0.62rem;
+      letter-spacing:0.14em;
+      text-transform:uppercase;
+      white-space:nowrap;
     }
-    .cta:hover{border-color:rgba(201,168,76,0.45);background:rgba(201,168,76,0.08);color:var(--gold);transform:translateY(-2px)}
-    .cta.primary{
-      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
-      border-color:transparent;
-      color:var(--navy);
-    }
-    .cta.primary:hover{opacity:.9;color:var(--navy)}
-    .cta svg{flex-shrink:0}
-
-    .spec-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-      margin-top:10px;
-      opacity:0;animation:fadeUp .55s .34s ease forwards;
-    }
-    .spec-card{
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
-      border-radius:var(--radius);
-      padding:12px 12px;
-    }
-    .spec-k{
+    .back-btn:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-1px)}
+    .crumb{
       font-family:'Montserrat',sans-serif;
-      font-size:0.52rem;letter-spacing:.22em;text-transform:uppercase;
+      font-size:0.55rem;
+      letter-spacing:0.26em;
+      text-transform:uppercase;
       color:var(--muted);
-      margin-bottom:6px;
+      opacity:.9;
+      text-align:right;
+      line-height:1.2;
     }
-    .spec-v{
-      font-size:0.92rem;color:var(--white);
-      font-weight:400;
+
+    /* ═══ TITLE BLOCK ═══ */
+    .title-wrap{
+      margin:8px 0 18px;
     }
-    .spec-v strong{
+    .eyebrow{
+      font-family:'Montserrat',sans-serif;
+      font-size:0.6rem;
+      letter-spacing:0.32em;
+      text-transform:uppercase;
+      color:var(--teal);
+      margin-bottom:10px;
+      opacity:0;
+      animation:fadeUp .7s .05s ease forwards;
+    }
+    .h1{
       font-family:'Cormorant Garamond',serif;
-      font-size:1.3rem;
-      font-weight:400;
+      font-size:clamp(1.9rem,6.5vw,3.2rem);
+      font-weight:300;
+      line-height:1.1;
+      color:var(--white);
+      margin-bottom:10px;
+      opacity:0;
+      animation:fadeUp .7s .15s ease forwards;
+    }
+    .h1 em{
+      font-style:italic;
       background:linear-gradient(135deg,var(--gold),var(--gold-lt));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background-clip:text;
     }
+    .subline{
+      color:var(--muted);
+      font-size:0.9rem;
+      line-height:1.7;
+      max-width:920px;
+      opacity:0;
+      animation:fadeUp .7s .25s ease forwards;
+    }
 
-    /* Sections */
-    .section{
-      margin-top:16px;
+    /* ═══ BADGES ═══ */
+    .badgerow{
+      display:flex;flex-wrap:wrap;gap:8px;
+      margin-top:14px;
+      opacity:0;
+      animation:fadeUp .7s .35s ease forwards;
+    }
+    .chip{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:7px 10px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--sand);
+      font-family:'Montserrat',sans-serif;
+      font-size:0.56rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .chip strong{
+      font-weight:600;
+      letter-spacing:0.16em;
+      color:var(--gold);
+    }
+    .dot{width:6px;height:6px;border-radius:50%}
+    .d-av{background:var(--available);box-shadow:0 0 7px var(--available)}
+    .d-rs{background:var(--reserved);box-shadow:0 0 7px var(--reserved)}
+    .d-sd{background:var(--sold);box-shadow:0 0 7px var(--sold)}
+    .d-rt{background:var(--rented);box-shadow:0 0 7px var(--rented)}
+
+    /* ═══ LAYOUT GRID ═══ */
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+    @media(min-width:980px){
+      .layout{
+        grid-template-columns: 1.4fr 0.9fr;
+        align-items:start;
+        gap:16px;
+      }
+    }
+
+    /* ═══ CARD BASE ═══ */
+    .card{
+      background:var(--card-bg);
       border:1px solid var(--border);
       border-radius:var(--radius);
-      background:rgba(6,15,26,0.55);
-      backdrop-filter:blur(10px);
       overflow:hidden;
-      opacity:0;transform:translateY(10px);
-      animation:cardIn .55s .16s ease forwards;
+      backdrop-filter:blur(12px);
+      box-shadow:0 12px 30px rgba(0,0,0,.12);
     }
-    .sec-h{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:12px;
+    .card-h{
       padding:14px 16px;
       border-bottom:1px solid var(--border);
-      background:rgba(255,255,255,0.03);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
     }
-    .sec-title{
+    .card-title{
       font-family:'Montserrat',sans-serif;
-      font-size:0.62rem;letter-spacing:.22em;text-transform:uppercase;
-      color:var(--gold);
-      display:flex;align-items:center;gap:8px;
+      font-size:0.58rem;
+      letter-spacing:0.28em;
+      text-transform:uppercase;
+      color:var(--teal);
+      margin-top:2px;
+      white-space:nowrap;
     }
-    .sec-body{padding:14px 16px 18px}
-    .desc{
-      font-size:0.92rem;
-      line-height:1.9;
-      color:rgba(245,237,216,0.88);
-      white-space:pre-wrap;
+    .card-sub{
+      font-size:.82rem;color:var(--muted);line-height:1.55;
+      margin-top:6px;
+    }
+    .card-b{
+      padding:14px 16px 16px;
     }
 
-    /* Chips */
-    .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{
-      padding:8px 10px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      border-radius:999px;
-      color:rgba(245,237,216,0.85);
-      font-family:'Montserrat',sans-serif;
-      font-size:0.58rem;letter-spacing:.12em;text-transform:uppercase;
+    /* ═══ GALLERY ═══ */
+    .gallery{
+      position:relative;
     }
-
-    /* Map */
-    .map-frame{
+    .stage{
+      position:relative;
       width:100%;
-      height:320px;
-      border:0;
-      border-radius:var(--radius);
+      aspect-ratio: 16/10;
       background:#060F1A;
+      overflow:hidden;
     }
-    .map-actions{
-      display:flex;flex-wrap:wrap;gap:10px;
-      margin-top:12px;
+    .stage img{
+      width:100%;height:100%;
+      object-fit:cover;
+      display:block;
+      filter:brightness(.9) saturate(1.1);
+      transform:scale(1.01);
+      transition:transform .7s ease;
+    }
+    .stage:hover img{transform:scale(1.05)}
+    .shade{
+      position:absolute;inset:0;
+      background:linear-gradient(to bottom, transparent 40%, rgba(11,24,41,.55) 72%, rgba(11,24,41,.92) 100%);
+      pointer-events:none;
+    }
+    .navbtn{
+      position:absolute;top:50%;
+      transform:translateY(-50%);
+      width:44px;height:44px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(6,15,26,0.55);
+      backdrop-filter:blur(8px);
+      color:var(--sand);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:all var(--trans);
+      user-select:none;
+    }
+    .navbtn:hover{border-color:rgba(201,168,76,0.5);color:var(--gold)}
+    .navbtn:active{transform:translateY(-50%) scale(0.98)}
+    .navbtn.left{left:10px}
+    .navbtn.right{right:10px}
+
+    .stage-meta{
+      position:absolute;left:12px;bottom:12px;
+      display:flex;flex-wrap:wrap;gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      background:rgba(6,15,26,0.65);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:999px;
+      backdrop-filter:blur(8px);
+    }
+    .stage-meta .m1{
+      font-family:'Montserrat',sans-serif;
+      font-size:.54rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(245,237,216,0.82);
+      white-space:nowrap;
+    }
+    .stage-meta .m2{
+      font-family:'Montserrat',sans-serif;
+      font-size:.54rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--gold);
+      white-space:nowrap;
     }
 
-    /* Related (simple) */
-    .mini-grid{
-      display:grid;grid-template-columns:1fr;
+    .thumbs{
+      display:flex;gap:8px;
+      padding:12px 12px 14px;
+      overflow:auto;
+      scrollbar-width:none;
+      border-top:1px solid var(--border);
+      background:rgba(6,15,26,0.35);
+    }
+    .thumbs::-webkit-scrollbar{display:none}
+    .thumb{
+      width:86px;height:56px;flex:0 0 auto;
+      border-radius:4px;
+      border:1px solid rgba(255,255,255,0.12);
+      overflow:hidden;
+      background:#060F1A;
+      cursor:pointer;
+      transition:all var(--trans);
+      position:relative;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85)}
+    .thumb.active{border-color:rgba(201,168,76,0.65);box-shadow:0 0 0 3px var(--gold-glow)}
+    .thumb:hover{transform:translateY(-1px);border-color:rgba(201,168,76,0.45)}
+
+    /* ═══ QUICK SPECS ═══ */
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
       gap:10px;
     }
-    .mini-card{
-      display:flex;gap:12px;
-      padding:12px;
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
-      text-decoration:none;color:inherit;
-      transition:all var(--trans);
-      overflow:hidden;
-    }
-    .mini-card:hover{border-color:rgba(201,168,76,0.45);transform:translateY(-2px)}
-    .mini-img{
-      width:108px;aspect-ratio:4/3;border-radius:var(--radius);
-      background:#060F1A;overflow:hidden;flex-shrink:0;
-    }
-    .mini-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.88) saturate(1.1)}
-    .mini-t{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.1rem;color:var(--white);line-height:1.1;
-      margin-bottom:4px;
-    }
-    .mini-s{
-      font-size:.78rem;color:var(--muted);line-height:1.5;
-      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-    }
-
-    /* Skeleton & error */
-    .err-box{
-      background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);
-      color:#ef9090;padding:13px 16px;border-radius:var(--radius);
-      font-size:.84rem;margin-bottom:14px;display:none;
-    }
-    .skel{
+    .kpi{
+      padding:12px 12px;
+      background:rgba(255,255,255,0.04);
       border:1px solid var(--border);
       border-radius:var(--radius);
-      background:rgba(17,34,56,0.75);
+    }
+    .kpi-lbl{
+      font-family:'Montserrat',sans-serif;
+      font-size:0.52rem;
+      letter-spacing:0.2em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .kpi-val{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.55rem;
+      font-weight:400;
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      line-height:1;
+    }
+    .kpi-sub{
+      margin-top:6px;
+      font-size:.78rem;
+      color:rgba(122,155,181,0.92);
+      line-height:1.45;
+    }
+
+    /* ═══ TABLE SPECS ═══ */
+    .spec-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0 10px;
+      margin-top:2px;
+    }
+    .spec-row td{
+      padding:11px 12px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+    }
+    .spec-row td:first-child{
+      border-right:none;
+      border-top-left-radius:var(--radius);
+      border-bottom-left-radius:var(--radius);
+      width:42%;
+      color:var(--muted);
+      font-family:'Montserrat',sans-serif;
+      font-size:.56rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .spec-row td:last-child{
+      border-left:none;
+      border-top-right-radius:var(--radius);
+      border-bottom-right-radius:var(--radius);
+      font-size:.9rem;
+      color:var(--sand);
+      line-height:1.45;
+      word-break:break-word;
+    }
+
+    /* ═══ CTA BUTTONS ═══ */
+    .cta{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    @media(min-width:520px){ .cta{grid-template-columns:1fr 1fr} }
+    @media(min-width:980px){ .cta{grid-template-columns:1fr} }
+
+    .btn{
+      display:flex;align-items:center;justify-content:center;
+      gap:10px;
+      padding:14px 14px;
+      border-radius:var(--radius);
+      border:1px solid rgba(201,168,76,0.35);
+      background:rgba(255,255,255,0.04);
+      color:var(--sand);
+      text-decoration:none;
+      font-family:'Montserrat',sans-serif;
+      font-size:0.62rem;
+      letter-spacing:0.16em;
+      text-transform:uppercase;
+      transition:all var(--trans);
+      text-align:center;
+    }
+    .btn:hover{background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.55);transform:translateY(-2px)}
+    .btn.primary{
+      background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+      color:var(--navy);
+      border-color:transparent;
+    }
+    .btn.primary:hover{opacity:.92}
+    .btn .hint{
+      font-family:'Sarabun',sans-serif;
+      letter-spacing:0;
+      text-transform:none;
+      font-size:.84rem;
+      font-weight:300;
+      color:rgba(11,24,41,0.9);
+    }
+
+    /* ═══ MAP / IFRAME ═══ */
+    .iframe{
+      width:100%;
+      height:320px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:#060F1A;
+    }
+    .iframe iframe{
+      width:100%;height:100%;
+      border:0;
+    }
+    @media(min-width:980px){ .iframe{height:360px} }
+
+    /* ═══ SKELETON / ERROR ═══ */
+    .err-box{
+      background:rgba(224,85,85,.1);
+      border:1px solid rgba(224,85,85,.3);
+      color:#ef9090;
+      padding:13px 16px;
+      border-radius:var(--radius);
+      font-size:.84rem;
+      margin:14px 0 0;
+      display:none;
+    }
+    .skel{
+      display:grid;
+      gap:12px;
+    }
+    .sk-card{
+      background:rgba(17,34,56,0.8);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
       overflow:hidden;
     }
-    .skel-img{
+    .sk-img{
       width:100%;aspect-ratio:16/10;
       background:linear-gradient(90deg,#112238 25%,#1a3350 50%,#112238 75%);
       background-size:200% 100%;
       animation:shimmer 1.4s infinite;
     }
-    .skel-body{padding:16px}
-    .skel-ln{
-      height:12px;border-radius:3px;margin-bottom:10px;
+    .sk-body{padding:14px 16px}
+    .sk-ln{
+      height:11px;border-radius:3px;margin-bottom:9px;
       background:linear-gradient(90deg,#1a3350 25%,#243f5a 50%,#1a3350 75%);
       background-size:200% 100%;
       animation:shimmer 1.4s infinite;
     }
-    .skel-ln.s{width:35%}.skel-ln.m{width:58%}.skel-ln.l{width:85%}
-    .skel-ln.xl{height:22px;width:45%;margin-top:14px}
+    .sk-ln.s{width:38%}
+    .sk-ln.m{width:60%}
+    .sk-ln.l{width:85%}
+    .sk-ln.xl{height:20px;width:46%;margin-top:14px}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-    /* Footer (reuse style spirit) */
+    /* ═══ FOOTER (light, simple) ═══ */
     footer{
       border-top:1px solid var(--border);
-      padding:36px var(--px) 48px;
+      padding:28px var(--px) 44px;
       position:relative;z-index:1;
       background:rgba(6,15,26,0.6);
-      margin-top:26px;
+      margin-top:28px;
     }
-    .footer-brand{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.1rem;color:var(--gold);letter-spacing:.1em;
-      margin-bottom:6px;
-    }
-    .footer-tagline{
-      font-size:.78rem;color:var(--muted);margin-bottom:18px;
-      font-family:'Montserrat',sans-serif;font-weight:300;letter-spacing:.05em;
-    }
+    @media(min-width:1100px){ footer{padding:36px var(--px-lg) 54px} }
     .footer-copy{
-      font-size:.65rem;color:var(--muted);opacity:.4;padding-top:16px;
-      border-top:1px solid var(--border);
+      font-size:.65rem;color:var(--muted);opacity:.45;
+      font-family:'Montserrat',sans-serif;
+      letter-spacing:.06em;
     }
-
-    /* Responsive */
-    @media(min-width:760px){
-      .spec-grid{grid-template-columns:repeat(4,1fr)}
-      .mini-grid{grid-template-columns:repeat(2,1fr)}
-      .map-frame{height:360px}
-    }
-    @media(min-width:1100px){
-      header{padding:0 var(--px-lg)}
-      .wrap{padding:96px var(--px-lg) 90px}
-      footer{padding:44px var(--px-lg) 56px}
-      .mini-grid{grid-template-columns:repeat(3,1fr)}
-    }
-
-    /* Animations */
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes cardIn{to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 
@@ -498,554 +554,143 @@
   <header>
     <a href="index.html" class="logo">Hua Hin<span>.Properties</span></a>
     <div class="header-nav">
-      <a href="index.html" class="btn-header">Back</a>
       <a href="contact.html" class="btn-contact-header">ติดต่อเรา</a>
     </div>
   </header>
 
-  <main class="wrap">
-
-    <div class="crumbs">
-      <div class="crumb-left">
-        <span class="crumb-pill">Luxury Coastal</span>
-        <span class="crumb-pill" id="crumbZone">—</span>
-        <span class="crumb-pill id-pill" id="crumbId">ID: —</span>
-      </div>
-      <div class="crumb-left">
-        <span class="crumb-pill" id="crumbType">—</span>
-        <span class="crumb-pill" id="crumbListing">—</span>
-      </div>
+  <main>
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <a class="back-btn" href="index.html" id="backBtn">← Back</a>
+      <div class="crumb" id="crumb">Listing Details</div>
     </div>
 
-    <div class="err-box" id="errBox"></div>
+    <!-- TITLE -->
+    <section class="title-wrap">
+      <div class="eyebrow" id="eyebrow">🌊 Luxury Coastal Real Estate · Hua Hin</div>
+      <h1 class="h1" id="titleH1">กำลังโหลดรายละเอียด…</h1>
+      <p class="subline" id="subtitle">โปรดรอสักครู่ ระบบกำลังดึงข้อมูลจากฐานข้อมูล</p>
 
-    <!-- SKELETON (shows before data ready) -->
-    <div class="skel" id="skelBox">
-      <div class="skel-img"></div>
-      <div class="skel-body">
-        <div class="skel-ln s"></div>
-        <div class="skel-ln xl"></div>
-        <div class="skel-ln m"></div>
-        <div class="skel-ln l"></div>
-      </div>
+      <div class="badgerow" id="badgeRow" style="display:none"></div>
+      <div class="err-box" id="errBox"></div>
+    </section>
+
+    <!-- SKELETON -->
+    <div class="skel" id="skelWrap">
+      <div class="sk-card"><div class="sk-img"></div><div class="sk-body"><div class="sk-ln s"></div><div class="sk-ln m"></div><div class="sk-ln l"></div><div class="sk-ln xl"></div></div></div>
+      <div class="sk-card"><div class="sk-body"><div class="sk-ln s"></div><div class="sk-ln l"></div><div class="sk-ln m"></div><div class="sk-ln xl"></div></div></div>
     </div>
 
-    <!-- HERO CARD -->
-    <article class="hero-card" id="heroCard" style="display:none">
-      <div class="gal">
-        <img id="galImg" alt="property" loading="eager"/>
-        <div class="gal-shade"></div>
-
-        <div class="badge" id="badgeEl" style="display:none"></div>
-
-        <div class="status" id="statusEl">
-          <span class="dot d-av" id="statusDot"></span>
-          <span id="statusLbl">Available</span>
-        </div>
-
-        <div class="gal-nav">
-          <button class="nav-btn" id="prevBtn" type="button">← Prev</button>
-          <button class="nav-btn" id="nextBtn" type="button">Next →</button>
-          <div class="gal-counter" id="galCounter">1 / 1</div>
-        </div>
-      </div>
-
-      <div class="hero-body">
-        <div class="zone" id="zoneEl">📍 —</div>
-        <h1 class="title" id="titleEl">—</h1>
-        <p class="subtitle" id="subEl">—</p>
-
-        <div class="cta-row">
-          <a class="cta primary" id="ctaLine" target="_blank" rel="noopener" href="https://line.me/R/ti/p/@qap7218t">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-            LINE
-          </a>
-
-          <a class="cta" id="ctaWhatsapp" target="_blank" rel="noopener" href="https://wa.me/66805820777?text=Interested">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.857L0 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.877 9.877 0 01-5.034-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106c5.42 0 9.894 4.474 9.894 9.894 0 5.42-4.474 9.894-9.894 9.894z"/></svg>
-            WhatsApp
-          </a>
-
-          <a class="cta" id="ctaCall" href="tel:+66805820777">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            Call
-          </a>
-
-          <a class="cta" id="ctaMap" target="_blank" rel="noopener" href="#" style="display:none">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>
-            Open Map
-          </a>
-
-          <a class="cta" id="ctaVirtual" target="_blank" rel="noopener" href="#" style="display:none">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7L8 5z"/></svg>
-            Virtual Tour
-          </a>
-
-          <a class="cta" id="ctaFB" target="_blank" rel="noopener" href="#" style="display:none">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073 24 5.446 18.627 0 12 0z"/></svg>
-            Facebook
-          </a>
-        </div>
-
-        <div class="spec-grid" id="specGrid">
-          <div class="spec-card"><div class="spec-k">Listing</div><div class="spec-v" id="spListing">—</div></div>
-          <div class="spec-card"><div class="spec-k">Bedrooms</div><div class="spec-v" id="spBeds">—</div></div>
-          <div class="spec-card"><div class="spec-k">Bathrooms</div><div class="spec-v" id="spBath">—</div></div>
-          <div class="spec-card"><div class="spec-k">Living</div><div class="spec-v" id="spLiving">—</div></div>
-
-          <div class="spec-card"><div class="spec-k">Land</div><div class="spec-v" id="spLand">—</div></div>
-          <div class="spec-card"><div class="spec-k">Pool</div><div class="spec-v" id="spPool">—</div></div>
-          <div class="spec-card"><div class="spec-k">Ownership</div><div class="spec-v" id="spOwner">—</div></div>
-          <div class="spec-card"><div class="spec-k">Price</div><div class="spec-v"><strong id="spPrice">—</strong></div></div>
-        </div>
-      </div>
-    </article>
-
-    <!-- DETAILS -->
-    <section class="section" id="secHighlights" style="display:none">
-      <div class="sec-h">
-        <div class="sec-title">✨ Key Selling Points</div>
-      </div>
-      <div class="sec-body">
-        <div class="desc" id="kspEl">—</div>
-      </div>
-    </section>
-
-    <section class="section" id="secDesc" style="display:none">
-      <div class="sec-h">
-        <div class="sec-title">📝 Description</div>
-      </div>
-      <div class="sec-body">
-        <div class="desc" id="descEl">—</div>
-      </div>
-    </section>
-
-    <section class="section" id="secTags" style="display:none">
-      <div class="sec-h">
-        <div class="sec-title">🏷️ Tags</div>
-      </div>
-      <div class="sec-body">
-        <div class="chips" id="chipsWrap"></div>
-      </div>
-    </section>
-
-    <section class="section" id="secMap" style="display:none">
-      <div class="sec-h">
-        <div class="sec-title">📍 Location</div>
-      </div>
-      <div class="sec-body">
-        <iframe class="map-frame" id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <div class="map-actions">
-          <a class="cta" id="mapOpenBtn" target="_blank" rel="noopener" href="#">Open in Google Maps</a>
-          <a class="cta" id="mapNavBtn" target="_blank" rel="noopener" href="#">Navigation</a>
-        </div>
-        <p style="margin-top:10px;color:rgba(122,155,181,.85);font-size:.78rem;line-height:1.6">
-          *หากแผนที่ไม่แสดง อาจเป็นลิงก์แบบ “maps.app.goo.gl” (short link) — ปุ่ม Open in Google Maps จะพาไปเปิดได้แน่นอน
-        </p>
-      </div>
-    </section>
-
-    <section class="section" id="secMore" style="display:none">
-      <div class="sec-h">
-        <div class="sec-title">🏡 More in This Collection</div>
-      </div>
-      <div class="sec-body">
-        <div class="mini-grid" id="moreGrid"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-brand">Hua Hin · Properties</div>
-    <p class="footer-tagline">Luxury Coastal Real Estate · หัวหิน ชะอำ ปราณบุรี</p>
-    <p class="footer-copy">© 2025 huahin.properties · Luxury Coastal Real Estate · All rights reserved</p>
-  </footer>
-
-  <script>
-    // ══════════════════════════════════════════
-    // CONFIG (match your index)
-    // ══════════════════════════════════════════
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
-    const SHEET_ID   = '1vFsPw6GRO8kd_vHDhbV-Y-t11WTOfyv0E18TH0Nuy74';
-    const SHEET_NAME = 'properties';
-    const SHEET_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
-
-    // ══════════════════════════════════════════
-    // STATE
-    // ══════════════════════════════════════════
-    const qs = new URLSearchParams(location.search);
-    const HP_ID = (qs.get('id') || '').trim();
-
-    let unit = null;
-    let allProps = [];
-    let imgs = [];
-    let imgIdx = 0;
-
-    // ══════════════════════════════════════════
-    // HELPERS (reuse logic from index)
-    // ══════════════════════════════════════════
-    function dotCls(s){
-      return { Available:'d-av', Reserved:'d-rs', Sold:'d-sd', Rented:'d-rt' }[s] || 'd-av';
-    }
-
-    function fmtPrice(sale, rent, ltype){
-      const src = ltype === 'Rent' ? rent : (sale && sale !== '#' ? sale : rent);
-      if (!src || src === '#') return '—';
-      const n = parseFloat(String(src).replace(/[^\d.]/g,''));
-      if (!n) return '—';
-      const sfx = (ltype === 'Rent' || (!sale && rent)) ? '/mo' : '';
-      if (n >= 1e6) return '฿' + (n/1e6).toFixed(1) + 'M' + sfx;
-      if (n >= 1e3) return '฿' + Math.round(n/1e3) + 'K' + sfx;
-      return '฿' + n.toLocaleString() + sfx;
-    }
-
-    function safeStr(v){ return (v == null ? '' : String(v)).trim(); }
-    function isUrl(u){ return /^https?:\/\/\S+/i.test(safeStr(u)); }
-
-    function setText(id, v){ const el = document.getElementById(id); if(el) el.textContent = v; }
-    function show(id, on=true){ const el = document.getElementById(id); if(el) el.style.display = on ? '' : 'none'; }
-
-    function showErr(msg){
-      document.getElementById('skelBox').style.display = 'none';
-      const e = document.getElementById('errBox');
-      e.textContent = '⚠ ' + msg;
-      e.style.display = 'block';
-    }
-
-    function hideSkel(){
-      document.getElementById('skelBox').style.display = 'none';
-      document.getElementById('heroCard').style.display = '';
-    }
-
-    // Parse Image_List (supports: JSON array / comma / newline)
-    function parseImageList(p){
-      const a = [];
-      const t = safeStr(p['Image_List']);
-      const thumb = safeStr(p['Thumbnail_Image']).replace(/^#$/,'');
-      if (thumb) a.push(thumb);
-
-      if (t){
-        try{
-          const j = JSON.parse(t);
-          if (Array.isArray(j)) j.forEach(x=>{ if(isUrl(x)) a.push(String(x)); });
-        }catch(_){
-          t.split(/[\n,]/).map(s=>s.trim()).forEach(x=>{ if(isUrl(x)) a.push(x); });
-        }
-      }
-      // unique
-      return Array.from(new Set(a));
-    }
-
-    // Map embed strategy:
-    // - if link is google.com/maps?... -> embed directly
-    // - if maps.app.goo.gl short link -> cannot embed reliably, show blank embed but keep Open buttons
-    function toEmbedUrl(mapUrl){
-      const u = safeStr(mapUrl);
-      if (!u) return '';
-      // if already embed
-      if (/google\.com\/maps\/embed\?/i.test(u)) return u;
-
-      // standard google maps link with query
-      if (/google\.com\/maps/i.test(u)){
-        // if has "q=" or "query=" try build embed by q
-        try{
-          const url = new URL(u);
-          const q = url.searchParams.get('q') || url.searchParams.get('query');
-          if (q) return 'https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed';
-          // place link (cid) or other patterns: fallback to embed with same url + output=embed
-          if (!url.searchParams.get('output')) url.searchParams.set('output','embed');
-          return url.toString();
-        }catch(_){
-          return '';
-        }
-      }
-      // short link: cannot safely convert without network resolve
-      if (/maps\.app\.goo\.gl/i.test(u)) return '';
-      return '';
-    }
-
-    // ══════════════════════════════════════════
-    // FETCH (same fallback approach)
-    // ══════════════════════════════════════════
-    async function fetchUnit(){
-      if (!HP_ID){
-        showErr('ไม่พบพารามิเตอร์ id — ตัวอย่าง: details.html?id=HP00-0001');
-        return;
-      }
-
-      // 1) Try Web App getUnitDetail (if supported)
-      try{
-        const r = await fetch(SCRIPT_URL + '?mode=getUnitDetail&id=' + encodeURIComponent(HP_ID), { signal: AbortSignal.timeout(7000) });
-        if (r.ok){
-          const j = await r.json();
-          if (j && j.data){
-            unit = j.data;
-            // also try list for "More" section
-            try { await fetchListLite(); } catch(_){}
-            return renderUnit();
-          }
-        }
-      }catch(_){}
-
-      // 2) Fallback: load from Sheet GViz, then pick by HP_ID
-      try{
-        await fetchSheetAll();
-        unit = allProps.find(p => safeStr(p['HP_ID']) === HP_ID);
-        if (!unit){
-          showErr('ไม่พบรายการนี้ในฐานข้อมูล (ID: ' + HP_ID + ')');
-          return;
-        }
-        renderUnit();
-      }catch(_){
-        showErr('ไม่สามารถโหลดข้อมูลได้ — กรุณาตรวจสอบว่า Google Sheet เปิดเป็น Public');
-      }
-    }
-
-    async function fetchListLite(){
-      const r = await fetch(SCRIPT_URL + '?mode=getUnitList', { signal: AbortSignal.timeout(7000) });
-      if (!r.ok) throw new Error();
-      const j = await r.json();
-      if (j && Array.isArray(j.data)) {
-        allProps = j.data.filter(p => p['System_Status'] === 'Live');
-      }
-    }
-
-    async function fetchSheetAll(){
-      const r = await fetch(SHEET_URL);
-      const t = await r.text();
-      const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
-      const cols = j.table.cols.map(c => c.label);
-      allProps = j.table.rows.map(row => {
-        const o = {};
-        cols.forEach((c,i)=>{ o[c] = row.c?.[i]?.v != null ? String(row.c[i].v) : ''; });
-        return o;
-      }).filter(p => p['System_Status'] === 'Live');
-    }
-
-    // ══════════════════════════════════════════
-    // RENDER
-    // ══════════════════════════════════════════
-    function renderUnit(){
-      hideSkel();
-
-      const id = safeStr(unit['HP_ID']) || HP_ID;
-      const badge = safeStr(unit['Badge']);
-      const st = safeStr(unit['Status']) || 'Available';
-      const lt = safeStr(unit['Listing_Type']) || 'Sale';
-      const zone = safeStr(unit['Zone']) || safeStr(unit['District']) || 'Hua Hin';
-      const name = [safeStr(unit['Project_Name']), safeStr(unit['Type'])].filter(Boolean).join(' · ') || 'Luxury Listing';
-      const pts  = safeStr(unit['Key_Selling_Points']);
-      const desc = safeStr(unit['Description']);
-      const view = safeStr(unit['View_Type']);
-      const deed = safeStr(unit['Land_Title_Deed_Type']);
-      const own  = safeStr(unit['Ownership_Type']);
-      const dist = safeStr(unit['Distance_to_Beach']);
-      const price = fmtPrice(unit['Sale_Price'], unit['Monthly_Rent'], lt);
-      const sub = [view, dist, deed].filter(Boolean).join(' · ') || 'Premium coastal living with curated details.';
-
-      // crumbs
-      setText('crumbZone', zone || '—');
-      setText('crumbId', 'ID: ' + id);
-      setText('crumbType', safeStr(unit['Type']) || '—');
-      setText('crumbListing', lt || '—');
-
-      // hero texts
-      setText('zoneEl', '📍 ' + zone);
-      setText('titleEl', name);
-      setText('subEl', sub);
-
-      // badge
-      if (badge){
-        const b = document.getElementById('badgeEl');
-        b.textContent = badge;
-        b.style.display = '';
-      }
-
-      // status
-      document.getElementById('statusDot').className = 'dot ' + dotCls(st);
-      setText('statusLbl', st);
-
-      // specs
-      setText('spListing', lt);
-      setText('spBeds', (safeStr(unit['Bedrooms'])||'—') + ' Bed');
-      setText('spBath', (safeStr(unit['Bathrooms'])||'—') + ' Bath');
-      setText('spLiving', safeStr(unit['Living_Area_sq_m']) ? safeStr(unit['Living_Area_sq_m']) + ' m²' : '—');
-
-      const landW = safeStr(unit['Land_Area_sq_w']);
-      const landM = safeStr(unit['Land_Area_sq_m']);
-      setText('spLand', landW ? (landW + ' sq.w' + (landM ? ' · ' + landM + ' m²' : '')) : (landM ? (landM + ' m²') : '—'));
-
-      const pool = [safeStr(unit['Pool_Size']), safeStr(unit['Pool_Depth'])].filter(Boolean).join(' · ');
-      setText('spPool', pool || '—');
-
-      setText('spOwner', own || '—');
-      setText('spPrice', price);
-
-      // CTA links (optional)
-      const mapLink = safeStr(unit['Map_Link']);
-      const vtLink  = safeStr(unit['Virtual_Tour']);
-      const fbLink  = safeStr(unit['FB_Link']);
-
-      if (isUrl(mapLink)){
-        const a = document.getElementById('ctaMap');
-        a.href = mapLink;
-        a.style.display = '';
-        document.getElementById('mapOpenBtn').href = mapLink;
-        document.getElementById('mapNavBtn').href = mapLink;
-      }
-
-      if (isUrl(vtLink)){
-        const a = document.getElementById('ctaVirtual');
-        a.href = vtLink;
-        a.style.display = '';
-      }
-
-      if (isUrl(fbLink)){
-        const a = document.getElementById('ctaFB');
-        a.href = fbLink;
-        a.style.display = '';
-      }
-
-      // sections
-      if (pts){
-        show('secHighlights', true);
-        setText('kspEl', pts);
-      } else show('secHighlights', false);
-
-      if (desc){
-        show('secDesc', true);
-        setText('descEl', desc);
-      } else show('secDesc', false);
-
-      // tags from multiple fields
-      const tags = [];
-      if (safeStr(unit['Type'])) tags.push(safeStr(unit['Type']));
-      if (lt) tags.push(lt);
-      if (st) tags.push(st);
-      if (zone) tags.push(zone);
-      if (view) tags.push(view);
-      if (own) tags.push(own);
-      if (deed) tags.push(deed);
-
-      const chipsWrap = document.getElementById('chipsWrap');
-      chipsWrap.innerHTML = Array.from(new Set(tags.filter(Boolean))).slice(0,10).map(t=>`<span class="chip">${escapeHtml(t)}</span>`).join('');
-      show('secTags', chipsWrap.innerHTML.trim().length > 0);
-
-      // Map embed
-      const emb = toEmbedUrl(mapLink);
-      if (mapLink){
-        show('secMap', true);
-        const fr = document.getElementById('mapFrame');
-        fr.src = emb || 'about:blank';
-      } else {
-        show('secMap', false);
-      }
-
-      // Gallery
-      imgs = parseImageList(unit);
-      if (!imgs.length){
-        const thumb = safeStr(unit['Thumbnail_Image']).replace(/^#$/,'');
-        if (thumb) imgs = [thumb];
-      }
-      if (!imgs.length){
-        // fallback placeholder
-        imgs = ['data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1200" height="750"%3E%3Crect width="1200" height="750" fill="%23060F1A"/%3E%3Ctext x="50%25" y="50%25" fill="rgba(255,255,255,0.18)" font-size="46" font-family="Arial" text-anchor="middle"%3EHuahin.Properties%3C/text%3E%3C/svg%3E'];
-      }
-
-      imgIdx = 0;
-      renderGallery();
-
-      // More section (use list if available)
-      tryRenderMore();
-      // update document title
-      document.title = name + ' | Hua Hin Properties';
-    }
-
-    function renderGallery(){
-      const imgEl = document.getElementById('galImg');
-      imgEl.src = imgs[imgIdx];
-      document.getElementById('galCounter').textContent = (imgIdx+1) + ' / ' + imgs.length;
-
-      const prev = document.getElementById('prevBtn');
-      const next = document.getElementById('nextBtn');
-      prev.disabled = imgs.length <= 1;
-      next.disabled = imgs.length <= 1;
-    }
-
-    function tryRenderMore(){
-      if (!Array.isArray(allProps) || allProps.length < 2) { show('secMore', false); return; }
-
-      const zone = safeStr(unit['Zone']) || safeStr(unit['District']) || '';
-      const sameZone = allProps
-        .filter(p => safeStr(p['HP_ID']) && safeStr(p['HP_ID']) !== HP_ID)
-        .filter(p => {
-          const z = (safeStr(p['Zone']) || safeStr(p['District']));
-          return zone && z && z.toLowerCase() === zone.toLowerCase();
-        })
-        .slice(0,6);
-
-      const pick = sameZone.length ? sameZone : allProps.filter(p => safeStr(p['HP_ID']) !== HP_ID).slice(0,6);
-      if (!pick.length) { show('secMore', false); return; }
-
-      const g = document.getElementById('moreGrid');
-      g.innerHTML = pick.map(p=>{
-        const id = safeStr(p['HP_ID']);
-        const name = [safeStr(p['Project_Name']), safeStr(p['Type'])].filter(Boolean).join(' · ') || 'Luxury Listing';
-        const sub = [safeStr(p['Zone'])||safeStr(p['District']), safeStr(p['Status'])].filter(Boolean).join(' · ');
-        const thumb = safeStr(p['Thumbnail_Image']).replace(/^#$/,'');
-        const img = thumb ? `<img src="${thumb}" alt="${escapeHtml(name)}" loading="lazy" onerror="this.style.display='none'">` : '';
-        return `
-          <a class="mini-card" href="details.html?id=${encodeURIComponent(id)}">
-            <div class="mini-img">${img}</div>
-            <div>
-              <div class="mini-t">${escapeHtml(name)}</div>
-              <div class="mini-s">${escapeHtml(sub || safeStr(p['Key_Selling_Points']) || '')}</div>
+    <!-- CONTENT -->
+    <section class="layout" id="contentWrap" style="display:none">
+      <!-- LEFT: GALLERY + DETAILS -->
+      <div class="leftcol">
+
+        <!-- GALLERY -->
+        <div class="card gallery" id="galleryCard">
+          <div class="stage" id="stage">
+            <img id="stageImg" alt="Listing image" />
+            <div class="shade"></div>
+
+            <button class="navbtn left" id="btnPrev" aria-label="Previous">‹</button>
+            <button class="navbtn right" id="btnNext" aria-label="Next">›</button>
+
+            <div class="stage-meta">
+              <div class="m1" id="imgCount">Image 1/1</div>
+              <div class="m2" id="imgHint">Swipe / Click</div>
             </div>
-          </a>
-        `;
-      }).join('');
+          </div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
 
-      show('secMore', true);
-    }
+        <!-- DESCRIPTION -->
+        <div class="card" style="margin-top:14px" id="descCard">
+          <div class="card-h">
+            <div>
+              <div class="card-title">Overview</div>
+              <div class="card-sub" id="ksp">—</div>
+            </div>
+          </div>
+          <div class="card-b">
+            <div id="descText" style="font-size:.95rem;line-height:1.85;color:rgba(245,237,216,0.92);white-space:pre-wrap">—</div>
+          </div>
+        </div>
 
-    // basic escape for chips/cards
-    function escapeHtml(s){
-      return String(s||'')
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'","&#039;");
-    }
+        <!-- MAP -->
+        <div class="card" style="margin-top:14px" id="mapCard">
+          <div class="card-h">
+            <div>
+              <div class="card-title">Map</div>
+              <div class="card-sub">แผนที่ / พิกัด (ถ้ามีลิงก์ Map)</div>
+            </div>
+          </div>
+          <div class="card-b">
+            <div class="iframe" id="mapFrameWrap" style="display:none">
+              <iframe id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+              <a class="btn" id="btnMap" href="#" target="_blank" rel="noopener" style="display:none">Open Map</a>
+              <a class="btn" id="btnTour" href="#" target="_blank" rel="noopener" style="display:none">Virtual Tour</a>
+              <a class="btn" id="btnFB" href="#" target="_blank" rel="noopener" style="display:none">Facebook Post</a>
+            </div>
+            <div id="noMapNote" style="margin-top:10px;color:rgba(122,155,181,0.9);font-size:.85rem;display:none">
+              ไม่มี Map_Link ในรายการนี้
+            </div>
+          </div>
+        </div>
+      </div>
 
-    // ══════════════════════════════════════════
-    // EVENTS
-    // ══════════════════════════════════════════
-    document.getElementById('prevBtn').addEventListener('click', ()=>{
-      if (imgs.length <= 1) return;
-      imgIdx = (imgIdx - 1 + imgs.length) % imgs.length;
-      renderGallery();
-    });
-    document.getElementById('nextBtn').addEventListener('click', ()=>{
-      if (imgs.length <= 1) return;
-      imgIdx = (imgIdx + 1) % imgs.length;
-      renderGallery();
-    });
+      <!-- RIGHT: PRICE + SPECS + CTA -->
+      <aside class="rightcol">
 
-    // keyboard support
-    window.addEventListener('keydown', (e)=>{
-      if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
-      if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
-    });
+        <!-- PRICE -->
+        <div class="card" id="priceCard">
+          <div class="card-h">
+            <div>
+              <div class="card-title">Pricing</div>
+              <div class="card-sub" id="priceSub">—</div>
+            </div>
+          </div>
+          <div class="card-b">
+            <div class="grid2">
+              <div class="kpi">
+                <div class="kpi-lbl" id="priceLbl">Sale Price</div>
+                <div class="kpi-val" id="priceVal">—</div>
+                <div class="kpi-sub" id="priceNote">*ราคาอาจเปลี่ยนแปลงได้</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-lbl">Listing ID</div>
+                <div class="kpi-val" id="hpIdVal">—</div>
+                <div class="kpi-sub" id="zoneVal">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    // ══════════════════════════════════════════
-    // START
-    // ══════════════════════════════════════════
-    fetchUnit();
-  </script>
-</body>
-</html>
-```
+        <!-- SPECS -->
+        <div class="card" style="margin-top:14px" id="specCard">
+          <div class="card-h">
+            <div>
+              <div class="card-title">Key Specs</div>
+              <div class="card-sub">ข้อมูลสำคัญของรายการ</div>
+            </div>
+          </div>
+          <div class="card-b">
+            <table class="spec-table" id="specTable">
+              <!-- rows injected -->
+            </table>
+          </div>
+        </div>
 
+        <!-- CONTACT CTA -->
+        <div class="card" style="margin-top:14px" id="ctaCard">
+          <div class="card-h">
+            <div>
+              <div class="card-title">Contact</div>
+              <div class="card-sub">ติดต่อเพื่อรับรายละเอียด / นัดดูบ้าน</div>
+            </div>
+          </div>
+          <div class="card-b">
+            <div class="cta">
+              <a class="btn primary" id="btnLine" href="https://line.me/R/ti/p/@qap7218t" target="_blank" rel="noopener">
+                LINE OA <span class="hint
