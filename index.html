@@ -28,13 +28,25 @@
       --thumb-w: 110px;
     }
 
-    /* Scaling for LINE Browser */
+    /* ✅ ปรับลดขนาดเฉพาะการเปิดผ่านโปรแกรม LINE ตามที่เน้นในกรอบสีแดง */
     body.is-line {
-      zoom: 0.92;
-      -moz-transform: scale(0.92);
+      zoom: 0.88; /* ลดสเกลภาพรวมลงอีกเพื่อให้ภาพดูโปร่งเหมือน Chrome */
+      -moz-transform: scale(0.88);
       -moz-transform-origin: 0 0;
     }
-    body.is-line .prop-name { font-weight: 600; letter-spacing: 0.01em; }
+    body.is-line .prop-name { 
+      font-size: 0.78rem; /* ลดขนาดหัวข้อ */
+      font-weight: 600; 
+    }
+    body.is-line .prop-specs { 
+      font-size: 0.62rem; /* ลดขนาด Bed/Bath/Sqm เพื่อไม่ให้เบียดราคา */
+    }
+    body.is-line .price { 
+      font-size: 0.88rem; /* ลดขนาดตัวเลขราคาเล็กน้อย */
+    }
+    body.is-line .tag { 
+      font-size: 0.4rem; /* ลดขนาดป้ายสถานะ */
+    }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -140,13 +152,13 @@
       z-index: 2;
     }
 
-    .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; }
+    .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
     .info-main { min-width: 0; }
     .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; }
-    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; }
+    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .price-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .price-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
     
     .tag { font-size: 0.45rem; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -191,8 +203,8 @@
         </select>
         <select id="sortFilter" class="filter-select">
           <option value="">All Prices</option>
-          <option value="low-high"> Low → Hight </option>
-          <option value="high-low"> Hight → Low </option>
+          <option value="low-high">Low → High</option>
+          <option value="high-low">High → Low</option>
         </select>
         <select id="bedFilter" class="filter-select">
           <option value="">Bedrooms</option>
@@ -302,7 +314,6 @@
         const matchQ = q === "" || text.includes(q);
         const matchArea = area === "" || p.District === area || p.Zone === area;
         
-        // Bed filter logic for 10+
         let matchBed = true;
         if (bed !== "") {
           const b = parseInt(p.Bedrooms) || 0;
