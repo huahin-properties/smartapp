@@ -6,139 +6,86 @@
   <title>Admin: Link Generator | HUA HIN PROPERTIES</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5;
-      --border: rgba(255, 255, 255, 0.1); --card-bg: #112238;
-    }
+    :root { --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.1); --card-bg: #112238; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--navy); color: var(--white);
-      font-family: 'Montserrat', 'Sarabun', sans-serif;
-      padding: 20px; display: flex; justify-content: center;
-    }
-    .container {
-      width: 100%; max-width: 600px; background: var(--card-bg);
-      padding: 30px; border-radius: 20px; border: 1px solid var(--gold);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
-    h1 { color: var(--gold); font-size: 1.5rem; margin-bottom: 5px; text-align: center; }
-    p.subtitle { text-align: center; font-size: 0.8rem; color: #7A9BB5; margin-bottom: 25px; }
-    
+    body { background-color: var(--navy); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; padding: 20px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    h1 { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 20px; }
     .form-group { margin-bottom: 18px; }
     label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 6px; font-weight: 700; }
-    input, textarea {
-      width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
-      background: rgba(0,0,0,0.2); color: white; font-family: 'Sarabun', sans-serif; outline: none;
-    }
+    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; font-family: 'Sarabun', sans-serif; outline: none; }
     input:focus { border-color: var(--gold); }
-    
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-    .result-box {
-      margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3);
-      border-radius: 10px; border: 1px solid var(--gold);
-    }
-    .url-display {
-      font-size: 0.7rem; color: #7A9BB5; word-break: break-all;
-      margin-bottom: 15px; min-height: 40px; line-height: 1.4;
-    }
-    .btn-copy {
-      width: 100%; padding: 15px; border-radius: 10px; border: none;
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-      color: var(--navy); font-weight: 800; text-transform: uppercase;
-      cursor: pointer; transition: 0.3s;
-    }
-    .btn-copy:active { transform: scale(0.98); }
-    .success-msg {
-      text-align: center; color: #2ECC8A; font-size: 0.8rem;
-      margin-top: 10px; display: none;
-    }
+    .result-box { margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; border: 1px solid var(--gold); }
+    .url-display { font-size: 0.7rem; color: #7A9BB5; word-break: break-all; margin-bottom: 15px; max-height: 80px; overflow-y: auto; line-height: 1.4; padding: 5px; background: #060F1A; border-radius: 5px; }
+    .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn { padding: 15px; border-radius: 10px; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 0.75rem; }
+    .btn-copy { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: var(--navy); }
+    .btn-shorten { background: #1B4F72; color: white; border: 1px solid #7A9BB5; }
+    .btn:active { transform: scale(0.98); }
+    .note { font-size: 0.7rem; color: #E05555; margin-top: 10px; line-height: 1.4; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>URL Generator</h1>
-  <p class="subtitle">เครื่องมือสร้างลิงก์ส่งให้ลูกค้า (Focus Mode)</p>
-
+  <h1>Link Generator 2.0</h1>
+  
   <div class="row">
-    <div class="form-group">
-      <label>งบเริ่มต้น (Min Price)</label>
-      <input type="number" id="minPrice" placeholder="เช่น 5000000">
-    </div>
-    <div class="form-group">
-      <label>งบสูงสุด (Max Price)</label>
-      <input type="number" id="maxPrice" placeholder="เช่น 6000000">
-    </div>
+    <div class="form-group"><label>งบเริ่มต้น</label><input type="number" id="minPrice" placeholder="5000000"></div>
+    <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
   </div>
 
-  <div class="form-group">
-    <label>จำนวนห้องนอน (Rooms)</label>
-    <input type="number" id="rooms" placeholder="เช่น 3">
-  </div>
-
-  <div class="form-group">
-    <label>ข้อความทักทายลูกค้า (msg)</label>
-    <textarea id="msg" rows="2" placeholder="เช่น คัดพิเศษสำหรับคุณสมชายครับ"></textarea>
-  </div>
-
-  <div class="form-group">
-    <label>URL รูปภาพแบนเนอร์ (img)</label>
-    <input type="text" id="img" placeholder="https://...">
-  </div>
-
-  <div class="row">
-    <div class="form-group">
-      <label>ชื่อปุ่มพิเศษ (btn)</label>
-      <input type="text" id="btn" placeholder="เช่น จองตอนนี้">
-    </div>
-    <div class="form-group">
-      <label>ลิงก์ของปุ่ม (link)</label>
-      <input type="text" id="link" placeholder="เช่น ลิงก์ Line">
-    </div>
-  </div>
+  <div class="form-group"><label>ข้อความพิเศษ (msg)</label><textarea id="msg" rows="2" placeholder="เช่น คัดพิเศษสำหรับคุณสมชายครับ"></textarea></div>
+  <div class="form-group"><label>URL รูปภาพ (img) *ห้ามใส่ไฟล์รูป*</label><input type="text" id="img" placeholder="https://..."></div>
 
   <div class="result-box">
-    <label>Generated Link Preview:</label>
-    <div class="url-display" id="urlPreview">https://huahin-properties.github.io/smartapp/index.html?mode=focus</div>
-    <button class="btn-copy" onclick="copyLink()">Copy Link to Clipboard</button>
-    <p class="success-msg" id="successMsg">คัดลอกลิงก์เรียบร้อย! นำไปวางใน Line ได้เลย ✨</p>
+    <label>Generated Link:</label>
+    <div class="url-display" id="urlPreview">...รอการสร้างลิงก์...</div>
+    <div class="btn-group">
+      <button class="btn btn-copy" onclick="copyLink()">Copy Long Link</button>
+      <button class="btn btn-shorten" onclick="openShortener()">Shorten Link (TinyURL)</button>
+    </div>
+    <p id="copyStatus" style="text-align:center; font-size:0.75rem; margin-top:10px; color:#2ECC8A; display:none;">Copied! ✨</p>
+    <div class="note">** คำแนะนำ: หากลิงก์ยาวเกินไป ให้ใช้ URL รูปภาพแทนการเลือกไฟล์ และกดปุ่ม Shorten เพื่อย่อลิงก์ก่อนส่งใน Line</div>
   </div>
 </div>
 
 <script>
   const BASE_URL = "https://huahin-properties.github.io/smartapp/index.html";
-  const inputs = ['minPrice', 'maxPrice', 'rooms', 'msg', 'img', 'btn', 'link'];
+  const fields = ['minPrice', 'maxPrice', 'msg', 'img'];
 
   function generateURL() {
     let url = new URL(BASE_URL);
     url.searchParams.set('mode', 'focus');
-
-    inputs.forEach(id => {
+    fields.forEach(id => {
       const val = document.getElementById(id).value.trim();
-      if (val) {
-        url.searchParams.set(id, val);
-      }
+      if (val) url.searchParams.set(id, val);
     });
-
-    document.getElementById('urlPreview').textContent = url.toString();
-    return url.toString();
+    const finalUrl = url.toString();
+    document.getElementById('urlPreview').textContent = finalUrl;
+    return finalUrl;
   }
 
-  // อัปเดตพรีวิวลิงก์ทุกครั้งที่มีการพิมพ์
-  inputs.forEach(id => {
-    document.getElementById(id).addEventListener('input', generateURL);
-  });
+  fields.forEach(id => document.getElementById(id).addEventListener('input', generateURL));
 
   function copyLink() {
-    const fullUrl = generateURL();
-    navigator.clipboard.writeText(fullUrl).then(() => {
-      const msg = document.getElementById('successMsg');
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 3000);
+    const text = generateURL();
+    navigator.clipboard.writeText(text).then(() => {
+      const status = document.getElementById('copyStatus');
+      status.style.display = 'block';
+      setTimeout(() => status.style.display = 'none', 2000);
     });
   }
-</script>
 
+  function openShortener() {
+    const longUrl = encodeURIComponent(generateURL());
+    // เปิดหน้า TinyURL เพื่อให้คุณกดย่อได้ง่ายๆ
+    window.open(`https://tinyurl.com/api-create.php?url=${longUrl}`, '_blank');
+    alert("ระบบกำลังเปิดหน้าย่อลิงก์... โปรดก๊อปปี้ลิงก์สั้นจากหน้าที่เปิดขึ้นมาใหม่ครับ");
+  }
+
+  generateURL();
+</script>
 </body>
 </html>
