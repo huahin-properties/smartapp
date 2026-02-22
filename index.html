@@ -18,13 +18,7 @@
       --rented: #5B9BD5; --row-h: 75px; --thumb-w: 110px;
     }
 
-    /* Scaling for LINE Browser */
     body.is-line { zoom: 0.88; -moz-transform: scale(0.88); -moz-transform-origin: 0 0; }
-    body.is-line .prop-name { font-size: 0.78rem; font-weight: 600; }
-    body.is-line .prop-specs { font-size: 0.62rem; }
-    body.is-line .price { font-size: 0.88rem; }
-    body.is-line .tag { font-size: 0.4rem; }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(circle at 50% -10%, rgba(27, 79, 114, 0.3) 0%, transparent 70%); z-index: -1; }
@@ -38,17 +32,14 @@
     .hero-title-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
     .hero-title { font-size: 1.8rem; font-weight: 300; margin: 0; }
     .hero-title em { font-style: normal; color: var(--gold-lt); }
-    
-    .btn-reset { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; }
+    .btn-reset { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; }
 
     .search-container { max-width: 550px; margin: 0 auto; }
     .search-box { position: relative; margin-bottom: 10px; }
     .search-input { width: 100%; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border); border-radius: 50px; padding: 10px 15px 10px 40px; color: var(--white); font-size: 0.85rem; outline: none; }
     .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 0.8rem; }
-
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border); border-radius: 8px; padding: 8px; color: var(--white); font-size: 0.75rem; appearance: none; outline: none; }
-
     .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
     .pill { white-space: nowrap; padding: 6px 14px; border-radius: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--muted); font-size: 0.65rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
     .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
@@ -57,22 +48,38 @@
     .section-title { font-size: 1.15rem; font-weight: 300; }
     .unit-count { font-size: 0.65rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
 
-    .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 6px; }
+    /* SPECIAL MESSAGE BOX */
+    .special-msg-box {
+      display: none;
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px dashed var(--gold);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 10px 15px 20px;
+      text-align: center;
+      color: var(--gold-lt);
+      font-size: 0.95rem;
+      font-weight: 400;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.8s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
+    .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 6px; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: var(--row-h); transition: 0.2s ease; }
     .card:active { transform: scale(0.98); border-color: var(--gold); }
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .hp-id { position: absolute; top: 5px; left: 7px; font-size: 0.48rem; font-weight: 300; color: rgba(255, 255, 255, 0.6); text-shadow: 0 1px 2px rgba(0,0,0,0.8); z-index: 2; }
+    .hp-id { position: absolute; top: 5px; left: 7px; font-size: 0.48rem; color: rgba(255, 255, 255, 0.6); z-index: 2; }
     .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
-    .info-main { min-width: 0; }
     .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .price-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; }
+    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
     .tag { font-size: 0.45rem; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
-    .tag-status { background: rgba(255,255,255,0.08); color: var(--white); border: 0.5px solid rgba(255,255,255,0.15); }
+    .tag-status { background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15); }
     .tag-badge { background: var(--brand-red); color: white; }
 
     .skel { height: var(--row-h); background: rgba(255,255,255,0.03); border-radius: 12px; animation: pulse 1.5s infinite; }
@@ -108,7 +115,6 @@
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" class="search-input" placeholder="Search Location, ID, or Project...">
       </div>
-
       <div class="filters-grid">
         <select id="areaFilter" class="filter-select">
           <option value="">All Zones</option>
@@ -124,10 +130,8 @@
         <select id="bedFilter" class="filter-select">
           <option value="">Bedrooms</option>
           <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
-          <option value="10plus">10+</option>
         </select>
       </div>
-
       <div class="pill-container" id="pillBox">
         <div class="pill active" data-f="all">All</div>
         <div class="pill" data-f="Sale">Sale</div>
@@ -137,6 +141,11 @@
       </div>
     </div>
   </section>
+
+  <div id="specialMsgBox" class="special-msg-box">
+    <span style="font-size: 1.2rem;">✨</span>
+    <span id="specialMsgText"></span>
+  </div>
 
   <div class="section-bar">
     <h2 class="section-title" id="barTitle">Luxury Collections</h2>
@@ -151,13 +160,20 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     let rawData = [];
     
-    // ดึงค่า Parameters จาก URL
     const urlParams = new URLSearchParams(window.location.search);
     const isFocusMode = urlParams.get('mode') === 'focus';
+    const specialMsg = urlParams.get('msg');
     
+    // ตั้งค่า Focus Mode และข้อความพิเศษ
     if (isFocusMode) {
       document.body.classList.add('mode-focus');
       document.getElementById('barTitle').textContent = "Selected Properties";
+      
+      if (specialMsg) {
+        const msgBox = document.getElementById('specialMsgBox');
+        document.getElementById('specialMsgText').textContent = specialMsg;
+        msgBox.style.display = 'flex';
+      }
     }
 
     function checkLineBrowser() {
@@ -167,7 +183,6 @@
 
     async function getProperties() {
       try {
-        // ส่ง parameters ทั้งหมดไปให้ Apps Script กรองข้อมูล
         const fetchUrl = SCRIPT_URL + '?mode=getUnitList&' + urlParams.toString();
         const response = await fetch(fetchUrl);
         const json = await response.json();
@@ -176,23 +191,16 @@
       } catch (err) { console.error(err); }
     }
 
-    function getNumPrice(p) {
-      const priceVal = p.Listing_Type === 'Sale' ? p.Sale_Price : p.Monthly_Rent;
-      return parseFloat(String(priceVal || "0").replace(/[^0-9.]/g, '')) || 0;
-    }
-
     function renderList(items) {
       const grid = document.getElementById('propGrid');
       document.getElementById('unitCount').textContent = `${items.length} UNITS`;
       if(items.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No results found matching your budget.</div>';
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No results found matching your criteria.</div>';
         return;
       }
       grid.innerHTML = items.map(p => {
-        const pNum = getNumPrice(p);
+        const pNum = parseFloat(String(p.Sale_Price || "0").replace(/[^0-9.]/g, '')) || 0;
         const dPrice = pNum === 0 ? "—" : "฿" + pNum.toLocaleString();
-        
-        // ส่งพารามิเตอร์ต่อหน้า Detail
         const detailLink = `details.html?id=${p.HP_ID}${isFocusMode ? '&mode=focus' : ''}`;
 
         return `
@@ -230,20 +238,26 @@
         const text = `${p.District} ${p.HP_ID} ${p.Project_Name} ${p.Zone}`.toLowerCase();
         const matchQ = q === "" || text.includes(q);
         const matchArea = area === "" || p.District === area || p.Zone === area;
-        let matchBed = bed === "" || (bed === "10plus" ? parseInt(p.Bedrooms) >= 10 : parseInt(p.Bedrooms) == parseInt(bed));
+        let matchBed = bed === "" || parseInt(p.Bedrooms) == parseInt(bed);
         const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
         return matchQ && matchArea && matchBed && matchPill;
       });
 
-      if (sort === "low-high") filtered.sort((a, b) => getNumPrice(a) - getNumPrice(b));
-      else if (sort === "high-low") filtered.sort((a, b) => getNumPrice(b) - getNumPrice(a));
+      if (sort === "low-high") filtered.sort((a, b) => {
+        const pA = parseFloat(String(a.Sale_Price || "0").replace(/[^0-9.]/g, ''));
+        const pB = parseFloat(String(b.Sale_Price || "0").replace(/[^0-9.]/g, ''));
+        return pA - pB;
+      });
+      else if (sort === "high-low") filtered.sort((a, b) => {
+        const pA = parseFloat(String(a.Sale_Price || "0").replace(/[^0-9.]/g, ''));
+        const pB = parseFloat(String(b.Sale_Price || "0").replace(/[^0-9.]/g, ''));
+        return pB - pA;
+      });
 
       renderList(filtered);
     }
 
-    function resetFilters() {
-      location.href = location.pathname; // ล้างพารามิเตอร์ URL ทั้งหมดกลับสู่ค่าเริ่มต้น
-    }
+    function resetFilters() { location.href = location.pathname; }
 
     document.getElementById('searchInput').addEventListener('input', filterData);
     document.getElementById('areaFilter').addEventListener('change', filterData);
