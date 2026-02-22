@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin: Link Generator | HUA HIN PROPERTIES</title>
+  <title>Admin: Smart Link Generator | HUA HIN PROPERTIES</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root { --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.1); --card-bg: #112238; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; padding: 20px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    h1 { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 20px; }
+    h1 { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
     .form-group { margin-bottom: 18px; }
     label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 6px; font-weight: 700; }
     input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; font-family: 'Sarabun', sans-serif; outline: none; }
     input:focus { border-color: var(--gold); }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .result-box { margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; border: 1px solid var(--gold); }
-    .url-display { font-size: 0.7rem; color: #7A9BB5; word-break: break-all; margin-bottom: 15px; max-height: 80px; overflow-y: auto; line-height: 1.4; padding: 5px; background: #060F1A; border-radius: 5px; }
+    .url-display { font-size: 0.7rem; color: #7A9BB5; word-break: break-all; margin-bottom: 15px; max-height: 80px; overflow-y: auto; line-height: 1.4; padding: 10px; background: #060F1A; border-radius: 5px; border: 1px solid var(--border); }
     .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .btn { padding: 15px; border-radius: 10px; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 0.75rem; }
     .btn-copy { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: var(--navy); }
     .btn-shorten { background: #1B4F72; color: white; border: 1px solid #7A9BB5; }
-    .btn:active { transform: scale(0.98); }
-    .note { font-size: 0.7rem; color: #E05555; margin-top: 10px; line-height: 1.4; }
+    .btn:active { transform: scale(0.95); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .success-msg { text-align: center; color: #2ECC8A; font-size: 0.8rem; margin-top: 10px; display: none; }
+    .warning { color: #E05555; font-size: 0.7rem; margin-top: 5px; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -32,22 +34,26 @@
   <h1>Link Generator 2.0</h1>
   
   <div class="row">
-    <div class="form-group"><label>งบเริ่มต้น</label><input type="number" id="minPrice" placeholder="5000000"></div>
-    <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
+    <div class="form-group"><label>งบเริ่มต้น (Min Price)</label><input type="number" id="minPrice" placeholder="5000000"></div>
+    <div class="form-group"><label>งบสูงสุด (Max Price)</label><input type="number" id="maxPrice" placeholder="6000000"></div>
   </div>
 
   <div class="form-group"><label>ข้อความพิเศษ (msg)</label><textarea id="msg" rows="2" placeholder="เช่น คัดพิเศษสำหรับคุณสมชายครับ"></textarea></div>
-  <div class="form-group"><label>URL รูปภาพ (img) *ห้ามใส่ไฟล์รูป*</label><input type="text" id="img" placeholder="https://..."></div>
+  <div class="form-group">
+    <label>URL รูปภาพแบนเนอร์ (img)</label>
+    <input type="text" id="img" placeholder="https://...">
+    <p class="warning">** ห้ามวางไฟล์รูปภาพโดยตรง ให้ใช้เป็น URL ลิงก์เท่านั้น</p>
+  </div>
 
   <div class="result-box">
-    <label>Generated Link:</label>
-    <div class="url-display" id="urlPreview">...รอการสร้างลิงก์...</div>
+    <label>Preview & Results:</label>
+    <div class="url-display" id="urlPreview">https://huahin-properties.github.io/smartapp/index.html?mode=focus</div>
+    
     <div class="btn-group">
-      <button class="btn btn-copy" onclick="copyLink()">Copy Long Link</button>
-      <button class="btn btn-shorten" onclick="openShortener()">Shorten Link (TinyURL)</button>
+      <button class="btn btn-copy" onclick="copyLink()">Copy Link</button>
+      <button class="btn btn-shorten" id="shortBtn" onclick="shortenLink()">Shorten with TinyURL</button>
     </div>
-    <p id="copyStatus" style="text-align:center; font-size:0.75rem; margin-top:10px; color:#2ECC8A; display:none;">Copied! ✨</p>
-    <div class="note">** คำแนะนำ: หากลิงก์ยาวเกินไป ให้ใช้ URL รูปภาพแทนการเลือกไฟล์ และกดปุ่ม Shorten เพื่อย่อลิงก์ก่อนส่งใน Line</div>
+    <p class="success-msg" id="successMsg">คัดลอกลงคลิปบอร์ดเรียบร้อย! ✨</p>
   </div>
 </div>
 
@@ -62,27 +68,48 @@
       const val = document.getElementById(id).value.trim();
       if (val) url.searchParams.set(id, val);
     });
-    const finalUrl = url.toString();
-    document.getElementById('urlPreview').textContent = finalUrl;
-    return finalUrl;
+    document.getElementById('urlPreview').textContent = url.toString();
+    return url.toString();
   }
 
   fields.forEach(id => document.getElementById(id).addEventListener('input', generateURL));
 
   function copyLink() {
-    const text = generateURL();
+    const text = document.getElementById('urlPreview').textContent;
     navigator.clipboard.writeText(text).then(() => {
-      const status = document.getElementById('copyStatus');
-      status.style.display = 'block';
-      setTimeout(() => status.style.display = 'none', 2000);
+      showSuccess();
     });
   }
 
-  function openShortener() {
-    const longUrl = encodeURIComponent(generateURL());
-    // เปิดหน้า TinyURL เพื่อให้คุณกดย่อได้ง่ายๆ
-    window.open(`https://tinyurl.com/api-create.php?url=${longUrl}`, '_blank');
-    alert("ระบบกำลังเปิดหน้าย่อลิงก์... โปรดก๊อปปี้ลิงก์สั้นจากหน้าที่เปิดขึ้นมาใหม่ครับ");
+  async function shortenLink() {
+    const longUrl = generateURL();
+    const btn = document.getElementById('shortBtn');
+    btn.disabled = true;
+    btn.textContent = "Shortening...";
+
+    try {
+      // ใช้ TinyURL API แบบง่าย
+      const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
+      if (response.ok) {
+        const shortUrl = await response.text();
+        document.getElementById('urlPreview').textContent = shortUrl;
+        navigator.clipboard.writeText(shortUrl);
+        showSuccess();
+      } else {
+        alert("ไม่สามารถย่อลิงก์ได้ในขณะนี้ กรุณาใช้ลิงก์ยาวแทน");
+      }
+    } catch (err) {
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อระบบย่อลิงก์");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Shorten with TinyURL";
+    }
+  }
+
+  function showSuccess() {
+    const msg = document.getElementById('successMsg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
   }
 
   generateURL();
