@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin: Smart Link Generator V4 | HUA HIN PROPERTIES</title>
+  <title>Smart Generator V4 | HUA HIN PROPERTIES</title>
   <style>
-    :root { --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --card-bg: #112238; }
+    :root { --navy: #0B1829; --gold: #C9A84C; --white: #FDFAF5; --card-bg: #112238; }
     body { background-color: var(--navy); color: var(--white); font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
     h1 { color: var(--gold); font-size: 1.4rem; text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 15px; }
     .form-group { margin-bottom: 20px; }
     label { display: block; font-size: 0.75rem; color: var(--gold); margin-bottom: 8px; font-weight: bold; text-transform: uppercase; }
-    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; outline: none; }
+    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; outline: none; font-size: 0.9rem; }
+    input:focus { border-color: var(--gold); }
     .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--gold), #E4C46A); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; }
-    .btn-main:disabled { opacity: 0.5; }
     .result { margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; text-align: center; border: 1px dashed var(--gold); }
-    #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 15px 0; display: block; }
+    #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 15px 0; display: block; font-size: 0.95rem; }
     .action-row { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 10px; }
-    .tip { font-size: 0.7rem; color: #7A9BB5; margin-top: 15px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -29,18 +28,18 @@
     <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
   </div>
 
-  <div class="form-group"><label>ข้อความทักทายลูกค้า (MSG)</label><input type="text" id="msg" placeholder="สวัสดีครับคุณสมชาย"></div>
-  <div class="form-group"><label>Google Drive Photo ID (IMG)</label><input type="text" id="img" placeholder="วางเฉพาะรหัส ID"></div>
+  <div class="form-group"><label>ข้อความทักทายลูกค้า</label><input type="text" id="msg" placeholder="เช่น สวัสดีครับคุณสมชาย"></div>
+  <div class="form-group"><label>Google Drive Photo ID</label><input type="text" id="img" placeholder="วางไอดีรูปภาพที่นี่"></div>
   
   <div class="form-group">
-    <label>ปุ่มกดพิเศษ (Actions)</label>
+    <label>ปุ่มกดพิเศษ (ACTIONS)</label>
     <div class="action-row">
-      <input type="text" id="btn1_lbl" placeholder="ป้ายกำกับ 1 เช่น ดูแผนที่">
-      <input type="text" id="btn1_url" placeholder="ลิงก์ (URL) 1">
+      <input type="text" id="btn1_lbl" placeholder="ป้ายกำกับ 1 (เช่น ดูแผนที่)">
+      <input type="text" id="btn1_url" placeholder="ลิงก์ URL 1">
     </div>
     <div class="action-row">
-      <input type="text" id="btn2_lbl" placeholder="ป้ายกำกับ 2 เช่น ทัก Line">
-      <input type="text" id="btn2_url" placeholder="ลิงก์ (URL) 2">
+      <input type="text" id="btn2_lbl" placeholder="ป้ายกำกับ 2 (เช่น ทัก Line)">
+      <input type="text" id="btn2_url" placeholder="ลิงก์ URL 2">
     </div>
   </div>
   
@@ -49,11 +48,7 @@
   <div id="resultBox" class="result">
     <label>ลิงก์ส่วนตัวของคุณ:</label>
     <span id="shortUrl"></span>
-    <p style="font-size: 0.8rem; color: #2ECC8A; font-weight: bold;">✓ คัดลอกลงคลิปบอร์ดแล้ว!</p>
-  </div>
-
-  <div class="tip">
-    * หากไม่กรอกช่องไหน ระบบจะซ่อนส่วนนั้นอัตโนมัติในหน้าลูกค้าครับ
+    <p style="font-size: 0.8rem; color: #2ECC8A; font-weight: bold;">✓ คัดลอกแล้ว! นำไปวางในแชทได้เลย</p>
   </div>
 </div>
 
@@ -65,11 +60,15 @@
     const btn = document.getElementById('btnCreate');
     btn.disabled = true; btn.textContent = "กำลังสร้าง...";
 
+    // ล้างรหัส ID ให้สะอาด (ลบ "1 " หรือ เว้นวรรค)
+    let driveId = document.getElementById('img').value.trim();
+    driveId = driveId.replace(/^1\s+/, '').replace(/\s/g, ''); 
+
     const params = {
       minPrice: document.getElementById('minPrice').value,
       maxPrice: document.getElementById('maxPrice').value,
       msg: document.getElementById('msg').value,
-      img: document.getElementById('img').value.trim(),
+      img: driveId,
       btn1: document.getElementById('btn1_lbl').value,
       url1: document.getElementById('btn1_url').value,
       btn2: document.getElementById('btn2_lbl').value,
@@ -77,12 +76,7 @@
       mode: 'focus'
     };
 
-    // ล้างรหัส ID ที่มีช่องว่างหรือมีเลข 1 นำหน้าแบบที่คุณเจอปัญหา
-    if (params.img) {
-      params.img = params.img.replace(/^1\s+/, '').replace(/\s/g, '');
-    }
-
-    // ลบค่าที่ว่างออก
+    // ลบช่องที่ว่างเปล่าออกเพื่อประหยัดพื้นที่
     Object.keys(params).forEach(key => !params[key] && delete params[key]);
     const queryStr = new URLSearchParams(params).toString();
     
@@ -95,10 +89,7 @@
         document.getElementById('shortUrl').textContent = finalLink;
         document.getElementById('resultBox').style.display = 'block';
         
-        const el = document.createElement('textarea');
-        el.value = finalLink; document.body.appendChild(el);
-        el.select(); document.execCommand('copy');
-        document.body.removeChild(el);
+        navigator.clipboard.writeText(finalLink);
       }
     } catch (e) { alert("เกิดข้อผิดพลาดในการเชื่อมต่อ"); }
     
