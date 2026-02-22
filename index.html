@@ -48,35 +48,59 @@
     .section-title { font-size: 1.15rem; font-weight: 300; }
     .unit-count { font-size: 0.65rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
 
-    /* SPECIAL MESSAGE BOX */
+    /* PERSONALIZED LANDING BOX (ULTIMATE) */
     .special-msg-box {
       display: none;
-      background: rgba(201, 168, 76, 0.08);
-      border: 1px dashed var(--gold);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px 15px 20px;
-      text-align: center;
-      color: var(--gold-lt);
-      font-size: 0.95rem;
-      font-weight: 400;
-      justify-content: center;
+      background: rgba(11, 24, 41, 0.95);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 10px 12px 25px;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      animation: fadeIn 0.8s ease;
+      gap: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      animation: slideIn 0.8s ease;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .special-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: none;
+    }
+    .special-text {
+      color: var(--gold-lt);
+      font-size: 1rem;
+      line-height: 1.5;
+      text-align: center;
+      white-space: pre-line;
+    }
+    .special-btn {
+      display: none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: var(--navy-dark);
+      padding: 10px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+    .special-btn:active { transform: scale(0.95); }
 
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 6px; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: var(--row-h); transition: 0.2s ease; }
-    .card:active { transform: scale(0.98); border-color: var(--gold); }
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .hp-id { position: absolute; top: 5px; left: 7px; font-size: 0.48rem; color: rgba(255, 255, 255, 0.6); z-index: 2; }
     .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
     .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prop-specs { font-size: 0.7rem; color: var(--muted); margin: 1px 0; }
-    .prop-zone { font-size: 0.65rem; color: var(--muted); opacity: 0.6; }
+    .prop-specs { font-size: 0.7rem; color: var(--muted); }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
     .tag { font-size: 0.45rem; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
     .tag-status { background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15); }
@@ -94,6 +118,7 @@
       :root { --row-h: 90px; --thumb-w: 140px; }
       .prop-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .hero-title { font-size: 2.5rem; }
+      .special-msg-box { margin: 10px auto 30px; max-width: 700px; }
     }
   </style>
 </head>
@@ -143,8 +168,9 @@
   </section>
 
   <div id="specialMsgBox" class="special-msg-box">
-    <span style="font-size: 1.2rem;">✨</span>
-    <span id="specialMsgText"></span>
+    <img id="specialImg" class="special-img" src="" alt="Special Message">
+    <div id="specialMsgText" class="special-text"></div>
+    <a id="specialBtn" class="special-btn" href="#" target="_blank"></a>
   </div>
 
   <div class="section-bar">
@@ -162,17 +188,31 @@
     
     const urlParams = new URLSearchParams(window.location.search);
     const isFocusMode = urlParams.get('mode') === 'focus';
-    const specialMsg = urlParams.get('msg');
     
-    // ตั้งค่า Focus Mode และข้อความพิเศษ
+    // ตั้งค่า Landing Page ส่วนบุคคล
     if (isFocusMode) {
       document.body.classList.add('mode-focus');
       document.getElementById('barTitle').textContent = "Selected Properties";
       
-      if (specialMsg) {
-        const msgBox = document.getElementById('specialMsgBox');
-        document.getElementById('specialMsgText').textContent = specialMsg;
-        msgBox.style.display = 'flex';
+      const msg = urlParams.get('msg');
+      const img = urlParams.get('img');
+      const btn = urlParams.get('btn');
+      const link = urlParams.get('link');
+
+      if (msg || img || btn) {
+        document.getElementById('specialMsgBox').style.display = 'flex';
+        if (msg) document.getElementById('specialMsgText').textContent = msg;
+        if (img) {
+          const imgEl = document.getElementById('specialImg');
+          imgEl.src = img;
+          imgEl.style.display = 'block';
+        }
+        if (btn && link) {
+          const btnEl = document.getElementById('specialBtn');
+          btnEl.textContent = btn;
+          btnEl.href = link;
+          btnEl.style.display = 'inline-block';
+        }
       }
     }
 
@@ -195,7 +235,7 @@
       const grid = document.getElementById('propGrid');
       document.getElementById('unitCount').textContent = `${items.length} UNITS`;
       if(items.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No results found matching your criteria.</div>';
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No matches found.</div>';
         return;
       }
       grid.innerHTML = items.map(p => {
