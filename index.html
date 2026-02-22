@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Hua Hin Properties | Exclusive Selection</title>
+  <title>Hua Hin Properties | Focus Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08); --card-bg: rgba(11, 24, 41, 0.9); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; }
     
+    /* SPECIAL PERSONALIZED HEADER */
     .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
     #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; border: 1px solid rgba(255,255,255,0.1); }
-    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; white-space: pre-line; }
+    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; white-space: pre-line; }
 
+    /* ACTION BAR */
     .action-bar { display: none; justify-content: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
-    .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+    .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+    .action-btn:hover { background: var(--gold); color: var(--navy); }
 
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: 85px; }
@@ -23,8 +26,8 @@
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .card-info { flex: 1; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; min-width: 0; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
-
-    body.mode-focus header, body.mode-focus .hero { display: none !important; }
+    
+    body.mode-focus header, body.mode-focus .hero, body.mode-focus .search-container { display: none !important; }
     body.mode-focus main { padding-top: 20px !important; }
     @media (min-width: 768px) { .prop-list { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
   </style>
@@ -37,8 +40,8 @@
     <div id="actionBar" class="action-bar"></div>
   </div>
 
-  <div style="text-align:center; padding: 10px; font-size: 0.8rem; color: var(--gold); opacity: 0.7;" id="focusBar">
-    SELECTED PROPERTIES <span id="unitCount">...</span>
+  <div style="text-align:center; padding: 15px; font-size: 0.85rem; color: var(--gold); letter-spacing: 1px;" id="focusBar">
+    SELECTED PROPERTIES <span id="unitCount"></span>
   </div>
 
   <main class="prop-list" id="propGrid"></main>
@@ -51,7 +54,7 @@
     async function init() {
       let finalParams = urlParams;
 
-      // ถ้าเป็นลิงก์ย่อ ให้ไปดึงข้อมูล "ล่าสุด" จาก Google Sheet
+      // 1. ดึงข้อมูลพารามิเตอร์ล่าสุด
       if (shortId) {
         try {
           const res = await fetch(`${SCRIPT_URL}?s=${shortId}`);
@@ -60,12 +63,14 @@
         } catch (e) { console.error(e); }
       }
 
+      // 2. ตั้งค่าโหมด Focus และแสดง Content พิเศษ
       const isFocus = finalParams.get('mode') === 'focus';
       if (isFocus) {
         document.body.classList.add('mode-focus');
         renderSpecialContent(finalParams);
       }
 
+      // 3. ดึงรายการบ้านตามเงื่อนไข
       getProperties(finalParams);
     }
 
@@ -75,24 +80,50 @@
       const btn1 = params.get('btn1'), url1 = params.get('url1');
       const btn2 = params.get('btn2'), url2 = params.get('url2');
 
+      const header = document.getElementById('specialHeader');
+      const msgDiv = document.getElementById('specialMsg');
+      const imgEl = document.getElementById('specialImg');
+      const bar = document.getElementById('actionBar');
+
       if (msg || imgId || btn1 || btn2) {
-        document.getElementById('specialHeader').style.display = 'block';
-        if (msg) document.getElementById('specialMsg').textContent = msg;
+        header.style.display = 'block';
+        
+        // แสดงข้อความถ้ามี
+        if (msg) {
+          msgDiv.textContent = msg;
+          msgDiv.style.display = 'block';
+        } else {
+          msgDiv.style.display = 'none';
+        }
+        
+        // แสดงรูปแบนเนอร์ถ้ามี
         if (imgId) {
-          const imgEl = document.getElementById('specialImg');
-          imgEl.src = `https://lh3.googleusercontent.com/d/${imgId.replace(/\s/g, '')}`;
+          const cleanId = imgId.replace(/\s/g, ''); 
+          imgEl.src = `https://lh3.googleusercontent.com/d/${cleanId}`;
           imgEl.style.display = 'block';
+          imgEl.onerror = function() { this.style.display = 'none'; }; 
         }
 
-        let barHtml = '';
-        if (btn1 && url1) barHtml += `<a href="${url1}" class="action-btn">📍 ${btn1}</a>`;
-        if (btn2 && url2) barHtml += `<a href="${url2}" class="action-btn">💬 ${btn2}</a>`;
-        if (barHtml) {
-          const bar = document.getElementById('actionBar');
-          bar.innerHTML = barHtml;
+        // แสดงปุ่มถ้ามีข้อมูลทั้งชื่อและลิงก์
+        let buttonsHtml = '';
+        if (btn1 && url1) buttonsHtml += createButton(btn1, url1);
+        if (btn2 && url2) buttonsHtml += createButton(btn2, url2);
+
+        if (buttonsHtml) {
+          bar.innerHTML = buttonsHtml;
           bar.style.display = 'flex';
+        } else {
+          bar.style.display = 'none';
         }
       }
+    }
+
+    function createButton(label, url) {
+      let icon = '🔗';
+      if (label.includes('แผนที่') || label.includes('Map')) icon = '📍';
+      if (label.includes('ไลน์') || label.includes('Line')) icon = '💬';
+      if (label.includes('โทร') || label.includes('Call')) icon = '📞';
+      return `<a href="${url}" class="action-btn" target="_blank">${icon} ${label}</a>`;
     }
 
     async function getProperties(params) {
@@ -105,9 +136,9 @@
           const pPrice = parseFloat(String(p.Sale_Price).replace(/[^0-9.]/g, '')) || 0;
           return `
             <a href="details.html?id=${p.HP_ID}&mode=focus" class="card">
-              <div class="card-img"><img src="${p.Thumbnail_Image}"></div>
+              <div class="card-img"><img src="${p.Thumbnail_Image}" loading="lazy"></div>
               <div class="card-info">
-                <div style="min-width:0;"><div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.Project_Name}</div><div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.District}</div></div>
+                <div style="min-width:0;"><div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.Project_Name}</div><div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.Zone}</div></div>
                 <div class="price">฿${pPrice.toLocaleString()}</div>
               </div>
             </a>`;
