@@ -1,70 +1,91 @@
-<style>
-  /* ... โค้ด CSS เดิมของคุณทั้งหมด ... */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Hua Hin Properties | Luxury Catalog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A;
+      --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(11, 24, 41, 0.9); --thumb-w: 110px; --row-h: 75px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; }
+    header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
+    .logo { font-size: 1.15rem; font-weight: 700; color: var(--gold); text-decoration: none; }
+    .hero { padding: 75px 15px 10px; text-align: center; }
+    .section-bar { display: flex; justify-content: space-between; align-items: baseline; padding: 15px; border-top: 1px solid var(--border); }
+    .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: var(--row-h); }
+    .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .card-info { flex: 1; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; min-width: 0; }
+    .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prop-specs { font-size: 0.7rem; color: var(--muted); }
+    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); text-align: right; }
+    .tag { font-size: 0.45rem; padding: 2px 6px; border-radius: 3px; background: rgba(255,255,255,0.08); text-transform: uppercase; }
 
-  /* FOCUS MODE: สั่งซ่อนสิ่งที่รบกวนสายตา */
-  body.mode-focus header,
-  body.mode-focus .hero,
-  body.mode-focus .search-container,
-  body.mode-focus .section-bar .section-title {
-    display: none !important;
-  }
-  body.mode-focus main {
-    padding-top: 20px !important;
-  }
-  body.mode-focus .section-bar {
-    border-top: none;
-    justify-content: center;
-  }
-</style>
+    /* FOCUS MODE */
+    body.mode-focus header, body.mode-focus .hero { display: none !important; }
+    body.mode-focus main { padding-top: 20px !important; }
+    body.mode-focus .section-bar { border-top: none; justify-content: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#" class="logo">HUA HIN<span>.PROPERTIES</span></a>
+  </header>
+  <section class="hero">
+    <h1>Prime Asset Catalog</h1>
+  </section>
+  <div class="section-bar">
+    <h2 id="titleText">Luxury Collections</h2>
+    <span id="unitCount">Loading...</span>
+  </div>
+  <main class="prop-list" id="propGrid"></main>
 
-<script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
-  const urlParams = new URLSearchParams(window.location.search);
-  const isFocusMode = urlParams.get('mode') === 'focus';
-  
-  if (isFocusMode) document.body.classList.add('mode-focus');
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
+    const urlParams = new URLSearchParams(window.location.search);
+    const isFocusMode = urlParams.get('mode') === 'focus';
+    if (isFocusMode) document.body.classList.add('mode-focus');
 
-  async function getProperties() {
-    try {
-      // ส่งค่า Filter ไปยัง Server โดยตรง
-      const fetchUrl = `${SCRIPT_URL}?mode=getUnitList&${urlParams.toString()}`;
-      const response = await fetch(fetchUrl);
-      const json = await response.json();
-      renderList(json.data);
-    } catch (err) { console.error(err); }
-  }
+    async function getProperties() {
+      try {
+        const fetchUrl = `${SCRIPT_URL}?mode=getUnitList&${urlParams.toString()}`;
+        const response = await fetch(fetchUrl);
+        const json = await response.json();
+        renderList(json.data);
+      } catch (err) { console.error(err); }
+    }
 
-  function renderList(items) {
-    const grid = document.getElementById('propGrid');
-    document.getElementById('unitCount').textContent = `${items.length} UNITS FOUND FOR YOU`;
-    
-    grid.innerHTML = items.map(p => {
-      // ตรวจสอบว่าต้องรักษาโหมด Focus ไปหน้าถัดไปไหม
-      const detailLink = `details.html?id=${p.HP_ID}${isFocusMode ? '&mode=focus' : ''}`;
+    function renderList(items) {
+      const grid = document.getElementById('propGrid');
+      document.getElementById('unitCount').textContent = `${items.length} UNITS`;
+      if (isFocusMode) document.getElementById('titleText').textContent = "Selected for You";
       
-      const pNum = parseFloat(String(p.Sale_Price || "0").replace(/[^0-9.]/g, '')) || 0;
-      const dPrice = pNum === 0 ? "—" : "฿" + pNum.toLocaleString();
-      
-      return `
-        <a href="${detailLink}" class="card">
-          <div class="card-img">
-            <span class="hp-id">#${p.HP_ID}</span>
-            <img src="${p.Thumbnail_Image}" alt="property" loading="lazy">
-          </div>
-          <div class="card-info">
-            <div class="info-main">
-              <div class="prop-name">${p.Project_Name || p.Listing_Type}</div>
-              <div class="prop-specs">${p.Bedrooms} Bed | ${p.Bathrooms} Bath | ${p.Living_Area_sq_m} sqm</div>
-              <div class="prop-zone">${p.Zone}</div>
+      grid.innerHTML = items.map(p => {
+        const detailLink = `details.html?id=${p.HP_ID}${isFocusMode ? '&mode=focus' : ''}`;
+        const pNum = parseFloat(String(p.Sale_Price || "0").replace(/[^0-9.]/g, '')) || 0;
+        return `
+          <a href="${detailLink}" class="card">
+            <div class="card-img">
+              <img src="${p.Thumbnail_Image}" alt="property">
             </div>
-            <div class="price-side">
-              <div class="price">${dPrice}</div>
-              <span class="tag tag-status">${p.Status}</span>
+            <div class="card-info">
+              <div>
+                <div class="prop-name">${p.Project_Name}</div>
+                <div class="prop-specs">${p.Bedrooms} Bed | ${p.Bathrooms} Bath</div>
+                <div class="tag">${p.Status}</div>
+              </div>
+              <div class="price">฿${pNum.toLocaleString()}</div>
             </div>
-          </div>
-        </a>`;
-    }).join('');
-  }
-  
-  getProperties();
-</script>
+          </a>`;
+      }).join('');
+    }
+    getProperties();
+  </script>
+</body>
+</html>
