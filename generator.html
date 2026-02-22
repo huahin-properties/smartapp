@@ -1,85 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin: Smart Link Generator | HUA HIN PROPERTIES</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>Admin: Smart Shortener | HUA HIN PROPERTIES</title>
   <style>
-    :root { --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.1); --card-bg: #112238; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: var(--navy); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; padding: 20px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    h1 { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-    .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 6px; font-weight: 700; }
-    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; font-family: 'Sarabun', sans-serif; outline: none; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .result-box { margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; border: 1px solid var(--gold); }
-    .url-display { font-size: 0.8rem; color: #7A9BB5; word-break: break-all; margin-bottom: 15px; padding: 10px; background: #060F1A; border-radius: 5px; border: 1px solid var(--border); }
-    .btn-copy { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: var(--navy); font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-    .btn-copy:active { transform: scale(0.95); }
-    .guide-box { margin-top: 15px; font-size: 0.7rem; color: #7A9BB5; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 10px; }
-    .success-msg { text-align: center; color: #2ECC8A; font-size: 0.8rem; margin-top: 10px; display: none; }
+    :root { --navy: #0B1829; --gold: #C9A84C; --white: #FDFAF5; --card-bg: #112238; }
+    body { background: var(--navy); color: var(--white); font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 500px; background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid var(--gold); }
+    h1 { color: var(--gold); font-size: 1.2rem; text-align: center; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-size: 0.7rem; color: var(--gold); margin-bottom: 5px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; box-sizing: border-box; }
+    .btn-main { width: 100%; padding: 15px; border-radius: 8px; border: none; background: var(--gold); color: var(--navy); font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .result { margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; display: none; text-align: center; }
+    #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 10px 0; display: block; }
   </style>
 </head>
 <body>
-
 <div class="container">
-  <h1>URL Generator (Short Link)</h1>
+  <h1>สร้างลิงก์ย่อส่วนตัว</h1>
+  <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
+  <div class="form-group"><label>ข้อความทักทาย</label><input type="text" id="msg" placeholder="สวัสดีครับคุณสมชาย"></div>
+  <div class="form-group"><label>Google Drive ID รูปภาพ</label><input type="text" id="img" placeholder="วางเฉพาะรหัส ID"></div>
   
-  <div class="row">
-    <div class="form-group"><label>งบเริ่มต้น</label><input type="number" id="minPrice" placeholder="5000000"></div>
-    <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
-  </div>
+  <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์และคัดลอก</button>
 
-  <div class="form-group"><label>ข้อความพิเศษ (msg)</label><textarea id="msg" rows="2" placeholder="เช่น คัดพิเศษสำหรับคุณสมชายครับ"></textarea></div>
-  <div class="form-group">
-    <label>Google Drive Photo ID (img)</label>
-    <input type="text" id="img" placeholder="วางเฉพาะรหัส ID ของรูปภาพ เช่น 1xAb2Cd3Ef...">
-  </div>
-
-  <div class="result-box">
-    <label>Professional Link:</label>
-    <div class="url-display" id="urlPreview">...กรอกข้อมูลเพื่อสร้างลิงก์...</div>
-    <button class="btn-copy" onclick="copyLink()">Copy Professional Link</button>
-    <p class="success-msg" id="successMsg">คัดลอกลิงก์เรียบร้อย! ✨</p>
-  </div>
-
-  <div class="guide-box">
-    <strong>💡 วิธีทำรูปให้สั้นและน่าเชื่อถือ:</strong><br>
-    1. อัปโหลดรูปแบนเนอร์ขึ้น Google Drive<br>
-    2. ตั้งค่ารูปเป็น "ทุกคนที่มีลิงก์ดูได้"<br>
-    3. ก๊อปปี้รหัส ID ของรูป (ตัวอักษรยาวๆ ในลิงก์ Drive) มาวางในช่องด้านบน<br>
-    <em>*วิธีนี้ลิงก์จะสั้นและไม่ต้องเข้าเว็บอื่นที่ดูไม่ปลอดภัย*</em>
+  <div id="resultBox" class="result">
+    <label>ลิงก์ย่อของคุณ (Professional):</label>
+    <span id="shortUrl"></span>
+    <p style="font-size: 0.7rem; color: #2ECC8A;">คัดลอกแล้ว! นำไปวางใน Line ได้ทันที</p>
   </div>
 </div>
 
 <script>
-  const BASE_URL = "https://huahin-properties.github.io/smartapp/index.html";
-  const fields = ['minPrice', 'maxPrice', 'msg', 'img'];
+  // ** เปลี่ยนเป็น URL ของ Google Script ของคุณที่กด Deploy ล่าสุด **
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
+  const APP_URL = "https://huahin-properties.github.io/smartapp/index.html";
 
-  function generateURL() {
-    let url = new URL(BASE_URL);
-    url.searchParams.set('mode', 'focus');
-    fields.forEach(id => {
-      const val = document.getElementById(id).value.trim();
-      if (val) url.searchParams.set(id, val);
-    });
-    const finalUrl = url.toString();
-    document.getElementById('urlPreview').textContent = finalUrl;
-    return finalUrl;
-  }
+  async function createShortLink() {
+    const btn = document.getElementById('btnCreate');
+    btn.disabled = true; btn.textContent = "กำลังสร้าง...";
 
-  fields.forEach(id => document.getElementById(id).addEventListener('input', generateURL));
+    const data = {
+      maxPrice: document.getElementById('maxPrice').value,
+      msg: document.getElementById('msg').value,
+      img: document.getElementById('img').value,
+      mode: 'focus'
+    };
 
-  function copyLink() {
-    const text = generateURL();
-    navigator.clipboard.writeText(text).then(() => {
-      const msg = document.getElementById('successMsg');
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 3000);
-    });
+    const queryStr = new URLSearchParams(data).toString();
+    
+    try {
+      const res = await fetch(`${SCRIPT_URL}?mode=createShortLink&data=${encodeURIComponent(queryStr)}`);
+      const json = await res.json();
+      
+      if (json.ok) {
+        const finalLink = `${APP_URL}?s=${json.shortId}`;
+        document.getElementById('shortUrl').textContent = finalLink;
+        document.getElementById('resultBox').style.display = 'block';
+        navigator.clipboard.writeText(finalLink);
+      }
+    } catch (e) { alert("เกิดข้อผิดพลาด"); }
+    
+    btn.disabled = false; btn.textContent = "สร้างลิงก์และคัดลอก";
   }
 </script>
 </body>
