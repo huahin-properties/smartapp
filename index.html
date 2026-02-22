@@ -3,29 +3,35 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Hua Hin Properties | Focus Mode</title>
+  <title>Hua Hin Properties | Luxury Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08); --card-bg: rgba(11, 24, 41, 0.9); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; }
+    body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; min-height: 100vh; }
     
-    .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+    /* SPECIAL HEADER (Luxury Banner) */
+    .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); animation: slideIn 0.8s ease; }
     #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; border: 1px solid rgba(255,255,255,0.1); }
-    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; }
+    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; line-height: 1.5; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ACTION BAR */
+    /* ACTION BAR (Iconic Buttons) */
     .action-bar { display: none; justify-content: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
-    .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+    .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
     .action-btn:hover { background: var(--gold); color: var(--navy); }
 
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: 85px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: 85px; transition: 0.2s; }
+    .card:active { transform: scale(0.98); }
     .card-img { width: 120px; flex-shrink: 0; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .card-info { flex: 1; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; min-width: 0; }
-    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
-    
+    .prop-details { min-width: 0; }
+    .prop-name { font-weight: 700; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 4px; }
+    .prop-sub { font-size: 0.7rem; color: var(--muted); }
+    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); flex-shrink: 0; }
+
     body.mode-focus main { padding-top: 20px !important; }
     @media (min-width: 768px) { .prop-list { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
   </style>
@@ -38,7 +44,7 @@
     <div id="actionBar" class="action-bar"></div>
   </div>
 
-  <div style="text-align:center; padding: 15px; font-size: 0.85rem; color: var(--gold); letter-spacing: 1px;" id="focusBar">
+  <div style="text-align:center; padding: 15px; font-size: 0.85rem; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;" id="focusBar">
     SELECTED PROPERTIES <span id="unitCount"></span>
   </div>
 
@@ -52,19 +58,25 @@
     async function init() {
       let finalParams = urlParams;
 
+      // 1. ถอดรหัสลิงก์ย่อถ้ามี
       if (shortId) {
         try {
           const res = await fetch(`${SCRIPT_URL}?s=${shortId}`);
           const json = await res.json();
-          if (json.ok && json.params) finalParams = new URLSearchParams(json.params);
-        } catch (e) { console.error(e); }
+          if (json.ok && json.params) {
+            finalParams = new URLSearchParams(json.params);
+          }
+        } catch (e) { console.error("Shortlink Load Error"); }
       }
 
-      renderSpecialContent(finalParams);
-      getProperties(finalParams);
+      // 2. แสดงผลเนื้อหาพิเศษ (ถ้ามีข้อมูล)
+      renderPersonalizedUI(finalParams);
+
+      // 3. ดึงข้อมูลบ้าน
+      loadProperties(finalParams);
     }
 
-    function renderSpecialContent(params) {
+    function renderPersonalizedUI(params) {
       const msg = params.get('msg');
       const imgId = params.get('img');
       const btn1 = params.get('btn1');
@@ -80,53 +92,66 @@
       if (msg || imgId || btn1 || btn2) {
         header.style.display = 'block';
         
-        if (msg) msgDiv.textContent = msg;
-        else msgDiv.style.display = 'none';
+        if (msg) {
+            msgDiv.textContent = msg;
+            msgDiv.style.display = 'block';
+        }
         
         if (imgId) {
-          const cleanId = imgId.replace(/\s/g, ''); // ล้างช่องว่าง
+          const cleanId = imgId.replace(/\s/g, '').replace(/^1\s+/, '');
           imgEl.src = `https://lh3.googleusercontent.com/d/${cleanId}`;
           imgEl.style.display = 'block';
-          imgEl.onerror = function() { this.style.display = 'none'; }; // ซ่อนถ้าโหลดรูปไม่ขึ้น
+          imgEl.onerror = () => imgEl.style.display = 'none';
         }
 
-        let buttonsHtml = '';
-        if (btn1 && url1) buttonsHtml += createButton(btn1, url1);
-        if (btn2 && url2) buttonsHtml += createButton(btn2, url2);
+        let actionsHtml = '';
+        if (btn1 && url1) actionsHtml += createActionButton(btn1, url1);
+        if (btn2 && url2) actionsHtml += createActionButton(btn2, url2);
 
-        if (buttonsHtml) {
-          bar.innerHTML = buttonsHtml;
+        if (actionsHtml) {
+          bar.innerHTML = actionsHtml;
           bar.style.display = 'flex';
         }
       }
     }
 
-    function createButton(label, url) {
+    function createActionButton(label, url) {
       let icon = '🔗';
-      if (label.includes('แผนที่') || label.includes('Map')) icon = '📍';
-      if (label.includes('Line') || label.includes('ไลน์')) icon = '💬';
-      if (label.includes('โทร') || label.includes('Call')) icon = '📞';
+      const l = label.toLowerCase();
+      if (l.includes('แผนที่') || l.includes('map')) icon = '📍';
+      if (l.includes('ไลน์') || l.includes('line')) icon = '💬';
+      if (l.includes('โทร') || l.includes('call')) icon = '📞';
       return `<a href="${url}" class="action-btn" target="_blank">${icon} ${label}</a>`;
     }
 
-    async function getProperties(params) {
+    async function loadProperties(params) {
       try {
         const response = await fetch(`${SCRIPT_URL}?mode=getUnitList&${params.toString()}`);
         const json = await response.json();
+        
         document.getElementById('unitCount').textContent = `(${json.data.length} UNITS)`;
         const grid = document.getElementById('propGrid');
+        
+        if (json.data.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--muted);">No properties found matching your selection.</div>';
+          return;
+        }
+
         grid.innerHTML = json.data.map(p => {
           const pPrice = parseFloat(String(p.Sale_Price).replace(/[^0-9.]/g, '')) || 0;
           return `
             <a href="details.html?id=${p.HP_ID}&mode=focus" class="card">
-              <div class="card-img"><img src="${p.Thumbnail_Image}"></div>
+              <div class="card-img"><img src="${p.Thumbnail_Image}" loading="lazy"></div>
               <div class="card-info">
-                <div style="min-width:0;"><div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.Project_Name}</div><div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.Zone}</div></div>
+                <div class="prop-details">
+                  <div class="prop-name">${p.Project_Name || p.Type}</div>
+                  <div class="prop-sub">${p.Bedrooms} Bed | ${p.District || p.Zone}</div>
+                </div>
                 <div class="price">฿${pPrice.toLocaleString()}</div>
               </div>
             </a>`;
         }).join('');
-      } catch (err) { console.error(err); }
+      } catch (err) { console.error("Properties Load Error"); }
     }
 
     init();
