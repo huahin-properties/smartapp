@@ -3,54 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin: Smart Generator | HUA HIN PROPERTIES</title>
+  <title>Admin: Smart Link Generator V4 | HUA HIN PROPERTIES</title>
   <style>
-    :root { --navy: #0B1829; --gold: #C9A84C; --white: #FDFAF5; --card-bg: #112238; }
-    body { background: var(--navy); color: var(--white); font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 500px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+    :root { --navy: #0B1829; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --card-bg: #112238; }
+    body { background-color: var(--navy); color: var(--white); font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
     h1 { color: var(--gold); font-size: 1.4rem; text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 15px; }
     .form-group { margin-bottom: 20px; }
     label { display: block; font-size: 0.75rem; color: var(--gold); margin-bottom: 8px; font-weight: bold; text-transform: uppercase; }
     input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; outline: none; }
-    input:focus { border-color: var(--gold); }
-    .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--gold), #E4C46A); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-    .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--gold), #E4C46A); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; }
+    .btn-main:disabled { opacity: 0.5; }
     .result { margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; text-align: center; border: 1px dashed var(--gold); }
-    #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 15px 0; display: block; font-size: 0.9rem; }
+    #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 15px 0; display: block; }
+    .action-row { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 10px; }
     .tip { font-size: 0.7rem; color: #7A9BB5; margin-top: 15px; line-height: 1.5; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>URL Generator (Short Link)</h1>
+  <h1>URL Generator (Smart Link V4)</h1>
   
   <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
     <div class="form-group"><label>งบเริ่มต้น</label><input type="number" id="minPrice" placeholder="5000000"></div>
     <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="6000000"></div>
   </div>
 
-  <div class="form-group"><label>ข้อความทักทาย (MSG)</label><input type="text" id="msg" placeholder="สวัสดีครับคุณสมชาย"></div>
+  <div class="form-group"><label>ข้อความทักทายลูกค้า (MSG)</label><input type="text" id="msg" placeholder="สวัสดีครับคุณสมชาย"></div>
+  <div class="form-group"><label>Google Drive Photo ID (IMG)</label><input type="text" id="img" placeholder="วางเฉพาะรหัส ID"></div>
   
   <div class="form-group">
-    <label>Google Drive Photo ID (IMG)</label>
-    <input type="text" id="img" placeholder="วางเฉพาะรหัส ID เช่น 1xAb2Cd3Ef...">
+    <label>ปุ่มกดพิเศษ (Actions)</label>
+    <div class="action-row">
+      <input type="text" id="btn1_lbl" placeholder="ป้ายกำกับ 1 เช่น ดูแผนที่">
+      <input type="text" id="btn1_url" placeholder="ลิงก์ (URL) 1">
+    </div>
+    <div class="action-row">
+      <input type="text" id="btn2_lbl" placeholder="ป้ายกำกับ 2 เช่น ทัก Line">
+      <input type="text" id="btn2_url" placeholder="ลิงก์ (URL) 2">
+    </div>
   </div>
   
-  <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์ย่อ & คัดลอก</button>
+  <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์พรีเมียม & คัดลอก</button>
 
   <div id="resultBox" class="result">
-    <label>Professional Link:</label>
+    <label>ลิงก์ส่วนตัวของคุณ:</label>
     <span id="shortUrl"></span>
     <p style="font-size: 0.8rem; color: #2ECC8A; font-weight: bold;">✓ คัดลอกลงคลิปบอร์ดแล้ว!</p>
   </div>
 
   <div class="tip">
-    <strong>คำแนะนำ:</strong> รหัส ID รูปภาพให้นำมาจากลิงก์แชร์ของ Google Drive (เช่น ส่วนที่อยู่หลัง /d/...) โดยไม่ต้องมีเลข 1 หรือช่องว่างนำหน้าครับ
+    * หากไม่กรอกช่องไหน ระบบจะซ่อนส่วนนั้นอัตโนมัติในหน้าลูกค้าครับ
   </div>
 </div>
 
 <script>
-  // ** ตรวจสอบว่า SCRIPT_URL ตรงกับที่ Deploy ล่าสุดหรือไม่ **
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
   const APP_URL = "https://huahin-properties.github.io/smartapp/index.html";
 
@@ -63,10 +70,19 @@
       maxPrice: document.getElementById('maxPrice').value,
       msg: document.getElementById('msg').value,
       img: document.getElementById('img').value.trim(),
+      btn1: document.getElementById('btn1_lbl').value,
+      url1: document.getElementById('btn1_url').value,
+      btn2: document.getElementById('btn2_lbl').value,
+      url2: document.getElementById('btn2_url').value,
       mode: 'focus'
     };
 
-    // ล้างค่าที่ว่างเปล่าออก
+    // ล้างรหัส ID ที่มีช่องว่างหรือมีเลข 1 นำหน้าแบบที่คุณเจอปัญหา
+    if (params.img) {
+      params.img = params.img.replace(/^1\s+/, '').replace(/\s/g, '');
+    }
+
+    // ลบค่าที่ว่างออก
     Object.keys(params).forEach(key => !params[key] && delete params[key]);
     const queryStr = new URLSearchParams(params).toString();
     
@@ -79,15 +95,14 @@
         document.getElementById('shortUrl').textContent = finalLink;
         document.getElementById('resultBox').style.display = 'block';
         
-        // คัดลอกอัตโนมัติ
         const el = document.createElement('textarea');
         el.value = finalLink; document.body.appendChild(el);
         el.select(); document.execCommand('copy');
         document.body.removeChild(el);
       }
-    } catch (e) { alert("เกิดข้อผิดพลาดในการเชื่อมต่อ Server"); }
+    } catch (e) { alert("เกิดข้อผิดพลาดในการเชื่อมต่อ"); }
     
-    btn.disabled = false; btn.textContent = "สร้างลิงก์ย่อ & คัดลอก";
+    btn.disabled = false; btn.textContent = "สร้างลิงก์พรีเมียม & คัดลอก";
   }
 </script>
 </body>
