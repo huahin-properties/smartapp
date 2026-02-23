@@ -16,25 +16,34 @@
     body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(circle at 50% -10%, rgba(27, 79, 114, 0.3) 0%, transparent 70%); z-index: -1; }
 
     /* =========================================
-       NEW: SPLASH SCREEN LOADER (V24)
+       MASTER SPLASH SCREEN V25 (WELCOME EDITION)
     ========================================= */
     #pageSplash {
       position: fixed; inset: 0; background: var(--navy-dark); 
       display: flex; flex-direction: column; align-items: center; justify-content: center; 
-      z-index: 10000; transition: opacity 0.5s ease-out, visibility 0.5s;
+      z-index: 10000; transition: opacity 0.6s ease-out, visibility 0.6s;
     }
-    .ducky-wrap { display: flex; gap: 15px; margin-bottom: 20px; font-size: 45px; filter: drop-shadow(0 0 10px rgba(201,168,76,0.3)); }
+    .ducky-wrap { display: flex; gap: 18px; margin-bottom: 25px; font-size: 50px; filter: drop-shadow(0 0 15px rgba(201,168,76,0.3)); }
     .ducky { animation: bounceDucky 0.8s ease-in-out infinite alternate; }
     .ducky:nth-child(2) { animation-delay: 0.2s; }
     .ducky:nth-child(3) { animation-delay: 0.4s; }
     
     @keyframes bounceDucky {
       0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-15px) scale(1.1); }
+      100% { transform: translateY(-18px) scale(1.15); }
+    }
+    .splash-welcome {
+      color: var(--gold); font-size: 0.75rem; font-weight: 400; letter-spacing: 6px;
+      text-transform: uppercase; margin-bottom: 8px; opacity: 0.8;
+      animation: fadeInWelcome 1.5s ease-out;
+    }
+    @keyframes fadeInWelcome {
+      from { opacity: 0; letter-spacing: 15px; }
+      to { opacity: 0.8; letter-spacing: 6px; }
     }
     .splash-text { 
-      color: var(--white); font-size: 1.1rem; font-weight: 800; letter-spacing: 4px; 
-      text-transform: uppercase; opacity: 0.9;
+      color: var(--white); font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; 
+      text-transform: uppercase; opacity: 0.95;
     }
     /* ========================================= */
 
@@ -96,6 +105,7 @@
     <div class="ducky-wrap">
       <span class="ducky">🐚</span><span class="ducky">🌊</span><span class="ducky">🌴</span>
     </div>
+    <div class="splash-welcome">WELCOME</div>
     <div class="splash-text">HUAHIN.PROPERTIES</div>
   </div>
 
@@ -140,14 +150,14 @@
         document.getElementById('focusBar').style.display = 'block';
         renderSpecial(fParams);
       }
-      await getProperties(fParams); // รอให้โหลดเสร็จก่อนปิด Splash
+      await getProperties(fParams);
       hideSplash();
     }
 
     function hideSplash() {
       const splash = document.getElementById('pageSplash');
       splash.style.opacity = '0';
-      setTimeout(() => { splash.style.display = 'none'; }, 500);
+      setTimeout(() => { splash.style.display = 'none'; }, 600);
     }
 
     function renderSpecial(p) {
@@ -157,7 +167,7 @@
         const cleanId = p.get('img').replace(/\s/g,'').replace(/^1/,'');
         img.src = `https://googleusercontent.com/profile/picture/1{cleanId}`; img.style.display = 'block'; 
       }
-      if (p.get('btn1') && p.get('url1')) document.getElementById('actionBar').innerHTML = `<a href="${p.get('url1')}" class="action-btn">📍 ${p.get('btn1')}</a>`;
+      if (p.get('btn1') && p.get('url1')) document.getElementById('actionBar').innerHTML = `<a href="${p.get('url1')}" class="action-btn" target="_blank">📍 ${p.get('btn1')}</a>`;
       document.getElementById('specialHeader').style.display = 'block';
     }
 
