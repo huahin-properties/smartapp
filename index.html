@@ -18,8 +18,9 @@
     .card-info { flex: 1; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; min-width: 0; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold); }
 
+    /* PERSONALIZED */
     .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; }
-    #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; margin-left: auto; margin-right: auto; }
+    #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; }
     .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; margin-top: 10px; display: inline-block; }
 
     body.mode-focus header, body.mode-focus .hero { display: none !important; }
@@ -67,12 +68,7 @@
 
     function renderSpecial(p) {
       if (p.get('msg')) document.getElementById('specialMsg').textContent = p.get('msg');
-      if (p.get('img')) { 
-        const img = document.getElementById('specialImg'); 
-        const cleanId = p.get('img').replace(/\s/g,'').replace(/^1/,'');
-        img.src = `https://lh3.googleusercontent.com/d/${cleanId}`; 
-        img.style.display = 'block'; 
-      }
+      if (p.get('img')) { const img = document.getElementById('specialImg'); img.src = `https://lh3.googleusercontent.com/d/${p.get('img').replace(/\s/g,'')}`; img.style.display = 'block'; }
       if (p.get('btn1') && p.get('url1')) document.getElementById('actionBar').innerHTML = `<a href="${p.get('url1')}" class="action-btn">📍 ${p.get('btn1')}</a>`;
       document.getElementById('specialHeader').style.display = 'block';
     }
