@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
-  <title>Hua Hin Properties | Luxury Asset Catalog</title>
+  <title>Hua Hin Properties | Luxury Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-
   <style>
     :root {
       --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A;
       --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08);
       --card-bg: rgba(11, 24, 41, 0.9); --brand-red: #8B1F2D;
-      --row-h: 75px; --thumb-w: 110px;
+      --available: #2ECC8A; --row-h: 75px; --thumb-w: 110px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
@@ -46,12 +45,11 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: var(--row-h); transition: 0.2s ease; }
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .hp-id { position: absolute; top: 5px; left: 7px; font-size: 0.48rem; color: rgba(255, 255, 255, 0.6); z-index: 2; }
     .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
     .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
 
-    /* CURATED MODE STYLES */
+    /* SPECIAL PERSONALIZED HEADER */
     .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
     #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; border: 1px solid rgba(255,255,255,0.1); }
     #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; white-space: pre-line; letter-spacing: 0.5px; }
@@ -60,69 +58,40 @@
 
     .focus-bar { display: none; text-align: center; padding: 25px 15px 15px; }
     .focus-title { font-size: 1rem; color: var(--gold); letter-spacing: 3px; font-weight: 500; text-transform: uppercase; margin-bottom: 5px; }
-    .focus-subtitle { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; }
-
     .status-tag { font-size: 0.55rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: inline-block; border: 1px solid; }
     .s-available { background: rgba(46, 204, 138, 0.1); color: #2ECC8A; border-color: #2ECC8A; }
     .s-off-plan { background: rgba(206, 168, 108, 0.1); color: #CEA86C; border-color: #CEA86C; }
 
-    body.mode-focus header, body.mode-focus .hero { display: none !important; }
+    /* FOCUS MODE OVERRIDES */
+    body.mode-focus header, body.mode-focus .hero, body.mode-focus .search-container { display: none !important; }
     body.mode-focus main { padding-top: 5px !important; }
     body.mode-focus .focus-bar { display: block; }
     body.mode-focus .section-bar { border-top: none; justify-content: center; }
 
-    @media (min-width: 768px) {
-      :root { --row-h: 90px; --thumb-w: 140px; }
-      .prop-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .hero-title { font-size: 2.5rem; }
-    }
+    @media (min-width: 768px) { .prop-list { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
   </style>
 </head>
 <body>
 
-  <header>
-    <a href="#" class="logo">HUA HIN<span>.PROPERTIES</span></a>
-    <a href="https://line.me/R/ti/p/@qap7218t" class="btn-contact">Contact</a>
-  </header>
+  <header><a href="#" class="logo">HUA HIN<span>.PROPERTIES</span></a></header>
 
   <div id="specialHeader" class="special-header">
-    <img id="specialImg" src="">
-    <div id="specialMsg"></div>
-    <div id="actionBar" class="action-bar"></div>
+    <img id="specialImg" src=""><div id="specialMsg"></div><div id="actionBar" class="action-bar"></div>
   </div>
 
   <div class="focus-bar" id="focusBar">
     <div class="focus-title">Curated for You</div>
-    <div class="focus-subtitle">Handpicked based on your preferences <span id="curatedUnitCount"></span></div>
+    <div style="font-size:0.7rem; color:var(--muted);">Handpicked based on your preferences <span id="curatedCount"></span></div>
   </div>
 
   <section class="hero">
-    <div class="hero-title-wrap">
-      <h1 class="hero-title">Prime <em>Asset</em> Catalog</h1>
-      <button class="btn-reset" onclick="resetFilters()">↻</button>
-    </div>
-    
+    <div class="hero-title-wrap"><h1 class="hero-title">Prime <em>Asset</em> Catalog</h1></div>
     <div class="search-container">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search Location, ID, or Project...">
-      </div>
+      <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchInput" class="search-input" placeholder="Search Location, ID, or Project..."></div>
       <div class="filters-grid">
-        <select id="areaFilter" class="filter-select">
-          <option value="">All Zones</option>
-          <option value="Hua Hin">Hua Hin</option>
-          <option value="Cha-am">Cha-am</option>
-          <option value="Pranburi">Pranburi</option>
-        </select>
-        <select id="sortFilter" class="filter-select">
-          <option value="">All Prices</option>
-          <option value="low-high">Low → High</option>
-          <option value="high-low">High → Low</option>
-        </select>
-        <select id="bedFilter" class="filter-select">
-          <option value="">Bedrooms</option>
-          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="10plus">10+</option>
-        </select>
+        <select id="areaFilter" class="filter-select"><option value="">All Zones</option><option value="Hua Hin">Hua Hin</option><option value="Cha-am">Cha-am</option></select>
+        <select id="sortFilter" class="filter-select"><option value="">Price Sort</option><option value="low-high">Low → High</option><option value="high-low">High → Low</option></select>
+        <select id="bedFilter" class="filter-select"><option value="">Bedrooms</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
       </div>
       <div class="pill-container" id="pillBox">
         <div class="pill active" data-f="all">All</div>
@@ -146,7 +115,6 @@
 
     async function init() {
       let finalParams = urlParams;
-
       if (shortId) {
         try {
           const res = await fetch(`${SCRIPT_URL}?s=${shortId}`);
@@ -160,13 +128,11 @@
         document.getElementById('barTitle').style.display = 'none';
         renderSpecialContent(finalParams);
       }
-
       getProperties(finalParams);
     }
 
     function renderSpecialContent(params) {
-      const msg = params.get('msg'), imgId = params.get('img');
-      const btn1 = params.get('btn1'), url1 = params.get('url1');
+      const msg = params.get('msg'), imgId = params.get('img'), btn1 = params.get('btn1'), url1 = params.get('url1');
       if (msg || imgId || btn1) {
         document.getElementById('specialHeader').style.display = 'block';
         if (msg) document.getElementById('specialMsg').textContent = msg;
@@ -174,7 +140,6 @@
           const imgEl = document.getElementById('specialImg');
           imgEl.src = `https://lh3.googleusercontent.com/d/{imgId.replace(/\s/g, '')}`;
           imgEl.style.display = 'block';
-          imgEl.onerror = function() { this.style.display = 'none'; };
         }
         if (btn1 && url1) {
           document.getElementById('actionBar').innerHTML = `<a href="${url1}" class="action-btn" target="_blank">📍 ${btn1}</a>`;
@@ -194,27 +159,17 @@
 
     function renderList(items) {
       const grid = document.getElementById('propGrid');
-      const curatedLabel = document.getElementById('curatedUnitCount');
       document.getElementById('unitCount').textContent = `${items.length} UNITS`;
-      if (curatedLabel) curatedLabel.textContent = `— ${items.length} Units Found`;
+      if (document.getElementById('curatedCount')) document.getElementById('curatedCount').textContent = `— ${items.length} Units Found`;
 
       grid.innerHTML = items.map(p => {
         const pPrice = parseFloat(String(p.Sale_Price).replace(/[^0-9.]/g, '')) || 0;
-        const isOffPlan = String(p.Status).toLowerCase().includes('off');
-        const statusCls = isOffPlan ? 's-off-plan' : 's-available';
-        
+        const statusCls = String(p.Status).toLowerCase().includes('off') ? 's-off-plan' : 's-available';
         return `
-          <a href="details.html?id=${p.HP_ID}${urlParams.has('mode')||urlParams.has('s')?'&mode=focus':''}" class="card">
-            <div class="card-img">
-              <span class="hp-id">#${p.HP_ID}</span>
-              <img src="${p.Thumbnail_Image}" loading="lazy">
-            </div>
+          <a href="details.html?id=${p.HP_ID}${urlParams.has('s')||urlParams.has('mode')?'&mode=focus':''}" class="card">
+            <div class="card-img"><img src="${p.Thumbnail_Image}" loading="lazy"></div>
             <div class="card-info">
-              <div class="info-main">
-                <div class="prop-name">${p.Project_Name || p.Listing_Type}</div>
-                <div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.District || p.Zone}</div>
-                <span class="status-tag ${statusCls}">${p.Status || 'Available'}</span>
-              </div>
+              <div><div style="font-weight:700;">${p.Project_Name || p.Listing_Type}</div><div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.District || p.Zone}</div><span class="status-tag ${statusCls}">${p.Status || 'Available'}</span></div>
               <div class="price">฿${pPrice.toLocaleString()}</div>
             </div>
           </a>`;
@@ -232,7 +187,7 @@
         const text = `${p.District} ${p.HP_ID} ${p.Project_Name} ${p.Zone}`.toLowerCase();
         const matchQ = q === "" || text.includes(q);
         const matchArea = area === "" || p.District === area || p.Zone === area;
-        let matchBed = bed === "" || (bed === "10plus" ? parseInt(p.Bedrooms) >= 10 : parseInt(p.Bedrooms) == parseInt(bed));
+        let matchBed = bed === "" || parseInt(p.Bedrooms) == parseInt(bed);
         const matchPill = activePill === "all" || p.Listing_Type === activePill || p.Type === activePill || p.Status === activePill;
         return matchQ && matchArea && matchBed && matchPill;
       });
@@ -241,8 +196,6 @@
       else if (sort === "high-low") filtered.sort((a,b) => parseFloat(String(b.Sale_Price).replace(/[^0-9.]/g,'')) - parseFloat(String(a.Sale_Price).replace(/[^0-9.]/g,'')));
       renderList(filtered);
     }
-
-    function resetFilters() { location.href = location.pathname; }
 
     document.getElementById('searchInput')?.addEventListener('input', filterData);
     document.getElementById('areaFilter')?.addEventListener('change', filterData);
