@@ -79,7 +79,6 @@
     }
 
     .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
-    .pill-container::-webkit-scrollbar { display: none; }
     .pill {
       white-space: nowrap; padding: 6px 14px; border-radius: 50px;
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
@@ -107,22 +106,37 @@
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .hp-id { position: absolute; top: 5px; left: 7px; font-size: 0.48rem; color: rgba(255, 255, 255, 0.6); z-index: 2; }
 
-    .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
-    .info-main { min-width: 0; }
+    /* ปรับปรุงโครงสร้าง Info เพื่อให้ข้อความยาวได้มากที่สุด */
+    .card-info { 
+      flex: 1; padding: 6px 10px; 
+      display: flex; justify-content: space-between; 
+      align-items: center; min-width: 0; gap: 8px; 
+    }
+    .info-main { 
+      flex: 1; min-width: 0; /* ยอมให้ส่วนนี้ยืดหดได้เต็มที่ */
+    }
     
-    /* สไตล์สำหรับหัวข้อประกาศและสถานที่ */
-    .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .loc-text { font-size: 0.72rem; font-weight: 300; color: var(--gold-lt); opacity: 0.9; }
+    /* แก้ไขการแสดงชื่อและที่ตั้ง */
+    .prop-name { 
+      font-size: 0.88rem; font-weight: 700; color: var(--white); 
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+      width: 100%; display: block;
+    }
+    .loc-text { font-size: 0.72rem; font-weight: 300; color: var(--gold-lt); opacity: 0.85; }
 
-    .prop-specs { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
+    .prop-specs { font-size: 0.65rem; color: var(--muted); margin-top: 1px; }
+
+    .price-side { 
+      text-align: right; flex-shrink: 0; /* ป้องกันราคาถูกบีบ */
+    }
+    .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); white-space: nowrap; }
 
     /* TAGS */
-    .status-tag { font-size: 0.55rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: inline-block; border: 1px solid; }
+    .status-tag { font-size: 0.52rem; padding: 2px 5px; border-radius: 3px; font-weight: bold; text-transform: uppercase; margin-top: 3px; display: inline-block; border: 1px solid; line-height: 1; }
     .s-available { background: rgba(46, 204, 138, 0.1); color: #2ECC8A; border-color: #2ECC8A; }
     .s-off-plan { background: rgba(206, 168, 108, 0.1); color: #CEA86C; border-color: #CEA86C; }
 
-    /* PERSONALIZED HEADER */
+    /* SPECIAL CURATED HEADER */
     .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
     #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; margin-left: auto; margin-right: auto; }
     #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; white-space: pre-line; }
@@ -152,9 +166,7 @@
   </header>
 
   <div id="specialHeader" class="special-header">
-    <img id="specialImg" src="">
-    <div id="specialMsg"></div>
-    <div id="actionBar" class="action-bar"></div>
+    <img id="specialImg" src=""><div id="specialMsg"></div><div id="actionBar" class="action-bar"></div>
   </div>
 
   <div class="focus-bar" id="focusBar">
@@ -171,41 +183,18 @@
       </div>
 
       <div class="filters-grid">
-        <select id="areaFilter" class="filter-select">
-          <option value="">All Zones</option>
-          <option value="Hua Hin">Hua Hin</option>
-          <option value="Cha-am">Cha-am</option>
-          <option value="Pranburi">Pranburi</option>
-        </select>
-        <select id="sortFilter" class="filter-select">
-          <option value="">Price Sort</option>
-          <option value="low-high">Low → High</option>
-          <option value="high-low">High → Low</option>
-        </select>
-        <select id="bedFilter" class="filter-select">
-          <option value="">Bedrooms</option>
-          <option value="1">1 Bed</option>
-          <option value="2">2 Bed</option>
-          <option value="3">3 Bed</option>
-          <option value="4">4 Bed</option>
-          <option value="5">5+ Bed</option>
-        </select>
+        <select id="areaFilter" class="filter-select"><option value="">All Zones</option><option value="Hua Hin">Hua Hin</option><option value="Cha-am">Cha-am</option><option value="Pranburi">Pranburi</option></select>
+        <select id="sortFilter" class="filter-select"><option value="">Price Sort</option><option value="low-high">Low → High</option><option value="high-low">High → Low</option></select>
+        <select id="bedFilter" class="filter-select"><option value="">Bedrooms</option><option value="1">1 Bed</option><option value="2">2 Bed</option><option value="3">3 Bed</option><option value="4">4 Bed</option><option value="5">5+ Bed</option></select>
       </div>
 
       <div class="pill-container" id="pillBox">
-        <div class="pill active" data-f="all">All</div>
-        <div class="pill" data-f="Sale">Sale</div>
-        <div class="pill" data-f="Rent">Rent</div>
-        <div class="pill" data-f="Pool Villa">Pool Villa</div>
-        <div class="pill" data-f="Condo">Condo</div>
+        <div class="pill active" data-f="all">All</div><div class="pill" data-f="Sale">Sale</div><div class="pill" data-f="Rent">Rent</div><div class="pill" data-f="Pool Villa">Pool Villa</div><div class="pill" data-f="Condo">Condo</div>
       </div>
     </div>
   </section>
 
-  <div class="section-bar">
-    <h2 class="section-title" id="barTitle">Luxury Collections</h2>
-    <span class="unit-count" id="unitCount">Loading...</span>
-  </div>
+  <div class="section-bar"><h2 class="section-title" id="barTitle">Luxury Collections</h2><span class="unit-count" id="unitCount">Loading...</span></div>
 
   <main class="prop-list" id="propGrid"></main>
 
@@ -230,7 +219,6 @@
         document.getElementById('barTitle').style.display = 'none';
         renderSpecialContent(finalParams);
       }
-
       getProperties(finalParams);
     }
 
@@ -266,13 +254,13 @@
       if (document.getElementById('curatedCount')) document.getElementById('curatedCount').textContent = `— ${items.length} Units Found`;
 
       grid.innerHTML = items.map(p => {
-        // จุดที่ 1 & 3: ปรับหัวข้อเป็น For Sale/Rent และสถานที่ (ตัวบาง)
+        // Logic หัวข้อและสถานที่
         const labelText = p.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
-        const district = (p.District || "").replace("อำเภอ", "");
-        const zone = (p.Zone || "").replace("โซน", "");
+        const district = (p.District || "").replace(/อำเภอ|District/g, "").trim();
+        const zone = (p.Zone || "").replace(/โซน|Zone/g, "").trim();
         const titleLine = `${labelText} · <span class="loc-text">${district} | ${zone}</span>`;
 
-        // จุดที่ 2: Logic เลือกราคาที่ถูกต้อง (ห้ามเป็น 0)
+        // Logic ราคา (ห้ามเป็น 0)
         let displayPrice = 0;
         let suffix = "";
         if (p.Listing_Type === 'Rent') {
@@ -296,7 +284,9 @@
                 <div class="prop-specs">${p.Bedrooms} Bed | ${p.Bathrooms} Bath</div>
                 <span class="status-tag ${statusCls}">${p.Status || 'Available'}</span>
               </div>
-              <div class="price">฿${displayPrice.toLocaleString()}${suffix}</div>
+              <div class="price-side">
+                <div class="price">฿${displayPrice.toLocaleString()}${suffix}</div>
+              </div>
             </div>
           </a>`;
       }).join('');
