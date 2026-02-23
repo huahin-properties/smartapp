@@ -3,53 +3,34 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Hua Hin Properties | Curated Selection</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <title>Hua Hin Properties | Focus Mode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    :root { 
-      --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A; 
-      --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08); 
-      --card-bg: rgba(11, 24, 41, 0.9);
-    }
+    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A; --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08); --card-bg: rgba(11, 24, 41, 0.9); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; }
     
-    /* PERSONALIZED HEADER SECTION */
     .special-header { display: none; background: rgba(11, 24, 41, 0.95); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
     #specialImg { max-width: 100%; border-radius: 10px; margin-bottom: 15px; display: none; border: 1px solid rgba(255,255,255,0.1); }
-    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; white-space: pre-line; letter-spacing: 0.5px; }
+    #specialMsg { color: var(--gold-lt); font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; }
 
-    /* ACTION BUTTONS */
+    /* ACTION BAR */
     .action-bar { display: none; justify-content: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
     .action-btn { background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
     .action-btn:hover { background: var(--gold); color: var(--navy); }
 
-    /* GREETING TITLE */
-    .focus-bar { text-align: center; padding: 25px 15px 15px; }
-    .focus-title { font-size: 1rem; color: var(--gold); letter-spacing: 3px; font-weight: 500; text-transform: uppercase; margin-bottom: 5px; }
-    .focus-subtitle { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; }
-
-    /* PROPERTY CARDS */
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; overflow: hidden; text-decoration: none; color: inherit; height: 85px; }
     .card-img { width: 120px; flex-shrink: 0; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .card-info { flex: 1; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; min-width: 0; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
-
-    /* STATUS TAGS */
-    .status-tag { font-size: 0.55rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: inline-block; border: 1px solid; }
-    .s-available { background: rgba(46, 204, 138, 0.1); color: #2ECC8A; border-color: #2ECC8A; }
-    .s-off-plan { background: rgba(206, 168, 108, 0.1); color: #CEA86C; border-color: #CEA86C; }
-
-    /* HIDE DEFAULT UI IN FOCUS MODE */
-    body.mode-focus header, body.mode-focus .hero, body.mode-focus .search-container { display: none !important; }
-    body.mode-focus main { padding-top: 5px !important; }
-
+    
+    body.mode-focus main { padding-top: 20px !important; }
     @media (min-width: 768px) { .prop-list { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
   </style>
 </head>
-<body>
+<body class="mode-focus">
 
   <div id="specialHeader" class="special-header">
     <img id="specialImg" src="">
@@ -57,9 +38,8 @@
     <div id="actionBar" class="action-bar"></div>
   </div>
 
-  <div class="focus-bar" id="focusBar">
-    <div class="focus-title">Curated for You</div>
-    <div class="focus-subtitle">Handpicked based on your preferences <span id="unitCount"></span></div>
+  <div style="text-align:center; padding: 15px; font-size: 0.85rem; color: var(--gold); letter-spacing: 1px;" id="focusBar">
+    SELECTED PROPERTIES <span id="unitCount"></span>
   </div>
 
   <main class="prop-list" id="propGrid"></main>
@@ -72,32 +52,25 @@
     async function init() {
       let finalParams = urlParams;
 
-      // 1. ถอดรหัสลิงก์ย่อถ้ามี (ดึงค่าสดจาก Sheets)
       if (shortId) {
         try {
           const res = await fetch(`${SCRIPT_URL}?s=${shortId}`);
           const json = await res.json();
           if (json.ok && json.params) finalParams = new URLSearchParams(json.params);
-        } catch (e) { console.error("Link sync error", e); }
+        } catch (e) { console.error(e); }
       }
 
-      // 2. ตั้งค่าโหมด Focus และ Content พิเศษ
-      const isFocus = finalParams.get('mode') === 'focus';
-      if (isFocus) {
-        document.body.classList.add('mode-focus');
-        renderSpecialContent(finalParams);
-      } else {
-        document.getElementById('focusBar').style.display = 'none';
-      }
-
-      // 3. ดึงรายการบ้าน
+      renderSpecialContent(finalParams);
       getProperties(finalParams);
     }
 
     function renderSpecialContent(params) {
-      const msg = params.get('msg'), imgId = params.get('img');
-      const btn1 = params.get('btn1'), url1 = params.get('url1');
-      const btn2 = params.get('btn2'), url2 = params.get('url2');
+      const msg = params.get('msg');
+      const imgId = params.get('img');
+      const btn1 = params.get('btn1');
+      const url1 = params.get('url1');
+      const btn2 = params.get('btn2');
+      const url2 = params.get('url2');
 
       const header = document.getElementById('specialHeader');
       const msgDiv = document.getElementById('specialMsg');
@@ -106,19 +79,21 @@
 
       if (msg || imgId || btn1 || btn2) {
         header.style.display = 'block';
+        
         if (msg) msgDiv.textContent = msg;
+        else msgDiv.style.display = 'none';
         
         if (imgId) {
-          const cleanId = imgId.replace(/^1\s+/, '').replace(/\s/g, ''); 
-          imgEl.src = `https://lh3.googleusercontent.com/d/{cleanId}`;
+          const cleanId = imgId.replace(/\s/g, ''); // ล้างช่องว่าง
+          imgEl.src = `https://lh3.googleusercontent.com/d/${cleanId}`;
           imgEl.style.display = 'block';
-          imgEl.onerror = function() { this.style.display = 'none'; };
+          imgEl.onerror = function() { this.style.display = 'none'; }; // ซ่อนถ้าโหลดรูปไม่ขึ้น
         }
 
         let buttonsHtml = '';
-        if (btn1 && url1) buttonsHtml += createBtnHTML(btn1, url1);
-        if (btn2 && url2) buttonsHtml += createBtnHTML(btn2, url2);
-        
+        if (btn1 && url1) buttonsHtml += createButton(btn1, url1);
+        if (btn2 && url2) buttonsHtml += createButton(btn2, url2);
+
         if (buttonsHtml) {
           bar.innerHTML = buttonsHtml;
           bar.style.display = 'flex';
@@ -126,7 +101,7 @@
       }
     }
 
-    function createBtnHTML(label, url) {
+    function createButton(label, url) {
       let icon = '🔗';
       if (label.includes('แผนที่') || label.includes('Map')) icon = '📍';
       if (label.includes('Line') || label.includes('ไลน์')) icon = '💬';
@@ -138,23 +113,15 @@
       try {
         const response = await fetch(`${SCRIPT_URL}?mode=getUnitList&${params.toString()}`);
         const json = await response.json();
-        document.getElementById('unitCount').textContent = `(${json.data.length} Units Found)`;
-        
+        document.getElementById('unitCount').textContent = `(${json.data.length} UNITS)`;
         const grid = document.getElementById('propGrid');
         grid.innerHTML = json.data.map(p => {
           const pPrice = parseFloat(String(p.Sale_Price).replace(/[^0-9.]/g, '')) || 0;
-          const isOffPlan = String(p.Status).toLowerCase().includes('off');
-          const statusCls = isOffPlan ? 's-off-plan' : 's-available';
-
           return `
             <a href="details.html?id=${p.HP_ID}&mode=focus" class="card">
-              <div class="card-img"><img src="${p.Thumbnail_Image}" loading="lazy"></div>
+              <div class="card-img"><img src="${p.Thumbnail_Image}"></div>
               <div class="card-info">
-                <div style="min-width:0;">
-                  <div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.Project_Name}</div>
-                  <div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.District}</div>
-                  <span class="status-tag ${statusCls}">${p.Status || 'Available'}</span>
-                </div>
+                <div style="min-width:0;"><div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.Project_Name}</div><div style="font-size:0.7rem;color:var(--muted);">${p.Bedrooms} Bed | ${p.Zone}</div></div>
                 <div class="price">฿${pPrice.toLocaleString()}</div>
               </div>
             </a>`;
