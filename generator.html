@@ -10,20 +10,28 @@
   label { display: block; font-size: 0.75rem; color: var(--gold); margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
   input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--gold); background: #FFFFFF; color: #0B1829; box-sizing: border-box; outline: none; margin-bottom: 10px; font-weight: 600; }
   .checkbox-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-  .check-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer; }
   .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: var(--gold); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
   .result { margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; text-align: center; border: 1px dashed var(--gold); }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Smart Generator V21</h1>
-  <div class="form-group"><label>Budget Range</label><div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;"><input type="number" id="min" placeholder="Min"><input type="number" id="max" placeholder="Max"></div></div>
-  <div class="form-group"><label>Status</label><div class="checkbox-grid" id="statusChecks"><label class="check-item"><input type="checkbox" value="Available" checked> พร้อมอยู่</label><label class="check-item"><input type="checkbox" value="Off-plan"> สั่งสร้าง</label><label class="check-item"><input type="checkbox" value="Reserved"> จองแล้ว</label></div></div>
-  <div class="form-group"><label>Bedrooms</label><div class="checkbox-grid" id="roomChecks"><label class="check-item"><input type="checkbox" value="1"> 1 Bed</label><label class="check-item"><input type="checkbox" value="2"> 2 Bed</label><label class="check-item"><input type="checkbox" value="3" checked> 3 Bed</label><label class="check-item"><input type="checkbox" value="4"> 4 Bed</label><label class="check-item"><input type="checkbox" value="5"> 5+ Bed</label></div></div>
-  <div class="form-group"><label>Greeting</label><input type="text" id="msg" placeholder="Hello..."></div>
-  <div class="form-group"><label>Photo ID</label><input type="text" id="img" placeholder="ID"></div>
-  <div class="form-group"><label>Action</label><div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px;"><input type="text" id="btn1" placeholder="Label"><input type="text" id="url1" placeholder="URL"></div></div>
+  <h1>Smart Generator V22</h1>
+  <div class="form-group"><label>งบประมาณ</label><div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;"><input type="number" id="min" placeholder="Min"><input type="number" id="max" placeholder="Max"></div></div>
+  
+  <div class="form-group"><label>การตกแต่ง (Furnishing)</label>
+    <div class="checkbox-grid" id="furnishChecks">
+      <label class="check-item"><input type="checkbox" value="Fully Furnished"> ตกแต่งครบ</label>
+      <label class="check-item"><input type="checkbox" value="Partially Furnished"> บางส่วน</label>
+      <label class="check-item"><input type="checkbox" value="Unfurnished"> บ้านเปล่า</label>
+    </div>
+  </div>
+
+  <div class="form-group"><label>ห้องนอน</label><div class="checkbox-grid" id="roomChecks"><label class="check-item"><input type="checkbox" value="1"> 1 Bed</label><label class="check-item"><input type="checkbox" value="2"> 2 Bed</label><label class="check-item"><input type="checkbox" value="3" checked> 3 Bed</label><label class="check-item"><input type="checkbox" value="4"> 4 Bed</label><label class="check-item"><input type="checkbox" value="5"> 5+ Bed</label></div></div>
+  <div class="form-group"><label>ข้อความทักทาย</label><input type="text" id="msg" placeholder="Hello..."></div>
+  <div class="form-group"><label>Google Drive Photo ID</label><input type="text" id="img" placeholder="ID"></div>
+  <div class="form-group"><label>ปุ่มกดพิเศษ</label><div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px;"><input type="text" id="btn1" placeholder="Label"><input type="text" id="url1" placeholder="URL"></div></div>
   <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์ & คัดลอก</button>
   <div id="resultBox" class="result"><label>Link:</label><br><span id="shortUrl" style="color:var(--gold); font-weight:bold; word-break:break-all;"></span></div>
 </div>
@@ -34,7 +42,7 @@
     const btn = document.getElementById('btnCreate'); btn.disabled = true;
     const params = {
       minPrice: document.getElementById('min').value, maxPrice: document.getElementById('max').value,
-      statuses: Array.from(document.querySelectorAll('#statusChecks input:checked')).map(cb => cb.value).join(','),
+      furnish: Array.from(document.querySelectorAll('#furnishChecks input:checked')).map(cb => cb.value).join(','),
       rooms: Array.from(document.querySelectorAll('#roomChecks input:checked')).map(cb => cb.value).join(','),
       msg: document.getElementById('msg').value, img: document.getElementById('img').value.trim().replace(/^1\s+/,''),
       btn1: document.getElementById('btn1').value, url1: document.getElementById('url1').value, mode: 'focus'
