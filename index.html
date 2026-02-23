@@ -61,7 +61,6 @@
     .search-container { max-width: 550px; margin: 0 auto; }
     .search-box { position: relative; margin-bottom: 10px; }
     
-    /* แก้ไขสีพื้นหลังขาว ตัวอักษรดำ เพื่อให้มองเห็นชัดเจน */
     .search-input {
       width: 100%; background: #FFFFFF;
       border: 1px solid var(--gold); border-radius: 50px;
@@ -110,7 +109,11 @@
 
     .card-info { flex: 1; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; gap: 5px; }
     .info-main { min-width: 0; }
+    
+    /* สไตล์สำหรับหัวข้อประกาศและสถานที่ */
     .prop-name { font-size: 0.88rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .loc-text { font-size: 0.72rem; font-weight: 300; color: var(--gold-lt); opacity: 0.9; }
+
     .prop-specs { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
     .price { font-size: 1rem; font-weight: 800; color: var(--gold-lt); }
 
@@ -129,7 +132,6 @@
     .focus-bar { display: none; text-align: center; padding: 25px 15px 15px; }
     .focus-title { font-size: 1rem; color: var(--gold); letter-spacing: 3px; font-weight: 500; text-transform: uppercase; margin-bottom: 5px; }
     
-    /* FOCUS MODE OVERRIDES */
     body.mode-focus header, body.mode-focus .hero { display: none !important; }
     body.mode-focus main { padding-top: 5px !important; }
     body.mode-focus .focus-bar { display: block; }
@@ -215,8 +217,6 @@
 
     async function init() {
       let finalParams = urlParams;
-
-      // 1. ตรวจสอบรหัสย่อ
       if (shortId) {
         try {
           const res = await fetch(`${SCRIPT_URL}?s=${shortId}`);
@@ -225,34 +225,25 @@
         } catch (e) { console.error("Decryption Error", e); }
       }
 
-      // 2. จัดการโหมด Focus
       if (finalParams.get('mode') === 'focus') {
         document.body.classList.add('mode-focus');
         document.getElementById('barTitle').style.display = 'none';
         renderSpecialContent(finalParams);
       }
 
-      // 3. ดึงข้อมูลและ Render
       getProperties(finalParams);
     }
 
     function renderSpecialContent(params) {
-      const msg = params.get('msg');
-      const imgId = params.get('img');
-      const btn1 = params.get('btn1');
-      const url1 = params.get('url1');
-
+      const msg = params.get('msg'), imgId = params.get('img'), btn1 = params.get('btn1'), url1 = params.get('url1');
       if (msg || imgId || btn1) {
         document.getElementById('specialHeader').style.display = 'block';
         if (msg) document.getElementById('specialMsg').textContent = msg;
-        
         if (imgId) {
           const cleanId = imgId.replace(/\s/g, '').replace(/^1/, ''); 
-          const imgEl = document.getElementById('specialImg');
-          imgEl.src = `https://lh3.googleusercontent.com/d/${cleanId}`;
-          imgEl.style.display = 'block';
+          document.getElementById('specialImg').src = `https://googleusercontent.com/profile/picture/1{cleanId}`;
+          document.getElementById('specialImg').style.display = 'block';
         }
-
         if (btn1 && url1) {
           document.getElementById('actionBar').innerHTML = `<a href="${url1}" class="action-btn" target="_blank">📍 ${btn1}</a>`;
           document.getElementById('actionBar').style.display = 'flex';
@@ -271,14 +262,27 @@
 
     function renderList(items) {
       const grid = document.getElementById('propGrid');
-      const curatedLabel = document.getElementById('curatedCount');
       document.getElementById('unitCount').textContent = `${items.length} UNITS`;
-      if (curatedLabel) curatedLabel.textContent = `— ${items.length} Units Found`;
+      if (document.getElementById('curatedCount')) document.getElementById('curatedCount').textContent = `— ${items.length} Units Found`;
 
       grid.innerHTML = items.map(p => {
-        const pPrice = parseFloat(String(p.Sale_Price).replace(/[^0-9.]/g, '')) || 0;
-        const isOffPlan = String(p.Status).toLowerCase().includes('off');
-        const statusCls = isOffPlan ? 's-off-plan' : 's-available';
+        // จุดที่ 1 & 3: ปรับหัวข้อเป็น For Sale/Rent และสถานที่ (ตัวบาง)
+        const labelText = p.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
+        const district = (p.District || "").replace("อำเภอ", "");
+        const zone = (p.Zone || "").replace("โซน", "");
+        const titleLine = `${labelText} · <span class="loc-text">${district} | ${zone}</span>`;
+
+        // จุดที่ 2: Logic เลือกราคาที่ถูกต้อง (ห้ามเป็น 0)
+        let displayPrice = 0;
+        let suffix = "";
+        if (p.Listing_Type === 'Rent') {
+          displayPrice = parseFloat(String(p.Monthly_Rent || "0").replace(/[^0-9.]/g, '')) || 0;
+          suffix = "/mo";
+        } else {
+          displayPrice = parseFloat(String(p.Sale_Price || "0").replace(/[^0-9.]/g, '')) || 0;
+        }
+
+        const statusCls = String(p.Status).toLowerCase().includes('off') ? 's-off-plan' : 's-available';
 
         return `
           <a href="details.html?id=${p.HP_ID}${urlParams.has('s')||urlParams.has('mode')?'&mode=focus':''}" class="card">
@@ -288,11 +292,11 @@
             </div>
             <div class="card-info">
               <div class="info-main">
-                <div class="prop-name">${p.Project_Name || p.Listing_Type}</div>
-                <div class="prop-specs">${p.Bedrooms} Bed | ${p.District || p.Zone}</div>
+                <div class="prop-name">${titleLine}</div>
+                <div class="prop-specs">${p.Bedrooms} Bed | ${p.Bathrooms} Bath</div>
                 <span class="status-tag ${statusCls}">${p.Status || 'Available'}</span>
               </div>
-              <div class="price">฿${pPrice.toLocaleString()}</div>
+              <div class="price">฿${displayPrice.toLocaleString()}${suffix}</div>
             </div>
           </a>`;
       }).join('');
@@ -314,8 +318,16 @@
         return matchQ && matchArea && matchBed && matchPill;
       });
 
-      if (sort === "low-high") filtered.sort((a,b) => parseFloat(String(a.Sale_Price).replace(/[^0-9.]/g,'')) - parseFloat(String(b.Sale_Price).replace(/[^0-9.]/g,'')));
-      else if (sort === "high-low") filtered.sort((a,b) => parseFloat(String(b.Sale_Price).replace(/[^0-9.]/g,'')) - parseFloat(String(a.Sale_Price).replace(/[^0-9.]/g,'')));
+      if (sort === "low-high") filtered.sort((a,b) => {
+        const pA = a.Listing_Type === 'Rent' ? parseFloat(String(a.Monthly_Rent).replace(/[^0-9.]/g,'')) : parseFloat(String(a.Sale_Price).replace(/[^0-9.]/g,''));
+        const pB = b.Listing_Type === 'Rent' ? parseFloat(String(b.Monthly_Rent).replace(/[^0-9.]/g,'')) : parseFloat(String(b.Sale_Price).replace(/[^0-9.]/g,''));
+        return pA - pB;
+      });
+      else if (sort === "high-low") filtered.sort((a,b) => {
+        const pA = a.Listing_Type === 'Rent' ? parseFloat(String(a.Monthly_Rent).replace(/[^0-9.]/g,'')) : parseFloat(String(a.Sale_Price).replace(/[^0-9.]/g,''));
+        const pB = b.Listing_Type === 'Rent' ? parseFloat(String(b.Monthly_Rent).replace(/[^0-9.]/g,'')) : parseFloat(String(b.Sale_Price).replace(/[^0-9.]/g,''));
+        return pB - pA;
+      });
       renderList(filtered);
     }
 
