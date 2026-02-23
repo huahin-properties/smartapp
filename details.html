@@ -41,7 +41,7 @@
   .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
   .thumb.active { opacity: 1; border-color: var(--gold); }
 
-  /* INFO SECTION */
+  /* INFO PANELS (CoCo Style Layout) */
   .info-panel { background: var(--card-bg); border-radius: 18px; padding: 25px; border: 1px solid var(--border); margin-bottom: 15px; }
   .section-title { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -51,9 +51,11 @@
   .val { font-size: 0.9rem; font-weight: 400; color: var(--white); }
   .gold-val { color: var(--gold-lt); font-weight: 600; }
 
-  /* MAP & NEARBY (สไตล์บริษัท) */
+  /* MAP & NEARBY (Bottom Position) */
   .map-box { width: 100%; height: 250px; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; }
   .btn-nav { width: 100%; background: var(--gold); color: var(--navy); text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; }
+  
+  .nearby-grid { display: grid; grid-template-columns: 1fr; gap: 2px; }
   .nearby-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
   .loc-name { font-size: 0.85rem; font-weight: 300; }
   .loc-dist { font-size: 0.8rem; font-weight: 600; color: var(--gold); }
@@ -61,7 +63,10 @@
   .footer { position: fixed; bottom: 0; width: 100%; background: var(--navy-dark); padding: 15px; border-top: 1px solid var(--border); z-index: 1000; text-align: center; }
   .btn-chat { background: var(--gold); color: var(--navy-dark); text-decoration: none; padding: 15px; border-radius: 8px; display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-  @media(min-width: 768px) { .grid-specs { grid-template-columns: repeat(4, 1fr); } }
+  @media(min-width: 768px) { 
+    .grid-specs { grid-template-columns: repeat(4, 1fr); } 
+    .nearby-grid { grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  }
 </style>
 </head>
 <body>
@@ -90,7 +95,7 @@
     </div>
 
     <div class="info-panel">
-      <h1 id="propTitle" style="font-size:1.8rem; color:var(--white); margin-bottom:5px; font-family:'Playfair Display',serif;">Plot ...</h1>
+      <h1 id="propTitle" style="font-size:1.8rem; color:var(--white); margin-bottom:5px;">Plot ...</h1>
       <div id="propLoc" style="color:var(--muted); font-size:0.85rem; margin-bottom:20px;">📍 -</div>
       <div class="grid-specs">
         <div><div class="label">Bed / Bath</div><div class="val" id="vBB">-</div></div>
@@ -128,12 +133,12 @@
     <div class="info-panel">
       <h2 class="section-title">Location & Navigation</h2>
       <div class="map-box" id="mapBox" style="display:none;"><iframe id="mapFrame" width="100%" height="100%" frameborder="0"></iframe></div>
-      <a id="navLink" href="" target="_blank" class="btn-nav" style="display:none;">📍 Start GPS Navigation</a>
+      <a id="navLink" href="" target="_blank" class="btn-nav">📍 Start GPS Navigation</a>
     </div>
 
     <div class="info-panel">
       <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
-      <div id="nearbyGrid"></div>
+      <div id="nearbyGrid" class="nearby-grid"></div>
     </div>
   </main>
 
@@ -144,12 +149,20 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRn
 const hpId = new URLSearchParams(window.location.search).get('id');
 let images = [], idx = 0;
 
+// ✅ ฐานข้อมูลสถานที่สำคัญ 12 แห่ง
 const LANDMARKS = [
   { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 },
   { name: "Cicada Market", lat: 12.5342, lon: 99.9655 },
   { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 },
   { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 },
-  { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }
+  { name: "Hua Hin Night Market", lat: 12.5714, lon: 99.9575 },
+  { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 },
+  { name: "Market Village Mall", lat: 12.5598, lon: 99.9602 },
+  { name: "Vana Nava Water Park", lat: 12.5273, lon: 99.9642 },
+  { name: "Hua Hin Railway Station", lat: 12.5674, lon: 99.9548 },
+  { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 },
+  { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 },
+  { name: "Black Mountain Water Park", lat: 12.6046, lon: 99.8897 }
 ];
 
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -199,11 +212,11 @@ function renderData(u) {
   document.getElementById('vUtil').textContent = u.Electricity || "-";
   document.getElementById('vDesc').textContent = u.Description || "No description available.";
 
+  // ✅ แสดงแผนที่และคำนวณระยะทางสถานที่สำคัญ 12 แห่ง
   if (u.Coordinates && u.Coordinates !== "#") {
     document.getElementById('mapBox').style.display = 'block';
-    document.getElementById('navLink').style.display = 'flex';
     document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${u.Coordinates.trim()}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-    document.getElementById('navLink').href = `https://www.google.com/maps?q=${u.Coordinates.trim()}`;
+    document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${u.Coordinates.trim()}`;
     
     const [la, lo] = u.Coordinates.split(',');
     const grid = document.getElementById('nearbyGrid');
