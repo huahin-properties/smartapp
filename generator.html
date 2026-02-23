@@ -2,7 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Admin: Smart Generator V12 | HUA HIN PROPERTIES</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin: Smart Multi-Generator V15 | HUA HIN PROPERTIES</title>
   <style>
     :root { --navy: #0B1829; --gold: #C9A84C; --white: #FDFAF5; --card-bg: #112238; }
     body { background-color: var(--navy); color: var(--white); font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
@@ -10,29 +11,92 @@
     h1 { color: var(--gold); font-size: 1.3rem; text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 15px; }
     .form-group { margin-bottom: 20px; }
     label { display: block; font-size: 0.75rem; color: var(--gold); margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
-    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; outline: none; }
-    .checkbox-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; }
+    
+    /* แก้ไขสีช่องกรอกข้อมูลให้พื้นหลังขาว ตัวอักษรดำเข้ม */
+    input { 
+      width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--gold); 
+      background: #FFFFFF; color: #0B1829; box-sizing: border-box; outline: none; 
+      margin-bottom: 10px; font-weight: 600;
+    }
+    input:focus { border-color: #FFFFFF; box-shadow: 0 0 10px rgba(201,168,76,0.5); }
+
+    .checkbox-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
     .check-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; }
-    .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--gold), #E4C46A); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+    .check-item input { width: auto; margin-bottom: 0; cursor: pointer; }
+
+    .btn-main { width: 100%; padding: 16px; border-radius: 10px; border: none; background: var(--gold); color: var(--navy); font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
     .result { margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; text-align: center; border: 1px dashed var(--gold); }
     #shortUrl { color: var(--gold); font-weight: bold; word-break: break-all; margin: 15px 0; display: block; font-size: 0.95rem; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Smart Generator V12</h1>
-  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-    <div class="form-group"><label>งบเริ่มต้น</label><input type="number" id="minPrice" placeholder="5000000"></div>
-    <div class="form-group"><label>งบสูงสุด</label><input type="number" id="maxPrice" placeholder="12000000"></div>
+  <h1>Smart Generator V15</h1>
+  
+  <div class="form-group">
+    <label>Budget Range (งบประมาณ)</label>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+      <input type="number" id="minPrice" placeholder="Min (ต่ำสุด)">
+      <input type="number" id="maxPrice" placeholder="Max (สูงสุด)">
+    </div>
   </div>
-  <div class="form-group"><label>สถานะ (Status)</label><div class="checkbox-grid" id="statusChecks"><label class="check-item"><input type="checkbox" value="Available" checked> พร้อมอยู่</label><label class="check-item"><input type="checkbox" value="Off-plan"> สั่งสร้าง</label><label class="check-item"><input type="checkbox" value="Reserved"> จองแล้ว</label></div></div>
-  <div class="form-group"><label>ห้องนอน</label><div class="checkbox-grid" id="roomChecks"><label class="check-item"><input type="checkbox" value="1"> 1 Bed</label><label class="check-item"><input type="checkbox" value="2"> 2 Bed</label><label class="check-item"><input type="checkbox" value="3" checked> 3 Bed</label><label class="check-item"><input type="checkbox" value="4"> 4 Bed</label></div></div>
-  <div class="form-group"><label>ข้อความทักทาย</label><input type="text" id="msg" placeholder="สวัสดีครับคุณสมชาย"></div>
-  <div class="form-group"><label>Google Drive Photo ID</label><input type="text" id="img" placeholder="วางเฉพาะไอดีรูปภาพ"></div>
-  <div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px;"><input type="text" id="btn1" placeholder="ชื่อปุ่ม"><input type="text" id="url1" placeholder="ลิงก์ URL"></div>
-  <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์ & คัดลอก</button>
-  <div id="resultBox" class="result"><label>Professional Link:</label><span id="shortUrl"></span><p style="color:#2ECC8A; font-weight:bold;">✓ คัดลอกแล้ว!</p></div>
+
+  <div class="form-group">
+    <label>Status (สถานะที่ต้องการส่ง)</label>
+    <div class="checkbox-grid" id="statusChecks">
+      <label class="check-item"><input type="checkbox" value="Available" checked> พร้อมอยู่</label>
+      <label class="check-item"><input type="checkbox" value="Off-plan"> สั่งสร้าง</label>
+      <label class="check-item"><input type="checkbox" value="Reserved"> จองแล้ว</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Bedrooms (จำนวนห้องนอน)</label>
+    <div class="checkbox-grid" id="roomChecks">
+      <label class="check-item"><input type="checkbox" value="1"> 1 Bed</label>
+      <label class="check-item"><input type="checkbox" value="2"> 2 Bed</label>
+      <label class="check-item"><input type="checkbox" value="3" checked> 3 Bed</label>
+      <label class="check-item"><input type="checkbox" value="4"> 4 Bed</label>
+      <label class="check-item"><input type="checkbox" value="5"> 5+ Bed</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Location (โซนทำเล)</label>
+    <div class="checkbox-grid" id="zoneChecks">
+      <label class="check-item"><input type="checkbox" value="Hin Lek Fai"> หินเหล็กไฟ</label>
+      <label class="check-item"><input type="checkbox" value="Thap Tai"> ทับใต้</label>
+      <label class="check-item"><input type="checkbox" value="Hua Hin"> หัวหิน</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Greeting Message (ข้อความทักทาย)</label>
+    <input type="text" id="msg" placeholder="เช่น สวัสดีครับคุณสมชาย รายการนี้คัดมาให้เป็นพิเศษครับ">
+  </div>
+
+  <div class="form-group">
+    <label>Google Drive Photo ID (รหัสรูปแบนเนอร์)</label>
+    <input type="text" id="img" placeholder="วางเฉพาะรหัสไอดีรูปภาพ">
+  </div>
+
+  <div class="form-group">
+    <label>Action Button (ปุ่มกดพิเศษ)</label>
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px;">
+      <input type="text" id="btn1" placeholder="ชื่อปุ่ม เช่น ดูแผนที่">
+      <input type="text" id="url1" placeholder="ลิงก์ URL (https://...)">
+    </div>
+  </div>
+
+  <button class="btn-main" id="btnCreate" onclick="createShortLink()">สร้างลิงก์พรีเมียม & คัดลอก</button>
+
+  <div id="resultBox" class="result">
+    <label>Professional Link:</label>
+    <span id="shortUrl"></span>
+    <p style="font-size: 0.8rem; color: #2ECC8A; font-weight: bold;">✓ คัดลอกลงคลิปบอร์ดแล้ว!</p>
+  </div>
 </div>
+
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
   const APP_URL = "https://huahin-properties.github.io/smartapp/index.html";
@@ -41,18 +105,24 @@
     const btn = document.getElementById('btnCreate');
     btn.disabled = true; btn.textContent = "กำลังสร้าง...";
 
+    const statuses = Array.from(document.querySelectorAll('#statusChecks input:checked')).map(cb => cb.value).join(',');
+    const rooms = Array.from(document.querySelectorAll('#roomChecks input:checked')).map(cb => cb.value).join(',');
+    const districts = Array.from(document.querySelectorAll('#zoneChecks input:checked')).map(cb => cb.value).join(',');
+
     const params = {
       minPrice: document.getElementById('minPrice').value,
       maxPrice: document.getElementById('maxPrice').value,
-      statuses: Array.from(document.querySelectorAll('#statusChecks input:checked')).map(cb => cb.value).join(','),
-      rooms: Array.from(document.querySelectorAll('#roomChecks input:checked')).map(cb => cb.value).join(','),
+      statuses: statuses,
+      rooms: rooms,
+      districts: districts,
       msg: document.getElementById('msg').value,
-      img: document.getElementById('img').value.trim().replace(/^1\s+/, ''),
+      img: document.getElementById('img').value.trim().replace(/^1\s+/, '').replace(/\s/g, ''),
       btn1: document.getElementById('btn1').value,
       url1: document.getElementById('url1').value,
       mode: 'focus'
     };
 
+    // ลบช่องที่ว่างออก
     Object.keys(params).forEach(key => !params[key] && delete params[key]);
     const queryStr = new URLSearchParams(params).toString();
     
@@ -65,8 +135,8 @@
         document.getElementById('resultBox').style.display = 'block';
         navigator.clipboard.writeText(finalLink);
       }
-    } catch (e) { alert("เกิดข้อผิดพลาด"); }
-    btn.disabled = false; btn.textContent = "สร้างลิงก์ & คัดลอก";
+    } catch (e) { alert("เกิดข้อผิดพลาดในการเชื่อมต่อ"); }
+    btn.disabled = false; btn.textContent = "สร้างลิงก์พรีเมียม & คัดลอก";
   }
 </script>
 </body>
