@@ -41,7 +41,7 @@
   .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
   .thumb.active { opacity: 1; border-color: var(--gold); }
 
-  /* INFO PANELS (CoCo Style Layout) */
+  /* INFO PANELS */
   .info-panel { background: var(--card-bg); border-radius: 18px; padding: 25px; border: 1px solid var(--border); margin-bottom: 15px; }
   .section-title { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -51,7 +51,7 @@
   .val { font-size: 0.9rem; font-weight: 400; color: var(--white); }
   .gold-val { color: var(--gold-lt); font-weight: 600; }
 
-  /* MAP & NEARBY (Bottom Position) */
+  /* MAP & NEARBY (Bottom) */
   .map-box { width: 100%; height: 250px; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; }
   .btn-nav { width: 100%; background: var(--gold); color: var(--navy); text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; }
   
@@ -118,9 +118,13 @@
     <div class="info-panel">
       <h2 class="section-title">Technical Specifications</h2>
       <div class="grid-specs">
-        <div><div class="label">Pool Info</div><div class="val" id="vPool">-</div></div>
-        <div><div class="label">Direction</div><div class="val" id="vDirect">-</div></div>
+        <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
         <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
+        <div><div class="label">Pool System</div><div class="val gold-val" id="vPoolSys">-</div></div>
+        <div><div class="label">Pool Size/Depth</div><div class="val" id="vPool">-</div></div>
+        <div><div class="label">Kitchen Type</div><div class="val" id="vKitchen">-</div></div>
+        <div><div class="label">Parking</div><div class="val" id="vParking">-</div></div>
+        <div><div class="label">Direction</div><div class="val" id="vDirect">-</div></div>
         <div><div class="label">Electricity</div><div class="val" id="vUtil">-</div></div>
       </div>
     </div>
@@ -149,29 +153,14 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRn
 const hpId = new URLSearchParams(window.location.search).get('id');
 let images = [], idx = 0;
 
-// ✅ ฐานข้อมูลสถานที่สำคัญ 12 แห่ง
 const LANDMARKS = [
-  { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 },
-  { name: "Cicada Market", lat: 12.5342, lon: 99.9655 },
-  { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 },
-  { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 },
-  { name: "Hua Hin Night Market", lat: 12.5714, lon: 99.9575 },
-  { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 },
-  { name: "Market Village Mall", lat: 12.5598, lon: 99.9602 },
-  { name: "Vana Nava Water Park", lat: 12.5273, lon: 99.9642 },
-  { name: "Hua Hin Railway Station", lat: 12.5674, lon: 99.9548 },
-  { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 },
-  { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 },
-  { name: "Black Mountain Water Park", lat: 12.6046, lon: 99.8897 }
+  { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Vana Nava", lat: 12.5273, lon: 99.9642 }, { name: "Railway Station", lat: 12.5674, lon: 99.9548 }, { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }, { name: "Water Park", lat: 12.6046, lon: 99.8897 }
 ];
 
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; 
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c * 1.35; 
+  const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))) * 1.35; 
 }
 
 async function init() {
@@ -184,11 +173,7 @@ async function init() {
   hideSplash();
 }
 
-function hideSplash() { 
-  const s = document.getElementById('pageSplash'); 
-  s.style.opacity = '0'; 
-  setTimeout(()=>s.style.display='none', 600); 
-}
+function hideSplash() { const s = document.getElementById('pageSplash'); s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 600); }
 
 function renderData(u) {
   const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
@@ -206,45 +191,36 @@ function renderData(u) {
   document.getElementById('vFeeY').textContent = `฿${Math.round(f * a * 12).toLocaleString()} / Yr`;
   document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
   document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
-  document.getElementById('vPool').textContent = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
-  document.getElementById('vDirect').textContent = u.Direction || "-";
+
+  // ✅ แมพข้อมูลระบบสระและฟิลด์ใหม่ครบถ้วน
+  document.getElementById('vStatus').textContent = u.Status || "-";
   document.getElementById('vFurnish').textContent = u.Furnishing || "-";
+  document.getElementById('vPoolSys').textContent = u.Pool_System || "-";
+  document.getElementById('vPool').textContent = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
+  document.getElementById('vKitchen').textContent = u.Kitchen_Type || "-";
+  document.getElementById('vParking').textContent = u.Parking || "-";
+  document.getElementById('vDirect').textContent = u.Direction || "-";
   document.getElementById('vUtil').textContent = u.Electricity || "-";
   document.getElementById('vDesc').textContent = u.Description || "No description available.";
 
-  // ✅ แสดงแผนที่และคำนวณระยะทางสถานที่สำคัญ 12 แห่ง
   if (u.Coordinates && u.Coordinates !== "#") {
     document.getElementById('mapBox').style.display = 'block';
     document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${u.Coordinates.trim()}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-    document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${u.Coordinates.trim()}`;
-    
-    const [la, lo] = u.Coordinates.split(',');
-    const grid = document.getElementById('nearbyGrid');
+    const [la, lo] = u.Coordinates.split(','); const grid = document.getElementById('nearbyGrid');
     grid.innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div style="font-size:0.6rem; color:var(--muted);">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
   }
-
-  images = u.__album || [u.Thumbnail_Image];
-  if (images.length > 0) { renderThumbs(); setMain(0); }
+  images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
 }
 
 function setMain(i) {
-  idx = (i + images.length) % images.length;
-  const mainImg = document.getElementById('mainImg');
-  mainImg.style.opacity = '0';
-  setTimeout(() => {
-    mainImg.src = images[idx];
-    mainImg.style.opacity = '1';
-    document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`;
-    document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx));
-  }, 150);
+  idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg');
+  mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150);
 }
 function changeSlide(n) { setMain(idx + n); }
-function renderThumbs() {
-  document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join('');
-}
+function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
 init();
 </script>
 </body>
