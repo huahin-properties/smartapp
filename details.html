@@ -1,235 +1,166 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Hua Hin Properties · Exclusive Asset Specifications</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-  :root {
-    --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A;
-    --white: #FDFAF5; --muted: #7A9BB5; --border: rgba(255, 255, 255, 0.08);
-    --card-bg: rgba(11, 24, 41, 0.92);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--navy); color: var(--white); font-family: 'Montserrat', 'Sarabun', sans-serif; min-height: 100dvh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(27,79,114,0.4) 0%, transparent 60%); z-index: 0; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Asset Detail | HUA HIN PROPERTIES</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --navy: #0B1829; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(255, 255, 255, 0.1); --card-bg: #0F172A; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #060F1A; color: #FDFAF5; font-family: 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased; }
+    
+    #pageSplash { position: fixed; inset: 0; background: #060F1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.4s; }
+    .leaf-anim { font-size: 55px; animation: leafSwing 1.5s infinite alternate; margin-bottom: 20px; }
+    @keyframes leafSwing { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+    .splash-brand { color: var(--gold); font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; }
 
-  /* SPLASH SCREEN (HP Style) */
-  #pageSplash { position: fixed; inset: 0; background: var(--navy-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.6s ease-out; }
-  .ducky-wrap { display: flex; gap: 18px; margin-bottom: 25px; font-size: 50px; filter: drop-shadow(0 0 15px rgba(201,168,76,0.3)); }
-  .ducky { animation: bounceDucky 0.8s ease-in-out infinite alternate; }
-  .ducky:nth-child(2) { animation-delay: 0.2s; }
-  .ducky:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes bounceDucky { 0% { transform: translateY(0); } 100% { transform: translateY(-18px); } }
+    header { position: fixed; top: 0; width: 100%; height: 55px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+    .back { text-decoration: none; color: var(--gold); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+    
+    .gallery-container { margin-top: 65px; padding: 0 15px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+    .gallery-card { background: #000; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 20px; }
+    .main-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; background: #000; overflow: hidden; } 
+    .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+    .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.4); color: white; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+    .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.2); scrollbar-width: none; }
+    .thumb-row::-webkit-scrollbar { display: none; }
+    .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 10px; object-fit: cover; opacity: 0.4; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
+    .thumb.active { opacity: 1; border-color: var(--gold); }
+    .tag-count { position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: 700; }
 
-  header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6,15,26,0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
-  .logo { font-size: 1.1rem; font-weight: 700; color: var(--gold); text-decoration: none; text-transform: uppercase; }
-  .backBtn { padding: 8px 16px; border-radius: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--white); cursor: pointer; font-size: 0.75rem; text-transform: uppercase; }
-
-  main { position: relative; z-index: 1; padding: 75px 15px 120px; max-width: 1100px; margin: 0 auto; }
-  
-  /* GALLERY SYSTEM (16:10 Ratio) */
-  .gallery-card { background: var(--card-bg); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-  .main-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; background: #000; overflow: hidden; }
-  .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
-  .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
-  .tag-price { position: absolute; left: 20px; bottom: 20px; font-size: 1.6rem; font-weight: 800; color: var(--gold-lt); text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-  .tag-count { position: absolute; right: 20px; bottom: 20px; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 50px; font-size: 12px; color: var(--white); }
-  .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.2); scrollbar-width: none; }
-  .thumb-row::-webkit-scrollbar { display: none; }
-  .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
-  .thumb.active { opacity: 1; border-color: var(--gold); }
-
-  /* INFO PANELS (V101 Structure) */
-  .info-panel { background: var(--card-bg); border-radius: 18px; padding: 25px; border: 1px solid var(--border); margin-bottom: 15px; }
-  .section-title { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  
-  .grid-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .label { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; font-weight: 400; letter-spacing: 1px; margin-bottom: 3px; }
-  .val { font-size: 0.9rem; font-weight: 400; color: var(--white); }
-  .gold-val { color: var(--gold-lt); font-weight: 600; }
-
-  /* MAP & NEARBY */
-  .map-box { width: 100%; height: 250px; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; }
-  .btn-nav { width: 100%; background: var(--gold); color: var(--navy); text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; }
-  
-  .nearby-grid { display: grid; grid-template-columns: 1fr; gap: 2px; }
-  .nearby-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
-  .loc-name { font-size: 0.85rem; font-weight: 300; }
-  .loc-dist { font-size: 0.8rem; font-weight: 600; color: var(--gold); }
-
-  .footer { position: fixed; bottom: 0; width: 100%; background: var(--navy-dark); padding: 15px; border-top: 1px solid var(--border); z-index: 1000; text-align: center; }
-  .btn-chat { background: var(--gold); color: var(--navy-dark); text-decoration: none; padding: 15px; border-radius: 8px; display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-
-  @media(min-width: 768px) { 
-    .grid-specs { grid-template-columns: repeat(4, 1fr); } 
-    .nearby-grid { grid-template-columns: 1fr 1fr; gap: 0 40px; }
-  }
-</style>
+    .content { padding: 10px 15px 120px; max-width: 900px; margin: 0 auto; }
+    .info-card { background: var(--card-bg); border-radius: 16px; padding: 25px; margin-bottom: 15px; border: 1px solid var(--border); }
+    .section-title { font-size: 0.7rem; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .label { font-size: 0.6rem; color: #7A9BB5; text-transform: uppercase; font-weight: 600; letter-spacing: 1.2px; margin-bottom: 4px; }
+    .val { font-size: 0.9rem; font-weight: 500; color: #FFF; }
+    .gold-val { color: var(--gold); font-weight: 700; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    
+    .nearby-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .loc-name { font-size: 0.8rem; font-weight: 400; color: #FFF; }
+    .loc-dist { font-size: 0.75rem; font-weight: 600; color: var(--gold); }
+    
+    .map-box { width: 100%; height: 250px; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; }
+    .btn-nav { width: 100%; background: var(--gold); color: #060F1A; text-decoration: none; padding: 16px; border-radius: 12px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
+    .footer { position: fixed; bottom: 0; width: 100%; background: rgba(6, 15, 26, 0.95); padding: 15px; border-top: 1px solid var(--border); z-index: 1000; backdrop-filter: blur(10px); }
+    .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 16px; border-radius: 8px; display: block; text-align: center; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 800; }
+  </style>
 </head>
 <body>
-
-  <div id="pageSplash">
-    <div class="ducky-wrap"><span class="ducky">🐚</span><span class="ducky">🌊</span><span class="ducky">🌴</span></div>
-    <div style="color:var(--gold); letter-spacing:6px; font-size:0.7rem; margin-bottom:8px;">WELCOME</div>
-    <div style="font-weight:800; letter-spacing:4px;">HUAHIN.PROPERTIES</div>
-  </div>
-
-  <header>
-    <a href="index.html" class="logo">HUA HIN<span style="font-weight:300; color:#fff;">.PROPERTIES</span></a>
-    <button class="backBtn" onclick="history.back()">← Back</button>
-  </header>
-
-  <main>
-    <div class="gallery-card">
-      <div class="main-stage">
-        <img id="mainImg" class="main-img" src="">
-        <div class="nav-arrow" style="left:15px" onclick="changeSlide(-1)">❮</div>
-        <div class="nav-arrow" style="right:15px" onclick="changeSlide(1)">❯</div>
-        <div class="tag-price" id="priceLabel">฿0</div>
-        <div class="tag-count" id="countLabel">0 / 0</div>
-      </div>
-      <div class="thumb-row" id="thumbStrip"></div>
-    </div>
-
-    <div class="info-panel">
-      <h1 id="propTitle" style="font-size:1.8rem; color:var(--white); margin-bottom:5px;">Plot ...</h1>
-      <div id="pLocText" style="color:var(--gold); font-size:0.75rem; margin-bottom:20px; text-transform:uppercase; letter-spacing:1px;">📍 -</div>
-      <div class="grid-specs">
+  <div id="pageSplash"><div class="leaf-anim">💎</div><div class="splash-brand">MASTER CATALOG</div></div>
+  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold); letter-spacing:1px;">HUA HIN PROPERTIES</div><div style="width:40px;"></div></header>
+  
+  <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:15px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:15px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
+  
+  <main class="content">
+    <div class="info-card">
+      <h1 id="pPlot" style="font-size: 2rem; font-weight: 800; color: var(--gold); margin-bottom: 8px;">Plot ...</h1>
+      <div id="pLocText" style="font-size: 0.85rem; color: #7A9BB5; margin-bottom: 20px;">📍 -</div>
+      <div id="pPrice" style="font-size: 1.6rem; font-weight: 800; color: var(--white); margin-bottom: 25px;">฿0</div>
+      <div class="grid">
         <div><div class="label">Bed / Bath</div><div class="val" id="vBB">-</div></div>
         <div><div class="label">Living Area</div><div class="val" id="vLiving">-</div></div>
         <div><div class="label">Land Size</div><div class="val" id="vLand">-</div></div>
-        <div><div class="label">Price / Sq.m</div><div class="val gold-val" id="vPriceSq">-</div></div>
+        <div><div class="label">Price per Sq.m</div><div class="val gold-val" id="vPriceSq">-</div></div>
       </div>
     </div>
 
-    <div class="info-panel">
-      <h2 class="section-title">Technical Specifications</h2>
-      <div class="grid-specs">
+    <div class="info-card">
+      <h2 class="section-title">Property Specifications</h2>
+      <div class="grid">
         <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
         <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
         <div><div class="label">District</div><div class="val" id="vDistrict">-</div></div>
-        <div><div class="label">Sub-district</div><div class="val" id="vSubDistrict">-</div></div>
         <div><div class="label">Zone</div><div class="val gold-val" id="vZone">-</div></div>
-        <div><div class="label">Pool System</div><div class="val gold-val" id="vPoolSys">-</div></div>
+        <div><div class="label">Pool System</div><div class="val" id="vPoolSys">-</div></div>
         <div><div class="label">Pool Size</div><div class="val" id="vPool">-</div></div>
         <div><div class="label">Kitchen Type</div><div class="val" id="vKitchen">-</div></div>
         <div><div class="label">Parking</div><div class="val" id="vParking">-</div></div>
         <div><div class="label">Direction</div><div class="val" id="vDirect">-</div></div>
-        <div><div class="label">Electricity</div><div class="val" id="vUtil">-</div></div>
+        <div><div class="label">Utility</div><div class="val" id="vUtil">-</div></div>
       </div>
     </div>
 
-    <div class="info-panel" style="border-left: 4px solid var(--gold);">
-      <h2 class="section-title">Ownership & Fees</h2>
-      <div class="grid-specs">
+    <div class="info-card" style="border-left: 5px solid var(--gold);">
+      <h2 class="section-title">Ownership Details</h2>
+      <div class="grid">
         <div><div class="label">Monthly Fee</div><div class="val" id="vFeeM">-</div></div>
         <div><div class="label">Yearly Total</div><div class="val gold-val" id="vFeeY">-</div></div>
         <div><div class="label">Ownership</div><div class="val" id="vOwner">-</div></div>
-        <div><div class="label">Transfer Exp.</div><div class="val" id="vTransfer">-</div></div>
+        <div><div class="label">Transfer Fee</div><div class="val" id="vTransfer">-</div></div>
       </div>
     </div>
 
-    <div class="info-panel">
-      <h2 class="section-title">Bespoke Narrative</h2>
-      <p id="vDesc" style="font-family:'Sarabun'; font-size:0.9rem; line-height:1.8; color:var(--muted); white-space:pre-line;">-</p>
+    <div class="info-card">
+      <h2 class="section-title">Asset Description</h2>
+      <p id="vDesc" style="font-size: 0.88rem; line-height: 1.8; color: #CCC; font-weight: 400; white-space: pre-line;">-</p>
     </div>
 
-    <div class="info-panel">
-      <h2 class="section-title">Location & Navigation</h2>
+    <div class="info-card">
+      <h2 class="section-title">Map & Navigation</h2>
       <div class="map-box" id="mapBox" style="display:none;"><iframe id="mapFrame" width="100%" height="100%" frameborder="0"></iframe></div>
-      <a id="navLink" href="" target="_blank" class="btn-nav">📍 Start GPS Navigation</a>
+      <a id="navLink" href="" target="_blank" class="btn-nav" style="display:none;">📍 Open in Google Maps</a>
     </div>
 
-    <div class="info-panel">
-      <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
-      <div id="nearbyGrid" class="nearby-grid"></div>
+    <div class="info-card">
+      <h2 class="section-title">Lifestyle Proximity</h2>
+      <div id="nearbyGrid" class="grid grid-cols-1"></div>
     </div>
   </main>
 
-  <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat with Concierge</a></div>
+  <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">Contact Asset Manager</a></div>
 
-<script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
-const hpId = new URLSearchParams(window.location.search).get('id');
-let images = [], idx = 0;
-
-// 12 Landmarks Database
-const LANDMARKS = [
-  { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Vana Nava", lat: 12.5273, lon: 99.9642 }, { name: "Railway Station", lat: 12.5674, lon: 99.9548 }, { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }, { name: "Water Park", lat: 12.6046, lon: 99.8897 }
-];
-
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180;
-  const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))) * 1.35; 
-}
-
-async function init() {
-  if(!hpId) return;
-  try {
-    const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
-    const json = await res.json();
-    if(json.ok) renderData(json.data);
-  } catch(e) { console.error(e); }
-  hideSplash();
-}
-
-function hideSplash() { const s = document.getElementById('pageSplash'); s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 600); }
-
-function renderData(u) {
-  const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
-  const a = parseFloat(String(u.Living_Area_sq_m || 1).replace(/[^0-9.]/g, ''));
-  const f = parseFloat(String(u.Common_Fee_Rate || 0).replace(/[^0-9.]/g, ''));
-
-  document.getElementById('propTitle').textContent = u.Plot ? `Plot ${u.Plot}` : u.HP_ID;
-  document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'} (${u.Zone || '-'})`;
-  document.getElementById('priceLabel').textContent = "฿" + p.toLocaleString();
-  document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
-  document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
-  document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
-  document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
-  document.getElementById('vFeeM').textContent = `฿${f.toLocaleString()} / m²`;
-  document.getElementById('vFeeY').textContent = `฿${Math.round(f * a * 12).toLocaleString()} / Yr`;
-  document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
-  document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
-
-  // Full Specifications Sync
-  document.getElementById('vStatus').textContent = u.Status || "-";
-  document.getElementById('vFurnish').textContent = u.Furnishing || "-";
-  document.getElementById('vDistrict').textContent = u.District || "-";
-  document.getElementById('vSubDistrict').textContent = u.SubDistrict || "-";
-  document.getElementById('vZone').textContent = u.Zone || "-";
-  document.getElementById('vPoolSys').textContent = u.Pool_System || "-";
-  document.getElementById('vPool').textContent = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
-  document.getElementById('vKitchen').textContent = u.Kitchen_Type || "-";
-  document.getElementById('vParking').textContent = u.Parking || "-";
-  document.getElementById('vDirect').textContent = u.Direction || "-";
-  document.getElementById('vUtil').textContent = u.Electricity || "-";
-  document.getElementById('vDesc').textContent = u.Description || "No description available.";
-
-  if (u.Coordinates && u.Coordinates !== "#") {
-    document.getElementById('mapBox').style.display = 'block';
-    document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${u.Coordinates.trim()}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-    document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${u.Coordinates.trim()}`;
-    const [la, lo] = u.Coordinates.split(','); const grid = document.getElementById('nearbyGrid');
-    grid.innerHTML = LANDMARKS.map(loc => {
-      const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon);
-      return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div style="font-size:0.6rem; color:var(--muted);">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
-    }).join('');
-  }
-  images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
-}
-
-function setMain(i) {
-  idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg');
-  mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150);
-}
-function changeSlide(n) { setMain(idx + n); }
-function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
-init();
-</script>
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
+    const hpId = new URLSearchParams(window.location.search).get('id');
+    let images = [], idx = 0;
+    const LANDMARKS = [
+      { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Bluport Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Black Mountain", lat: 12.6146, lon: 99.8924 }
+    ];
+    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
+    async function init() { if(!hpId) return; await fetchFreshData(); }
+    async function fetchFreshData() { try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) { renderData(json.data); hideSplash(); } } catch(e) { hideSplash(); } }
+    function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
+    function renderData(u) {
+      const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
+      const a = parseFloat(String(u.Living_Area_sq_m).replace(/[^0-9.]/g, '')) || 1;
+      document.getElementById('pPlot').textContent = `Asset ${u.HP_ID} (Plot ${u.Plot || '-'})`;
+      document.getElementById('pLocText').textContent = `📍 ${u.District || '-'}, ${u.Zone || '-'}`;
+      document.getElementById('pPrice').textContent = `฿${p.toLocaleString()}`;
+      document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
+      document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
+      document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
+      document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
+      document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
+      document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
+      document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
+      document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
+      document.getElementById('vDistrict').textContent = u.District || "-";
+      document.getElementById('vZone').textContent = u.Zone || "-";
+      document.getElementById('vStatus').textContent = u.Status || "-";
+      document.getElementById('vFurnish').textContent = u.Furnishing || "-";
+      document.getElementById('vPoolSys').textContent = u.Pool_System || "-";
+      document.getElementById('vPool').textContent = u.Pool_Size || "-";
+      document.getElementById('vKitchen').textContent = u.Kitchen_Type || "-";
+      document.getElementById('vParking').textContent = u.Parking || "-";
+      document.getElementById('vDirect').textContent = u.Direction || "-";
+      document.getElementById('vUtil').textContent = `Elec: ${u.Electricity || '-'} | Water: ${u.Water_Source || '-'}`;
+      document.getElementById('vDesc').textContent = u.Description || "-";
+      if (u.Coordinates && u.Coordinates !== "#") {
+        document.getElementById('mapBox').style.display='block'; document.getElementById('navLink').style.display='flex';
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${u.Coordinates.trim()}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('navLink').href = `https://www.google.com/maps?q=${u.Coordinates.trim()}`;
+        const [la, lo] = u.Coordinates.split(','); const grid = document.getElementById('nearbyGrid');
+        grid.innerHTML = LANDMARKS.map(loc => { const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
+      }
+      images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
+    }
+    function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
+    function changeSlide(n) { setMain(idx + n); }
+    function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
+    init();
+  </script>
 </body>
 </html>
