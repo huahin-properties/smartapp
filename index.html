@@ -2,107 +2,81 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>HUA HIN.PROPERTIES | MASTER</title>
+  <title>HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #010A1A; color: white; }
-    .search-bar { background: white; border-radius: 2rem; padding: 12px 24px; color: #333; font-weight: 600; width: 100%; }
-    .filter-btn { background: white; color: #010A1A; border-radius: 0.75rem; padding: 8px 16px; font-weight: 700; font-size: 14px; white-space: nowrap; }
-    .cat-btn { background: rgba(255,255,255,0.1); color: #94a3b8; border-radius: 2rem; padding: 6px 18px; font-weight: 700; font-size: 12px; }
-    .cat-btn.active { background: #C9A84C; color: white; }
+    body { font-family: 'Montserrat', sans-serif; background: #010A1A; color: white; padding: 20px; }
+    .search-input { width: 100%; background: white; border-radius: 1.5rem; padding: 12px 24px; color: #333; font-weight: 600; margin-bottom: 12px; }
+    .filter-btn { background: white; color: #010A1A; border-radius: 0.75rem; padding: 8px 16px; font-weight: 700; font-size: 14px; width: 100%; text-align: left; }
+    .unit-card { background: rgba(255,255,255,0.03); border-radius: 1.5rem; overflow: hidden; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); }
+    .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
   </style>
 </head>
-<body class="p-6">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-lg font-800 tracking-tighter">HUA HIN.<span class="text-slate-400">PROPERTIES</span></h1>
-    <button class="bg-[#C9A84C] text-[10px] font-800 px-4 py-2 rounded-lg">CONTACT</button>
+<body>
+  <div class="mb-6"><h1 class="text-xl font-800 tracking-tight">HUA HIN PROPERTIES</h1></div>
+  
+  <input type="text" id="searchInput" class="search-input" placeholder="Search..." onkeyup="filter()">
+  
+  <div class="grid grid-cols-3 gap-2 mb-8">
+    <select id="zoneF" onchange="filter()" class="filter-btn"><option value="all">All Zones</option></select>
+    <select id="priceF" onchange="filter()" class="filter-btn"><option value="none">Price Sort</option><option value="asc">Lowest</option></select>
+    <select id="bedF" onchange="filter()" class="filter-btn"><option value="all">Bedrooms</option></select>
   </div>
 
-  <div class="relative mb-4">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search Location, ID, or Project..." onkeyup="filterData()">
+  <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-2">
+    <h2 class="text-[#C9A84C] text-xs font-800 tracking-widest uppercase">Luxury Collections</h2>
+    <span id="counter" class="text-[10px] text-slate-500 font-700">0 UNITS</span>
   </div>
 
-  <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
-    <select id="zoneFilter" onchange="filterData()" class="filter-btn outline-none"><option value="all">All Zones</option></select>
-    <select id="priceSort" onchange="filterData()" class="filter-btn outline-none"><option value="none">Price Sort</option><option value="asc">Low to High</option><option value="desc">High to Low</option></select>
-    <select id="bedFilter" onchange="filterData()" class="filter-btn outline-none"><option value="all">Bedrooms</option></select>
-  </div>
-
-  <div class="flex gap-2 mb-8 overflow-x-auto no-scrollbar">
-    <button class="cat-btn active" onclick="setCat('all', this)">ALL</button>
-    <button class="cat-btn" onclick="setCat('sale', this)">SALE</button>
-    <button class="cat-btn" onclick="setCat('rent', this)">RENT</button>
-    <button class="cat-btn" onclick="setCat('pool villa', this)">POOL VILLA</button>
-    <button class="cat-btn" onclick="setCat('condo', this)">CONDO</button>
-  </div>
-
-  <h2 class="text-[#C9A84C] text-sm font-800 tracking-widest mb-6">LUXURY COLLECTIONS</h2>
-  <div id="container" class="space-y-6"></div>
+  <div id="container"></div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
-    let allData = [];
-    let currentCat = 'all';
+    let rawData = [];
 
-    async function load() {
+    async function init() {
       const res = await fetch(`${API}?mode=getListSmall&project=all`);
-      allData = await res.json();
-      setupFilters();
-      filterData();
+      rawData = await res.json();
+      const zones = [...new Set(rawData.map(i => i.Zone))].filter(Boolean);
+      zones.forEach(z => document.getElementById('zoneF').innerHTML += `<option value="${z}">${z}</option>`);
+      const beds = [...new Set(rawData.map(i => i.Bedrooms))].sort();
+      beds.forEach(b => document.getElementById('bedF').innerHTML += `<option value="${b}">${b} Beds</option>`);
+      filter();
     }
 
-    function setupFilters() {
-      const zones = [...new Set(allData.map(item => item.Zone))].filter(Boolean);
-      const zoneSelect = document.getElementById('zoneFilter');
-      zones.forEach(z => zoneSelect.innerHTML += `<option value="${z}">${z}</option>`);
-      
-      const beds = [...new Set(allData.map(item => item.Bedrooms))].sort((a,b)=>a-b);
-      const bedSelect = document.getElementById('bedFilter');
-      beds.forEach(b => bedSelect.innerHTML += `<option value="${b}">${b} Beds</option>`);
-    }
+    function filter() {
+      const s = document.getElementById('searchInput').value.toLowerCase();
+      const z = document.getElementById('zoneF').value;
+      const b = document.getElementById('bedF').value;
+      const sort = document.getElementById('priceF').value;
 
-    function setCat(cat, btn) {
-      currentCat = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      filterData();
-    }
-
-    function filterData() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const zone = document.getElementById('zoneFilter').value;
-      const bed = document.getElementById('bedFilter').value;
-      const sort = document.getElementById('priceSort').value;
-
-      let filtered = allData.filter(u => {
-        const matchSearch = u.HP_ID.toLowerCase().includes(search) || u.Project_Name.toLowerCase().includes(search);
-        const matchZone = zone === 'all' || u.Zone === zone;
-        const matchBed = bed === 'all' || String(u.Bedrooms) === bed;
-        const matchCat = currentCat === 'all' || String(u.Listing_Type).toLowerCase() === currentCat || String(u.Type).toLowerCase() === currentCat;
-        return matchSearch && matchZone && matchBed && matchCat;
+      let f = rawData.filter(u => {
+        return (u.HP_ID.toLowerCase().includes(s) || u.Plot.toLowerCase().includes(s)) && (z === 'all' || u.Zone === z) && (b === 'all' || String(u.Bedrooms) === b);
       });
 
-      if(sort === 'asc') filtered.sort((a,b) => a.Sale_Price - b.Sale_Price);
-      if(sort === 'desc') filtered.sort((a,b) => b.Sale_Price - a.Sale_Price);
-
-      render(filtered);
-    }
-
-    function render(items) {
-      const html = items.map(u => `
-        <div class="relative rounded-[2rem] overflow-hidden bg-slate-900 border border-white/5">
-          <img src="${u.Thumbnail_Image}" class="w-full h-64 object-cover opacity-80">
-          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
-             <h3 class="font-800 text-xl">PLOT ${u.Plot}</h3>
-             <p class="text-2xl font-800 text-[#C9A84C]">฿${Number(u.Sale_Price).toLocaleString()}</p>
-             <a href="details.html?id=${u.HP_ID}" class="mt-4 inline-block text-[10px] font-800 border-b border-white pb-1">VIEW DETAILS</a>
+      if(sort === 'asc') f.sort((a,b) => a.Sale_Price - b.Sale_Price);
+      document.getElementById('counter').innerText = `${f.length} UNITS`;
+      
+      document.getElementById('container').innerHTML = f.map(u => `
+        <div class="unit-card flex items-center p-4 gap-4" onclick="location.href='details.html?id=${u.HP_ID}'">
+          <div class="relative w-32 h-32 flex-shrink-0">
+            <img src="${u.Thumbnail_Image}" class="w-full h-full object-cover rounded-2xl">
+            <span class="absolute top-2 left-2 text-[8px] bg-black/50 px-1 rounded text-white/50">#${u.HP_ID}</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-800 text-lg">For ${u.Listing_Type || 'Sale'}</h3>
+            <p class="text-[11px] font-700 text-slate-400 uppercase">${u.Bedrooms} Bed | ${u.Bathrooms} Bath</p>
+            <div class="my-2"><span class="status-badge ${u.Status === 'Available' ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-500 border border-rose-500/30'}">${u.Status}</span></div>
+            <p class="text-[10px] text-slate-500 uppercase">${u.District} | ${u.Zone}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-xl font-800 text-[#C9A84C]">฿${Number(u.Sale_Price).toLocaleString()}</p>
           </div>
         </div>
       `).join('');
-      document.getElementById('container').innerHTML = html || '<p class="text-center py-10 text-slate-500">No properties found.</p>';
     }
-    window.onload = load;
+    window.onload = init;
   </script>
 </body>
 </html>
