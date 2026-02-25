@@ -1,136 +1,56 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-  <title>Master Dashboard V112 | HuaHin.Properties</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Admin Dashboard | Master</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #f8fafc; font-size: 13px; }
-    .table-container { background: white; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; overflow-x: auto; }
-    th { text-transform: uppercase; font-size: 10px; font-weight: 800; color: #94a3b8; letter-spacing: 1px; padding: 12px 16px !important; }
-    td { padding: 10px 16px !important; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-    tr:hover { background-color: #f8fafc; }
-    .status-badge { padding: 4px 10px; border-radius: 99px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-    .btn-manage { color: #64748b; transition: all 0.2s; }
-    .btn-manage:hover { color: #0f172a; transform: scale(1.2); }
-    .search-box { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; padding: 10px 20px; width: 100%; max-width: 400px; font-weight: 600; outline: none; }
-    .filter-tab { padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; color: #64748b; }
-    .filter-tab.active { background: #0f172a; color: white; }
-    .unit-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: #f1f5f9; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; padding: 20px; }
+    .unit-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
   </style>
 </head>
-<body class="p-4 md:p-8">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-      <div class="flex items-center gap-4">
-        <div class="bg-slate-900 p-3 rounded-2xl"><i class="fas fa-database text-white text-xl"></i></div>
-        <div>
-          <h1 class="text-xl font-800 tracking-tight text-slate-800">DIRECT HUB SITE</h1>
-          <p class="text-[10px] text-slate-400 font-700 uppercase tracking-widest">Management Dashboard V112</p>
-        </div>
-      </div>
-      <input type="text" id="searchInput" class="search-box" placeholder="ค้นหารหัส HP-ID หรือ ชื่อแปลง..." onkeyup="searchUnits()">
-    </div>
-
-    <div class="flex gap-2 mb-6" id="filterContainer">
-      <div class="filter-tab active" onclick="filterData('all', this)">ALL PROJECTS</div>
-      <div class="filter-tab" onclick="filterData('coco', this)">COCO HUA HIN 88</div>
-      <div class="filter-tab" onclick="filterData('pyne', this)">THE PYNE PLUS</div>
-    </div>
-
-    <div class="table-container">
-      <table class="min-w-full text-left border-collapse">
-        <thead class="bg-slate-50">
-          <tr>
-            <th>IMG</th>
-            <th>UNIT ID</th>
-            <th>PLOT NAME</th>
-            <th>SALE STATUS</th>
-            <th>PROJECT</th>
-            <th>SPECS</th>
-            <th>PRICE (THB)</th>
-            <th class="text-center">MANAGE</th>
-          </tr>
-        </thead>
-        <tbody id="unitTableBody">
-          </tbody>
-      </table>
-    </div>
-    
-    <div id="loading" class="text-center py-20">
-      <div class="animate-spin inline-block w-6 h-6 border-3 border-slate-900 border-t-transparent rounded-full mb-4"></div>
-      <p class="text-slate-400 font-700 text-[10px] tracking-widest">LOADING DATABASE...</p>
-    </div>
+<body>
+  <div class="flex justify-between items-center mb-8 mt-4 px-2">
+    <h1 class="text-xl font-800 uppercase text-[#C9A84C]">Dashboard</h1>
+    <button onclick="location.href='edit.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-[10px] uppercase shadow-lg shadow-gold/10"><i class="fas fa-plus mr-2"></i>Add Unit</button>
   </div>
+  
+  <input type="text" id="sI" onkeyup="filter()" placeholder="Search HP-ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-6 outline-none focus:border-[#C9A84C] text-sm font-600">
+  
+  <div id="list"></div>
 
   <script>
-    const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec"; //
-    let allUnits = [];
+    const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
+    let data = [];
 
-    async function fetchUnits() {
-      try {
-        const res = await fetch(`${API}?mode=getListSmall`);
-        allUnits = await res.json();
-        renderTable(allUnits);
-        document.getElementById('loading').style.display = 'none';
-      } catch (e) { console.error("Load failed", e); }
+    async function init() {
+      const res = await fetch(`${API}?mode=getListSmall&project=all`);
+      data = await res.json(); render(data);
     }
 
-    function renderTable(units) {
-      const tbody = document.getElementById('unitTableBody');
-      tbody.innerHTML = units.map(u => {
-        const isCoco = String(u.Project_Name).toLowerCase().includes('coco');
-        const repoName = isCoco ? 'smartapp-coco' : 'smartapp-pyneplus';
-        
-        // กำหนดสี Status Badge
-        let statusClass = "bg-slate-100 text-slate-500";
-        if(u.Status === 'Available') statusClass = "bg-emerald-100 text-emerald-600";
-        if(u.Status === 'Sold') statusClass = "bg-rose-100 text-rose-600";
-        if(u.Status === 'Reserved') statusClass = "bg-indigo-100 text-indigo-600";
-
-        return `
-          <tr>
-            <td><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/100'}" class="unit-thumb shadow-sm"></td>
-            <td class="font-800 text-slate-800">${u.HP_ID}</td>
-            <td class="font-700 text-slate-500">${u.Plot || '-'}</td>
-            <td><span class="status-badge ${statusClass}">${u.Status || 'N/A'}</span></td>
-            <td class="font-700 text-[11px] text-slate-400">${u.Project_Name}</td>
-            <td class="font-600 text-slate-500 text-[11px]">${u.Bedrooms || 0}B / ${u.Bathrooms || 0}B</td>
-            <td class="font-800 text-slate-700">${Number(u.Sale_Price || 0).toLocaleString()}</td>
-            <td class="text-center">
-              <a href="https://huahin-properties.github.io/${repoName}/admin.html?id=${u.HP_ID}" class="btn-manage">
-                <i class="fas fa-edit text-lg"></i>
-              </a>
-            </td>
-          </tr>
-        `;
-      }).join('');
+    function render(items) {
+      document.getElementById('list').innerHTML = items.map(u => `
+        <div class="unit-row">
+          <img src="${u.Thumbnail_Image}" class="w-16 h-16 rounded-lg object-cover bg-black">
+          <div class="flex-1 min-width-0">
+            <div class="text-[9px] text-slate-500 font-800">#${u.HP_ID}</div>
+            <div class="font-800 text-sm truncate uppercase">Plot ${u.Plot || 'N/A'}</div>
+            <div class="text-[9px] text-[#C9A84C] font-700">${u.Status} | ${u.Project_Name}</div>
+          </div>
+          <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="bg-white/10 p-3 rounded-xl hover:bg-[#C9A84C] hover:text-black transition-all">
+            <i class="fas fa-edit text-xs"></i>
+          </button>
+        </div>
+      `).join('');
     }
 
-    function searchUnits() {
-      const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = allUnits.filter(u => 
-        u.HP_ID.toLowerCase().includes(term) || 
-        (u.Plot && u.Plot.toLowerCase().includes(term)) ||
-        u.Project_Name.toLowerCase().includes(term)
-      );
-      renderTable(filtered);
+    function filter() {
+      const q = document.getElementById('sI').value.toLowerCase();
+      render(data.filter(u => u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q))));
     }
-
-    function filterData(proj, btn) {
-      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      if(proj === 'all') {
-        renderTable(allUnits);
-      } else {
-        const filtered = allUnits.filter(u => String(u.Project_Name).toLowerCase().includes(proj));
-        renderTable(filtered);
-      }
-    }
-
-    window.onload = fetchUnits;
+    window.onload = init;
   </script>
 </body>
 </html>
