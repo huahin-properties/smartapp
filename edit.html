@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Asset Editor | MASTER SYSTEM V128</title>
+  <title>Asset Editor | MASTER SYSTEM V129</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -18,16 +18,18 @@
     .img-tile.marked { opacity: 0.3; border: 2.5px solid #EF4444; filter: grayscale(0.8); }
     .img-x { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: 2px solid #060F1A; }
     
-    /* PDF Section */
-    .pdf-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
-    .btn-pdf-action { padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; }
+    /* PDF Power-Up */
+    .pdf-row { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); padding: 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
+    .pdf-info { flex: 1; min-width: 0; }
+    .pdf-name { font-size: 9px; color: #E4C46A; font-weight: 700; display: block; margin-top: 2px; }
+    .btn-pdf { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
+    .btn-pdf:active { transform: scale(0.9); }
 
     .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.95); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
     .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #C9A84C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
-    .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; transition: 0.3s; }
+    .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
   </style>
 </head>
 <body>
@@ -67,26 +69,38 @@
       </div>
       
       <div class="input-card">
-        <span class="field-label">PDF Documents (Customer / Agent / Floor Plan)</span>
+        <span class="field-label">PDF Documents (Real-time Manager)</span>
         <div class="space-y-3 mt-4">
           <div class="pdf-row">
-            <div class="flex-1"><span class="text-[10px] font-700 block">FLOOR PLAN (PDF)</span><span id="txt-FloorPlan_PDF" class="text-[9px] text-slate-500 truncate block">No file found</span></div>
-            <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white">Upload</button>
-            <button onclick="deleteFile('FloorPlan_PDF')" class="btn-pdf-action bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            <div class="pdf-info"><span class="text-[10px] font-800 block">FLOOR PLAN</span><span id="txt-FloorPlan_PDF" class="pdf-name truncate">No file found</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('FloorPlan_PDF')" id="view-FloorPlan_PDF" class="btn-pdf bg-white/10 text-white hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="downloadFile('FloorPlan_PDF')" id="dl-FloorPlan_PDF" class="btn-pdf bg-blue-600/20 text-blue-400 hidden"><i class="fas fa-download"></i></button>
+              <button onclick="document.getElementById('f_floor').click()" class="btn-pdf bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('FloorPlan_PDF')" class="btn-pdf bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            </div>
             <input type="file" id="f_floor" class="hidden" accept="application/pdf" onchange="handleUpload(this, 'pdf', 'FloorPlan_PDF')">
             <input type="hidden" id="FloorPlan_PDF">
           </div>
           <div class="pdf-row">
-            <div class="flex-1"><span class="text-[10px] font-700 block">CUSTOMER BROCHURE</span><span id="txt-Sales_Gallery" class="text-[9px] text-slate-500 truncate block">No file found</span></div>
-            <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white">Upload</button>
-            <button onclick="deleteFile('Sales_Gallery')" class="btn-pdf-action bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            <div class="pdf-info"><span class="text-[10px] font-800 block">CUSTOMER BROCHURE</span><span id="txt-Sales_Gallery" class="pdf-name truncate">No file found</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('Sales_Gallery')" id="view-Sales_Gallery" class="btn-pdf bg-white/10 text-white hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="downloadFile('Sales_Gallery')" id="dl-Sales_Gallery" class="btn-pdf bg-blue-600/20 text-blue-400 hidden"><i class="fas fa-download"></i></button>
+              <button onclick="document.getElementById('f_customer').click()" class="btn-pdf bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('Sales_Gallery')" class="btn-pdf bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            </div>
             <input type="file" id="f_customer" class="hidden" accept="application/pdf" onchange="handleUpload(this, 'pdf', 'Sales_Gallery')">
             <input type="hidden" id="Sales_Gallery">
           </div>
           <div class="pdf-row">
-            <div class="flex-1"><span class="text-[10px] font-700 block">AGENT FACT SHEET</span><span id="txt-Material_PDF" class="text-[9px] text-slate-500 truncate block">No file found</span></div>
-            <button onclick="document.getElementById('f_agent').click()" class="btn-pdf-action bg-blue-600 text-white">Upload</button>
-            <button onclick="deleteFile('Material_PDF')" class="btn-pdf-action bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            <div class="pdf-info"><span class="text-[10px] font-800 block">AGENT FACT SHEET</span><span id="txt-Material_PDF" class="pdf-name truncate">No file found</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('Material_PDF')" id="view-Material_PDF" class="btn-pdf bg-white/10 text-white hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="downloadFile('Material_PDF')" id="dl-Material_PDF" class="btn-pdf bg-blue-600/20 text-blue-400 hidden"><i class="fas fa-download"></i></button>
+              <button onclick="document.getElementById('f_agent').click()" class="btn-pdf bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('Material_PDF')" class="btn-pdf bg-red-600/20 text-red-500"><i class="fas fa-trash"></i></button>
+            </div>
             <input type="file" id="f_agent" class="hidden" accept="application/pdf" onchange="handleUpload(this, 'pdf', 'Material_PDF')">
             <input type="hidden" id="Material_PDF">
           </div>
@@ -130,26 +144,48 @@
         });
         const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (res.ok) {
-          Object.keys(res.data).forEach(k => { 
-            if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; 
-            if(document.getElementById('txt-'+k)) document.getElementById('txt-'+k).innerText = res.data[k] ? "File Ready" : "No file found";
+          const u = res.data;
+          Object.keys(u).forEach(k => { 
+            if(document.getElementById(k)) document.getElementById(k).value = u[k]; 
           });
-          renderMainThumb(res.data.Thumbnail_Image);
-          currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
+          // แสดงชื่อไฟล์และปุ่ม
+          syncPdfUI('FloorPlan_PDF', u.FloorPlan_PDF, u.FloorPlan_Name);
+          syncPdfUI('Sales_Gallery', u.Sales_Gallery, u.Sales_Gallery_Name);
+          syncPdfUI('Material_PDF', u.Material_PDF, u.Material_PDF_Name);
+
+          renderMainThumb(u.Thumbnail_Image);
+          currentGallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [];
           renderGallery();
         }
       }
     }
 
-    function renderMainThumb(url) {
-      const box = document.getElementById('thumbPreview');
+    function syncPdfUI(id, url, name) {
+      const txt = document.getElementById('txt-'+id);
+      const view = document.getElementById('view-'+id);
+      const dl = document.getElementById('dl-'+id);
       if (url) {
-        box.innerHTML = `<div class="img-wrapper"><div class="img-x" onclick="deleteMainThumb('${url}')">✕</div><img src="${url.split('=')[0]+'=s600'}" class="w-full h-full object-cover"></div>`;
-        document.getElementById('Thumbnail_Image').value = url;
+        txt.innerText = name || "File Ready";
+        view.classList.remove('hidden');
+        dl.classList.remove('hidden');
       } else {
-        box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`;
-        document.getElementById('Thumbnail_Image').value = "";
+        txt.innerText = "No file found";
+        view.classList.add('hidden');
+        dl.classList.add('hidden');
       }
+    }
+
+    function viewFile(id) {
+      const url = document.getElementById(id).value;
+      if (!url) return;
+      // แปลงเป็นลิงก์ Preview
+      const fileId = url.split("id=")[1].split("&")[0];
+      window.open(`https://drive.google.com/file/d/${fileId}/view?usp=sharing`, '_blank');
+    }
+
+    function downloadFile(id) {
+      const url = document.getElementById(id).value;
+      if (url) window.open(url, '_blank');
     }
 
     async function handleUpload(input, target, fieldId) {
@@ -164,7 +200,7 @@
           else if (target === 'gallery') currentGallery.push(result.url);
           else { 
             document.getElementById(fieldId).value = result.url;
-            document.getElementById('txt-'+fieldId).innerText = "File Uploaded ✅";
+            syncPdfUI(fieldId, result.url, result.fileName);
           }
         }
       }
@@ -175,16 +211,25 @@
     async function deleteFile(fieldId) {
       const url = document.getElementById(fieldId).value;
       if (!url || !confirm("Delete this file permanently?")) return;
-      // ลบทันทีหลังบ้าน
       fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
       document.getElementById(fieldId).value = "";
-      document.getElementById('txt-'+fieldId).innerText = "No file found (Deleted)";
+      syncPdfUI(fieldId, "", "");
       if (fieldId === 'Thumbnail_Image') renderMainThumb("");
       alert('FILE DELETED! 🗑️');
     }
 
-    function deleteMainThumb(url) { deleteFile('Thumbnail_Image'); }
+    function renderMainThumb(url) {
+      const box = document.getElementById('thumbPreview');
+      if (url) {
+        box.innerHTML = `<div class="img-wrapper"><div class="img-x" onclick="deleteMainThumb()">✕</div><img src="${url.split('=')[0]+'=s600'}" class="w-full h-full object-cover"></div>`;
+        document.getElementById('Thumbnail_Image').value = url;
+      } else {
+        box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`;
+        document.getElementById('Thumbnail_Image').value = "";
+      }
+    }
 
+    function deleteMainThumb() { deleteFile('Thumbnail_Image'); }
     const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; });
 
     function renderGallery() {
