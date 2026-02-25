@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Asset Editor | MASTER SYSTEM V127</title>
+  <title>Asset Editor | MASTER SYSTEM V128</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,6 +14,7 @@
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
     
+    /* Optimized Grid for Gallery */
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #000; }
     .img-tile.marked { opacity: 0.3; border: 2.5px solid #EF4444; filter: grayscale(0.8); }
     .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: 2px solid #060F1A; }
@@ -37,32 +38,11 @@
     </div>
 
     <div class="flex gap-8 mb-8 border-b border-white/10 px-4">
-      <button onclick="switchTab('info')" id="btn-info" class="pb-4 font-800 text-[11px] uppercase tracking-widest tab-active">Property Data</button>
-      <button onclick="switchTab('photo')" id="btn-photo" class="pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500">Cover & Gallery</button>
+      <button onclick="switchTab('photo')" id="btn-photo" class="pb-4 font-800 text-[11px] uppercase tracking-widest tab-active">Cover & Gallery</button>
+      <button onclick="switchTab('info')" id="btn-info" class="pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500">Property Data</button>
     </div>
 
-    <div id="tab-info" class="space-y-6">
-      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div><label class="field-label">HP-ID</label><input id="HP_ID" class="field-input" readonly></div>
-        <div><label class="field-label">Plot</label><input id="Plot" class="field-input"></div>
-        <div><label class="field-label">Status</label><select id="Status" class="field-input"></select></div>
-        <div><label class="field-label">Listing</label><select id="Listing_Type" class="field-input"></select></div>
-        <div><label class="field-label">Bedrooms</label><input type="number" id="Bedrooms" class="field-input"></div>
-        <div><label class="field-label">Bathrooms</label><input type="number" id="Bathrooms" class="field-input"></div>
-        <div><label class="field-label">Living M²</label><input id="Living_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">Land M²</label><input id="Land_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">Furnishing</label><select id="Furnishing" class="field-input"></select></div>
-        <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
-        <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
-        <div><label class="field-label">Zone</label><select id="Zone" class="field-input"></select></div>
-        <div class="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20">
-          <label class="field-label !text-blue-400">Sale Price (THB)</label>
-          <input id="Sale_Price" class="field-input !border-blue-500/30 font-800 text-[#C9A84C]">
-        </div>
-      </div>
-    </div>
-
-    <div id="tab-photo" class="hidden space-y-6">
+    <div id="tab-photo" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="input-card">
           <span class="field-label">Main Cover Thumbnail</span>
@@ -85,12 +65,30 @@
       </div>
       
       <div class="input-card">
-        <span class="field-label">PDF Documents (URLs)</span>
+        <span class="field-label">PDF Documents</span>
         <div class="space-y-3 mt-4">
           <input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Sales Gallery Link">
           <input type="text" id="Material_PDF" class="field-input !text-[11px]" placeholder="Material PDF Link">
           <input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Floor Plan Link">
         </div>
+      </div>
+    </div>
+
+    <div id="tab-info" class="hidden space-y-6">
+      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div><label class="field-label">HP-ID</label><input id="HP_ID" class="field-input" readonly></div>
+        <div><label class="field-label">Plot Number</label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">Status</label><select id="Status" class="field-input"></select></div>
+        <div><label class="field-label">Listing</label><select id="Listing_Type" class="field-input"></select></div>
+        <div><label class="field-label">Bedrooms</label><input type="number" id="Bedrooms" class="field-input"></div>
+        <div><label class="field-label">Bathrooms</label><input type="number" id="Bathrooms" class="field-input"></div>
+        <div><label class="field-label">Living M²</label><input id="Living_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Land M²</label><input id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Furnishing</label><select id="Furnishing" class="field-input"></select></div>
+        <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
+        <div><label class="field-label">Zone</label><select id="Zone" class="field-input"></select></div>
+        <div class="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20"><label class="field-label">Sale Price</label><input id="Sale_Price" class="field-input font-800 text-[#C9A84C]"></div>
       </div>
     </div>
   </div>
@@ -102,52 +100,50 @@
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const hpId = new URLSearchParams(window.location.search).get('id');
-    let dataLoaded = false;
     let currentGallery = [];
     let markedForDelete = [];
 
-    // เทคนิคบีบอัดภาพตัวอย่างระดับสูงสุด (Extreme Compression)
+    // เทคนิคบีบอัดภาพเพื่อความเร็วสูงสุด (Speed Hack: w200)
     function _instantImg(url) {
       if (!url || !url.includes("googleusercontent.com")) return url;
-      return url.split('=')[0] + "=s150";
+      return url.split('=')[0] + "=w200-h200-c-rj"; // ใช้ WebP + Crop เพื่อการโหลดที่เร็วที่สุด
     }
 
     async function init() {
-      if (hpId) {
-        document.getElementById('displayId').innerText = hpId;
-        // โหลดเฉพาะข้อมูลตัวอักษรทันที (Property Data) เพื่อให้หน้าเว็บพร้อมใช้งาน
-        const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
-        ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
-          if(document.getElementById(f)) document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
-        });
+      if (!hpId) return;
+      document.getElementById('displayId').innerText = hpId;
 
-        const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
-        if (res.ok) {
-          Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
-          currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
-          dataLoaded = true;
-        }
-      }
-    }
-
-    // ฟังก์ชันสลับแท็บแบบ On-Demand Loading (โหลดเมื่อต้องใช้เท่านั้น)
-    function switchTab(t) {
-      document.getElementById('tab-photo').classList.toggle('hidden', t !== 'photo');
-      document.getElementById('tab-info').classList.toggle('hidden', t !== 'info');
-      document.getElementById('btn-photo').className = t === 'photo' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
-      document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
-      
-      // ถ้าเปิดแท็บ Photo ครั้งแรก ค่อยสั่ง Render รูป
-      if (t === 'photo' && dataLoaded) {
-        renderMainThumb(document.getElementById('Thumbnail_Image').value);
+      // 1. Instant Cache: ลองโหลดรูปจาก Cache มาแสดงผลทันที
+      const cached = localStorage.getItem(`master_cache_${hpId}`);
+      if (cached) {
+        const c = JSON.parse(cached);
+        renderMainThumb(c.Thumbnail_Image);
+        currentGallery = c.Album_Image ? c.Album_Image.split(',').filter(Boolean) : [];
         renderGallery();
+      }
+
+      // 2. Background Sync: ดึงข้อมูลจริงจากเซิร์ฟเวอร์มาทับ
+      const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
+      ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
+        if(document.getElementById(f)) document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
+      });
+
+      const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
+      if (res.ok) {
+        Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
+        renderMainThumb(res.data.Thumbnail_Image);
+        currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
+        renderGallery();
+        // อัปเดต Cache สำหรับการเปิดครั้งถัดไป
+        localStorage.setItem(`master_cache_${hpId}`, JSON.stringify(res.data));
       }
     }
 
     function renderMainThumb(url) {
       const box = document.getElementById('thumbPreview');
       if (url) {
-        box.innerHTML = `<div class="img-x" onclick="removeMainThumb('${url}')">✕</div><img src="${_instantImg(url)}" class="w-full h-full object-cover">`;
+        box.innerHTML = `<div class="img-wrapper"><div class="img-x" onclick="removeMainThumb('${url}')">✕</div><img src="${_instantImg(url)}" class="w-full h-full object-cover"></div>`;
+        document.getElementById('Thumbnail_Image').value = url;
       } else {
         box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`;
       }
@@ -158,11 +154,23 @@
       box.innerHTML = currentGallery.map((url, i) => `
         <div class="img-tile ${markedForDelete.includes(i) ? 'marked' : ''}">
           <div class="img-x" onclick="toggleMark(${i})">✕</div>
-          <img src="${_instantImg(url)}" class="w-full h-full object-cover">
+          <img src="${_instantImg(url)}" class="w-full h-full object-cover" loading="eager">
         </div>
       `).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
       document.getElementById('delBtn').style.display = markedForDelete.length > 0 ? 'block' : 'none';
       document.getElementById('delBtn').innerText = `Confirm Delete ${markedForDelete.length} Photos`;
+    }
+
+    function toggleMark(i) {
+      const idx = markedForDelete.indexOf(i);
+      if (idx > -1) markedForDelete.splice(idx, 1); else markedForDelete.push(i);
+      renderGallery();
+    }
+
+    function removeMainThumb(url) {
+      if(!confirm("Delete cover photo?")) return;
+      fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
+      renderMainThumb("");
     }
 
     async function handleUpload(input, mode) {
@@ -173,28 +181,17 @@
         const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: files[i].type, name: files[i].name }) });
         const result = await res.json();
         if (result.ok) {
-          if (mode === 'uploadThumb') {
-            document.getElementById('Thumbnail_Image').value = result.url;
-            renderMainThumb(result.url);
-          } else {
-            currentGallery.push(result.url);
-          }
+          if (mode === 'uploadThumb') renderMainThumb(result.url);
+          else currentGallery.push(result.url);
         }
       }
       document.getElementById('Album_Image').value = currentGallery.join(',');
-      renderGallery(); hideLoading();
+      renderGallery(); hideLoading(); alert('UPLOADED SUCCESS! ✅');
     }
 
     const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; });
 
-    function toggleMark(i) {
-      const idx = markedForDelete.indexOf(i);
-      if (idx > -1) markedForDelete.splice(idx, 1); else markedForDelete.push(i);
-      renderGallery();
-    }
-
     function processBatchDelete() {
-      if(!confirm(`Delete ${markedForDelete.length} photos?`)) return;
       const targets = markedForDelete.sort((a,b) => b-a);
       for (const idx of targets) {
         const url = currentGallery[idx];
@@ -204,6 +201,13 @@
       markedForDelete = []; document.getElementById('Album_Image').value = currentGallery.join(','); renderGallery();
     }
 
+    function switchTab(t) {
+      document.getElementById('tab-photo').classList.toggle('hidden', t !== 'photo');
+      document.getElementById('tab-info').classList.toggle('hidden', t !== 'info');
+      document.getElementById('btn-photo').className = t === 'photo' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
+      document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
+    }
+
     function confirmSave() { if(confirm("Update database?")) saveData(); }
     async function saveData() {
       const btn = document.getElementById('saveBtn'); showLoading("SAVING..."); btn.disabled = true;
@@ -211,7 +215,7 @@
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       try {
         const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
-        if ((await res.json()).ok) { hideLoading(); alert('SUCCESS! ✅'); location.href = 'dashboard.html'; }
+        if ((await res.json()).ok) { hideLoading(); alert('DATABASE UPDATED! ✅'); location.href = 'dashboard.html'; }
       } catch (e) { hideLoading(); alert('Error: ' + e); btn.disabled = false; }
     }
 
