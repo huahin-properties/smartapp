@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Detail | HUA HIN PROPERTIES</title>
+  <title>Asset Details | HUA HIN PROPERTIES</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    :root { --navy: #0B1829; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(255, 255, 255, 0.1); --card-bg: #0F172A; }
+    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(255, 255, 255, 0.08); --card-bg: #0F172A; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: #060F1A; color: #FDFAF5; font-family: 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--navy-dark); color: #FDFAF5; font-family: 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased; }
     
-    #pageSplash { position: fixed; inset: 0; background: #060F1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.4s; }
+    #pageSplash { position: fixed; inset: 0; background: var(--navy-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.4s; }
     .leaf-anim { font-size: 55px; animation: leafSwing 1.5s infinite alternate; margin-bottom: 20px; }
     @keyframes leafSwing { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
     .splash-brand { color: var(--gold); font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; }
@@ -84,7 +84,7 @@
     </div>
 
     <div class="info-card" style="border-left: 5px solid var(--gold);">
-      <h2 class="section-title">Ownership Details</h2>
+      <h2 class="section-title">Ownership & Fees</h2>
       <div class="grid">
         <div><div class="label">Monthly Fee</div><div class="val" id="vFeeM">-</div></div>
         <div><div class="label">Yearly Total</div><div class="val gold-val" id="vFeeY">-</div></div>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="info-card">
-      <h2 class="section-title">Lifestyle Proximity</h2>
+      <h2 class="section-title">Nearby Lifestyle</h2>
       <div id="nearbyGrid" class="grid grid-cols-1"></div>
     </div>
   </main>
@@ -120,13 +120,13 @@
       { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Bluport Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Black Mountain", lat: 12.6146, lon: 99.8924 }
     ];
     function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
-    async function init() { if(!hpId) return; await fetchFreshData(); }
-    async function fetchFreshData() { try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) { renderData(json.data); hideSplash(); } } catch(e) { hideSplash(); } }
+    async function init() { if(!hpId) return; const cached = localStorage.getItem(`master_unit_${hpId}`); if(cached) { renderData(JSON.parse(cached).data); setTimeout(hideSplash, 300); } await fetchFreshData(); }
+    async function fetchFreshData() { try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) { localStorage.setItem(`master_unit_${hpId}`, JSON.stringify({data: json.data})); renderData(json.data); hideSplash(); } } catch(e) { hideSplash(); } }
     function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
     function renderData(u) {
       const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
       const a = parseFloat(String(u.Living_Area_sq_m).replace(/[^0-9.]/g, '')) || 1;
-      document.getElementById('pPlot').textContent = `Asset ${u.HP_ID} (Plot ${u.Plot || '-'})`;
+      document.getElementById('pPlot').textContent = `Plot ${u.Plot || u.HP_ID}`;
       document.getElementById('pLocText').textContent = `📍 ${u.District || '-'}, ${u.Zone || '-'}`;
       document.getElementById('pPrice').textContent = `฿${p.toLocaleString()}`;
       document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
@@ -151,7 +151,7 @@
       if (u.Coordinates && u.Coordinates !== "#") {
         document.getElementById('mapBox').style.display='block'; document.getElementById('navLink').style.display='flex';
         document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${u.Coordinates.trim()}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-        document.getElementById('navLink').href = `https://www.google.com/maps?q=${u.Coordinates.trim()}`;
+        document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${u.Coordinates.trim()}`;
         const [la, lo] = u.Coordinates.split(','); const grid = document.getElementById('nearbyGrid');
         grid.innerHTML = LANDMARKS.map(loc => { const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
       }
