@@ -7,30 +7,40 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; padding-bottom: 100px; }
-    .tab-active { border-bottom: 4px solid #C9A84C; color: #C9A84C; }
-    .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; }
+    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --gold-lt: #E4C46A; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; }
+    
+    /* แก้ไขปัญหาการเลื่อนหน้าจอ */
+    .content-wrapper { padding: 20px 20px 180px; max-width: 1024px; margin: 0 auto; }
+    
+    .tab-active { border-bottom: 4px solid var(--gold); color: var(--gold); }
+    .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.5rem; }
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
-    .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; }
-    .field-input:focus { border-color: #C9A84C; background: rgba(255,255,255,0.08); }
-    .img-tile { position: relative; border-radius: 10px; overflow: hidden; height: 80px; }
-    .img-x { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.95); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); padding: 20px; z-index: 1000; }
+    .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
+    .field-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+    
+    /* Gallery Styles */
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .img-x { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+
+    /* Fixed Save Bar */
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
+    .btn-update { background: var(--gold); color: var(--navy-dark); width: 100%; max-width: 1000px; margin: 0 auto; display: block; py: 18px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; transition: 0.3s; height: 60px; }
   </style>
 </head>
-<body class="p-4 md:p-10">
-  <div class="max-w-5xl mx-auto">
+<body>
+  <div class="content-wrapper">
     <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5 shadow-2xl">
       <div>
         <p class="text-[#C9A84C] font-800 uppercase tracking-widest text-[10px] mb-2">Master Database Editor</p>
-        <h1 id="displayId" class="text-3xl font-800 tracking-tighter">HP-XXXX</h1>
+        <h1 id="displayId" class="text-3xl font-800 tracking-tighter italic">HP-XXXX</h1>
       </div>
-      <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/10 p-4 rounded-2xl transition-all">✕</button>
+      <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/20 p-4 rounded-2xl transition-all">✕</button>
     </div>
 
-    <div class="flex gap-8 mb-8 border-b border-white/10">
-      <button onclick="switchTab('photo')" id="btn-photo" class="pb-4 font-800 text-xs uppercase tracking-widest tab-active">Cover & Gallery</button>
-      <button onclick="switchTab('info')" id="btn-info" class="pb-4 font-800 text-xs uppercase tracking-widest text-slate-500">Property Data</button>
+    <div class="flex gap-8 mb-8 border-b border-white/10 px-4">
+      <button onclick="switchTab('photo')" id="btn-photo" class="pb-4 font-800 text-[11px] uppercase tracking-widest tab-active">Cover & Gallery</button>
+      <button onclick="switchTab('info')" id="btn-info" class="pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500">Property Data</button>
     </div>
 
     <div id="tab-photo" class="space-y-6">
@@ -40,28 +50,34 @@
           <div id="thumbPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden mb-4">
             <span class="text-4xl opacity-20">🖼️</span>
           </div>
-          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-3 bg-[#C9A84C] text-[#060F1A] rounded-xl font-800 uppercase text-xs">Upload Cover</button>
+          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs">Upload Cover</button>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="previewMain(this)">
+          <input type="text" id="Thumbnail_Image" class="field-input mt-3 !text-[9px]" placeholder="Thumbnail URL">
         </div>
 
         <div class="input-card">
           <span class="field-label">Project Gallery Album</span>
           <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
-          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-3 bg-white/10 text-white rounded-xl font-800 uppercase text-xs border border-white/10">Add Gallery Photos</button>
+          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Photos</button>
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="addGallery(this)">
+          <textarea id="Album_Image" class="field-input mt-3 !text-[9px]" placeholder="Album URLs (Comma separated)" rows="2"></textarea>
         </div>
       </div>
 
       <div class="input-card">
-        <span class="field-label">PDF Documents</span>
-        <div class="space-y-3 mt-4">
-          <div class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
+        <span class="field-label">PDF Documents (Drive ID or URL)</span>
+        <div class="space-y-4 mt-4">
+          <div class="flex flex-col gap-2 bg-white/5 p-4 rounded-xl border border-white/5">
             <div class="flex items-center gap-3"><i class="fas fa-file-pdf text-rose-500"></i> <span class="text-xs font-700">Sales Gallery Link</span></div>
-            <input type="text" id="Sales_Gallery" class="field-input !w-1/2 !py-2 !text-[10px]" placeholder="Drive File ID or URL">
+            <input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Drive File ID or URL">
           </div>
-          <div class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
+          <div class="flex flex-col gap-2 bg-white/5 p-4 rounded-xl border border-white/5">
             <div class="flex items-center gap-3"><i class="fas fa-file-pdf text-rose-500"></i> <span class="text-xs font-700">Material PDF Link</span></div>
-            <input type="text" id="Material_PDF" class="field-input !w-1/2 !py-2 !text-[10px]" placeholder="Drive File ID or URL">
+            <input type="text" id="Material_PDF" class="field-input !text-[11px]" placeholder="Drive File ID or URL">
+          </div>
+          <div class="flex flex-col gap-2 bg-white/5 p-4 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3"><i class="fas fa-file-pdf text-rose-500"></i> <span class="text-xs font-700">Floor Plan Link</span></div>
+            <input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Drive File ID or URL">
           </div>
         </div>
       </div>
@@ -86,15 +102,15 @@
         <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
         <div><label class="field-label">Zone</label><select id="Zone" class="field-input"></select></div>
         <div class="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20">
-          <label class="field-label !color-blue-400">Sale Price (THB)</label>
+          <label class="field-label !text-blue-400">Sale Price (THB)</label>
           <input id="Sale_Price" class="field-input !border-blue-500/30 font-800 text-[#C9A84C]">
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="save-bar">
-      <button onclick="saveData()" id="saveBtn" class="w-full max-w-5xl mx-auto block py-5 bg-[#C9A84C] text-[#060F1A] rounded-2xl font-800 uppercase tracking-[0.3em] shadow-2xl hover:scale-[1.02] transition-all active:scale-95">Update Master Database</button>
-    </div>
+  <div class="save-bar">
+    <button onclick="saveData()" id="saveBtn" class="btn-update shadow-2xl">Update Master Database</button>
   </div>
 
   <script>
@@ -103,15 +119,15 @@
     let currentGallery = [];
 
     async function init() {
-      // 1. Fetch Metadata for dropdowns
-      const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
-      ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
-        document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
-      });
-
-      // 2. Load Unit Data
       if (hpId) {
         document.getElementById('displayId').innerText = hpId;
+        // Load Metadata
+        const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
+        ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
+          document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
+        });
+
+        // Load Unit Data
         const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (res.ok) {
           Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
@@ -125,8 +141,8 @@
     function switchTab(tab) {
       document.getElementById('tab-photo').classList.toggle('hidden', tab !== 'photo');
       document.getElementById('tab-info').classList.toggle('hidden', tab !== 'info');
-      document.getElementById('btn-photo').className = tab === 'photo' ? 'pb-4 font-800 text-xs uppercase tracking-widest tab-active' : 'pb-4 font-800 text-xs uppercase tracking-widest text-slate-500';
-      document.getElementById('btn-info').className = tab === 'info' ? 'pb-4 font-800 text-xs uppercase tracking-widest tab-active' : 'pb-4 font-800 text-xs uppercase tracking-widest text-slate-500';
+      document.getElementById('btn-photo').className = tab === 'photo' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
+      document.getElementById('btn-info').className = tab === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
     }
 
     function renderGallery() {
@@ -139,21 +155,18 @@
       `).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
     }
 
-    function removeImg(i) { currentGallery.splice(i, 1); renderGallery(); }
+    function removeImg(i) { currentGallery.splice(i, 1); renderGallery(); document.getElementById('Album_Image').value = currentGallery.join(','); }
 
     async function saveData() {
       const btn = document.getElementById('saveBtn');
       btn.innerText = "SAVING TO CLOUD..."; btn.disabled = true;
-      
-      const payload = { mode: "updateUnit", HP_ID: hpId, Album_Image: currentGallery.join(',') };
+      const payload = { mode: "updateUnit", HP_ID: hpId };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
-
       try {
         const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
-        if ((await res.json()).ok) { alert('Update Successful!'); location.href = 'dashboard.html'; }
+        if ((await res.json()).ok) { alert('Successfully Saved!'); location.href = 'dashboard.html'; }
       } catch (e) { alert('Error: ' + e); btn.innerText = "Update Master Database"; btn.disabled = false; }
     }
-
     window.onload = init;
   </script>
 </body>
