@@ -7,31 +7,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; }
-    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; }
     .content-wrapper { padding: 20px 20px 180px; max-width: 1024px; margin: 0 auto; }
-    .tab-active { border-bottom: 4px solid var(--gold); color: var(--gold); }
-    .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.5rem; position: relative; }
+    .tab-active { border-bottom: 4px solid #C9A84C; color: #C9A84C; }
+    .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.5rem; }
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
-    .field-input:focus { border-color: var(--gold); }
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .img-x { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
     
-    /* Upload Overlay */
-    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; border-radius: 1.5rem; backdrop-filter: blur(5px); }
-    .loading-spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 10px; }
+    /* Upload Loading Overlay */
+    .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+    .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #C9A84C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .img-x { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border-radius: 50%; background: #ef4444; color: white; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
-    .btn-update { background: var(--gold); color: var(--navy-dark); width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
+    .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
   </style>
 </head>
 <body>
+  <div id="upLoading" class="upload-overlay"><div class="loader"></div><div class="text-xs font-800 tracking-[0.3em]">UPLOADING...</div></div>
+
   <div class="content-wrapper">
-    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5 shadow-2xl">
-      <div><p class="text-[#C9A84C] font-800 uppercase tracking-widest text-[10px] mb-2">Master Database Editor</p><h1 id="displayId" class="text-3xl font-800 italic">HP-XXXX</h1></div>
+    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5">
+      <div><p class="text-[#C9A84C] font-800 uppercase tracking-widest text-[10px] mb-2">Master Database Editor</p><h1 id="displayId" class="text-3xl font-800 tracking-tighter italic">HP-XXXX</h1></div>
       <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/20 p-4 rounded-2xl transition-all">✕</button>
     </div>
 
@@ -42,115 +41,139 @@
 
     <div id="tab-photo" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="input-card" id="card-main">
-          <div class="loading-overlay" id="loader-main"><div class="loading-spinner"></div><span class="text-[10px] font-800 uppercase tracking-widest text-gold">Uploading...</span></div>
+        <div class="input-card">
           <span class="field-label">Main Cover Thumbnail</span>
-          <div id="thumbPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden mb-4"><span class="text-4xl opacity-20">🖼️</span></div>
-          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs">Pick New Cover</button>
-          <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleMainUpload(this)">
-          <input type="text" id="Thumbnail_Image" class="field-input mt-3 !text-[9px]" readonly>
+          <div id="thumbPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden mb-4">
+            <span class="text-4xl opacity-20">🖼️</span>
+          </div>
+          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs">Pick New Cover</button>
+          <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleUpload(this, 'uploadThumb')">
+          <input type="hidden" id="Thumbnail_Image">
         </div>
 
-        <div class="input-card" id="card-gallery">
-          <div class="loading-overlay" id="loader-gallery"><div class="loading-spinner"></div><span class="text-[10px] font-800 uppercase tracking-widest text-gold">Adding to Album...</span></div>
+        <div class="input-card">
           <span class="field-label">Project Gallery Album</span>
           <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
-          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Photos</button>
-          <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleGalleryUpload(this)">
-          <textarea id="Album_Image" class="hidden"></textarea>
+          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Photos</button>
+          <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'uploadGallery')">
+          <input type="hidden" id="Album_Image">
         </div>
       </div>
-
-      <div class="input-card"><span class="field-label">PDF Documents (Google Drive URL)</span><div class="space-y-4 mt-4">
-        <div class="flex flex-col gap-2 bg-white/5 p-4 rounded-xl border border-white/5"><div class="flex items-center gap-3"><i class="fas fa-file-pdf text-rose-500"></i><span class="text-xs font-700">Sales Gallery Link</span></div><input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Drive URL"></div>
-        <div class="flex flex-col gap-2 bg-white/5 p-4 rounded-xl border border-white/5"><div class="flex items-center gap-3"><i class="fas fa-file-pdf text-rose-500"></i><span class="text-xs font-700">Floor Plan Link</span></div><input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Drive URL"></div>
-      </div></div>
+      
+      <div class="input-card">
+        <span class="field-label">PDF Documents</span>
+        <div class="space-y-3 mt-4">
+          <input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Sales Gallery URL">
+          <input type="text" id="Material_PDF" class="field-input !text-[11px]" placeholder="Material PDF URL">
+          <input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Floor Plan URL">
+        </div>
+      </div>
     </div>
 
     <div id="tab-info" class="hidden space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
         <div><label class="field-label">HP-ID</label><input id="HP_ID" class="field-input" readonly></div>
-        <div><label class="field-label">Plot</label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">Plot Number</label><input id="Plot" class="field-input"></div>
         <div><label class="field-label">Status</label><select id="Status" class="field-input"></select></div>
+        <div><label class="field-label">Listing Type</label><select id="Listing_Type" class="field-input"></select></div>
         <div><label class="field-label">Bedrooms</label><input type="number" id="Bedrooms" class="field-input"></div>
         <div><label class="field-label">Bathrooms</label><input type="number" id="Bathrooms" class="field-input"></div>
-        <div><label class="field-label">Sale Price (฿)</label><input id="Sale_Price" class="field-input font-800 text-gold"></div>
+        <div><label class="field-label">Living Area (sq.m)</label><input id="Living_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Land Size (sq.m)</label><input id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Furnishing</label><select id="Furnishing" class="field-input"></select></div>
         <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
+        <div><label class="field-label">Zone</label><select id="Zone" class="field-input"></select></div>
+        <div class="bg-blue-900/20 p-3 rounded-xl"><label class="field-label">Sale Price</label><input id="Sale_Price" class="field-input"></div>
       </div>
     </div>
   </div>
 
-  <div class="save-bar"><button onclick="saveAll()" id="saveBtn" class="btn-update shadow-2xl">Update Master Database</button></div>
+  <div class="save-bar">
+    <button onclick="saveData()" id="saveBtn" class="btn-update shadow-2xl">Update Master Database</button>
+  </div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const hpId = new URLSearchParams(window.location.search).get('id');
-    let album = [];
+    let currentGallery = [];
 
     async function init() {
-      if(!hpId) return; document.getElementById('displayId').innerText = hpId;
-      const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
-      ["Status", "Furnishing", "District", "Zone"].forEach(f => {
-        if(document.getElementById(f)) document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
-      });
-      const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
-      if(res.ok) {
-        Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
-        if(res.data.Thumbnail_Image) document.getElementById('thumbPreview').innerHTML = `<img src="${res.data.Thumbnail_Image}" class="w-full h-full object-cover">`;
-        album = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
-        renderAlbum();
+      if (hpId) {
+        document.getElementById('displayId').innerText = hpId;
+        const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
+        ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
+          document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
+        });
+        const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
+        if (res.ok) {
+          Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
+          if(res.data.Thumbnail_Image) document.getElementById('thumbPreview').innerHTML = `<img src="${res.data.Thumbnail_Image}" class="w-full h-full object-cover">`;
+          currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',') : [];
+          renderGallery();
+        }
       }
     }
 
-    async function handleMainUpload(input) {
-      const file = input.files[0]; if(!file) return;
-      document.getElementById('loader-main').style.display = 'flex';
-      const base64 = await toBase64(file);
-      const oldUrl = document.getElementById('Thumbnail_Image').value;
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: "uploadImage", base64, type: file.type, name: file.name, oldUrl }) });
-      const json = await res.json();
-      if(json.ok) {
-        document.getElementById('Thumbnail_Image').value = json.url;
-        document.getElementById('thumbPreview').innerHTML = `<img src="${json.url}" class="w-full h-full object-cover">`;
+    async function handleUpload(input, mode) {
+      const files = input.files; if (!files.length) return;
+      document.getElementById('upLoading').style.display = 'flex';
+      
+      for (const file of files) {
+        const base64 = await toBase64(file);
+        const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: file.type, name: file.name }) });
+        const result = await res.json();
+        if (result.ok) {
+          if (mode === 'uploadThumb') {
+            document.getElementById('Thumbnail_Image').value = result.url;
+            document.getElementById('thumbPreview').innerHTML = `<img src="${result.url}" class="w-full h-full object-cover">`;
+          } else {
+            currentGallery.push(result.url);
+            document.getElementById('Album_Image').value = currentGallery.join(',');
+            renderGallery();
+          }
+        }
       }
-      document.getElementById('loader-main').style.display = 'none';
+      document.getElementById('upLoading').style.display = 'none';
+      alert('UPLOADED SUCCESSFULLY! ✅');
     }
 
-    async function handleGalleryUpload(input) {
-      const files = Array.from(input.files); if(!files.length) return;
-      document.getElementById('loader-gallery').style.display = 'flex';
-      for(let f of files) {
-        const base64 = await toBase64(f);
-        const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ mode: "uploadImage", base64, type: f.type, name: f.name }) })).json();
-        if(res.ok) album.push(res.url);
+    const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; });
+
+    function renderGallery() {
+      const box = document.getElementById('galleryPreview');
+      box.innerHTML = currentGallery.map((url, i) => `
+        <div class="img-tile"><div class="img-x" onclick="removeImg(${i}, '${url}')">✕</div><img src="${url}" class="w-full h-full object-cover"></div>
+      `).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
+    }
+
+    async function removeImg(i, url) {
+      if(!confirm('Delete this photo from Drive permanently?')) return;
+      document.getElementById('upLoading').style.display = 'flex';
+      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
+      if ((await res.json()).ok) {
+        currentGallery.splice(i, 1);
+        document.getElementById('Album_Image').value = currentGallery.join(',');
+        renderGallery();
       }
-      syncAlbum(); renderAlbum();
-      document.getElementById('loader-gallery').style.display = 'none';
+      document.getElementById('upLoading').style.display = 'none';
     }
 
-    async function deleteImg(idx) {
-      if(!confirm("Delete this image permanently from Drive?")) return;
-      const url = album[idx];
-      await fetch(API, { method: 'POST', body: JSON.stringify({ mode: "deleteImage", url }) });
-      album.splice(idx, 1); syncAlbum(); renderAlbum();
+    function switchTab(t) {
+      document.getElementById('tab-photo').classList.toggle('hidden', t !== 'photo');
+      document.getElementById('tab-info').classList.toggle('hidden', t !== 'info');
+      document.getElementById('btn-photo').className = t === 'photo' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
+      document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
     }
 
-    function renderAlbum() {
-      document.getElementById('galleryPreview').innerHTML = album.map((url, i) => `
-        <div class="img-tile">
-          <div class="img-x" onclick="deleteImg(${i})">✕</div>
-          <img src="${url}" class="w-full h-full object-cover">
-        </div>`).join('') || '<span class="text-2xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
-    }
-
-    function syncAlbum() { document.getElementById('Album_Image').value = album.join(','); }
-    function toBase64(f) { return new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result.split(',')[1]); reader.readAsDataURL(f); }); }
-    function switchTab(t) { document.getElementById('tab-photo').classList.toggle('hidden', t!=='photo'); document.getElementById('tab-info').classList.toggle('hidden', t!=='info'); }
-    async function saveAll() {
-      const btn = document.getElementById('saveBtn'); btn.innerText = "SAVING DATA..."; btn.disabled = true;
+    async function saveData() {
+      const btn = document.getElementById('saveBtn'); btn.innerText = "SAVING..."; btn.disabled = true;
       const payload = { mode: "updateUnit", HP_ID: hpId };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
-      try { const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) }); if((await res.json()).ok) location.href='dashboard.html'; } catch(e) { btn.innerText = "Update Master Database"; btn.disabled = false; }
+      try {
+        const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
+        if ((await res.json()).ok) { alert('DATABASE UPDATED!'); location.href = 'dashboard.html'; }
+      } catch (e) { alert('Error: ' + e); btn.innerText = "Update Master Database"; btn.disabled = false; }
     }
     window.onload = init;
   </script>
