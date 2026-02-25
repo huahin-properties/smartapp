@@ -13,23 +13,27 @@
     .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.5rem; }
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .img-x { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
     
-    /* Upload Loading Overlay */
+    /* Gallery & Delete Selection logic */
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+    .img-tile.marked { opacity: 0.3; border: 2px solid #EF4444; filter: grayscale(1); }
+    .img-x { position: absolute; top: 5px; right: 5px; width: 24px; height: 24px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+    .img-tile.marked .img-x { background: #10B981; transform: rotate(45deg); } /* Change X to Check or rotated state */
+
     .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
     .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #C9A84C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
-    .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
+    .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; transition: 0.3s; }
+    .btn-delete-batch { background: #EF4444; color: white; padding: 8px 16px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 10px; display: none; }
   </style>
 </head>
 <body>
-  <div id="upLoading" class="upload-overlay"><div class="loader"></div><div class="text-xs font-800 tracking-[0.3em]">UPLOADING...</div></div>
+  <div id="upLoading" class="upload-overlay"><div class="loader"></div><div id="loadText" class="text-xs font-800 tracking-[0.3em]">UPLOADING...</div></div>
 
   <div class="content-wrapper">
-    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5">
+    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5 shadow-2xl">
       <div><p class="text-[#C9A84C] font-800 uppercase tracking-widest text-[10px] mb-2">Master Database Editor</p><h1 id="displayId" class="text-3xl font-800 tracking-tighter italic">HP-XXXX</h1></div>
       <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/20 p-4 rounded-2xl transition-all">✕</button>
     </div>
@@ -53,10 +57,12 @@
 
         <div class="input-card">
           <span class="field-label">Project Gallery Album</span>
-          <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
+          <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto"></div>
+          <button id="delBtn" onclick="processBatchDelete()" class="btn-delete-batch w-full mb-3">Delete Selected Photos</button>
           <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Photos</button>
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'uploadGallery')">
           <input type="hidden" id="Album_Image">
+          <p class="text-[9px] text-slate-500 mt-3 italic">* เลือกรูปที่ต้องการลบ แล้วกดปุ่มสีแดงเพื่อยืนยันการลบพร้อมกัน</p>
         </div>
       </div>
       
@@ -90,13 +96,14 @@
   </div>
 
   <div class="save-bar">
-    <button onclick="saveData()" id="saveBtn" class="btn-update shadow-2xl">Update Master Database</button>
+    <button onclick="confirmSave()" id="saveBtn" class="btn-update shadow-2xl">Update Master Database</button>
   </div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const hpId = new URLSearchParams(window.location.search).get('id');
     let currentGallery = [];
+    let markedForDelete = [];
 
     async function init() {
       if (hpId) {
@@ -109,7 +116,7 @@
         if (res.ok) {
           Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
           if(res.data.Thumbnail_Image) document.getElementById('thumbPreview').innerHTML = `<img src="${res.data.Thumbnail_Image}" class="w-full h-full object-cover">`;
-          currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',') : [];
+          currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
           renderGallery();
         }
       }
@@ -117,9 +124,11 @@
 
     async function handleUpload(input, mode) {
       const files = input.files; if (!files.length) return;
-      document.getElementById('upLoading').style.display = 'flex';
+      showLoading("UPLOADING " + files.length + " PHOTOS...");
       
-      for (const file of files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        showLoading(`UPLOADING ${i+1}/${files.length}...`);
         const base64 = await toBase64(file);
         const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: file.type, name: file.name }) });
         const result = await res.json();
@@ -129,12 +138,12 @@
             document.getElementById('thumbPreview').innerHTML = `<img src="${result.url}" class="w-full h-full object-cover">`;
           } else {
             currentGallery.push(result.url);
-            document.getElementById('Album_Image').value = currentGallery.join(',');
-            renderGallery();
           }
         }
       }
-      document.getElementById('upLoading').style.display = 'none';
+      document.getElementById('Album_Image').value = currentGallery.join(',');
+      renderGallery();
+      hideLoading();
       alert('UPLOADED SUCCESSFULLY! ✅');
     }
 
@@ -143,20 +152,40 @@
     function renderGallery() {
       const box = document.getElementById('galleryPreview');
       box.innerHTML = currentGallery.map((url, i) => `
-        <div class="img-tile"><div class="img-x" onclick="removeImg(${i}, '${url}')">✕</div><img src="${url}" class="w-full h-full object-cover"></div>
+        <div class="img-tile ${markedForDelete.includes(i) ? 'marked' : ''}" id="tile-${i}">
+          <div class="img-x" onclick="toggleMark(${i})">✕</div>
+          <img src="${url}" class="w-full h-full object-cover">
+        </div>
       `).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
+      
+      document.getElementById('delBtn').style.display = markedForDelete.length > 0 ? 'block' : 'none';
+      document.getElementById('delBtn').innerText = `Confirm Delete ${markedForDelete.length} Photos`;
     }
 
-    async function removeImg(i, url) {
-      if(!confirm('Delete this photo from Drive permanently?')) return;
-      document.getElementById('upLoading').style.display = 'flex';
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
-      if ((await res.json()).ok) {
-        currentGallery.splice(i, 1);
-        document.getElementById('Album_Image').value = currentGallery.join(',');
-        renderGallery();
+    function toggleMark(i) {
+      const idx = markedForDelete.indexOf(i);
+      if (idx > -1) markedForDelete.splice(idx, 1);
+      else markedForDelete.push(i);
+      renderGallery();
+    }
+
+    async function processBatchDelete() {
+      if(!confirm(`Delete these ${markedForDelete.length} photos from Drive permanently?`)) return;
+      showLoading("CLEANING UP DRIVE...");
+      
+      // Sort in descending order to avoid index shifting problems
+      const targets = markedForDelete.sort((a,b) => b-a);
+      for (const idx of targets) {
+        const url = currentGallery[idx];
+        await fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
+        currentGallery.splice(idx, 1);
       }
-      document.getElementById('upLoading').style.display = 'none';
+      
+      markedForDelete = [];
+      document.getElementById('Album_Image').value = currentGallery.join(',');
+      renderGallery();
+      hideLoading();
+      alert('PHOTOS DELETED! 🗑️');
     }
 
     function switchTab(t) {
@@ -166,15 +195,25 @@
       document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
     }
 
+    async function confirmSave() {
+      if(!confirm("Are you sure you want to update the master database?")) return;
+      saveData();
+    }
+
     async function saveData() {
-      const btn = document.getElementById('saveBtn'); btn.innerText = "SAVING..."; btn.disabled = true;
+      const btn = document.getElementById('saveBtn');
+      showLoading("SAVING DATABASE...");
+      btn.disabled = true;
       const payload = { mode: "updateUnit", HP_ID: hpId };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       try {
         const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
-        if ((await res.json()).ok) { alert('DATABASE UPDATED!'); location.href = 'dashboard.html'; }
-      } catch (e) { alert('Error: ' + e); btn.innerText = "Update Master Database"; btn.disabled = false; }
+        if ((await res.json()).ok) { hideLoading(); alert('DATABASE UPDATED! ✅'); location.href = 'dashboard.html'; }
+      } catch (e) { hideLoading(); alert('Error: ' + e); btn.disabled = false; }
     }
+
+    function showLoading(txt) { document.getElementById('loadText').innerText = txt; document.getElementById('upLoading').style.display = 'flex'; }
+    function hideLoading() { document.getElementById('upLoading').style.display = 'none'; }
     window.onload = init;
   </script>
 </body>
