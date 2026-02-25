@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Asset Editor | MASTER SYSTEM V135</title>
+  <title>Asset Editor | MASTER SYSTEM V136</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,18 +14,14 @@
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
     
-    /* 🖼️ Main Cover Stage (16:10) */
-    .thumb-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #000; margin-bottom: 1rem; }
-    
-    /* Album Tiles (1:1) */
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; background: #000; }
+    .img-tile { position: relative; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; background: #000; }
+    .img-tile.marked { opacity: 0.3; border: 3px solid #EF4444; filter: grayscale(0.8); }
     
     /* ❌ Improved X Button */
-    .img-x { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; border: 2px solid #060F1A; transition: 0.2s; }
-    .img-x:hover { transform: scale(1.1); background: #EF4444; }
+    .img-x { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; border: 2px solid #060F1A; transition: 0.2s; }
+    .img-tile.marked .img-x { background: #10B981; transform: rotate(45deg); }
 
     .pdf-row { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); padding: 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
-    .pdf-info { flex: 1; min-width: 0; }
     .pdf-name { font-size: 9px; color: #E4C46A; font-weight: 700; display: block; margin-top: 2px; }
     .btn-pdf { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
 
@@ -35,10 +31,11 @@
 
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
     .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
+    .btn-delete-batch { background: #EF4444; color: white; padding: 12px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: none; width: 100%; }
   </style>
 </head>
 <body>
-  <div id="upLoading" class="upload-overlay"><div class="loader"></div><div id="loadText" class="text-xs font-800 tracking-[0.3em]">UPLOADING...</div></div>
+  <div id="upLoading" class="upload-overlay"><div class="loader"></div><div id="loadText" class="text-xs font-800 tracking-[0.3em]">PROCESSING...</div></div>
 
   <div class="content-wrapper">
     <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5 shadow-2xl">
@@ -55,10 +52,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="input-card">
           <span class="field-label">Main Cover Thumbnail</span>
-          <div id="thumbPreview" class="thumb-stage flex items-center justify-center">
-            <span class="text-4xl opacity-20">🖼️</span>
-          </div>
-          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs shadow-lg shadow-blue-900/20">Pick New Cover</button>
+          <div id="thumbPreview" class="thumb-stage flex items-center justify-center relative h-48 bg-black/20 rounded-xl mb-4 overflow-hidden border border-dashed border-white/10"><span class="text-4xl opacity-20">🖼️</span></div>
+          <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs shadow-lg">Pick New Cover</button>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleUpload(this, 'thumb')">
           <input type="hidden" id="Thumbnail_Image">
         </div>
@@ -66,7 +61,8 @@
         <div class="input-card">
           <span class="field-label">Project Gallery Album</span>
           <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
-          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs shadow-lg shadow-purple-900/20">Add Gallery Photos</button>
+          <button id="delBtn" onclick="processBatchDelete()" class="btn-delete-batch">Confirm Delete Selected</button>
+          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs shadow-lg">Add Gallery Photos</button>
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'album')">
           <input type="hidden" id="Album_Image">
         </div>
@@ -124,7 +120,7 @@
         <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
         <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
         <div><label class="field-label">Zone</label><select id="Zone" class="field-input"></select></div>
-        <div class="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20"><label class="field-label !text-blue-400">Sale Price</label><input id="Sale_Price" class="field-input !border-blue-500/30 font-800"></div>
+        <div class="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20"><label class="field-label !text-blue-400">Sale Price</label><input id="Sale_Price" class="field-input !border-blue-500/30 font-800 text-[#C9A84C]"></div>
       </div>
     </div>
   </div>
@@ -135,12 +131,9 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const hpId = new URLSearchParams(window.location.search).get('id');
     let currentGallery = [];
+    let markedForDelete = [];
 
-    // ฟังก์ชันตัดชื่อไฟล์ที่ยาวเกินไป
-    function shortenName(name) {
-      if (!name) return "File Loaded ✅";
-      return name.length > 25 ? name.substring(0, 22) + "..." : name;
-    }
+    function shortenName(name) { if (!name) return "File Ready ✅"; return name.length > 25 ? name.substring(0, 22) + "..." : name; }
 
     async function init() {
       if (hpId) {
@@ -168,17 +161,24 @@
       else { txt.innerText = "No file found"; view.classList.add('hidden'); }
     }
 
-    // ระบบ Sequential Upload: รับประกันรูปเข้าครบตามจำนวนที่เลือก
+    // [Main Cover - Instant Delete Logic]
+    function deleteMainThumb() {
+      const url = document.getElementById('Thumbnail_Image').value;
+      if (!url || !confirm("Delete this cover photo?")) return;
+      // Instant UI Removal
+      renderMainThumb(""); 
+      // Background Server Task
+      fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
+    }
+
     async function handleUpload(input, target, fieldId) {
       const filesArr = Array.from(input.files); if (!filesArr.length) return;
-      showLoading("PROCESSING " + filesArr.length + " FILES...");
-      
+      showLoading("UPLOADING...");
       try {
         for (let i = 0; i < filesArr.length; i++) {
-          const file = filesArr[i];
           showLoading(`UPLOADING ${i+1}/${filesArr.length}...`);
-          const base64 = await toBase64(file);
-          const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'uploadFile', target, hpId, data: base64, type: file.type, name: file.name }) });
+          const base64 = await toBase64(filesArr[i]);
+          const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'uploadFile', target, hpId, data: base64, type: filesArr[i].type, name: filesArr[i].name }) });
           const result = await res.json();
           if (result.ok) {
             if (target === 'thumb') renderMainThumb(result.url);
@@ -186,17 +186,19 @@
             else { document.getElementById(fieldId).value = result.url; syncPdfUI(fieldId, result.url, result.fileName); }
           }
         }
-        renderGallery(); hideLoading(); alert('UPLOADED SUCCESSFULLY! ✅');
+        renderGallery(); hideLoading();
       } catch (err) { hideLoading(); alert('Error: ' + err); }
       input.value = "";
     }
 
     async function deleteFile(fieldId) {
       const url = document.getElementById(fieldId).value;
-      if (!url || !confirm("Delete this file permanently from Drive?")) return;
+      if (!url || !confirm("Delete this file permanently?")) return;
+      // Instant UI Cleanup
+      document.getElementById(fieldId).value = ""; 
+      syncPdfUI(fieldId, "", "");
+      // Background Server Task
       fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
-      document.getElementById(fieldId).value = ""; syncPdfUI(fieldId, "", "");
-      if (fieldId === 'Thumbnail_Image') renderMainThumb("");
     }
 
     function viewFile(id) {
@@ -207,23 +209,41 @@
     function renderMainThumb(url) {
       const box = document.getElementById('thumbPreview');
       if (url) {
-        box.innerHTML = `<div class="img-wrapper"><div class="img-x" onclick="deleteMainThumb()">✕</div><img src="${url.split('=')[0]+'=s800'}" class="w-full h-full object-cover"></div>`;
+        box.innerHTML = `<div class="img-x" onclick="deleteMainThumb()">✕</div><img src="${url.split('=')[0]+'=s600'}" class="w-full h-full object-cover">`;
         document.getElementById('Thumbnail_Image').value = url;
       } else { box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`; document.getElementById('Thumbnail_Image').value = ""; }
     }
 
-    function deleteMainThumb() { deleteFile('Thumbnail_Image'); }
     const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; });
 
     function renderGallery() {
       const box = document.getElementById('galleryPreview');
-      box.innerHTML = currentGallery.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="removeImg(${i})">✕</div><img src="${url.split('=')[0]+'=s400'}" class="w-full h-full object-cover"></div>`).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
+      box.innerHTML = currentGallery.map((url, i) => `
+        <div class="img-tile ${markedForDelete.includes(i) ? 'marked' : ''}" onclick="toggleMark(${i})">
+          <div class="img-x"><i class="fas ${markedForDelete.includes(i) ? 'fa-check' : 'fa-times'}"></i></div>
+          <img src="${url.split('=')[0]+'=s400'}" class="w-full h-full object-cover">
+        </div>`).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
+      document.getElementById('delBtn').style.display = markedForDelete.length > 0 ? 'block' : 'none';
+      document.getElementById('delBtn').innerText = `Confirm Delete ${markedForDelete.length} Photos`;
     }
 
-    function removeImg(i) {
-      if(!confirm("Delete this photo?")) return;
-      fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url: currentGallery[i] }) });
-      currentGallery.splice(i, 1); document.getElementById('Album_Image').value = currentGallery.join(','); renderGallery();
+    function toggleMark(i) {
+      const idx = markedForDelete.indexOf(i);
+      if (idx > -1) markedForDelete.splice(idx, 1); else markedForDelete.push(i);
+      renderGallery();
+    }
+
+    // [Batch Gallery Delete - Seamless Logic]
+    function processBatchDelete() {
+      if(!confirm(`Delete these ${markedForDelete.length} photos?`)) return;
+      const targets = markedForDelete.sort((a,b) => b-a);
+      for (const idx of targets) {
+        fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url: currentGallery[idx] }) });
+        currentGallery.splice(idx, 1);
+      }
+      markedForDelete = [];
+      document.getElementById('Album_Image').value = currentGallery.join(',');
+      renderGallery();
     }
 
     function switchTab(t) {
@@ -232,7 +252,7 @@
       document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
     }
 
-    function confirmSave() { if(confirm("Confirm update master database?")) saveData(); }
+    function confirmSave() { if(confirm("Update master database?")) saveData(); }
     async function saveData() {
       const btn = document.getElementById('saveBtn'); showLoading("SAVING DATABASE..."); btn.disabled = true;
       const payload = { mode: "updateUnit", HP_ID: hpId };
