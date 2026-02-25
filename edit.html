@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Asset Editor | MASTER SYSTEM</title>
+  <title>Asset Editor | MASTER SYSTEM V126</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,15 +14,11 @@
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
     
-    /* Image Container Styles */
     .img-wrapper { position: relative; width: 100%; height: 100%; }
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; background: #000; }
     .img-tile.marked { opacity: 0.3; border: 2.5px solid #EF4444; filter: grayscale(0.8); }
     
-    /* Common Delete Button */
-    .img-x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: 2px solid #060F1A; transition: 0.2s; }
-    .img-x:hover { transform: scale(1.1); background: #EF4444; }
-    .img-tile.marked .img-x { background: #10B981; transform: rotate(45deg); }
+    .img-x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: 2px solid #060F1A; }
 
     .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.92); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
     .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #C9A84C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
@@ -39,7 +35,7 @@
   <div class="content-wrapper">
     <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white flex justify-between items-center mb-8 border border-white/5 shadow-2xl">
       <div><p class="text-[#C9A84C] font-800 uppercase tracking-widest text-[10px] mb-2">Master Database Editor</p><h1 id="displayId" class="text-3xl font-800 tracking-tighter italic">HP-XXXX</h1></div>
-      <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/20 p-4 rounded-2xl transition-all">✕</button>
+      <button onclick="location.href='dashboard.html'" class="bg-white/5 hover:bg-white/10 p-4 rounded-2xl transition-all">✕</button>
     </div>
 
     <div class="flex gap-8 mb-8 border-b border-white/10 px-4">
@@ -63,18 +59,18 @@
           <span class="field-label">Project Gallery Album</span>
           <div id="galleryPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
           <button id="delBtn" onclick="processBatchDelete()" class="btn-delete-batch w-full">Delete Selected Photos</button>
-          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Gallery Photos</button>
+          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 uppercase text-xs">Add Photos</button>
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'uploadGallery')">
           <input type="hidden" id="Album_Image">
         </div>
       </div>
       
       <div class="input-card">
-        <span class="field-label">PDF Documents (Paste URL)</span>
+        <span class="field-label">PDF Documents</span>
         <div class="space-y-3 mt-4">
-          <input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Sales Gallery Link">
-          <input type="text" id="Material_PDF" class="field-input !text-[11px]" placeholder="Material PDF Link">
-          <input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Floor Plan Link">
+          <input type="text" id="Sales_Gallery" class="field-input !text-[11px]" placeholder="Sales Gallery URL">
+          <input type="text" id="Material_PDF" class="field-input !text-[11px]" placeholder="Material PDF URL">
+          <input type="text" id="FloorPlan_PDF" class="field-input !text-[11px]" placeholder="Floor Plan URL">
         </div>
       </div>
     </div>
@@ -82,13 +78,13 @@
     <div id="tab-info" class="hidden space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
         <div><label class="field-label">HP-ID</label><input id="HP_ID" class="field-input" readonly></div>
-        <div><label class="field-label">Plot</label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">Plot Number</label><input id="Plot" class="field-input"></div>
         <div><label class="field-label">Status</label><select id="Status" class="field-input"></select></div>
-        <div><label class="field-label">Listing</label><select id="Listing_Type" class="field-input"></select></div>
+        <div><label class="field-label">Listing Type</label><select id="Listing_Type" class="field-input"></select></div>
         <div><label class="field-label">Bedrooms</label><input type="number" id="Bedrooms" class="field-input"></div>
         <div><label class="field-label">Bathrooms</label><input type="number" id="Bathrooms" class="field-input"></div>
-        <div><label class="field-label">Living M²</label><input id="Living_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">Land M²</label><input id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Living Area</label><input id="Living_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">Land Size</label><input id="Land_Area_sq_m" class="field-input"></div>
         <div><label class="field-label">Furnishing</label><select id="Furnishing" class="field-input"></select></div>
         <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
         <div><label class="field-label">District</label><select id="District" class="field-input"></select></div>
@@ -108,14 +104,21 @@
     let currentGallery = [];
     let markedForDelete = [];
 
+    // ฟังก์ชันช่วยลดขนาดภาพตัวอย่างเพื่อความเร็ว
+    function _fastImg(url) {
+      if (!url || !url.includes("googleusercontent.com")) return url;
+      return url.split('=')[0] + "=s400";
+    }
+
     async function init() {
       if (hpId) {
         document.getElementById('displayId').innerText = hpId;
+        // โหลด Metadata (ตัวอักษร) ก่อนเพื่อให้หน้าจอไม่ว่างเปล่า
         const meta = (await (await fetch(`${API}?mode=getMetadata`)).json()).data;
         ["Status", "Listing_Type", "Furnishing", "District", "Zone"].forEach(f => {
-          const el = document.getElementById(f);
-          if(el) el.innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
+          if(document.getElementById(f)) document.getElementById(f).innerHTML = meta[f].map(v => `<option value="${v}">${v}</option>`).join('');
         });
+
         const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (res.ok) {
           Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
@@ -128,12 +131,8 @@
 
     function renderMainThumb(url) {
       const box = document.getElementById('thumbPreview');
-      if (url && url !== "") {
-        box.innerHTML = `
-          <div class="img-wrapper">
-            <div class="img-x" onclick="removeMainThumb('${url}')">✕</div>
-            <img src="${url}" class="w-full h-full object-cover">
-          </div>`;
+      if (url) {
+        box.innerHTML = `<div class="img-wrapper"><div class="img-x" onclick="removeMainThumb('${url}')">✕</div><img src="${_fastImg(url)}" class="w-full h-full object-cover" loading="lazy"></div>`;
         document.getElementById('Thumbnail_Image').value = url;
       } else {
         box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`;
@@ -142,10 +141,9 @@
     }
 
     function removeMainThumb(url) {
-      if(!confirm("Delete this cover photo permanently?")) return;
-      // ลบทันทีโดยไม่รอ (Fire and forget)
+      if(!confirm("Delete this cover photo?")) return;
       fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
-      renderMainThumb(""); // Clear UI ทันที
+      renderMainThumb("");
     }
 
     async function handleUpload(input, mode) {
@@ -158,15 +156,12 @@
         const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: file.type, name: file.name }) });
         const result = await res.json();
         if (result.ok) {
-          if (mode === 'uploadThumb') {
-            renderMainThumb(result.url);
-          } else {
-            currentGallery.push(result.url);
-          }
+          if (mode === 'uploadThumb') renderMainThumb(result.url);
+          else currentGallery.push(result.url);
         }
       }
       document.getElementById('Album_Image').value = currentGallery.join(',');
-      renderGallery(); hideLoading(); alert('UPLOADED SUCCESSFULLY! ✅');
+      renderGallery(); hideLoading();
     }
 
     const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; });
@@ -176,7 +171,7 @@
       box.innerHTML = currentGallery.map((url, i) => `
         <div class="img-tile ${markedForDelete.includes(i) ? 'marked' : ''}">
           <div class="img-x" onclick="toggleMark(${i})">✕</div>
-          <img src="${url}" class="w-full h-full object-cover">
+          <img src="${_fastImg(url)}" class="w-full h-full object-cover" loading="lazy">
         </div>
       `).join('') || '<span class="text-4xl opacity-10 col-span-4 self-center justify-self-center">🗂️</span>';
       document.getElementById('delBtn').style.display = markedForDelete.length > 0 ? 'block' : 'none';
@@ -185,8 +180,7 @@
 
     function toggleMark(i) {
       const idx = markedForDelete.indexOf(i);
-      if (idx > -1) markedForDelete.splice(idx, 1);
-      else markedForDelete.push(i);
+      if (idx > -1) markedForDelete.splice(idx, 1); else markedForDelete.push(i);
       renderGallery();
     }
 
