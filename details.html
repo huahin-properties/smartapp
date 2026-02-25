@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | HUA HIN PROPERTIES</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Asset Details | HUA HIN PROPERTIES</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(255, 255, 255, 0.08); --card-bg: #0F172A; }
@@ -33,7 +32,7 @@
     .val { font-size: 0.82rem; font-weight: 400; color: #FFF; }
     .gold-txt { color: var(--gold); font-weight: 600; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .nearby-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+    .nearby-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
     .map-box { width: 100%; height: 230px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
@@ -91,7 +90,7 @@
     let images = [], idx = 0;
     const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Bluport Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }];
     function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
-    async function init() { if(!hpId) return; const cached = localStorage.getItem(`master_unit_${hpId}`); if(cached) { renderData(JSON.parse(cached).data); setTimeout(hideSplash, 300); } await fetchFreshData(); }
+    async function init() { if(!hpId) return; await fetchFreshData(); }
     async function fetchFreshData() { try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) { localStorage.setItem(`master_unit_${hpId}`, JSON.stringify({data: json.data})); renderData(json.data); hideSplash(); } } catch(e) { hideSplash(); } }
     function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
     function renderData(u) {
