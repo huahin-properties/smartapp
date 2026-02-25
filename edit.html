@@ -13,13 +13,21 @@
     .input-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.5rem; }
     .field-label { font-size: 10px; font-weight: 800; color: #7A9BB5; text-transform: uppercase; margin-bottom: 0.5rem; display: block; letter-spacing: 1px; }
     .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.75rem; color: white; outline: none; transition: 0.2s; font-size: 14px; }
+    
+    /* Image Container Styles */
+    .img-wrapper { position: relative; width: 100%; height: 100%; }
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
     .img-tile.marked { opacity: 0.3; border: 2.5px solid #EF4444; filter: grayscale(0.8); }
-    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid #060F1A; }
+    
+    /* Common Delete Button */
+    .img-x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: 2px solid #060F1A; transition: 0.2s; }
+    .img-x:hover { transform: scale(1.1); background: #EF4444; }
     .img-tile.marked .img-x { background: #10B981; transform: rotate(45deg); }
-    .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+
+    .upload-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.92); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
     .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #C9A84C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(6,15,26,0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 20px; z-index: 1000; }
     .btn-update { background: #C9A84C; color: #060F1A; width: 100%; max-width: 1000px; margin: 0 auto; display: block; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; transition: 0.3s; }
     .btn-delete-batch { background: #EF4444; color: white; padding: 12px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: none; }
@@ -43,7 +51,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="input-card">
           <span class="field-label">Main Cover Thumbnail</span>
-          <div id="thumbPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden mb-4">
+          <div id="thumbPreview" class="h-48 bg-white/5 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden mb-4 relative">
             <span class="text-4xl opacity-20">🖼️</span>
           </div>
           <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 uppercase text-xs">Pick New Cover</button>
@@ -111,25 +119,47 @@
         const res = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (res.ok) {
           Object.keys(res.data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = res.data[k]; });
-          if(res.data.Thumbnail_Image) document.getElementById('thumbPreview').innerHTML = `<img src="${res.data.Thumbnail_Image}" class="w-full h-full object-cover">`;
+          renderMainThumb(res.data.Thumbnail_Image);
           currentGallery = res.data.Album_Image ? res.data.Album_Image.split(',').filter(Boolean) : [];
           renderGallery();
         }
       }
     }
 
+    function renderMainThumb(url) {
+      const box = document.getElementById('thumbPreview');
+      if (url && url !== "") {
+        box.innerHTML = `
+          <div class="img-wrapper">
+            <div class="img-x" onclick="removeMainThumb('${url}')">✕</div>
+            <img src="${url}" class="w-full h-full object-cover">
+          </div>`;
+        document.getElementById('Thumbnail_Image').value = url;
+      } else {
+        box.innerHTML = `<span class="text-4xl opacity-20">🖼️</span>`;
+        document.getElementById('Thumbnail_Image').value = "";
+      }
+    }
+
+    function removeMainThumb(url) {
+      if(!confirm("Delete this cover photo permanently?")) return;
+      // ลบทันทีโดยไม่รอ (Fire and forget)
+      fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
+      renderMainThumb(""); // Clear UI ทันที
+    }
+
     async function handleUpload(input, mode) {
       const files = input.files; if (!files.length) return;
-      showLoading("UPLOADING " + files.length + " PHOTOS...");
+      showLoading("UPLOADING...");
       for (let i = 0; i < files.length; i++) {
-        showLoading(`UPLOADING ${i+1}/${files.length}...`);
-        const base64 = await toBase64(files[i]);
-        const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: files[i].type, name: files[i].name }) });
+        const file = files[i];
+        if (files.length > 1) showLoading(`UPLOADING ${i+1}/${files.length}...`);
+        const base64 = await toBase64(file);
+        const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode, hpId, data: base64, type: file.type, name: file.name }) });
         const result = await res.json();
         if (result.ok) {
           if (mode === 'uploadThumb') {
-            document.getElementById('Thumbnail_Image').value = result.url;
-            document.getElementById('thumbPreview').innerHTML = `<img src="${result.url}" class="w-full h-full object-cover">`;
+            renderMainThumb(result.url);
           } else {
             currentGallery.push(result.url);
           }
@@ -160,22 +190,17 @@
       renderGallery();
     }
 
-    // แก้ไข Logic การลบให้ทำงานหลังบ้าน (Asynchronous Deletion)
     function processBatchDelete() {
       if(!confirm(`Delete these ${markedForDelete.length} photos?`)) return;
-      
       const targets = markedForDelete.sort((a,b) => b-a);
       for (const idx of targets) {
         const url = currentGallery[idx];
-        // ส่งคำสั่งไปลบที่หลังบ้านโดยไม่ใช้ 'await' เพื่อไม่ให้บล็อกหน้าจอ
         fetch(API, { method: 'POST', body: JSON.stringify({ mode: 'deleteFile', url }) });
         currentGallery.splice(idx, 1);
       }
-      
       markedForDelete = [];
       document.getElementById('Album_Image').value = currentGallery.join(',');
       renderGallery();
-      // ไม่มีการแสดง 'Cleaning...' และไม่แจ้งเตือน ให้ผู้ใช้ทำงานต่อได้เลย
     }
 
     function switchTab(t) {
@@ -185,7 +210,7 @@
       document.getElementById('btn-info').className = t === 'info' ? 'pb-4 font-800 text-[11px] uppercase tracking-widest tab-active' : 'pb-4 font-800 text-[11px] uppercase tracking-widest text-slate-500';
     }
 
-    function confirmSave() { if(confirm("Are you sure you want to update the database?")) saveData(); }
+    function confirmSave() { if(confirm("Are you sure you want to update the master database?")) saveData(); }
 
     async function saveData() {
       const btn = document.getElementById('saveBtn'); showLoading("SAVING DATABASE..."); btn.disabled = true;
