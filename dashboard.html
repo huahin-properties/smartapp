@@ -2,77 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Master Dashboard | Compact Control V158</title>
+  <title>Master Dashboard | Ultra Compact V159</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-    .content-wrapper { padding: 10px; max-width: 1200px; margin: 0 auto; }
+    .content-wrapper { padding: 10px; max-width: 1000px; margin: 0 auto; }
     
-    /* 🎯 Header Bar: Compact Height */
-    .header-bar { display: grid; grid-template-columns: 60px 110px 1.5fr 1fr 140px 45px; gap: 8px; padding: 10px 20px; background: rgba(201, 168, 76, 0.08); border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(201, 168, 76, 0.15); }
-    .header-label { font-size: 9px; font-weight: 800; color: #C9A84C; text-transform: uppercase; letter-spacing: 1px; }
+    /* 🎯 โครงสร้าง 2 แถวเด็ดขาด */
+    .unit-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 10px 12px; margin-bottom: 6px; display: flex; flex-direction: column; gap: 6px; transition: 0.2s; }
+    .unit-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(201, 168, 76, 0.3); }
     
-    /* 🎯 Row Style: Reduced Spacing & Height */
-    .unit-row { display: grid; grid-template-columns: 60px 110px 1.5fr 1fr 140px 45px; gap: 8px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 1rem; padding: 6px 15px; margin-bottom: 6px; transition: 0.2s ease-in-out; }
-    .unit-row:hover { background: rgba(255,255,255,0.06); border-color: rgba(201, 168, 76, 0.3); transform: scale(1.005); }
+    /* แถวที่ 1: รูป + ID/Project + Edit */
+    .row-1 { display: flex; align-items: center; gap: 10px; position: relative; }
+    .u-img { width: 50px; height: 38px; border-radius: 6px; object-cover: cover; background: #000; border: 1px solid rgba(255,255,255,0.1); }
+    .u-info-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+    .u-id-badge { font-size: 11px; font-weight: 800; color: #FFFFFF; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+    .u-project-name { font-size: 11px; font-weight: 600; color: #94A3B8; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* 🎯 Text Clarity: Sharp HP-ID */
-    .u-id-txt { font-size: 12px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.3px; }
+    /* แถวที่ 2: Sale Status + Live Control */
+    .row-2 { display: flex; align-items: center; gap: 10px; }
+    .u-sale-status { font-size: 9px; font-weight: 800; color: #C9A84C; background: rgba(201, 168, 76, 0.08); padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(201, 168, 76, 0.15); min-width: 90px; text-align: center; text-transform: uppercase; }
 
-    /* 🎯 System Status Logic Colors */
-    .status-select { background: #0B1829; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 8px; font-size: 10px; font-weight: 800; padding: 6px 8px; outline: none; width: 100%; cursor: pointer; }
+    /* 🎯 สถานะสีตามสั่งเด็ดขาด */
+    .status-select { flex: 1; background: #0B1829; border-radius: 8px; font-size: 10px; font-weight: 800; padding: 5px 8px; outline: none; cursor: pointer; border: 1.5px solid transparent; transition: 0.3s; }
     
-    /* Online: Green */
     .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4) !important; background: rgba(16, 185, 129, 0.03); }
-    /* Pending: Orange */
     .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4) !important; background: rgba(245, 158, 11, 0.03); }
-    /* Offline: Dark Gray (Dim) */
-    .st-offline { color: #4B5563 !important; border-color: rgba(75, 85, 99, 0.4) !important; background: rgba(0, 0, 0, 0.2); }
+    .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.3) !important; background: rgba(0, 0, 0, 0.2); }
     
-    select option { background: #0B1829; color: white; padding: 8px; }
+    select option { background: #0B1829; color: white; }
     .opt-online { color: #10B981; } .opt-pending { color: #F59E0B; } .opt-offline { color: #94A3B8; }
 
-    .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-    .loader { border: 2.5px solid rgba(255,255,255,0.1); border-top: 2.5px solid #C9A84C; border-radius: 50%; width: 25px; height: 25px; animation: spin 0.8s linear infinite; }
+    .btn-edit-mini { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: #64748B; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); }
+    .btn-edit-mini:hover { background: #C9A84C; color: #060F1A; border-color: #C9A84C; }
+
+    .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #C9A84C; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* 📱 Mobile Optimized: Tighter & Similar to Samples */
-    @media (max-width: 900px) {
-      .header-bar { display: none; }
-      .unit-row { grid-template-columns: 55px 1fr 1fr; grid-template-rows: auto auto; padding: 10px 15px; gap: 6px; }
-      .u-img { grid-row: span 2; }
-      .u-id { font-size: 13px !important; }
-      .u-sale { text-align: right; }
-      .u-control { grid-column: span 2; }
-      .u-edit { text-align: right; }
-      .u-project { grid-column: span 1; font-size: 11px; white-space: nowrap; }
+    @media (min-width: 768px) {
+      .content-wrapper { padding: 20px; }
+      .unit-card { flex-direction: row; align-items: center; padding: 8px 20px; }
+      .row-1 { flex: 1.5; }
+      .row-2 { flex: 1; justify-content: flex-end; }
+      .u-img { width: 45px; height: 34px; }
     }
   </style>
 </head>
 <body>
-  <div id="quickLoad" class="loading-overlay"><div class="flex flex-col items-center gap-3"><div class="loader"></div><div class="text-[9px] font-800 tracking-[0.3em] text-[#C9A84C] uppercase italic">System Syncing...</div></div></div>
+  <div id="quickLoad" class="loading-overlay"><div class="flex flex-col items-center gap-3"><div class="loader"></div><div class="text-[9px] font-800 tracking-[0.3em] text-[#C9A84C] uppercase italic">Syncing...</div></div></div>
 
   <div class="content-wrapper">
     <div class="flex justify-between items-center mb-4 mt-1 px-1">
-      <div><h1 class="text-xl md:text-2xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Database Hub</h1><p class="text-[8px] font-700 text-slate-600 uppercase tracking-widest">Master Admin Console V158</p></div>
-      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-5 py-2 rounded-xl font-800 text-[10px] uppercase shadow-lg hover:brightness-110 active:scale-95 transition-all"><i class="fas fa-plus mr-1"></i>Add</button>
+      <div><h1 class="text-xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Database Hub</h1><p class="text-[8px] font-700 text-slate-600 uppercase tracking-widest">Master Admin Console V159</p></div>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-1.5 rounded-lg font-800 text-[10px] uppercase shadow-lg transition-all active:scale-95"><i class="fas fa-plus mr-1"></i>Add Unit</button>
     </div>
     
     <input type="text" id="sI" onkeyup="filter()" placeholder="Quick Search ID, Plot, Project..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-4 outline-none focus:border-[#C9A84C] text-sm font-600 transition-all shadow-inner">
     
-    <div class="header-bar">
-      <div class="header-label text-center">Image</div>
-      <div class="header-label">HP-ID</div>
-      <div class="header-label">Project Name</div>
-      <div class="header-label">Status</div>
-      <div class="header-label text-center">System Control</div>
-      <div class="header-label text-right">Edit</div>
-    </div>
-
     <div id="list">
-      <div class="text-center py-20 text-slate-800 font-800 text-[9px] animate-pulse tracking-[0.4em] uppercase">Connecting Master Stream...</div>
+      <div class="text-center py-20 text-slate-800 font-800 text-[9px] animate-pulse tracking-[0.4em] uppercase">Syncing Master Repository...</div>
     </div>
   </div>
 
@@ -93,33 +84,25 @@
         const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
         
         return `
-          <div class="unit-row">
-            <div class="flex justify-center u-img">
-              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45?text=NA'}" class="w-11 h-9 rounded object-cover bg-black border border-white/5 shadow-md">
-            </div>
-
-            <div class="u-id">
-              <span class="u-id-txt">#${u.HP_ID}</span>
-            </div>
-            
-            <div class="font-600 text-[12px] truncate uppercase tracking-tight text-slate-300 u-project">${u.Project_Name || 'Master'}</div>
-            
-            <div class="u-sale">
-              <span class="text-[9px] font-800 text-[#C9A84C] bg-[#C9A84C]/5 px-2 py-1 rounded-md border border-[#C9A84C]/10 uppercase">${u.Status || 'N/A'}</span>
+          <div class="unit-card">
+            <div class="row-1">
+              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45?text=NA'}" class="u-img shadow-md">
+              <div class="u-info-main">
+                <span class="u-id-badge">#${u.HP_ID}</span>
+                <span class="u-project-name">${u.Project_Name || 'Master'}</span>
+              </div>
+              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="btn-edit-mini">
+                <i class="fas fa-edit text-[10px]"></i>
+              </button>
             </div>
             
-            <div class="u-control">
+            <div class="row-2">
+              <div class="u-sale-status">${u.Status || 'AVAILABLE'}</div>
               <select onchange="quickUpdateStatus('${u.HP_ID}', this)" class="status-select ${colorClass}">
                 <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''} class="opt-online">● ONLINE</option>
                 <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''} class="opt-offline">● OFFLINE</option>
                 <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''} class="opt-pending">● PENDING</option>
               </select>
-            </div>
-
-            <div class="text-right u-edit">
-              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#C9A84C] hover:text-[#060F1A] flex items-center justify-center transition-all border border-white/5">
-                <i class="fas fa-pen-nib text-[10px]"></i>
-              </button>
             </div>
           </div>
         `;
