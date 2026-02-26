@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V171</title>
+  <title>Asset Specifications | MASTER SYSTEM V172</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -23,7 +23,7 @@
     .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.3); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
     
     .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.03); scrollbar-width: none; }
-    .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
+    .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
     .thumb.active { opacity: 1; border-color: var(--gold); }
     
     .content { padding: 10px 15px 120px; max-width: 900px; margin: 0 auto; }
@@ -34,22 +34,23 @@
     .val { font-size: 0.85rem; font-weight: 400; color: #FFF; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-    /* 🛡️ 🎯 ระบบแผนที่วิเคราะห์พื้นที่แบบ Dual Boundary (V171) */
-    .map-area-insight { position: relative; width: 100%; height: 420px; border-radius: 20px; overflow: hidden; border: 2px solid var(--border); margin: 15px 0; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    /* 🛡️ 🎯 ระบบแผนที่วิเคราะห์ขอบเขต 2 ชั้น V172 */
+    .map-boundary-box { position: relative; width: 100%; height: 450px; border-radius: 20px; overflow: hidden; border: 2px solid var(--border); margin: 15px 0; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     
-    /* Overlay Mask: Administrative Boundaries */
-    .boundary-layer { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
-    .boundary-layer svg { width: 100%; height: 100%; }
+    /* Administrative Layers */
+    .area-mask-container { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+    .area-mask-container svg { width: 100%; height: 100%; }
     
-    /* ขอบเขตอำเภอ (District) - สีเขียวประ */
-    .poly-district { fill: rgba(16, 185, 129, 0.04); stroke: #10B981; stroke-width: 3; stroke-dasharray: 8 4; }
-    /* ขอบเขตตำบล (Sub-District) - สีแดงประ */
-    .poly-sub-district { fill: rgba(239, 68, 68, 0.08); stroke: #EF4444; stroke-width: 4; stroke-dasharray: 10 5; filter: drop-shadow(0 0 10px rgba(239,68,68,0.2)); }
+    /* ขอบเขตอำเภอ (Outer Layer) - สีเขียวไฮไลต์ + เส้นประ */
+    .district-poly { fill: rgba(16, 185, 129, 0.05); stroke: #10B981; stroke-width: 3; stroke-dasharray: 8 6; }
     
-    .insight-labels { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
-    .tag-label { font-size: 9px; font-weight: 800; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; border: 1px solid; }
-    .tag-sub { background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.3); }
-    .tag-dist { background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3); }
+    /* ขอบเขตตำบล (Inner Layer) - สีแดงไฮไลต์ + เส้นประ */
+    .sub-district-poly { fill: rgba(239, 68, 68, 0.08); stroke: #EF4444; stroke-width: 4; stroke-dasharray: 10 5; filter: drop-shadow(0 0 10px rgba(239,68,68,0.2)); }
+    
+    .area-legend { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; flex-direction: column; gap: 6px; }
+    .legend-item { font-size: 9px; font-weight: 800; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; border: 1px solid; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); }
+    .lg-sub { color: #EF4444; border-color: rgba(239, 68, 68, 0.5); }
+    .lg-dist { color: #10B981; border-color: rgba(16, 185, 129, 0.5); }
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -58,7 +59,7 @@
 </head>
 <body>
   <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
-  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">ASSET SPECIFICATIONS</div><div style="width:40px;"></div></header>
+  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">SPECIFICATIONS</div><div style="width:40px;"></div></header>
   
   <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel" style="position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px;">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
   
@@ -76,21 +77,21 @@
     </div>
 
     <div class="info-card">
-      <h2 class="section-title">Area Intelligence Insight</h2>
-      <div class="map-area-insight" id="mapSection" style="display:none;">
-        <div class="insight-labels">
-          <span class="tag-label tag-sub" id="lblSub">Sub-District Boundary</span>
-          <span class="tag-label tag-dist" id="lblDist">District Boundary</span>
+      <h2 class="section-title">Administrative Area Intelligence</h2>
+      <div class="map-boundary-box" id="mapSection" style="display:none;">
+        <div class="area-legend">
+          <span class="legend-item lg-sub" id="lblSub">SUB-DISTRICT AREA</span>
+          <span class="legend-item lg-dist" id="lblDist">DISTRICT CONTEXT</span>
         </div>
-        <div class="boundary-layer">
-          <svg viewBox="0 0 400 400" preserveAspectRatio="none">
-            <rect x="10" y="10" width="380" height="380" rx="30" class="poly-district" />
-            <rect x="80" y="80" width="240" height="240" rx="20" class="poly-sub-district" />
+        <div class="area-mask-container">
+          <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+            <path d="M50,50 Q200,30 400,50 T800,50 T950,400 T950,800 T500,950 T50,800 Z" class="district-poly" />
+            <path d="M300,300 Q400,250 550,300 T750,500 T600,750 T300,700 T250,500 Z" class="sub-district-poly" />
           </svg>
         </div>
-        <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.4) contrast(1.1) brightness(0.9);"></iframe>
+        <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.2) contrast(1.1) brightness(0.9);"></iframe>
       </div>
-      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Precise location secured. Highlighting administrative zone context.</p>
+      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Exact property location hidden. Highlighting administrative zone for reference.</p>
     </div>
 
     <div class="info-card">
@@ -110,8 +111,6 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }];
-    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
 
     async function init() { if(!hpId) return; try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) renderData(json.data); hideSplash(); } catch(e) { hideSplash(); } }
     function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
@@ -127,15 +126,15 @@
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
       document.getElementById('vStatus').textContent = u.Status || "-"; document.getElementById('vDistrict').textContent = u.District || "-"; document.getElementById('vZone').textContent = u.Zone || "-"; document.getElementById('vFurnish').textContent = u.Furnishing || "-";
       
-      // 🎯 ส่วนแผนที่เขตปกครอง 2 ชั้น V171
+      // 🎯 ส่วนแผนที่ขอบเขตปกครองจริง V172
       if (u.SubDistrict && u.District) {
         document.getElementById('mapSection').style.display='block';
-        document.getElementById('lblSub').innerText = `${u.SubDistrict} AREA`;
-        document.getElementById('lblDist').innerText = `${u.District} CONTEXT`;
+        document.getElementById('lblSub').innerText = `${u.SubDistrict} Area (Red)`;
+        document.getElementById('lblDist').innerText = `${u.District} Context (Green)`;
         
-        // ค้นหาด้วยชื่อตำบลและอำเภอ เพื่อลบหมุดสีแดง 100%
-        const areaContext = encodeURIComponent(`${u.SubDistrict}, ${u.District}, Thailand`);
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${areaContext}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        // 🎯 ค้นหาด้วยชื่อ "ตำบล, อำเภอ" แทนพิกัด เพื่อลบหมุดสีแดงถาวร
+        const query = encodeURIComponent(`${u.SubDistrict}, ${u.District}, Thailand`);
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${query}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       }
       
       images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
