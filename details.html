@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V176</title>
+  <title>Asset Specifications | MASTER SYSTEM V177</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
@@ -46,11 +46,11 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /* 🛡️ 🎯 MAP BOX สี่เหลี่ยมจัตุรัส V176 */
+    /* 🛡️ 🎯 MAP BOX สี่เหลี่ยมจัตุรัส 1:1 V177 */
     .map-box { 
       width: 100%; 
       aspect-ratio: 1 / 1; 
-      max-height: 500px; 
+      max-height: 500px; /* จำกัดบนคอมพิวเตอร์ */
       border-radius: 12px; 
       overflow: hidden; 
       border: 1px solid var(--border); 
@@ -62,6 +62,8 @@
     .map-legend { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
     .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.62rem; color: #9AB; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     .leg-line { width: 35px; height: 4px; border-radius: 2px; }
+
+    /* ❌ ปุ่มนำทาง GPS ถูกลบออก 100% */
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -84,7 +86,7 @@
 
     <main class="content">
       <div class="info-card">
-        <div style="font-size: 0.6rem; color: var(--gold); font-weight: 800; margin-bottom: 5px;" id="pID">HP-XXXX</div>
+        <div style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 5px;" id="pID">HP-XXXX</div>
         <h1 id="pPlot" style="font-family:'Playfair Display',serif; font-size: 1.8rem; color: var(--gold); margin-bottom: 5px; font-weight: 800;">Plot ...</h1>
         <div id="pLocText" style="font-size: 0.75rem; color: #7A9BB5; margin-bottom: 20px;">📍 -</div>
         <div id="pPrice" style="font-size: 1.4rem; font-weight: 700; color: #FFF; margin-bottom: 20px;">฿0</div>
@@ -105,16 +107,16 @@
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
-        <p style="font-size: 0.6rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Exact property location secured. Highlighting verified administrative zones.</p>
+        <p style="font-size: 0.6rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Exact property location secured. Highlighting verified administrative boundaries.</p>
       </div>
 
       <div class="info-card">
         <h2 class="section-title">Property Details</h2>
         <div class="grid">
           <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
+          <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
           <div><div class="label">District</div><div class="val" id="vDistrict">-</div></div>
           <div><div class="label">Zone</div><div class="val gold-txt" id="vZone">-</div></div>
-          <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
           <div><div class="label">Pool Info</div><div class="val" id="vPool">-</div></div>
           <div><div class="label">Parking</div><div class="val" id="vParking">-</div></div>
         </div>
@@ -180,7 +182,7 @@
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
       document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
       document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
-      document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'}`;
+      document.getElementById('vOwner').textContent = u.Ownership_Type || "-";
       document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
       document.getElementById('vStatus').textContent = u.Status || "-";
       document.getElementById('vFurnish').textContent = u.Furnishing || "-";
@@ -205,7 +207,7 @@
       if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
-    // 🛡️ 🎯 ระบบวาดขอบเขตภูมิศาสตร์จริง V176
+    // 🛡️ 🎯 ระบบวาดขอบเขตภูมิศาสตร์จริง V177
     async function initBoundaryMap(coords, subName, distName) {
       const [lat, lon] = coords.split(',').map(Number);
       const map = L.map('leafletMap', { zoomControl: false, attributionControl: false }).setView([lat, lon], 11);
@@ -216,13 +218,13 @@
           const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&polygon_geojson=1`);
           const data = await res.json();
           if (data.length > 0) {
-            const boundary = L.geoJSON(data[0].geojson, { 
-              style: { color: color, weight: 3, dashArray: dash, fillOpacity: 0.12, fillColor: color } 
+            const poly = L.geoJSON(data[0].geojson, { 
+              style: { color: color, weight: 3, dashArray: dash, fillOpacity: 0.08, fillColor: color } 
             }).addTo(map);
-            // 🎯 ซูมให้พอดีกับขอบเขตอำเภอ
-            if(query.includes(distName)) map.fitBounds(boundary.getBounds(), { padding: [15, 15] });
+            // 🎯 ซูมให้เห็นขอบเขตอำเภอพอดีหน้าจอ
+            if(query.includes(distName)) map.fitBounds(poly.getBounds(), { padding: [15, 15] });
           }
-        } catch (e) { console.error("Map Load Error:", e); }
+        } catch (e) { console.error("Map Error:", e); }
       }
 
       await draw(`${distName}, Thailand`, '#10B981', '10, 8'); // อำเภอ (เขียว)
