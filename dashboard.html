@@ -2,24 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Admin Dashboard | Master</title>
+  <title>Master Dashboard | Live Control V154</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; padding: 20px; }
-    .unit-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; }
+    .content-wrapper { padding: 20px; max-width: 1000px; margin: 0 auto; }
+    .header-bar { display: grid; grid-template-columns: 80px 1.5fr 1fr 120px 50px; gap: 10px; padding: 15px 20px; background: rgba(201, 168, 76, 0.1); border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(201, 168, 76, 0.2); }
+    .header-label { font-size: 10px; font-weight: 800; color: #C9A84C; text-transform: uppercase; letter-spacing: 1px; }
+    .unit-row { display: grid; grid-template-columns: 80px 1.5fr 1fr 120px 50px; gap: 10px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; padding: 12px 20px; margin-bottom: 10px; transition: 0.3s; }
+    .unit-row:hover { background: rgba(255,255,255,0.06); border-color: rgba(201, 168, 76, 0.3); }
+    
+    /* 🎯 Status Styles */
+    .status-select { background: #0B1829; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 10px; font-weight: 800; padding: 6px; outline: none; width: 100%; cursor: pointer; }
+    .opt-online { color: #10B981; } .opt-offline { color: #94A3B8; } .opt-pending { color: #C9A84C; }
+    
+    .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.8); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #C9A84C; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .header-bar { display: none; }
+      .unit-row { grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+      .unit-row > div:nth-child(1) { order: 1; } /* HP-ID */
+      .unit-row > div:nth-child(5) { order: 2; text-align: right; } /* Edit Button */
+      .unit-row > div:nth-child(2) { order: 3; grid-column: span 2; } /* Project Name */
+      .unit-row > div:nth-child(3) { order: 4; } /* Unit Status */
+      .unit-row > div:nth-child(4) { order: 5; } /* System Status Control */
+    }
   </style>
 </head>
 <body>
-  <div class="flex justify-between items-center mb-8 mt-4 px-2">
-    <h1 class="text-xl font-800 uppercase text-[#C9A84C]">Dashboard</h1>
-    <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-[10px] uppercase shadow-lg shadow-gold/10"><i class="fas fa-plus mr-2"></i>Add Unit</button>
+  <div id="quickLoad" class="loading-overlay"><div class="flex flex-col items-center gap-3"><div class="loader"></div><div class="text-[10px] font-800 tracking-[0.2em] text-[#C9A84C]">UPDATING SYSTEM...</div></div></div>
+
+  <div class="content-wrapper">
+    <div class="flex justify-between items-center mb-8 mt-4 px-2">
+      <div><h1 class="text-2xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Database Dashboard</h1><p class="text-[9px] font-700 text-slate-500 uppercase tracking-widest">Master Control Panel V154</p></div>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-5 py-2.5 rounded-xl font-800 text-[10px] uppercase shadow-xl"><i class="fas fa-plus mr-2"></i>Add Unit</button>
+    </div>
+    
+    <input type="text" id="sI" onkeyup="filter()" placeholder="Search HP-ID, Plot or Project..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-8 outline-none focus:border-[#C9A84C] text-sm font-600 transition-all">
+    
+    <div class="header-bar">
+      <div class="header-label">HP-ID</div>
+      <div class="header-label">Project Name</div>
+      <div class="header-label">Unit Status</div>
+      <div class="header-label text-center">Live Control</div>
+      <div class="header-label text-right">Edit</div>
+    </div>
+
+    <div id="list">
+      <div class="text-center py-20 text-slate-600 font-800 text-xs animate-pulse tracking-[0.3em]">SYNCHRONIZING REPOSITORY...</div>
+    </div>
   </div>
-  
-  <input type="text" id="sI" onkeyup="filter()" placeholder="Search HP-ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-6 outline-none focus:border-[#C9A84C] text-sm font-600">
-  
-  <div id="list"></div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
@@ -27,29 +63,77 @@
 
     async function init() {
       const res = await fetch(`${API}?mode=getListSmall&project=all`);
-      data = await res.json(); render(data);
+      data = await res.json(); 
+      render(data);
     }
 
     function render(items) {
-      document.getElementById('list').innerHTML = items.map(u => `
-        <div class="unit-row">
-          <img src="${u.Thumbnail_Image}" class="w-16 h-16 rounded-lg object-cover bg-black">
-          <div class="flex-1 min-width-0">
-            <div class="text-[9px] text-slate-500 font-800">#${u.HP_ID}</div>
-            <div class="font-800 text-sm truncate uppercase">Plot ${u.Plot || 'N/A'}</div>
-            <div class="text-[9px] text-[#C9A84C] font-700">${u.Status} | ${u.Project_Name}</div>
+      document.getElementById('list').innerHTML = items.map(u => {
+        // กำหนดสีตามสถานะ System_Status
+        const sysStatus = u.System_Status || 'Pending';
+        const colorClass = sysStatus === 'Online' ? 'text-emerald-500' : (sysStatus === 'Offline' ? 'text-slate-500' : 'text-amber-500');
+        
+        return `
+          <div class="unit-row">
+            <div class="text-[10px] font-800 text-slate-500">#${u.HP_ID}</div>
+            <div class="font-800 text-sm truncate uppercase tracking-tight">${u.Project_Name || 'General'}</div>
+            <div class="text-[10px] font-700 text-[#C9A84C] uppercase">${u.Status || 'Available'}</div>
+            
+            <div>
+              <select onchange="quickUpdateStatus('${u.HP_ID}', this)" class="status-select ${colorClass}">
+                <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''} class="opt-online">● Online</option>
+                <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''} class="opt-offline">○ Offline</option>
+                <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''} class="opt-pending">🕒 Pending</option>
+              </select>
+            </div>
+
+            <div class="text-right">
+              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="text-slate-600 hover:text-[#C9A84C] transition-colors">
+                <i class="fas fa-edit text-xs"></i>
+              </button>
+            </div>
           </div>
-          <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="bg-white/10 p-3 rounded-xl hover:bg-[#C9A84C] hover:text-black transition-all">
-            <i class="fas fa-edit text-xs"></i>
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+    }
+
+    // 🎯 ฟังก์ชันอัปเดตสถานะแบบรวดเร็ว
+    async function quickUpdateStatus(id, selectEl) {
+      const newStatus = selectEl.value;
+      showLoading(true);
+      
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          body: JSON.stringify({ mode: "updateUnit", HP_ID: id, System_Status: newStatus })
+        });
+        const result = await res.json();
+        if(result.ok) {
+          // อัปเดตสีตัวหนังสือทันที
+          selectEl.className = `status-select ${newStatus === 'Online' ? 'text-emerald-500' : (newStatus === 'Offline' ? 'text-slate-500' : 'text-amber-500')}`;
+          // อัปเดตข้อมูลในตัวแปร local
+          const index = data.findIndex(item => item.HP_ID === id);
+          if(index !== -1) data[index].System_Status = newStatus;
+        } else {
+          alert("Update failed!");
+        }
+      } catch(e) {
+        alert("System Error: " + e);
+      } finally {
+        showLoading(false);
+      }
     }
 
     function filter() {
       const q = document.getElementById('sI').value.toLowerCase();
-      render(data.filter(u => u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q))));
+      render(data.filter(u => 
+        u.HP_ID.toLowerCase().includes(q) || 
+        (u.Project_Name && u.Project_Name.toLowerCase().includes(q)) ||
+        (u.Plot && u.Plot.toLowerCase().includes(q))
+      ));
     }
+
+    function showLoading(show) { document.getElementById('quickLoad').style.display = show ? 'flex' : 'none'; }
     window.onload = init;
   </script>
 </body>
