@@ -11,45 +11,55 @@
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(201, 168, 76, 0.15); --card-bg: #0F172A; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: #FDFAF5; font-family: 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* 🛡️ Gatekeeper Overlay */
     #gatekeeper { position: fixed; inset: 0; background: var(--navy-dark); z-index: 10001; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
+
     #pageSplash { position: fixed; inset: 0; background: var(--navy-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.4s; }
     .splash-brand { color: var(--gold); font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; }
+
     header { position: fixed; top: 0; width: 100%; height: 55px; background: rgba(11, 24, 41, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
     .back { text-decoration: none; color: var(--gold); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+
     .gallery-container { margin-top: 65px; padding: 0 15px; max-width: 1100px; margin: 0 auto; }
     .gallery-card { background: #000; border-radius: 18px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); margin-bottom: 20px; }
     .main-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; background: #000; overflow: hidden; }
     .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
     .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+
     .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.03); scrollbar-width: none; }
     .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
     .thumb.active { opacity: 1; border-color: var(--gold); }
     .tag-count { position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: 600; }
+
     .content { padding: 10px 15px 120px; max-width: 900px; margin: 0 auto; }
     .info-card { background: var(--card-bg); border-radius: 12px; padding: 22px; margin-bottom: 15px; border: 1px solid var(--border); }
     .section-title { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
     .label { font-size: 0.55rem; color: #7A9BB5; text-transform: uppercase; font-weight: 500; letter-spacing: 1.2px; margin-bottom: 3px; }
     .val { font-size: 0.85rem; font-weight: 400; color: #FFF; }
     .gold-txt { color: var(--gold); font-weight: 600; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
     .nearby-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /* 🗺️ แผนที่สูง 380px — สี่เหลี่ยมผืนผ้ากว้างxยาว */
-    .map-box { width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
+    /* 🗺️ แผนที่สี่เหลี่ยมจัตุรัส 1:1 */
+    .map-box { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
 
-    /* Legend เส้นประ */
+    /* Legend */
     .map-legend { display: flex; gap: 20px; margin-bottom: 8px; }
     .map-legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.62rem; color: #9AB; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; }
     .legend-line { width: 32px; height: 4px; border-radius: 2px; }
     .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
     .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
 
-    .btn-nav { width: 100%; background: var(--gold); color: #060F1A; text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; }
+    /* ปุ่ม GPS Navigation ถูกลบออกแล้ว ไม่ต้องมี .btn-nav */
+
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
@@ -117,16 +127,16 @@
 
       <div class="info-card">
         <h2 class="section-title">Location & Navigation</h2>
-        <!-- Legend แสดงความหมายเส้นสี -->
+        <!-- Legend -->
         <div class="map-legend" id="mapLegend" style="display:none;">
           <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
           <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
         </div>
-        <!-- Leaflet Map Box -->
+        <!-- แผนที่ Leaflet — สี่เหลี่ยมจัตุรัส 1:1, ไม่มีปุ่ม GPS Navigation -->
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
-        <a id="navLink" href="" target="_blank" class="btn-nav" style="display:none;">📍 Start GPS Navigation</a>
+        <!-- ❌ ปุ่ม Start GPS Navigation ถูกลบออกแล้วตามที่ร้องขอ -->
       </div>
 
       <div class="info-card">
@@ -200,14 +210,12 @@
 
       if (u.Coordinates && u.Coordinates !== "#") {
         document.getElementById('mapBox').style.display = 'block';
-        document.getElementById('navLink').style.display = 'flex';
         document.getElementById('mapLegend').style.display = 'flex';
 
         const coords = u.Coordinates.trim();
-        document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
-
         const [la, lo] = coords.split(',').map(Number);
 
+        // Nearby Amenities
         const grid = document.getElementById('nearbyGrid');
         grid.innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(la, lo, loc.lat, loc.lon);
@@ -237,60 +245,80 @@
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // วาดอำเภอ (ชั้นนอก สีเขียว) ก่อน
-      await drawAdminBoundary(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
+      // วาดอำเภอ (ชั้นนอก สีเขียว) ก่อน — admin_level 6
+      await drawBoundaryWithFallback(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
 
-      // วาดตำบล (ชั้นใน สีแดง) ทีหลัง ให้อยู่บนสุด + มี white outline รองด้านล่าง
-      await drawAdminBoundary(lat, lon, 8, '#FF2222', 4.5, '9, 6', true);
+      // วาดตำบล (ชั้นใน สีแดง) ทีหลัง ให้อยู่บนสุด — admin_level 8
+      // ใช้ 2 methods ควบคู่กัน: is_in() + around() เพื่อให้แน่ใจว่าได้ข้อมูล
+      await drawBoundaryWithFallback(lat, lon, 8, '#FF2222', 5, '9, 6', true);
     }
 
     /**
-     * ดึงและวาดเส้นขอบ administrative boundary
-     * @param {number} lat, lon   — พิกัด
-     * @param {number} adminLevel — 6=อำเภอ, 8=ตำบล
-     * @param {string} color      — สีเส้นหลัก
-     * @param {number} weight     — ความหนา
-     * @param {string} dashArray  — รูปแบบ dash
-     * @param {boolean} outline   — วาด white outline ด้านล่างหรือไม่
+     * ดึงและวาดขอบเขต — ลอง method แรก (is_in) ก่อน ถ้าไม่มีข้อมูลให้ลอง method ที่ 2 (around)
      */
-    async function drawAdminBoundary(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      const query = `[out:json][timeout:30];
+    async function drawBoundaryWithFallback(lat, lon, adminLevel, color, weight, dashArray, outline) {
+      // Method 1: is_in — ค้นหา relation ที่ครอบคลุมจุดพิกัดนี้
+      const query1 = `[out:json][timeout:30];
 is_in(${lat},${lon})->.a;
 relation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];
 out geom;`;
 
+      let drawn = await tryDrawBoundary(query1, color, weight, dashArray, outline);
+
+      // Method 2: around — ถ้า Method 1 ไม่ได้ผล ค้นหา relation ในรัศมี 100m รอบพิกัด
+      if (!drawn) {
+        console.log(`Method 1 ไม่ได้ผลสำหรับ admin_level ${adminLevel} — ลอง Method 2 (around)`);
+        const query2 = `[out:json][timeout:30];
+relation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+out geom;`;
+        drawn = await tryDrawBoundary(query2, color, weight, dashArray, outline);
+      }
+
+      // Method 3: ขยายรัศมีเป็น 5000m ถ้ายังไม่ได้
+      if (!drawn) {
+        console.log(`Method 2 ไม่ได้ผลสำหรับ admin_level ${adminLevel} — ลอง Method 3 (around 5km)`);
+        const query3 = `[out:json][timeout:30];
+relation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+out geom;`;
+        await tryDrawBoundary(query3, color, weight, dashArray, outline);
+      }
+    }
+
+    /**
+     * ส่ง query ไป Overpass แล้ววาดเส้น — คืนค่า true ถ้าวาดได้, false ถ้าไม่มีข้อมูล
+     */
+    async function tryDrawBoundary(query, color, weight, dashArray, outline) {
       try {
         const res = await fetch('https://overpass-api.de/api/interpreter', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'data=' + encodeURIComponent(query)
         });
-        if (!res.ok) return;
+        if (!res.ok) return false;
 
         const data = await res.json();
-        if (!data.elements || data.elements.length === 0) {
-          console.warn('ไม่พบ boundary ระดับ admin_level', adminLevel);
-          return;
-        }
+        if (!data.elements || data.elements.length === 0) return false;
 
+        // กรองเฉพาะ relation ที่มี geometry จริงๆ
+        let drawnCount = 0;
         data.elements.forEach(rel => {
           if (!rel.members) return;
           rel.members.forEach(m => {
             if (m.type !== 'way' || !m.geometry || m.geometry.length < 2) return;
             const pts = m.geometry.map(p => [p.lat, p.lon]);
 
-            // White outline รองด้านล่าง — ทำให้เส้นสีเด่นออกมาจาก background ถนน/ป่า
+            // White outline รองด้านล่างเพื่อให้เส้นสีเด่นออกจาก background
             if (outline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
                 weight: weight + 4,
-                opacity: 0.6,
+                opacity: 0.55,
                 dashArray: dashArray,
                 interactive: false
               }).addTo(leafletMap);
             }
 
-            // เส้นหลัก
+            // เส้นสีหลัก
             L.polyline(pts, {
               color: color,
               weight: weight,
@@ -298,11 +326,16 @@ out geom;`;
               dashArray: dashArray,
               interactive: false
             }).addTo(leafletMap);
+
+            drawnCount++;
           });
         });
 
+        return drawnCount > 0;
+
       } catch(e) {
-        console.warn('Boundary fetch error admin_level', adminLevel, e);
+        console.warn('Overpass fetch error:', e);
+        return false;
       }
     }
 
