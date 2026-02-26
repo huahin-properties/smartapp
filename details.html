@@ -43,15 +43,10 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /*
-      🗺️ MAP BOX:
-      - มือถือ: กว้างเต็มจอ สูง = กว้าง (สี่เหลี่ยมจัตุรัส) → ใช้ aspect-ratio: 1/1
-      - คอมพิวเตอร์: จำกัดความสูงไว้ที่ 500px ไม่ให้ใหญ่เกิน
-    */
     .map-box {
       width: 100%;
       aspect-ratio: 1 / 1;
-      max-height: 500px;   /* ← จำกัดบนคอมพิวเตอร์ */
+      max-height: 500px;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -60,14 +55,11 @@
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
 
-    /* Legend */
     .map-legend { display: flex; gap: 20px; margin-bottom: 8px; }
     .map-legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.62rem; color: #9AB; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; }
     .legend-line { width: 32px; height: 4px; border-radius: 2px; }
     .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
     .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
-
-    /* ❌ ปุ่ม GPS Navigation ถูกลบแล้ว */
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -86,7 +78,17 @@
   <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">MASTER CATALOG</div><div style="width:40px;"></div></header>
 
   <div id="mainUI">
-    <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
+    <div class="gallery-container">
+      <div class="gallery-card">
+        <div class="main-stage">
+          <img id="mainImg" class="main-img" src="">
+          <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
+          <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
+          <div class="tag-count" id="countLabel">0 / 0</div>
+        </div>
+        <div class="thumb-row" id="thumbStrip"></div>
+      </div>
+    </div>
 
     <main class="content">
       <div class="info-card">
@@ -140,7 +142,6 @@
           <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
           <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
         </div>
-        <!-- ❌ ปุ่ม GPS ถูกลบออกแล้ว — map box เท่านั้น -->
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
@@ -160,9 +161,29 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Vana Nava", lat: 12.5273, lon: 99.9642 }, { name: "Railway Station", lat: 12.5674, lon: 99.9548 }, { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }, { name: "Water Park", lat: 12.6046, lon: 99.8897 }];
 
-    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
+    const LANDMARKS = [
+      { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 },
+      { name: "Cicada Market", lat: 12.5342, lon: 99.9655 },
+      { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 },
+      { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 },
+      { name: "Night Market", lat: 12.5714, lon: 99.9575 },
+      { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 },
+      { name: "Market Village", lat: 12.5598, lon: 99.9602 },
+      { name: "Vana Nava", lat: 12.5273, lon: 99.9642 },
+      { name: "Railway Station", lat: 12.5674, lon: 99.9548 },
+      { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 },
+      { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 },
+      { name: "Water Park", lat: 12.6046, lon: 99.8897 }
+    ];
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2-lat1)*Math.PI/180;
+      const dLon = (lon2-lon1)*Math.PI/180;
+      const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+      return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35;
+    }
 
     async function init() {
       if(!hpId) return;
@@ -178,11 +199,18 @@
           }
           renderData(json.data);
           hideSplash();
+        } else {
+          hideSplash();
         }
-      } catch(e) { hideSplash(); }
+      } catch(e) {
+        hideSplash();
+      }
     }
 
-    function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
+    function hideSplash() {
+      const s = document.getElementById('pageSplash');
+      if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); }
+    }
 
     function renderData(u) {
       const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
@@ -196,10 +224,12 @@
       document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
       document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
+
       document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
       document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
       document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
       document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
+
       document.getElementById('vStatus').textContent = u.Status || "-";
       document.getElementById('vFurnish').textContent = u.Furnishing || "-";
       document.getElementById('vDistrict').textContent = u.District || "-";
@@ -226,7 +256,20 @@
           return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
         }).join('');
 
-        initLeafletMap(la, lo);
+        // ✅ แนวทาง A: วาดขอบเขต + ดึงชื่ออำเภอ/ตำบลจาก Overpass
+        (async()=>{
+          await initLeafletMap(la, lo);
+
+          const sub = await getAdminName(la, lo, [8,9,10]);
+          const dist = await getAdminName(la, lo, [6,7]);
+
+          if (dist?.name) document.getElementById('vDistrict').textContent = dist.name;
+          if (sub?.name)  document.getElementById('vSubDistrict').textContent = sub.name;
+
+          const locSub = sub?.name || u.SubDistrict || '-';
+          const locDist = dist?.name || u.District || '-';
+          document.getElementById('pLocText').textContent = `📍 ${locSub}, ${locDist} (${u.Zone || '-'})`;
+        })();
       }
 
       images = u.__album || [u.Thumbnail_Image];
@@ -234,14 +277,13 @@
     }
 
     /* ─────────────────────────────────────────
-       🗺️  LEAFLET MAP + BOUNDARY OVERLAY
+       🗺️  LEAFLET MAP + BOUNDARY OVERLAY (A)
     ───────────────────────────────────────── */
     let leafletMap = null;
 
     async function initLeafletMap(lat, lon) {
       if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 
-      // เริ่มต้นที่ zoom 11 — เห็นอำเภอหัวหินพอดี
       leafletMap = L.map('leafletMap', {
         zoomControl: true,
         attributionControl: false,
@@ -250,46 +292,42 @@
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // วาดอำเภอ (สีเขียว) ก่อน และเก็บ bounds เพื่อ fitBounds ภายหลัง
-      const districtBounds = await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
+      // ✅ อำเภอ: ลอง 6 แล้ว fallback 7
+      const districtBounds =
+        (await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false)) ||
+        (await drawBoundaryGetBounds(lat, lon, 7, '#00EE44', 3.5, '12, 7', false));
 
-      // วาดตำบล (สีแดง) ทีหลัง
-      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true);
+      // ✅ ตำบล: ลอง 8 แล้ว fallback 9/10
+      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true) ||
+      await drawBoundaryGetBounds(lat, lon, 9, '#FF2222', 5, '9, 6', true) ||
+      await drawBoundaryGetBounds(lat, lon,10, '#FF2222', 5, '9, 6', true);
 
-      // ซูมแผนที่ให้พอดีกับขอบเขตอำเภอ (ถ้าได้ข้อมูล)
       if (districtBounds && districtBounds.isValid()) {
         leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
       }
     }
 
-    /**
-     * ดึงขอบเขต admin boundary แล้ววาด + คืนค่า L.LatLngBounds
-     * ลอง 3 methods: is_in → around(100m) → around(5000m)
-     */
     async function drawBoundaryGetBounds(lat, lon, adminLevel, color, weight, dashArray, outline) {
       const queries = [
-        // Method 1: is_in — หา relation ที่ครอบพิกัดนี้
-        `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 2: around 100m
-        `[out:json][timeout:30];\nrelation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 3: around 5000m
-        `[out:json][timeout:30];\nrelation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`
+        `[out:json][timeout:30];
+is_in(${lat},${lon})->.a;
+relation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];
+out geom;`,
+        `[out:json][timeout:30];
+relation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+out geom;`,
+        `[out:json][timeout:30];
+relation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+out geom;`
       ];
 
       for (const query of queries) {
         const result = await tryFetchAndDraw(query, color, weight, dashArray, outline);
-        if (result) {
-          console.log(`✅ admin_level ${adminLevel} drawn`);
-          return result; // คืน bounds
-        }
+        if (result) return result;
       }
-      console.warn(`❌ ไม่พบ boundary สำหรับ admin_level ${adminLevel}`);
       return null;
     }
 
-    /**
-     * ส่ง query → วาดเส้น → คืน L.LatLngBounds (หรือ null ถ้าไม่มีข้อมูล)
-     */
     async function tryFetchAndDraw(query, color, weight, dashArray, outline) {
       try {
         const res = await fetch('https://overpass-api.de/api/interpreter', {
@@ -311,7 +349,6 @@
             const pts = m.geometry.map(p => [p.lat, p.lon]);
             allLatLngs.push(...pts);
 
-            // White outline รองด้านล่าง
             if (outline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
@@ -322,7 +359,6 @@
               }).addTo(leafletMap);
             }
 
-            // เส้นสีหลัก
             L.polyline(pts, {
               color: color,
               weight: weight,
@@ -337,17 +373,53 @@
         return L.latLngBounds(allLatLngs);
 
       } catch(e) {
-        console.warn('Overpass error:', e);
         return null;
       }
     }
 
+    // ✅ ดึง “ชื่อ” อำเภอ/ตำบลจาก Overpass ด้วย is_in + out tags
+    async function getAdminName(lat, lon, adminLevels) {
+      for (const lvl of adminLevels) {
+        const query =
+`[out:json][timeout:25];
+is_in(${lat},${lon})->.a;
+relation(pivot.a)["boundary"="administrative"]["admin_level"="${lvl}"];
+out tags;`;
+        try{
+          const res = await fetch('https://overpass-api.de/api/interpreter', {
+            method:'POST',
+            headers:{'Content-Type':'application/x-www-form-urlencoded'},
+            body:'data=' + encodeURIComponent(query)
+          });
+          if(!res.ok) continue;
+          const data = await res.json();
+          if(!data.elements || data.elements.length === 0) continue;
+
+          const rel = data.elements.find(e => e.tags && (e.tags.name || e.tags["name:en"])) || data.elements[0];
+          const name = (rel.tags && (rel.tags.name || rel.tags["name:en"])) ? (rel.tags.name || rel.tags["name:en"]) : null;
+          if(name) return { level:lvl, name };
+        }catch(e){ /* ignore */ }
+      }
+      return null;
+    }
+
     /* ─────────────────────────────────────────
-       🖼️  GALLERY (เดิม ไม่เปลี่ยนแปลง)
+       🖼️  GALLERY (เดิม)
     ───────────────────────────────────────── */
-    function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
+    function setMain(i) {
+      idx = (i + images.length) % images.length;
+      const mainImg = document.getElementById('mainImg');
+      mainImg.style.opacity = '0';
+      setTimeout(() => {
+        mainImg.src = images[idx];
+        mainImg.style.opacity = '1';
+        document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`;
+        document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx));
+      }, 150);
+    }
     function changeSlide(n) { setMain(idx + n); }
     function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
+
     init();
   </script>
 </body>
