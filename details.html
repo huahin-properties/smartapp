@@ -5,16 +5,13 @@
   <title>Asset Specifications | MASTER SYSTEM V167</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(201, 168, 76, 0.15); --card-bg: #0F172A; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: #FDFAF5; font-family: 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased; }
 
-    /* 🛡️ Gatekeeper Overlay */
     #gatekeeper { position: fixed; inset: 0; background: var(--navy-dark); z-index: 10001; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
-
     #pageSplash { position: fixed; inset: 0; background: var(--navy-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.4s; }
     .splash-brand { color: var(--gold); font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; }
 
@@ -46,8 +43,20 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /* 🗺️ แผนที่สี่เหลี่ยมจัตุรัส 1:1 */
-    .map-box { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
+    /*
+      🗺️ MAP BOX:
+      - มือถือ: กว้างเต็มจอ สูง = กว้าง (สี่เหลี่ยมจัตุรัส) → ใช้ aspect-ratio: 1/1
+      - คอมพิวเตอร์: จำกัดความสูงไว้ที่ 500px ไม่ให้ใหญ่เกิน
+    */
+    .map-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 500px;   /* ← จำกัดบนคอมพิวเตอร์ */
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin: 10px 0;
+    }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
 
@@ -58,7 +67,7 @@
     .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
     .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
 
-    /* ปุ่ม GPS Navigation ถูกลบออกแล้ว ไม่ต้องมี .btn-nav */
+    /* ❌ ปุ่ม GPS Navigation ถูกลบแล้ว */
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -127,16 +136,14 @@
 
       <div class="info-card">
         <h2 class="section-title">Location & Navigation</h2>
-        <!-- Legend -->
         <div class="map-legend" id="mapLegend" style="display:none;">
           <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
           <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
         </div>
-        <!-- แผนที่ Leaflet — สี่เหลี่ยมจัตุรัส 1:1, ไม่มีปุ่ม GPS Navigation -->
+        <!-- ❌ ปุ่ม GPS ถูกลบออกแล้ว — map box เท่านั้น -->
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
-        <!-- ❌ ปุ่ม Start GPS Navigation ถูกลบออกแล้วตามที่ร้องขอ -->
       </div>
 
       <div class="info-card">
@@ -148,9 +155,7 @@
 
   <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
@@ -215,7 +220,6 @@
         const coords = u.Coordinates.trim();
         const [la, lo] = coords.split(',').map(Number);
 
-        // Nearby Amenities
         const grid = document.getElementById('nearbyGrid');
         grid.innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(la, lo, loc.lat, loc.lon);
@@ -237,82 +241,82 @@
     async function initLeafletMap(lat, lon) {
       if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 
+      // เริ่มต้นที่ zoom 11 — เห็นอำเภอหัวหินพอดี
       leafletMap = L.map('leafletMap', {
         zoomControl: true,
         attributionControl: false,
         scrollWheelZoom: true
-      }).setView([lat, lon], 13);
+      }).setView([lat, lon], 11);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // วาดอำเภอ (ชั้นนอก สีเขียว) ก่อน — admin_level 6
-      await drawBoundaryWithFallback(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
+      // วาดอำเภอ (สีเขียว) ก่อน และเก็บ bounds เพื่อ fitBounds ภายหลัง
+      const districtBounds = await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
 
-      // วาดตำบล (ชั้นใน สีแดง) ทีหลัง ให้อยู่บนสุด — admin_level 8
-      // ใช้ 2 methods ควบคู่กัน: is_in() + around() เพื่อให้แน่ใจว่าได้ข้อมูล
-      await drawBoundaryWithFallback(lat, lon, 8, '#FF2222', 5, '9, 6', true);
-    }
+      // วาดตำบล (สีแดง) ทีหลัง
+      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true);
 
-    /**
-     * ดึงและวาดขอบเขต — ลอง method แรก (is_in) ก่อน ถ้าไม่มีข้อมูลให้ลอง method ที่ 2 (around)
-     */
-    async function drawBoundaryWithFallback(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      // Method 1: is_in — ค้นหา relation ที่ครอบคลุมจุดพิกัดนี้
-      const query1 = `[out:json][timeout:30];
-is_in(${lat},${lon})->.a;
-relation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];
-out geom;`;
-
-      let drawn = await tryDrawBoundary(query1, color, weight, dashArray, outline);
-
-      // Method 2: around — ถ้า Method 1 ไม่ได้ผล ค้นหา relation ในรัศมี 100m รอบพิกัด
-      if (!drawn) {
-        console.log(`Method 1 ไม่ได้ผลสำหรับ admin_level ${adminLevel} — ลอง Method 2 (around)`);
-        const query2 = `[out:json][timeout:30];
-relation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
-out geom;`;
-        drawn = await tryDrawBoundary(query2, color, weight, dashArray, outline);
-      }
-
-      // Method 3: ขยายรัศมีเป็น 5000m ถ้ายังไม่ได้
-      if (!drawn) {
-        console.log(`Method 2 ไม่ได้ผลสำหรับ admin_level ${adminLevel} — ลอง Method 3 (around 5km)`);
-        const query3 = `[out:json][timeout:30];
-relation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
-out geom;`;
-        await tryDrawBoundary(query3, color, weight, dashArray, outline);
+      // ซูมแผนที่ให้พอดีกับขอบเขตอำเภอ (ถ้าได้ข้อมูล)
+      if (districtBounds && districtBounds.isValid()) {
+        leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
       }
     }
 
     /**
-     * ส่ง query ไป Overpass แล้ววาดเส้น — คืนค่า true ถ้าวาดได้, false ถ้าไม่มีข้อมูล
+     * ดึงขอบเขต admin boundary แล้ววาด + คืนค่า L.LatLngBounds
+     * ลอง 3 methods: is_in → around(100m) → around(5000m)
      */
-    async function tryDrawBoundary(query, color, weight, dashArray, outline) {
+    async function drawBoundaryGetBounds(lat, lon, adminLevel, color, weight, dashArray, outline) {
+      const queries = [
+        // Method 1: is_in — หา relation ที่ครอบพิกัดนี้
+        `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
+        // Method 2: around 100m
+        `[out:json][timeout:30];\nrelation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
+        // Method 3: around 5000m
+        `[out:json][timeout:30];\nrelation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`
+      ];
+
+      for (const query of queries) {
+        const result = await tryFetchAndDraw(query, color, weight, dashArray, outline);
+        if (result) {
+          console.log(`✅ admin_level ${adminLevel} drawn`);
+          return result; // คืน bounds
+        }
+      }
+      console.warn(`❌ ไม่พบ boundary สำหรับ admin_level ${adminLevel}`);
+      return null;
+    }
+
+    /**
+     * ส่ง query → วาดเส้น → คืน L.LatLngBounds (หรือ null ถ้าไม่มีข้อมูล)
+     */
+    async function tryFetchAndDraw(query, color, weight, dashArray, outline) {
       try {
         const res = await fetch('https://overpass-api.de/api/interpreter', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'data=' + encodeURIComponent(query)
         });
-        if (!res.ok) return false;
+        if (!res.ok) return null;
 
         const data = await res.json();
-        if (!data.elements || data.elements.length === 0) return false;
+        if (!data.elements || data.elements.length === 0) return null;
 
-        // กรองเฉพาะ relation ที่มี geometry จริงๆ
-        let drawnCount = 0;
+        const allLatLngs = [];
+
         data.elements.forEach(rel => {
           if (!rel.members) return;
           rel.members.forEach(m => {
             if (m.type !== 'way' || !m.geometry || m.geometry.length < 2) return;
             const pts = m.geometry.map(p => [p.lat, p.lon]);
+            allLatLngs.push(...pts);
 
-            // White outline รองด้านล่างเพื่อให้เส้นสีเด่นออกจาก background
+            // White outline รองด้านล่าง
             if (outline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
                 weight: weight + 4,
-                opacity: 0.55,
+                opacity: 0.5,
                 dashArray: dashArray,
                 interactive: false
               }).addTo(leafletMap);
@@ -326,16 +330,15 @@ out geom;`;
               dashArray: dashArray,
               interactive: false
             }).addTo(leafletMap);
-
-            drawnCount++;
           });
         });
 
-        return drawnCount > 0;
+        if (allLatLngs.length === 0) return null;
+        return L.latLngBounds(allLatLngs);
 
       } catch(e) {
-        console.warn('Overpass fetch error:', e);
-        return false;
+        console.warn('Overpass error:', e);
+        return null;
       }
     }
 
