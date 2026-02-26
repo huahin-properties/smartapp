@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V167 (A)</title>
+  <title>Asset Specifications | MASTER SYSTEM V167</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -43,7 +43,15 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    .map-box { width: 100%; aspect-ratio: 1 / 1; max-height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
+    .map-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 500px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin: 10px 0;
+    }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
 
@@ -53,8 +61,19 @@
     .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
     .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
 
-    .mini-status { margin-top: 10px; font-size: 0.72rem; color: #9AB; line-height: 1.6; }
-    .mini-status b { color: var(--gold); }
+    /* Debug panel (ใช้ประเมินผลได้ / ถ้าไม่ต้องการ ปิดได้ด้วย MAP_DEBUG=false) */
+    #mapDebug {
+      display:none;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      color: #A8BCD6;
+      font-size: 12px;
+      line-height: 1.55;
+      background: rgba(0,0,0,0.15);
+    }
+    #mapDebug b{ color: var(--gold); }
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -73,12 +92,7 @@
   <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">MASTER CATALOG</div><div style="width:40px;"></div></header>
 
   <div id="mainUI">
-    <div class="gallery-container"><div class="gallery-card"><div class="main-stage">
-      <img id="mainImg" class="main-img" src="">
-      <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
-      <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
-      <div class="tag-count" id="countLabel">0 / 0</div>
-    </div><div class="thumb-row" id="thumbStrip"></div></div></div>
+    <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
 
     <main class="content">
       <div class="info-card">
@@ -135,7 +149,7 @@
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
-        <div class="mini-status" id="mapStatus" style="display:none;"></div>
+        <div id="mapDebug"></div>
       </div>
 
       <div class="info-card">
@@ -151,8 +165,11 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
-    let images = [], idx = 0;
 
+    /* ✅ เปิดไว้เพื่อประเมินผล ตอนคุณพร้อม “ปิดรอยเท้า” ให้ตั้งเป็น false */
+    const MAP_DEBUG = true;
+
+    let images = [], idx = 0;
     const LANDMARKS = [
       { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 },
       { name: "Cicada Market", lat: 12.5342, lon: 99.9655 },
@@ -172,14 +189,17 @@
       const R = 6371;
       const dLat = (lat2-lat1)*Math.PI/180;
       const dLon = (lon2-lon1)*Math.PI/180;
-      const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+      const a =
+        Math.sin(dLat/2)*Math.sin(dLat/2) +
+        Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180) *
+        Math.sin(dLon/2)*Math.sin(dLon/2);
       return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35;
     }
 
     async function init() {
       if(!hpId) return;
       try {
-        const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
+        const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
         const json = await res.json();
         if(json.ok) {
           if (json.data.System_Status && json.data.System_Status !== 'Online') {
@@ -193,9 +213,7 @@
         } else {
           hideSplash();
         }
-      } catch(e) {
-        hideSplash();
-      }
+      } catch(e) { hideSplash(); }
     }
 
     function hideSplash() {
@@ -203,40 +221,23 @@
       if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); }
     }
 
-    function safeNum(x){ return parseFloat(String(x||"").replace(/[^0-9.\-]/g,'')) || 0; }
-
-    function normalizeCoordString(s){
-      if(!s || typeof s !== 'string') return '';
-      return s.trim().replace(/[()]/g,'').replace(/\s+/g,'');
-    }
-
-    function parseCoordinates(u){
-      const raw = normalizeCoordString(u.Coordinates || "");
-      if(!raw || raw === "#") return null;
-      const parts = raw.split(',');
-      if(parts.length < 2) return null;
-      const lat = Number(parts[0]);
-      const lon = Number(parts[1]);
-      if(!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-      if(Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
-      return {lat, lon};
-    }
-
     function renderData(u) {
-      const p = safeNum(u.Sale_Price || 0);
-      const a = Math.max(safeNum(u.Living_Area_sq_m || 1), 1);
+      const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
+      const a = parseFloat(String(u.Living_Area_sq_m || 1).replace(/[^0-9.]/g, '')) || 1;
 
-      document.getElementById('pID').textContent = u.HP_ID || '-';
+      document.getElementById('pID').textContent = u.HP_ID || "HP-XXXX";
       document.getElementById('pPlot').textContent = `Plot ${u.Plot || '-'}`;
       document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'} (${u.Zone || '-'})`;
-      document.getElementById('pPrice').textContent = `฿${Math.round(p).toLocaleString()}`;
+      document.getElementById('pPrice').textContent = `฿${p.toLocaleString()}`;
+
       document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
       document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
       document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
 
-      document.getElementById('vFeeM').textContent = `฿${(safeNum(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
-      document.getElementById('vFeeY').textContent = `฿${Math.round((safeNum(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
+      document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
+      document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
+
       document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
       document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
 
@@ -251,126 +252,161 @@
       document.getElementById('vParking').textContent = u.Parking || "-";
       document.getElementById('vDirect').textContent = u.Direction || "-";
       document.getElementById('vUtil').textContent = `Elec: ${u.Electricity || '-'} | Water: ${u.Water_Source || '-'}`;
+
       document.getElementById('vDesc').textContent = u.Description || "-";
 
-      // Nearby + Map
-      const c = parseCoordinates(u);
-      if (c) {
+      // ✅ MAP + BOUNDARIES (NO MARKER)
+      if (u.Coordinates && u.Coordinates !== "#") {
         document.getElementById('mapBox').style.display = 'block';
         document.getElementById('mapLegend').style.display = 'flex';
-        document.getElementById('mapStatus').style.display = 'block';
 
+        const coords = String(u.Coordinates).trim();
+        const [la, lo] = coords.split(',').map(v => Number(String(v).trim()));
+        const districtName = String(u.District || "").trim();
+        const subDistrictName = String(u.SubDistrict || "").trim();
+
+        // Nearby list (ยังใช้พิกัดคำนวณระยะได้ แต่ไม่โชว์จุดบนแผนที่)
         const grid = document.getElementById('nearbyGrid');
         grid.innerHTML = LANDMARKS.map(loc => {
-          const d = getDistance(c.lat, c.lon, loc.lat, loc.lon);
-          return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+          const d = getDistance(la, lo, loc.lat, loc.lon);
+          return `<div class="nearby-item">
+                    <div>
+                      <div class="loc-name">${loc.name}</div>
+                      <div class="loc-time">${Math.ceil(d*1.5)} mins drive</div>
+                    </div>
+                    <div class="loc-dist">${d.toFixed(1)} km</div>
+                  </div>`;
         }).join('');
 
-        initLeafletMap_A(c.lat, c.lon, (u.District||"").trim(), (u.SubDistrict||"").trim());
-      } else {
-        document.getElementById('nearbyGrid').innerHTML = '';
+        initLeafletMap_NoMarker(la, lo, districtName, subDistrictName);
       }
 
-      images = u.__album || (u.Album_Image ? String(u.Album_Image).split(',').map(x=>x.trim()).filter(Boolean) : []) || [];
-      if (images.length === 0 && u.Thumbnail_Image) images = [u.Thumbnail_Image];
+      images = u.__album || [u.Thumbnail_Image];
       if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
     /* ─────────────────────────────────────────
-       🗺️  A: DISTRICT + SUBDISTRICT (with fallback by name)
+       🗺️  LEAFLET MAP (District + SubDistrict) — NO MARKER
     ───────────────────────────────────────── */
     let leafletMap = null;
 
-    function setStatus(lines){
-      const el = document.getElementById('mapStatus');
-      if(!el) return;
-      el.innerHTML = lines.map(s=>`• ${s}`).join('<br>');
+    function setStatus(lines) {
+      const box = document.getElementById('mapDebug');
+      if (!box) return;
+      if (!MAP_DEBUG) { box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      box.innerHTML = lines.map(s => `• ${s}`).join('<br>');
     }
 
-    async function initLeafletMap_A(lat, lon, districtName, subDistrictName) {
+    async function initLeafletMap_NoMarker(lat, lon, districtName, subDistrictName) {
       if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 
+      // ✅ ตั้งค่าเริ่มต้นแบบ "ไม่อ้างอิงตำแหน่งจริง" (กันการเดา/ซูมผิดพลาด)
       leafletMap = L.map('leafletMap', {
         zoomControl: true,
         attributionControl: false,
         scrollWheelZoom: true
-      }).setView([lat, lon], 11);
+      }).setView([12.56, 99.95], 11);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // Marker
-      L.circleMarker([lat, lon], { radius: 6, weight: 2, fillOpacity: 0.9 }).addTo(leafletMap);
-
       setStatus([
-        `<b>Mode A</b>: District + Sub-district`,
-        `Try by Coordinates → fallback by names if needed`
+        `<b>Mode A (Secure)</b>: District + Sub-district boundaries`,
+        `Marker: <b>OFF</b> (Hidden location)`
       ]);
 
-      // 1) District (admin_level 6)
+      // 1) วาด District (admin_level 6) สีเขียว เส้นประ
       const districtBounds =
-        await drawBoundaryByPoint(lat, lon, 6, '#00EE44', 3.5, '12, 7', false)
-        || await drawBoundaryByName(districtName, 6, '#00EE44', 3.5, '12, 7', false);
+        await drawBoundarySmart(lat, lon, districtName, 6, '#00EE44', 3.5, '12, 7', false);
 
-      // 2) SubDistrict (admin_level 8)
+      // 2) วาด SubDistrict (admin_level 8) สีแดง เส้นประ + ขอบขาว
       const subBounds =
-        await drawBoundaryByPoint(lat, lon, 8, '#FF2222', 5, '9, 6', true)
-        || await drawBoundaryByName(subDistrictName, 8, '#FF2222', 5, '9, 6', true, districtName);
+        await drawBoundarySmart(lat, lon, subDistrictName, 8, '#FF2222', 5, '9, 6', true, districtName);
 
-      // Fit: prefer subdistrict if got, else district, else keep view
-      const bounds = (subBounds && subBounds.isValid()) ? subBounds : (districtBounds && districtBounds.isValid() ? districtBounds : null);
-      if (bounds) leafletMap.fitBounds(bounds, { padding: [20, 20] });
-
-      const okDistrict = !!districtBounds;
-      const okSub = !!subBounds;
+      // ✅ FitBounds แบบ “เน้นตำบลก่อน” (เพราะคุณต้องการกรอบตำบลเป็นหลัก)
+      if (subBounds && subBounds.isValid()) {
+        leafletMap.fitBounds(subBounds, { padding: [20, 20] });
+      } else if (districtBounds && districtBounds.isValid()) {
+        leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
+      }
 
       setStatus([
-        `<b>Mode A</b>: District + Sub-district`,
-        `District boundary: ${okDistrict ? '<b>OK</b>' : 'Not found'}`,
-        `Sub-district boundary: ${okSub ? '<b>OK</b>' : 'Not found'}`,
-        `Tip: If Not found = OSM boundary missing/Overpass limit (free)`
+        `<b>Mode A (Secure)</b>: District + Sub-district boundaries`,
+        `District boundary: ${districtBounds && districtBounds.isValid() ? '<b>OK</b>' : 'Not found'}`,
+        `Sub-district boundary: ${subBounds && subBounds.isValid() ? '<b>OK</b>' : 'Not found'}`,
+        `Tip: If Not found = OSM boundary missing / Overpass limit (free)`
       ]);
     }
 
-    async function drawBoundaryByPoint(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      const queries = [
-        `[out:json][timeout:25];is_in(${lat},${lon})->.a;relation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];out geom;`,
-        `[out:json][timeout:25];relation(around:120,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];out geom;`,
-        `[out:json][timeout:25];relation(around:7000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];out geom;`
+    /**
+     * ✅ Smart boundary fetch
+     * ลำดับความพยายาม:
+     * 1) หา “ด้วยชื่อ” ก่อน (admin_level + name) เพื่อความแม่น
+     * 2) ถ้าไม่เจอ → is_in(point) และ around() เป็น fallback
+     */
+    async function drawBoundarySmart(lat, lon, name, adminLevel, color, weight, dashArray, outline, withinDistrictName) {
+      const cleanName = String(name || "").trim();
+      const cleanWithin = String(withinDistrictName || "").trim();
+
+      // --- Queries by NAME (แม่นกว่า) ---
+      const qByName = [];
+      if (cleanName) {
+        // name ตรง + admin_level
+        qByName.push(`
+          [out:json][timeout:30];
+          relation["boundary"="administrative"]["admin_level"="${adminLevel}"]["name"="${escapeOverpass(cleanName)}"];
+          out geom;
+        `);
+
+        // name:en เผื่อบางพื้นที่ใช้ name อังกฤษ
+        qByName.push(`
+          [out:json][timeout:30];
+          relation["boundary"="administrative"]["admin_level"="${adminLevel}"]["name:en"="${escapeOverpass(cleanName)}"];
+          out geom;
+        `);
+
+        // ถ้ามีชื่อ District ช่วยจำกัดบริบท (ลดการชนชื่อซ้ำ)
+        if (cleanWithin && adminLevel === 8) {
+          qByName.push(`
+            [out:json][timeout:30];
+            area["boundary"="administrative"]["admin_level"="6"]["name"="${escapeOverpass(cleanWithin)}"]->.a;
+            relation(area.a)["boundary"="administrative"]["admin_level"="8"]["name"="${escapeOverpass(cleanName)}"];
+            out geom;
+          `);
+          qByName.push(`
+            [out:json][timeout:30];
+            area["boundary"="administrative"]["admin_level"="6"]["name:en"="${escapeOverpass(cleanWithin)}"]->.a;
+            relation(area.a)["boundary"="administrative"]["admin_level"="8"]["name:en"="${escapeOverpass(cleanName)}"];
+            out geom;
+          `);
+        }
+      }
+
+      // --- Queries by POINT (fallback) ---
+      const qByPoint = [
+        `[out:json][timeout:30];
+         is_in(${lat},${lon})->.a;
+         relation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];
+         out geom;`,
+        `[out:json][timeout:30];
+         relation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+         out geom;`,
+        `[out:json][timeout:30];
+         relation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];
+         out geom;`
       ];
-      for (const q of queries) {
-        const bounds = await tryFetchAndDraw(q, color, weight, dashArray, outline);
+
+      const queries = [...qByName, ...qByPoint];
+
+      for (const query of queries) {
+        const bounds = await tryFetchAndDraw(query, color, weight, dashArray, outline);
         if (bounds) return bounds;
       }
       return null;
     }
 
-    async function drawBoundaryByName(name, adminLevel, color, weight, dashArray, outline, hintParentName="") {
-      name = String(name||"").trim();
-      if(!name) return null;
-
-      // Nominatim -> OSM relation id -> Overpass relation
-      // NOTE: Nominatim needs polite usage; keep 1 request
-      try {
-        const q = encodeURIComponent([name, hintParentName, "Prachuap Khiri Khan", "Thailand"].filter(Boolean).join(", "));
-        const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=3&addressdetails=1&q=${q}`;
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
-        if(!res.ok) return null;
-        const arr = await res.json();
-        if(!Array.isArray(arr) || arr.length===0) return null;
-
-        // Prefer relations/boundaries
-        const pick = arr.find(x => x.osm_type === 'relation') || arr[0];
-        if(!pick || !pick.osm_id) return null;
-
-        const relId = Number(pick.osm_id);
-        if(!Number.isFinite(relId)) return null;
-
-        const overpass = `[out:json][timeout:25];relation(${relId});out geom;`;
-        const bounds = await tryFetchAndDraw(overpass, color, weight, dashArray, outline);
-        return bounds || null;
-      } catch(e) {
-        return null;
-      }
+    function escapeOverpass(s) {
+      return String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
     }
 
     async function tryFetchAndDraw(query, color, weight, dashArray, outline) {
@@ -394,6 +430,7 @@
             const pts = m.geometry.map(p => [p.lat, p.lon]);
             allLatLngs.push(...pts);
 
+            // White outline (สำหรับเส้นตำบล)
             if (outline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
@@ -403,6 +440,8 @@
                 interactive: false
               }).addTo(leafletMap);
             }
+
+            // Main line
             L.polyline(pts, {
               color: color,
               weight: weight,
@@ -415,7 +454,9 @@
 
         if (allLatLngs.length === 0) return null;
         return L.latLngBounds(allLatLngs);
+
       } catch(e) {
+        console.warn('Overpass error:', e);
         return null;
       }
     }
@@ -436,7 +477,8 @@
     }
     function changeSlide(n) { setMain(idx + n); }
     function renderThumbs() {
-      document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join('');
+      document.getElementById('thumbStrip').innerHTML =
+        images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join('');
     }
 
     init();
