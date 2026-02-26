@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V169</title>
+  <title>Asset Specifications | MASTER SYSTEM V170</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -33,15 +33,20 @@
     .val { font-size: 0.85rem; font-weight: 400; color: #FFF; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-    /* 🛡️ 🎯 แผนที่แบบ "คลุมพื้นที่" (Master Privacy Style) */
-    .map-box { position: relative; width: 100%; height: 250px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
-    /* วงกลมคลุมจุดศูนย์กลาง */
-    .map-privacy-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background: rgba(201, 168, 76, 0.15); border: 2px dashed var(--gold); border-radius: 50%; pointer-events: none; z-index: 10; box-shadow: 0 0 0 1000px rgba(6, 15, 26, 0.1); }
-    /* ป้ายระบุบริเวณ */
-    .map-privacy-tag { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--navy); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 9px; font-weight: 800; border: 1px solid var(--gold); z-index: 11; white-space: nowrap; }
-
-    .btn-nav { width: 100%; background: #000; color: #fff; text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; border: 1px solid var(--border); }
+    /* 🛡️ 🎯 ระบบแผนที่คลุมพื้นที่ 2 ชั้น (Sub-District & District) */
+    .map-container { position: relative; width: 100%; height: 350px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; background: #000; }
     
+    /* 1. Boundary Overlay Mask (SVG) */
+    .boundary-mask { position: absolute; inset: 0; pointer-events: none; z-index: 5; display: flex; align-items: center; justify-content: center; }
+    .boundary-mask svg { width: 100%; height: 100%; }
+    
+    /* ขอบเขตชั้นนอก - อำเภอ */
+    .border-district { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 3; stroke-dasharray: 8 4; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+    /* ขอบเขตชั้นใน - ตำบล */
+    .border-sub-district { fill: rgba(201, 168, 76, 0.05); stroke: var(--gold); stroke-width: 4; stroke-dasharray: 10 5; filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.2)); }
+    
+    .area-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold); padding: 6px 20px; border-radius: 50px; font-size: 10px; font-weight: 800; border: 1.5px solid var(--gold); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 1px; }
+
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
@@ -49,9 +54,14 @@
 </head>
 <body>
   <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
-  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">PROPERTY SPECIFICATIONS</div><div style="width:40px;"></div></header>
+  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">ASSET SPECIFICATIONS</div><div style="width:40px;"></div></header>
   
-  <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel" style="position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px;">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
+  <div class="gallery-container">
+    <div class="gallery-card">
+      <div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel" style="position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px;">0 / 0</div></div>
+      <div class="thumb-row" id="thumbStrip"></div>
+    </div>
+  </div>
   
   <main class="content">
     <div class="info-card">
@@ -67,6 +77,21 @@
     </div>
 
     <div class="info-card">
+      <h2 class="section-title">Property Area Insight</h2>
+      <div class="map-container" id="mapContainer" style="display:none;">
+        <div class="boundary-mask">
+          <svg viewBox="0 0 400 400">
+            <rect x="20" y="20" width="360" height="360" rx="40" class="border-district" />
+            <rect x="80" y="80" width="240" height="240" rx="30" class="border-sub-district" />
+          </svg>
+        </div>
+        <div class="area-badge" id="areaLabel">AREA INSIGHT</div>
+        <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.5) contrast(1.2) brightness(0.8);"></iframe>
+      </div>
+      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic;">* Exact location hidden for privacy. Showing general area of the sub-district.</p>
+    </div>
+
+    <div class="info-card">
       <h2 class="section-title">Specifications</h2>
       <div class="grid">
         <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
@@ -75,20 +100,6 @@
         <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
       </div>
     </div>
-
-    <div class="info-card" style="border-left: 4px solid var(--gold);"><h2 class="section-title">Ownership & Fees</h2><div class="grid"><div><div class="label">Monthly Fee</div><div class="val" id="vFeeM">-</div></div><div><div class="label">Yearly Total</div><div class="val" id="vFeeY" style="color:var(--gold)">-</div></div><div><div class="label">Ownership</div><div class="val" id="vOwner">-</div></div></div></div>
-
-    <div class="info-card">
-      <h2 class="section-title">Approximate Location</h2>
-      <div class="map-box" id="mapBox" style="display:none;">
-        <div class="map-privacy-overlay"></div>
-        <div class="map-privacy-tag">ESTIMATED VICINITY</div>
-        <iframe id="mapFrame" width="100%" height="100%" frameborder="0"></iframe>
-      </div>
-      <a id="navLink" href="" target="_blank" class="btn-nav" style="display:none;">📍 Open Vicinity Area</a>
-    </div>
-
-    <div class="info-card"><h2 class="section-title">Nearby Highlights</h2><div id="nearbyGrid" style="display:grid; grid-template-columns: 1fr; gap: 5px;"></div></div>
   </main>
 
   <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
@@ -97,8 +108,6 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }];
-    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
 
     async function init() { if(!hpId) return; try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) renderData(json.data); hideSplash(); } catch(e) { hideSplash(); } }
     function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
@@ -106,32 +115,28 @@
     function renderData(u) {
       const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0; const a = parseFloat(String(u.Living_Area_sq_m).replace(/[^0-9.]/g, '')) || 1;
       document.getElementById('pPlot').textContent = `Plot ${u.Plot || '-'}`;
-      document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'} (${u.Zone || '-'})`;
+      document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'}`;
       document.getElementById('pPrice').textContent = `฿${p.toLocaleString()}`;
       document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
       document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
       document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
       document.getElementById('vStatus').textContent = u.Status || "-"; document.getElementById('vDistrict').textContent = u.District || "-"; document.getElementById('vZone').textContent = u.Zone || "-"; document.getElementById('vFurnish').textContent = u.Furnishing || "-";
-      document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
-      document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
-      document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'}`;
       
-      // 🎯 ส่วนแผนที่ความปลอดภัย (Privacy Map)
-      if (u.Coordinates && u.Coordinates !== "#") {
-        document.getElementById('mapBox').style.display='block'; document.getElementById('navLink').style.display='flex';
-        const coords = u.Coordinates.trim();
-        // ใช้ ll แทน q เพื่อซ่อนหมุดสีแดงใน iframe
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?ll=${coords}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-        document.getElementById('navLink').href = `https://www.google.com/maps/search/?api=1&query=${coords}`;
+      // 🎯 ส่วนแผนที่ความปลอดภัยระดับสูง (High Privacy Map)
+      if (u.SubDistrict && u.District) {
+        document.getElementById('mapContainer').style.display='block';
+        document.getElementById('areaLabel').innerText = `${u.SubDistrict} Vicinity`;
         
-        const [la, lo] = coords.split(','); 
-        document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon); return `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.75rem;"><span>${loc.name}</span><span style="color:var(--gold)">${d.toFixed(1)} km</span></div>`; }).join('');
+        // 🎯 เทคนิค: ค้นหาด้วย "ชื่อตำบล, อำเภอ" แทนพิกัด เพื่อลบหมุดสีแดง
+        const areaSearch = encodeURIComponent(`${u.SubDistrict}, ${u.District}, Thailand`);
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${areaSearch}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       }
+      
       images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
-    function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
+    function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
     function changeSlide(n) { setMain(idx + n); }
     function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
     init();
