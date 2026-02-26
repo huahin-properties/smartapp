@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Details | MASTER RESTORATION V162</title>
+  <title>Asset Details | MASTER SYSTEM</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -13,16 +13,19 @@
     .back { text-decoration: none; color: var(--gold); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     .gallery-container { margin-top: 65px; padding: 0 15px; max-width: 1100px; margin: 0 auto; }
     .main-stage { position: relative; width: 100%; aspect-ratio: 16/10; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
-    .main-img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+    .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
     .thumb-row { display: flex; gap: 10px; padding: 12px 0; overflow-x: auto; scrollbar-width: none; }
-    .thumb { width: 80px; aspect-ratio: 16/10; border-radius: 8px; object-fit: cover; cursor: pointer; opacity: 0.5; border: 1px solid transparent; }
+    .thumb { width: 80px; aspect-ratio: 16/10; border-radius: 8px; object-fit: cover; cursor: pointer; opacity: 0.5; border: 1px solid transparent; flex-shrink: 0; }
     .thumb.active { opacity: 1; border-color: var(--gold); }
+    .tag-count { position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: 600; }
     .content { padding: 10px 15px 120px; max-width: 900px; margin: 0 auto; }
     .info-card { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 22px; margin-bottom: 15px; border: 1px solid var(--border); }
+    .section-title { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .label { font-size: 0.55rem; color: #7A9BB5; text-transform: uppercase; font-weight: 600; margin-bottom: 3px; }
     .val { font-size: 0.85rem; font-weight: 500; color: #FFF; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .map-box { width: 100%; height: 230px; border-radius: 12px; overflow: hidden; margin-top: 15px; border: 1px solid var(--border); }
     .footer { position: fixed; bottom: 0; width: 100%; background: #0B1829; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 6px; display: block; text-align: center; font-size: 0.88rem; font-weight: 700; text-transform: uppercase; }
   </style>
@@ -31,38 +34,41 @@
   <header><a href="index.html" class="back">✕ Close</a><div style="font-family:'Playfair Display',serif; color:var(--gold); font-weight:700;">MASTER CATALOG</div><div style="width:40px;"></div></header>
   
   <div class="gallery-container">
-    <div class="main-stage"><img id="mainImg" class="main-img" src=""></div>
+    <div class="main-stage">
+      <img id="mainImg" class="main-img" src="">
+      <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
+      <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
+      <div class="tag-count" id="countLabel">0 / 0</div>
+    </div>
     <div class="thumb-row" id="thumbStrip"></div>
   </div>
 
   <main class="content">
     <div class="info-card">
       <h1 id="pPlot" style="font-family:'Playfair Display',serif; font-size: 1.8rem; color: var(--gold); margin-bottom: 5px;">Plot ...</h1>
+      <div id="pLocText" style="font-size: 0.75rem; color: #7A9BB5; margin-bottom: 20px;">📍 -</div>
       <div id="pPrice" style="font-size: 1.5rem; font-weight: 800; color: #FFF; margin-bottom: 20px;">฿0</div>
       <div class="grid">
         <div><div class="label">Bed / Bath</div><div class="val" id="vBB">-</div></div>
         <div><div class="label">Living Area</div><div class="val" id="vLiving">-</div></div>
+        <div><div class="label">Land Size</div><div class="val" id="vLand">-</div></div>
+        <div><div class="label">Project</div><div class="val gold-txt" id="vProject">-</div></div>
       </div>
     </div>
 
     <div class="info-card">
-      <h2 style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px;">Specifications</h2>
-      <div class="grid" id="vSpecs">
+      <h2 class="section-title">Specifications</h2>
+      <div class="grid" id="specGrid">
         <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
-        <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
         <div><div class="label">District</div><div class="val" id="vDistrict">-</div></div>
         <div><div class="label">Zone</div><div class="val" id="vZone">-</div></div>
+        <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
       </div>
     </div>
 
     <div class="info-card">
-      <h2 style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 10px;">Description</h2>
+      <h2 class="section-title">Description</h2>
       <p id="vDesc" style="font-size: 0.85rem; line-height: 1.7; color: #7A9BB5; white-space: pre-line;">-</p>
-    </div>
-
-    <div class="info-card" id="mapSection" style="display:none;">
-      <h2 style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase;">Location</h2>
-      <div class="map-box"><iframe id="mapFrame" width="100%" height="100%" frameborder="0"></iframe></div>
     </div>
   </main>
 
@@ -71,7 +77,7 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
-    let images = [];
+    let images = [], idx = 0;
 
     async function init() {
       if(!hpId) return;
@@ -84,36 +90,36 @@
 
     function renderData(u) {
       document.getElementById('pPlot').textContent = `Plot ${u.Plot || u.HP_ID}`;
+      document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'} (${u.Zone || '-'})`;
       document.getElementById('pPrice').textContent = `฿${Number(u.Sale_Price || 0).toLocaleString()}`;
       document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
       document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
+      document.getElementById('vLand').textContent = `${u.Land_Area_sq_m || '-'} m²`;
+      document.getElementById('vProject').textContent = u.Project_Name || "Master";
       document.getElementById('vStatus').textContent = u.Status || "-";
-      document.getElementById('vFurnish').textContent = u.Furnishing || "-";
       document.getElementById('vDistrict').textContent = u.District || "-";
       document.getElementById('vZone').textContent = u.Zone || "-";
-      document.getElementById('vDesc').textContent = u.Description || "No description provided.";
-
-      if (u.Coordinates && u.Coordinates !== "#") {
-        document.getElementById('mapSection').style.display = 'block';
-        document.getElementById('mapFrame').src = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY_HERE&q=${u.Coordinates}`;
-        // หมายเหตุ: ใช้ระบบ Embed เดิมของคุณได้เลยครับ
-      }
+      document.getElementById('vFurnish').textContent = u.Furnishing || "-";
+      document.getElementById('vDesc').textContent = u.Description || "No description available.";
 
       images = u.__album || [u.Thumbnail_Image];
-      if (images.length > 0) {
-        document.getElementById('mainImg').src = images[0];
-        document.getElementById('thumbStrip').innerHTML = images.map((img, i) => 
-          `<img class="thumb ${i===0?'active':''}" src="${img}" onclick="setMain(${i}, this)">`
-        ).join('');
-      }
+      if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
-    function setMain(i, el) {
-      document.getElementById('mainImg').src = images[i];
-      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
+    function setMain(i) {
+      idx = (i + images.length) % images.length;
+      const mainImg = document.getElementById('mainImg');
+      mainImg.style.opacity = '0.5';
+      setTimeout(() => {
+        mainImg.src = images[idx];
+        mainImg.style.opacity = '1';
+        document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`;
+        document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx));
+      }, 150);
     }
-
+    function changeSlide(n) { setMain(idx + n); }
+    function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
+    
     window.onload = init;
   </script>
 </body>
