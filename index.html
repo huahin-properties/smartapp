@@ -12,54 +12,52 @@
     header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(11, 24, 41, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; }
     .hero { padding: 80px 20px 20px; text-align: center; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; padding: 20px; }
-    .card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 15px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.3s; }
+    .card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 15px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.3s; height: 100%; display: flex; flex-direction: column; }
     .card:hover { transform: translateY(-5px); border-color: var(--gold); }
-    .card-img { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+    .card-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    
-    /* 🎯 จุดที่ 1: ปรับ HP-ID ให้ชัดเจน ไม่มีเครื่องหมาย # */
-    .hp-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #060F1A; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    
-    .card-content { padding: 15px; }
-    .price { font-size: 1.2rem; font-weight: 800; color: var(--gold); }
-    .status-pill { font-size: 9px; font-weight: 800; background: rgba(16, 185, 129, 0.1); color: #10B981; padding: 3px 8px; border-radius: 50px; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .hp-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #060F1A; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
+    .card-content { padding: 15px; flex: 1; display: flex; flex-direction: column; }
+    .price { font-size: 1.2rem; font-weight: 800; color: var(--gold); margin-top: auto; }
+    .status-pill { font-size: 9px; font-weight: 800; background: rgba(16, 185, 129, 0.1); color: #10B981; padding: 3px 8px; border-radius: 50px; border: 1px solid rgba(16, 185, 129, 0.2); text-transform: uppercase; }
   </style>
 </head>
 <body>
   <header><h1 class="text-lg font-800 text-[#C9A84C] tracking-tighter italic">MASTER CATALOG</h1></header>
   <div class="hero">
-    <input type="text" id="sI" onkeyup="f()" placeholder="Search Plot or ID..." class="w-full max-w-lg bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#C9A84C] text-sm">
+    <input type="text" id="sI" onkeyup="f()" placeholder="Search Plot, Project or ID..." class="w-full max-w-lg bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#C9A84C] text-sm">
   </div>
-  <div id="propGrid" class="grid-container"></div>
+  <div id="propGrid" class="grid-container">
+    <div class="col-span-full text-center py-20 text-slate-500 font-700 animate-pulse">LOADING INVENTORY...</div>
+  </div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
     async function init() {
-      const res = await fetch(`${API}?mode=getListSmall&project=all`);
-      data = await res.json(); f();
+      try {
+        const res = await fetch(`${API}?mode=getListSmall&project=all`);
+        data = await res.json(); f();
+      } catch(e) { document.getElementById('propGrid').innerHTML = "Error loading data."; }
     }
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
-      // 🎯 จุดที่ 2: กรองข้อมูล "เด็ดขาด" โชว์เฉพาะ ONLINE เท่านั้น
-      const filtered = data.filter(u => 
-        u.System_Status === 'Online' && 
-        (!q || u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q)))
-      );
+      // 🎯 กู้คืนการแสดงผลทั้งหมด (คืนค่าเดิม)
+      const filtered = data.filter(u => !q || u.HP_ID.toLowerCase().includes(q) || (u.Project_Name && u.Project_Name.toLowerCase().includes(q)) || (u.Plot && u.Plot.toLowerCase().includes(q)));
       
       document.getElementById('propGrid').innerHTML = filtered.map(u => `
         <a href="details.html?id=${u.HP_ID}" class="card">
           <div class="card-img">
             <div class="hp-badge">${u.HP_ID}</div>
-            <img src="${u.Thumbnail_Image}" loading="lazy">
+            <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy">
           </div>
           <div class="card-content">
             <div class="flex justify-between items-center mb-2">
-              <span class="text-xs font-700 text-slate-400 uppercase tracking-widest">${u.Project_Name}</span>
-              <span class="status-pill">${u.Status}</span>
+              <span class="text-[10px] font-700 text-slate-400 uppercase tracking-widest">${u.Project_Name || 'Master'}</span>
+              <span class="status-pill">${u.Status || 'Available'}</span>
             </div>
-            <div class="text-sm font-700 mb-1 uppercase">Plot ${u.Plot || 'N/A'}</div>
-            <div class="price">฿${Number(u.Sale_Price).toLocaleString()}</div>
+            <div class="text-sm font-700 mb-1 uppercase">Plot ${u.Plot || '-'}</div>
+            <div class="price">฿${Number(u.Sale_Price || 0).toLocaleString()}</div>
           </div>
         </a>`).join('');
     }
