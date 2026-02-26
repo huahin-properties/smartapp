@@ -2,10 +2,13 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V167</title>
+  <title>Asset Specifications | MASTER SYSTEM V176</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(201, 168, 76, 0.15); --card-bg: #0F172A; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,7 +28,7 @@
     .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
 
     .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.03); scrollbar-width: none; }
-    .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
+    .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
     .thumb.active { opacity: 1; border-color: var(--gold); }
     .tag-count { position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: 600; }
 
@@ -43,31 +46,22 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /*
-      🗺️ MAP BOX:
-      - มือถือ: กว้างเต็มจอ สูง = กว้าง (สี่เหลี่ยมจัตุรัส) → ใช้ aspect-ratio: 1/1
-      - คอมพิวเตอร์: จำกัดความสูงไว้ที่ 500px ไม่ให้ใหญ่เกิน
-    */
-    .map-box {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: 500px;   /* ← จำกัดบนคอมพิวเตอร์ */
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      margin: 10px 0;
+    /* 🛡️ 🎯 MAP BOX สี่เหลี่ยมจัตุรัส V176 */
+    .map-box { 
+      width: 100%; 
+      aspect-ratio: 1 / 1; 
+      max-height: 500px; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      border: 1px solid var(--border); 
+      margin: 10px 0; 
+      position: relative; 
     }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
-    .leaflet-control-attribution { display: none !important; }
 
-    /* Legend */
-    .map-legend { display: flex; gap: 20px; margin-bottom: 8px; }
-    .map-legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.62rem; color: #9AB; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; }
-    .legend-line { width: 32px; height: 4px; border-radius: 2px; }
-    .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
-    .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
-
-    /* ❌ ปุ่ม GPS Navigation ถูกลบแล้ว */
+    .map-legend { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.62rem; color: #9AB; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .leg-line { width: 35px; height: 4px; border-radius: 2px; }
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -103,19 +97,26 @@
       </div>
 
       <div class="info-card">
-        <h2 class="section-title">Specifications</h2>
+        <h2 class="section-title">Administrative Area Insights</h2>
+        <div class="map-legend">
+          <div class="legend-item"><div class="leg-line" style="background:rgba(239,68,68,1); border: 2px dashed #FFF;"></div> SUB-DISTRICT (RED)</div>
+          <div class="legend-item"><div class="leg-line" style="background:rgba(16,185,129,1); border: 2px dashed #FFF;"></div> DISTRICT (GREEN)</div>
+        </div>
+        <div class="map-box" id="mapBox" style="display:none;">
+          <div id="leafletMap"></div>
+        </div>
+        <p style="font-size: 0.6rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Exact property location secured. Highlighting verified administrative zones.</p>
+      </div>
+
+      <div class="info-card">
+        <h2 class="section-title">Property Details</h2>
         <div class="grid">
           <div><div class="label">Status</div><div class="val" id="vStatus">-</div></div>
-          <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
           <div><div class="label">District</div><div class="val" id="vDistrict">-</div></div>
-          <div><div class="label">Sub-district</div><div class="val" id="vSubDistrict">-</div></div>
           <div><div class="label">Zone</div><div class="val gold-txt" id="vZone">-</div></div>
-          <div><div class="label">Pool System</div><div class="val" id="vPoolSys">-</div></div>
+          <div><div class="label">Furnishing</div><div class="val" id="vFurnish">-</div></div>
           <div><div class="label">Pool Info</div><div class="val" id="vPool">-</div></div>
-          <div><div class="label">Kitchen Type</div><div class="val" id="vKitchen">-</div></div>
           <div><div class="label">Parking</div><div class="val" id="vParking">-</div></div>
-          <div><div class="label">Direction</div><div class="val" id="vDirect">-</div></div>
-          <div><div class="label">Utility Info</div><div class="val" id="vUtil">-</div></div>
         </div>
       </div>
 
@@ -129,40 +130,21 @@
         </div>
       </div>
 
-      <div class="info-card">
-        <h2 class="section-title">Description</h2>
-        <p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;">-</p>
-      </div>
+      <div class="info-card"><h2 class="section-title">Description</h2><p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #BBB; font-weight: 300; white-space: pre-line;">-</p></div>
 
-      <div class="info-card">
-        <h2 class="section-title">Location & Navigation</h2>
-        <div class="map-legend" id="mapLegend" style="display:none;">
-          <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
-          <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
-        </div>
-        <!-- ❌ ปุ่ม GPS ถูกลบออกแล้ว — map box เท่านั้น -->
-        <div class="map-box" id="mapBox" style="display:none;">
-          <div id="leafletMap"></div>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
-        <div id="nearbyGrid" class="nearby-grid"></div>
-      </div>
+      <div class="info-card"><h2 class="section-title">Nearby Lifestyle & Amenities</h2><div id="nearbyGrid" class="nearby-grid"></div></div>
     </main>
   </div>
 
   <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Vana Nava", lat: 12.5273, lon: 99.9642 }, { name: "Railway Station", lat: 12.5674, lon: 99.9548 }, { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }, { name: "Water Park", lat: 12.6046, lon: 99.8897 }];
+    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }];
 
-    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
+    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.3; }
 
     async function init() {
       if(!hpId) return;
@@ -190,7 +172,7 @@
 
       document.getElementById('pID').textContent = u.HP_ID;
       document.getElementById('pPlot').textContent = `Plot ${u.Plot || '-'}`;
-      document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'} (${u.Zone || '-'})`;
+      document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict || '-'}, ${u.District || '-'}`;
       document.getElementById('pPrice').textContent = `฿${p.toLocaleString()}`;
       document.getElementById('vBB').textContent = `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`;
       document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m || '-'} m²`;
@@ -198,153 +180,55 @@
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
       document.getElementById('vFeeM').textContent = `฿${(parseFloat(u.Common_Fee_Rate)||0).toLocaleString()} / m²`;
       document.getElementById('vFeeY').textContent = `฿${Math.round((parseFloat(u.Common_Fee_Rate)||0)*a*12).toLocaleString()} / Yr`;
-      document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'} (${u.Land_Title_Deed_Type || '-'})`;
+      document.getElementById('vOwner').textContent = `${u.Ownership_Type || '-'}`;
       document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
       document.getElementById('vStatus').textContent = u.Status || "-";
       document.getElementById('vFurnish').textContent = u.Furnishing || "-";
       document.getElementById('vDistrict').textContent = u.District || "-";
-      document.getElementById('vSubDistrict').textContent = u.SubDistrict || "-";
       document.getElementById('vZone').textContent = u.Zone || "-";
-      document.getElementById('vPoolSys').textContent = u.Pool_System || "-";
       document.getElementById('vPool').textContent = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
-      document.getElementById('vKitchen').textContent = u.Kitchen_Type || "-";
       document.getElementById('vParking').textContent = u.Parking || "-";
-      document.getElementById('vDirect').textContent = u.Direction || "-";
-      document.getElementById('vUtil').textContent = `Elec: ${u.Electricity || '-'} | Water: ${u.Water_Source || '-'}`;
       document.getElementById('vDesc').textContent = u.Description || "-";
 
-      if (u.Coordinates && u.Coordinates !== "#") {
+      if (u.Coordinates && u.SubDistrict) {
         document.getElementById('mapBox').style.display = 'block';
-        document.getElementById('mapLegend').style.display = 'flex';
-
-        const coords = u.Coordinates.trim();
-        const [la, lo] = coords.split(',').map(Number);
-
-        const grid = document.getElementById('nearbyGrid');
-        grid.innerHTML = LANDMARKS.map(loc => {
-          const d = getDistance(la, lo, loc.lat, loc.lon);
-          return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+        initBoundaryMap(u.Coordinates, u.SubDistrict, u.District);
+        
+        const [la, lo] = u.Coordinates.split(',');
+        document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
+          const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon);
+          return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
         }).join('');
-
-        initLeafletMap(la, lo);
       }
 
       images = u.__album || [u.Thumbnail_Image];
       if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
-    /* ─────────────────────────────────────────
-       🗺️  LEAFLET MAP + BOUNDARY OVERLAY
-    ───────────────────────────────────────── */
-    let leafletMap = null;
+    // 🛡️ 🎯 ระบบวาดขอบเขตภูมิศาสตร์จริง V176
+    async function initBoundaryMap(coords, subName, distName) {
+      const [lat, lon] = coords.split(',').map(Number);
+      const map = L.map('leafletMap', { zoomControl: false, attributionControl: false }).setView([lat, lon], 11);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-    async function initLeafletMap(lat, lon) {
-      if (leafletMap) { leafletMap.remove(); leafletMap = null; }
-
-      // เริ่มต้นที่ zoom 11 — เห็นอำเภอหัวหินพอดี
-      leafletMap = L.map('leafletMap', {
-        zoomControl: true,
-        attributionControl: false,
-        scrollWheelZoom: true
-      }).setView([lat, lon], 11);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
-
-      // วาดอำเภอ (สีเขียว) ก่อน และเก็บ bounds เพื่อ fitBounds ภายหลัง
-      const districtBounds = await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
-
-      // วาดตำบล (สีแดง) ทีหลัง
-      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true);
-
-      // ซูมแผนที่ให้พอดีกับขอบเขตอำเภอ (ถ้าได้ข้อมูล)
-      if (districtBounds && districtBounds.isValid()) {
-        leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
+      async function draw(query, color, dash) {
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&polygon_geojson=1`);
+          const data = await res.json();
+          if (data.length > 0) {
+            const boundary = L.geoJSON(data[0].geojson, { 
+              style: { color: color, weight: 3, dashArray: dash, fillOpacity: 0.12, fillColor: color } 
+            }).addTo(map);
+            // 🎯 ซูมให้พอดีกับขอบเขตอำเภอ
+            if(query.includes(distName)) map.fitBounds(boundary.getBounds(), { padding: [15, 15] });
+          }
+        } catch (e) { console.error("Map Load Error:", e); }
       }
+
+      await draw(`${distName}, Thailand`, '#10B981', '10, 8'); // อำเภอ (เขียว)
+      await draw(`${subName}, ${distName}, Thailand`, '#EF4444', '12, 6'); // ตำบล (แดง)
     }
 
-    /**
-     * ดึงขอบเขต admin boundary แล้ววาด + คืนค่า L.LatLngBounds
-     * ลอง 3 methods: is_in → around(100m) → around(5000m)
-     */
-    async function drawBoundaryGetBounds(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      const queries = [
-        // Method 1: is_in — หา relation ที่ครอบพิกัดนี้
-        `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 2: around 100m
-        `[out:json][timeout:30];\nrelation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 3: around 5000m
-        `[out:json][timeout:30];\nrelation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`
-      ];
-
-      for (const query of queries) {
-        const result = await tryFetchAndDraw(query, color, weight, dashArray, outline);
-        if (result) {
-          console.log(`✅ admin_level ${adminLevel} drawn`);
-          return result; // คืน bounds
-        }
-      }
-      console.warn(`❌ ไม่พบ boundary สำหรับ admin_level ${adminLevel}`);
-      return null;
-    }
-
-    /**
-     * ส่ง query → วาดเส้น → คืน L.LatLngBounds (หรือ null ถ้าไม่มีข้อมูล)
-     */
-    async function tryFetchAndDraw(query, color, weight, dashArray, outline) {
-      try {
-        const res = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: 'data=' + encodeURIComponent(query)
-        });
-        if (!res.ok) return null;
-
-        const data = await res.json();
-        if (!data.elements || data.elements.length === 0) return null;
-
-        const allLatLngs = [];
-
-        data.elements.forEach(rel => {
-          if (!rel.members) return;
-          rel.members.forEach(m => {
-            if (m.type !== 'way' || !m.geometry || m.geometry.length < 2) return;
-            const pts = m.geometry.map(p => [p.lat, p.lon]);
-            allLatLngs.push(...pts);
-
-            // White outline รองด้านล่าง
-            if (outline) {
-              L.polyline(pts, {
-                color: '#FFFFFF',
-                weight: weight + 4,
-                opacity: 0.5,
-                dashArray: dashArray,
-                interactive: false
-              }).addTo(leafletMap);
-            }
-
-            // เส้นสีหลัก
-            L.polyline(pts, {
-              color: color,
-              weight: weight,
-              opacity: 1,
-              dashArray: dashArray,
-              interactive: false
-            }).addTo(leafletMap);
-          });
-        });
-
-        if (allLatLngs.length === 0) return null;
-        return L.latLngBounds(allLatLngs);
-
-      } catch(e) {
-        console.warn('Overpass error:', e);
-        return null;
-      }
-    }
-
-    /* ─────────────────────────────────────────
-       🖼️  GALLERY (เดิม ไม่เปลี่ยนแปลง)
-    ───────────────────────────────────────── */
     function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
     function changeSlide(n) { setMain(idx + n); }
     function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
