@@ -1,104 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Hua Hin Properties | Master V118</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Master Index | HUA HIN PROPERTIES</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.08); --row-h: 80px; --thumb-w: 105px; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
-    header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
-    .hero { padding: 75px 15px 10px; text-align: center; }
-    .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 15px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; margin-bottom: 10px; }
-    .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-    .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
-    .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-    .pill { white-space: nowrap; padding: 6px 14px; border-radius: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: #7A9BB5; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
-    .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
-    .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .card { background: rgba(11, 24, 41, 0.9); border: 1px solid var(--border); border-radius: 12px; display: flex; height: var(--row-h); overflow: hidden; text-decoration: none; color: inherit; }
-    .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; }
+    :root { --navy: #0B1829; --gold: #C9A84C; --border: rgba(201, 168, 76, 0.15); }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; }
+    header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(11, 24, 41, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; }
+    .hero { padding: 80px 20px 20px; text-align: center; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; padding: 20px; }
+    .card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 15px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.3s; }
+    .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+    .card-img { position: relative; aspect-ratio: 16/10; overflow: hidden; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .hp-id { position: absolute; top: 4px; left: 6px; font-size: 0.45rem; color: rgba(255,255,255,0.5); }
-    .card-info { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
-    .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 5px; }
-    .prop-name { font-size: 0.82rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
-    .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid; font-weight: 800; text-transform: uppercase; }
-    .s-available { color: #2ECC8A; border-color: #2ECC8A; background: rgba(46, 204, 138, 0.1); }
-    .furnish-tag { color: var(--gold); border-color: var(--gold); background: rgba(201, 168, 76, 0.1); font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
     
-    /* 🔑 Admin Floating Icon */
-    .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
-    .admin-float:hover { transform: scale(1.1) rotate(15deg); filter: brightness(1.1); }
-    @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
+    /* 🎯 จุดที่ 1: ปรับ HP-ID ให้ชัดเจน ไม่มีเครื่องหมาย # */
+    .hp-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #060F1A; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    
+    .card-content { padding: 15px; }
+    .price { font-size: 1.2rem; font-weight: 800; color: var(--gold); }
+    .status-pill { font-size: 9px; font-weight: 800; background: rgba(16, 185, 129, 0.1); color: #10B981; padding: 3px 8px; border-radius: 50px; border: 1px solid rgba(16, 185, 129, 0.2); }
   </style>
 </head>
 <body>
-  <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">HUA HIN.<span style="font-weight:300; color:#fff;">PROPERTIES</span></a></header>
-  <section class="hero">
-    <div style="max-width:550px; margin:0 auto;">
-      <input type="text" id="sI" class="search-input" placeholder="Search Location or ID..." onkeyup="f()">
-      <div class="filters-grid">
-        <select id="zF" onchange="f()" class="filter-select"><option value="">All Zones</option></select>
-        <select id="sF" onchange="f()" class="filter-select"><option value="">Price Sort</option><option value="low">Low → High</option><option value="high">High → Low</option></select>
-        <select id="bF" onchange="f()" class="filter-select"><option value="">Bedrooms</option></select>
-      </div>
-      <div class="pill-container" id="pillBox">
-        <div class="pill active" data-f="all">All</div>
-        <div class="pill" data-f="Sale">Sale</div><div class="pill" data-f="Rent">Rent</div>
-        <div class="pill" data-f="Pool Villa">Pool Villa</div><div class="pill" data-f="Condo">Condo</div>
-        <div class="pill" data-f="House">House</div><div class="pill" data-f="Land">Land</div>
-      </div>
-    </div>
-  </section>
-  <div style="display:flex; justify-content:space-between; padding:15px; border-top:1px solid var(--border); margin-top:10px;">
-    <h2 style="font-size:0.9rem; color:var(--gold); text-transform:uppercase; font-weight:800;">Luxury Collections</h2>
-    <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Loading...</span>
+  <header><h1 class="text-lg font-800 text-[#C9A84C] tracking-tighter italic">MASTER CATALOG</h1></header>
+  <div class="hero">
+    <input type="text" id="sI" onkeyup="f()" placeholder="Search Plot or ID..." class="w-full max-w-lg bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#C9A84C] text-sm">
   </div>
-  <main class="prop-list" id="propGrid"></main>
-  <a href="gateway.html" class="admin-float"><i class="fas fa-key"></i></a>
+  <div id="propGrid" class="grid-container"></div>
+
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
     async function init() {
-      try {
-        const res = await fetch(`${API}?mode=getListSmall&project=all`);
-        data = await res.json();
-        const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
-        zones.forEach(z => document.getElementById('zF').innerHTML += `<option value="${z}">${z}</option>`);
-        const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
-        beds.forEach(b => document.getElementById('bF').innerHTML += `<option value="${b}">${b} Bed</option>`);
-        f();
-      } catch (err) { console.error(err); }
+      const res = await fetch(`${API}?mode=getListSmall&project=all`);
+      data = await res.json(); f();
     }
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
-      const z = document.getElementById('zF').value;
-      const b = document.getElementById('bF').value;
-      const pill = document.querySelector('.pill.active').dataset.f;
-      const sort = document.getElementById('sF').value;
-      let res = data.filter(u => (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && (!z || u.Zone === z) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
-      if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
-      else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
-      document.getElementById('unitCount').textContent = `${res.length} UNITS`;
-      document.getElementById('propGrid').innerHTML = res.map(u => {
-        const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
-        const price = u.Listing_Type === 'Rent' ? Number(u.Monthly_Rent || 0) : Number(u.Sale_Price || 0);
-        return `
-          <a href="details.html?id=${u.HP_ID}" class="card">
-            <div class="card-img"><span class="hp-id">#${u.HP_ID}</span><img src="${u.Thumbnail_Image}" loading="lazy"></div>
-            <div class="card-info">
-              <div class="info-row"><div class="prop-name">${label}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
-              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Bathrooms || 0} Bath</div><div class="price-new">฿${price.toLocaleString()}</div></div>
-              <div class="info-row"><span class="status-tag s-available">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.District || ''} | ${u.Zone || ''}</div></div>
+      // 🎯 จุดที่ 2: กรองข้อมูล "เด็ดขาด" โชว์เฉพาะ ONLINE เท่านั้น
+      const filtered = data.filter(u => 
+        u.System_Status === 'Online' && 
+        (!q || u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q)))
+      );
+      
+      document.getElementById('propGrid').innerHTML = filtered.map(u => `
+        <a href="details.html?id=${u.HP_ID}" class="card">
+          <div class="card-img">
+            <div class="hp-badge">${u.HP_ID}</div>
+            <img src="${u.Thumbnail_Image}" loading="lazy">
+          </div>
+          <div class="card-content">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-700 text-slate-400 uppercase tracking-widest">${u.Project_Name}</span>
+              <span class="status-pill">${u.Status}</span>
             </div>
-          </a>`;
-      }).join('');
+            <div class="text-sm font-700 mb-1 uppercase">Plot ${u.Plot || 'N/A'}</div>
+            <div class="price">฿${Number(u.Sale_Price).toLocaleString()}</div>
+          </div>
+        </a>`).join('');
     }
-    document.getElementById('pillBox').addEventListener('click', (e) => { if (e.target.classList.contains('pill')) { document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); f(); } });
     window.onload = init;
   </script>
 </body>
