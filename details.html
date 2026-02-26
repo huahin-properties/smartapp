@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V170</title>
+  <title>Asset Specifications | MASTER SYSTEM V171</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -20,7 +20,8 @@
     .gallery-card { background: #000; border-radius: 18px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); margin-bottom: 20px; }
     .main-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; background: #000; overflow: hidden; } 
     .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
-    .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
+    .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.3); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+    
     .thumb-row { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: rgba(0,0,0,0.03); scrollbar-width: none; }
     .thumb { width: 90px; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; opacity: 0.5; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
     .thumb.active { opacity: 1; border-color: var(--gold); }
@@ -33,19 +34,22 @@
     .val { font-size: 0.85rem; font-weight: 400; color: #FFF; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-    /* 🛡️ 🎯 ระบบแผนที่คลุมพื้นที่ 2 ชั้น (Sub-District & District) */
-    .map-container { position: relative; width: 100%; height: 350px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); margin: 15px 0; background: #000; }
+    /* 🛡️ 🎯 ระบบแผนที่วิเคราะห์พื้นที่แบบ Dual Boundary (V171) */
+    .map-area-insight { position: relative; width: 100%; height: 420px; border-radius: 20px; overflow: hidden; border: 2px solid var(--border); margin: 15px 0; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     
-    /* 1. Boundary Overlay Mask (SVG) */
-    .boundary-mask { position: absolute; inset: 0; pointer-events: none; z-index: 5; display: flex; align-items: center; justify-content: center; }
-    .boundary-mask svg { width: 100%; height: 100%; }
+    /* Overlay Mask: Administrative Boundaries */
+    .boundary-layer { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+    .boundary-layer svg { width: 100%; height: 100%; }
     
-    /* ขอบเขตชั้นนอก - อำเภอ */
-    .border-district { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 3; stroke-dasharray: 8 4; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
-    /* ขอบเขตชั้นใน - ตำบล */
-    .border-sub-district { fill: rgba(201, 168, 76, 0.05); stroke: var(--gold); stroke-width: 4; stroke-dasharray: 10 5; filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.2)); }
+    /* ขอบเขตอำเภอ (District) - สีเขียวประ */
+    .poly-district { fill: rgba(16, 185, 129, 0.04); stroke: #10B981; stroke-width: 3; stroke-dasharray: 8 4; }
+    /* ขอบเขตตำบล (Sub-District) - สีแดงประ */
+    .poly-sub-district { fill: rgba(239, 68, 68, 0.08); stroke: #EF4444; stroke-width: 4; stroke-dasharray: 10 5; filter: drop-shadow(0 0 10px rgba(239,68,68,0.2)); }
     
-    .area-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold); padding: 6px 20px; border-radius: 50px; font-size: 10px; font-weight: 800; border: 1.5px solid var(--gold); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 1px; }
+    .insight-labels { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
+    .tag-label { font-size: 9px; font-weight: 800; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; border: 1px solid; }
+    .tag-sub { background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.3); }
+    .tag-dist { background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3); }
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -56,12 +60,7 @@
   <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
   <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">ASSET SPECIFICATIONS</div><div style="width:40px;"></div></header>
   
-  <div class="gallery-container">
-    <div class="gallery-card">
-      <div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel" style="position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px;">0 / 0</div></div>
-      <div class="thumb-row" id="thumbStrip"></div>
-    </div>
-  </div>
+  <div class="gallery-container"><div class="gallery-card"><div class="main-stage"><img id="mainImg" class="main-img" src=""><div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div><div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div><div class="tag-count" id="countLabel" style="position: absolute; right: 15px; bottom: 15px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px;">0 / 0</div></div><div class="thumb-row" id="thumbStrip"></div></div></div>
   
   <main class="content">
     <div class="info-card">
@@ -77,18 +76,21 @@
     </div>
 
     <div class="info-card">
-      <h2 class="section-title">Property Area Insight</h2>
-      <div class="map-container" id="mapContainer" style="display:none;">
-        <div class="boundary-mask">
-          <svg viewBox="0 0 400 400">
-            <rect x="20" y="20" width="360" height="360" rx="40" class="border-district" />
-            <rect x="80" y="80" width="240" height="240" rx="30" class="border-sub-district" />
+      <h2 class="section-title">Area Intelligence Insight</h2>
+      <div class="map-area-insight" id="mapSection" style="display:none;">
+        <div class="insight-labels">
+          <span class="tag-label tag-sub" id="lblSub">Sub-District Boundary</span>
+          <span class="tag-label tag-dist" id="lblDist">District Boundary</span>
+        </div>
+        <div class="boundary-layer">
+          <svg viewBox="0 0 400 400" preserveAspectRatio="none">
+            <rect x="10" y="10" width="380" height="380" rx="30" class="poly-district" />
+            <rect x="80" y="80" width="240" height="240" rx="20" class="poly-sub-district" />
           </svg>
         </div>
-        <div class="area-badge" id="areaLabel">AREA INSIGHT</div>
-        <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.5) contrast(1.2) brightness(0.8);"></iframe>
+        <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.4) contrast(1.1) brightness(0.9);"></iframe>
       </div>
-      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic;">* Exact location hidden for privacy. Showing general area of the sub-district.</p>
+      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic; margin-top: 10px;">* Precise location secured. Highlighting administrative zone context.</p>
     </div>
 
     <div class="info-card">
@@ -108,6 +110,8 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
+    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }];
+    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
 
     async function init() { if(!hpId) return; try { const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`); const json = await res.json(); if(json.ok) renderData(json.data); hideSplash(); } catch(e) { hideSplash(); } }
     function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
@@ -123,14 +127,15 @@
       document.getElementById('vPriceSq').textContent = `฿${Math.round(p/a).toLocaleString()} / m²`;
       document.getElementById('vStatus').textContent = u.Status || "-"; document.getElementById('vDistrict').textContent = u.District || "-"; document.getElementById('vZone').textContent = u.Zone || "-"; document.getElementById('vFurnish').textContent = u.Furnishing || "-";
       
-      // 🎯 ส่วนแผนที่ความปลอดภัยระดับสูง (High Privacy Map)
+      // 🎯 ส่วนแผนที่เขตปกครอง 2 ชั้น V171
       if (u.SubDistrict && u.District) {
-        document.getElementById('mapContainer').style.display='block';
-        document.getElementById('areaLabel').innerText = `${u.SubDistrict} Vicinity`;
+        document.getElementById('mapSection').style.display='block';
+        document.getElementById('lblSub').innerText = `${u.SubDistrict} AREA`;
+        document.getElementById('lblDist').innerText = `${u.District} CONTEXT`;
         
-        // 🎯 เทคนิค: ค้นหาด้วย "ชื่อตำบล, อำเภอ" แทนพิกัด เพื่อลบหมุดสีแดง
-        const areaSearch = encodeURIComponent(`${u.SubDistrict}, ${u.District}, Thailand`);
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${areaSearch}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        // ค้นหาด้วยชื่อตำบลและอำเภอ เพื่อลบหมุดสีแดง 100%
+        const areaContext = encodeURIComponent(`${u.SubDistrict}, ${u.District}, Thailand`);
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${areaContext}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       }
       
       images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
