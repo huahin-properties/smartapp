@@ -2,69 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Master Dashboard | Professional Control V156</title>
+  <title>Master Dashboard | Live Color Control V157</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
     .content-wrapper { padding: 15px; max-width: 1200px; margin: 0 auto; }
     
-    /* 🎯 จุดที่ 1 & 2: Grid Header */
-    .header-bar { display: grid; grid-template-columns: 65px 110px 1fr 120px 140px 50px; gap: 10px; padding: 15px 20px; background: rgba(201, 168, 76, 0.1); border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(201, 168, 76, 0.2); }
-    .header-label { font-size: 10px; font-weight: 800; color: #C9A84C; text-transform: uppercase; letter-spacing: 1px; }
+    /* 🎯 Header Bar */
+    .header-bar { display: grid; grid-template-columns: 70px 120px 1.5fr 1fr 150px 50px; gap: 12px; padding: 18px 25px; background: rgba(201, 168, 76, 0.1); border-radius: 15px; margin-bottom: 15px; border: 1px solid rgba(201, 168, 76, 0.2); }
+    .header-label { font-size: 10px; font-weight: 800; color: #C9A84C; text-transform: uppercase; letter-spacing: 1.5px; }
     
-    .unit-row { display: grid; grid-template-columns: 65px 110px 1fr 120px 140px 50px; gap: 10px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; padding: 10px 20px; margin-bottom: 8px; transition: 0.3s; }
-    .unit-row:hover { background: rgba(255,255,255,0.08); border-color: rgba(201, 168, 76, 0.4); }
+    /* 🎯 Unit Row Design */
+    .unit-row { display: grid; grid-template-columns: 70px 120px 1.5fr 1fr 150px 50px; gap: 12px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.5rem; padding: 12px 25px; margin-bottom: 10px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .unit-row:hover { background: rgba(255,255,255,0.08); border-color: rgba(201, 168, 76, 0.4); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
     
-    /* 🎯 จุดที่ 3: Status Colors */
-    .status-select { background: #0B1829; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 11px; font-weight: 800; padding: 8px 5px; outline: none; width: 100%; cursor: pointer; }
-    .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4); }
-    .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4); }
-    .st-offline { color: #94A3B8 !important; border-color: rgba(148, 163, 184, 0.4); }
-    
-    select option { background: #0B1829; color: white; padding: 10px; }
-    .opt-online { color: #10B981; } .opt-pending { color: #F59E0B; } .opt-offline { color: #94A3B8; }
+    /* 🎯 HP-ID Enhancement */
+    .u-id-txt { font-size: 13px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
 
-    .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #C9A84C; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+    /* 🎯 System Status Dynamic Colors */
+    .status-select { background: #0B1829; border: 2px solid rgba(255,255,255,0.08); border-radius: 10px; font-size: 11px; font-weight: 800; padding: 8px 12px; outline: none; width: 100%; cursor: pointer; transition: 0.3s; }
+    
+    /* Online: Green */
+    .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.5) !important; background: rgba(16, 185, 129, 0.05); }
+    /* Pending: Orange */
+    .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.5) !important; background: rgba(245, 158, 11, 0.05); }
+    /* Offline: Dark/Gray */
+    .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.5) !important; background: rgba(100, 116, 139, 0.05); }
+    
+    select option { background: #0B1829; color: white; padding: 12px; }
+    .opt-online { color: #10B981; font-weight: 700; } 
+    .opt-pending { color: #F59E0B; font-weight: 700; } 
+    .opt-offline { color: #94A3B8; font-weight: 700; }
+
+    .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.92); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #C9A84C; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* 📱 Mobile UI Fix */
-    @media (max-width: 850px) {
+    /* 📱 Mobile Responsive Mastery */
+    @media (max-width: 900px) {
       .header-bar { display: none; }
-      .unit-row { grid-template-columns: 60px 1fr 1fr; grid-template-rows: auto auto; padding: 15px; gap: 10px; }
-      .u-img { grid-row: span 2; }
-      .u-id { font-size: 13px !important; }
-      .u-project { grid-column: span 1; font-size: 11px; }
-      .u-sale { grid-column: span 1; text-align: right; }
-      .u-control { grid-column: span 2; }
+      .unit-row { grid-template-columns: 70px 1fr 1fr; grid-template-rows: auto auto auto; padding: 20px; gap: 12px; }
+      .u-img { grid-row: span 2; align-self: start; }
+      .u-id { grid-column: span 1; display: flex; align-items: center; }
       .u-edit { grid-column: span 1; text-align: right; }
+      .u-project { grid-column: span 2; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+      .u-sale { grid-column: span 1; display: flex; align-items: center; }
+      .u-control { grid-column: span 2; }
     }
   </style>
 </head>
 <body>
-  <div id="quickLoad" class="loading-overlay"><div class="flex flex-col items-center gap-4"><div class="loader"></div><div class="text-xs font-800 tracking-[0.3em] text-[#C9A84C] uppercase">Syncing Cloud...</div></div></div>
+  <div id="quickLoad" class="loading-overlay"><div class="flex flex-col items-center gap-5"><div class="loader"></div><div class="text-xs font-800 tracking-[0.4em] text-[#C9A84C] uppercase italic">Syncing Database...</div></div></div>
 
   <div class="content-wrapper">
-    <div class="flex justify-between items-center mb-6 mt-2 px-2">
-      <div><h1 class="text-2xl md:text-3xl font-800 uppercase text-[#C9A84C] italic tracking-tighter leading-none">Database Hub</h1><p class="text-[9px] font-700 text-slate-500 uppercase tracking-widest mt-1">Master Enterprise Controller V156</p></div>
-      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 md:px-6 md:py-3 rounded-xl font-800 text-[10px] md:text-[11px] uppercase shadow-2xl transition-all hover:brightness-110"><i class="fas fa-plus mr-1 md:mr-2"></i>Add Asset</button>
+    <div class="flex justify-between items-center mb-8 mt-2 px-2">
+      <div><h1 class="text-3xl font-800 uppercase text-[#C9A84C] italic tracking-tighter leading-none">Database Hub</h1><p class="text-[9px] font-700 text-slate-500 uppercase tracking-widest mt-2">Central Master Control V157</p></div>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-6 py-3 rounded-2xl font-800 text-[11px] uppercase shadow-[0_10px_30px_rgba(201,168,76,0.3)] transition-all hover:scale-105 active:scale-95"><i class="fas fa-plus mr-2"></i>Add Asset</button>
     </div>
     
-    <input type="text" id="sI" onkeyup="filter()" placeholder="Search Unit ID, Plot or Project..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-6 outline-none focus:border-[#C9A84C] text-sm font-600 transition-all shadow-inner">
+    <input type="text" id="sI" onkeyup="filter()" placeholder="Search Plot Name, Unit ID or Project..." class="w-full bg-white/5 border border-white/10 rounded-[1.2rem] px-7 py-5 mb-8 outline-none focus:border-[#C9A84C] focus:bg-white/10 text-sm font-600 transition-all shadow-inner">
     
     <div class="header-bar">
       <div class="header-label text-center">Unit</div>
       <div class="header-label">HP-ID</div>
       <div class="header-label">Project Name</div>
-      <div class="header-label">Sale Status</div>
+      <div class="header-label">Inventory</div>
       <div class="header-label text-center">System Live</div>
-      <div class="header-label text-right">Edit</div>
+      <div class="header-label text-right">Action</div>
     </div>
 
     <div id="list">
-      <div class="text-center py-24 text-slate-700 font-800 text-[10px] animate-pulse tracking-[0.4em] uppercase">Fetching Master Repository...</div>
+      <div class="text-center py-32 text-slate-700 font-800 text-xs animate-pulse tracking-[0.5em] uppercase">Connecting to Cloud Server...</div>
     </div>
   </div>
 
@@ -81,31 +91,37 @@
     function render(items) {
       document.getElementById('list').innerHTML = items.map(u => {
         const sysStatus = u.System_Status || 'Pending';
-        // 🎯 จุดที่ 3: กำหนด Class สีตามสถานะ
+        // 🎯 กำหนดสีตามสถานะที่เลือกจริง
         const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
+        const icon = sysStatus === 'Online' ? '●' : (sysStatus === 'Offline' ? '○' : '🕒');
         
         return `
           <div class="unit-row">
             <div class="flex justify-center u-img">
-              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/100x70?text=HP'}" class="w-12 h-10 md:w-14 md:h-11 rounded-lg object-cover bg-black border border-white/5 shadow-lg">
+              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/150x100?text=HP'}" class="w-14 h-11 rounded-xl object-cover bg-black border border-white/10 shadow-xl">
             </div>
 
-            <div class="text-[12px] font-800 text-white tracking-tighter u-id">#${u.HP_ID}</div>
+            <div class="u-id">
+              <span class="u-id-txt">#${u.HP_ID}</span>
+            </div>
             
-            <div class="font-700 text-[13px] truncate uppercase tracking-tight text-slate-300 u-project">${u.Project_Name || 'Master'}</div>
-            <div class="text-[10px] font-800 text-[#C9A84C] uppercase u-sale">${u.Status || 'Available'}</div>
+            <div class="font-700 text-[14px] truncate uppercase tracking-tight text-slate-200 u-project">${u.Project_Name || 'Master'}</div>
+            
+            <div class="u-sale">
+              <span class="text-[10px] font-800 text-[#C9A84C] bg-[#C9A84C]/10 px-3 py-1.5 rounded-lg border border-[#C9A84C]/20 uppercase">${u.Status || 'Available'}</span>
+            </div>
             
             <div class="u-control">
               <select onchange="quickUpdateStatus('${u.HP_ID}', this)" class="status-select ${colorClass}">
-                <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''} class="opt-online">● Online</option>
-                <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''} class="opt-offline">● Offline</option>
-                <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''} class="opt-pending">● Pending</option>
+                <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''} class="opt-online">● ONLINE</option>
+                <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''} class="opt-offline">● OFFLINE</option>
+                <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''} class="opt-pending">● PENDING</option>
               </select>
             </div>
 
             <div class="text-right u-edit">
-              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#C9A84C] hover:text-[#060F1A] flex items-center justify-center transition-all border border-white/5">
-                <i class="fas fa-pen-nib text-[11px]"></i>
+              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="w-10 h-10 rounded-2xl bg-white/5 hover:bg-[#C9A84C] hover:text-[#060F1A] flex items-center justify-center transition-all border border-white/5 shadow-inner">
+                <i class="fas fa-edit text-[12px]"></i>
               </button>
             </div>
           </div>
@@ -124,7 +140,7 @@
         });
         const result = await res.json();
         if(result.ok) {
-          // 🎯 เปลี่ยนสี UI ทันทีตามค่าที่เลือก
+          // 🎯 เปลี่ยนสีตัวหนังสือและขอบทันทีที่เลือก
           selectEl.className = `status-select ${newStatus === 'Online' ? 'st-online' : (newStatus === 'Offline' ? 'st-offline' : 'st-pending')}`;
           const index = data.findIndex(item => item.HP_ID === id);
           if(index !== -1) data[index].System_Status = newStatus;
