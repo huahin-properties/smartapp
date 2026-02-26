@@ -5,6 +5,8 @@
   <title>Asset Specifications | MASTER SYSTEM V167</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     /* 📐 Master Elite Theme based on Pyne Plus Structure */
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FFFFFF; --border: rgba(201, 168, 76, 0.15); --card-bg: #0F172A; }
@@ -46,6 +48,17 @@
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
     
     .map-box { width: 100%; height: 230px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
+    /* Leaflet map container */
+    #leafletMap { width: 100%; height: 100%; background: #0F172A; }
+    /* ซ่อน Leaflet attribution ให้ดูสะอาด */
+    .leaflet-control-attribution { display: none !important; }
+    /* Legend สำหรับเส้นประ */
+    .map-legend { display: flex; gap: 16px; margin-top: 8px; margin-bottom: 4px; }
+    .map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: #7A9BB5; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+    .legend-line { width: 28px; height: 0; border-top-width: 2.5px; border-top-style: dashed; }
+    .legend-red { border-top-color: #FF3333; }
+    .legend-green { border-top-color: #00DD44; }
+
     .btn-nav { width: 100%; background: var(--gold); color: #060F1A; text-decoration: none; padding: 14px; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800; font-size: 0.85rem; margin-top: 10px; text-transform: uppercase; }
     
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
@@ -115,7 +128,15 @@
 
       <div class="info-card">
         <h2 class="section-title">Location & Navigation</h2>
-        <div class="map-box" id="mapBox" style="display:none;"><iframe id="mapFrame" width="100%" height="100%" frameborder="0"></iframe></div>
+        <!-- Legend เส้นประ -->
+        <div class="map-legend" id="mapLegend" style="display:none;">
+          <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
+          <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
+        </div>
+        <!-- Leaflet Map Box แทน iframe เดิม -->
+        <div class="map-box" id="mapBox" style="display:none;">
+          <div id="leafletMap"></div>
+        </div>
         <a id="navLink" href="" target="_blank" class="btn-nav" style="display:none;">📍 Start GPS Navigation</a>
       </div>
 
@@ -127,6 +148,9 @@
   </div>
 
   <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
@@ -181,16 +205,106 @@
       document.getElementById('vDesc').textContent = u.Description || "-";
       
       if (u.Coordinates && u.Coordinates !== "#") {
-        document.getElementById('mapBox').style.display='block'; document.getElementById('navLink').style.display='flex';
+        document.getElementById('mapBox').style.display = 'block';
+        document.getElementById('navLink').style.display = 'flex';
+        document.getElementById('mapLegend').style.display = 'flex';
+
         const coords = u.Coordinates.trim();
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${coords}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
         document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
-        const [la, lo] = coords.split(','); const grid = document.getElementById('nearbyGrid');
-        grid.innerHTML = LANDMARKS.map(loc => { const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon); return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
+
+        const [la, lo] = coords.split(',').map(Number);
+
+        // คำนวณ Nearby Amenities
+        const grid = document.getElementById('nearbyGrid');
+        grid.innerHTML = LANDMARKS.map(loc => {
+          const d = getDistance(la, lo, loc.lat, loc.lon);
+          return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+        }).join('');
+
+        // 🗺️ เริ่ม Leaflet Map พร้อมเส้นประตำบล + อำเภอ
+        initLeafletMap(la, lo);
       }
+
       images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
     }
-    
+
+    /* ─────────────────────────────────────────
+       🗺️  LEAFLET MAP + BOUNDARY OVERLAY
+    ───────────────────────────────────────── */
+    let leafletMap = null;
+
+    async function initLeafletMap(lat, lon) {
+      // ถ้ามีแผนที่เก่าค้างอยู่ให้ลบออกก่อน
+      if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+
+      leafletMap = L.map('leafletMap', {
+        zoomControl: true,
+        attributionControl: false,
+        scrollWheelZoom: true
+      }).setView([lat, lon], 14);
+
+      // Base map tile (OpenStreetMap)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(leafletMap);
+
+      // ดึงและวาดเส้นขอบตำบล (admin_level 8) → สีแดง
+      await drawAdminBoundary(lat, lon, 8, '#FF3333', leafletMap);
+
+      // ดึงและวาดเส้นขอบอำเภอ (admin_level 6) → สีเขียว
+      await drawAdminBoundary(lat, lon, 6, '#00DD44', leafletMap);
+    }
+
+    /**
+     * ดึงขอบเขตจาก Overpass API แล้ววาดเป็นเส้นประบน Leaflet
+     * @param {number} lat - ละติจูดของพิกัด
+     * @param {number} lon - ลองติจูดของพิกัด
+     * @param {number} adminLevel - 8 = ตำบล, 6 = อำเภอ (ระบบ OSM ประเทศไทย)
+     * @param {string} color - สีเส้น เช่น '#FF3333'
+     * @param {object} map - Leaflet map instance
+     */
+    async function drawAdminBoundary(lat, lon, adminLevel, color, map) {
+      const query = `
+        [out:json][timeout:30];
+        is_in(${lat},${lon})->.a;
+        relation(pivot.a)["admin_level"="${adminLevel}"];
+        out geom;
+      `;
+
+      try {
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'data=' + encodeURIComponent(query)
+        });
+
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.elements || data.elements.length === 0) return;
+
+        data.elements.forEach(relation => {
+          if (!relation.members) return;
+          relation.members.forEach(member => {
+            if (member.type === 'way' && member.geometry && member.geometry.length > 1) {
+              const latlngs = member.geometry.map(p => [p.lat, p.lon]);
+              L.polyline(latlngs, {
+                color: color,
+                weight: adminLevel === 8 ? 2 : 2.5,   // ตำบลเส้นบางกว่า อำเภอหนากว่า
+                opacity: 0.9,
+                dashArray: adminLevel === 8 ? '6, 5' : '10, 6'  // ตำบล dash สั้น, อำเภอ dash ยาว
+              }).addTo(map);
+            }
+          });
+        });
+
+      } catch(e) {
+        // ถ้า fetch ล้มเหลวไม่ต้อง error ให้แผนที่ยังแสดงปกติ
+        console.warn('Boundary fetch failed for admin_level', adminLevel, e);
+      }
+    }
+    /* ─────────────────────────────────────────
+       🖼️  GALLERY FUNCTIONS (เดิม ไม่เปลี่ยนแปลง)
+    ───────────────────────────────────────── */
     function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
     function changeSlide(n) { setMain(idx + n); }
     function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
