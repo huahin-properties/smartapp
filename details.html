@@ -43,20 +43,8 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /*
-      🗺️ MAP BOX:
-      - มือถือ: กว้างเต็มจอ สูง = กว้าง (สี่เหลี่ยมจัตุรัส) → ใช้ aspect-ratio: 1/1
-      - คอมพิวเตอร์: จำกัดความสูงไว้ที่ 500px ไม่ให้ใหญ่เกิน
-    */
-    .map-box {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: 500px;   /* ← จำกัดบนคอมพิวเตอร์ */
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      margin: 10px 0;
-    }
+    /* Map: สี่เหลี่ยมจัตุรัส — จำกัดสูงสุด 500px บน desktop */
+    .map-box { width: 100%; aspect-ratio: 1 / 1; max-height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
 
@@ -64,10 +52,10 @@
     .map-legend { display: flex; gap: 20px; margin-bottom: 8px; }
     .map-legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.62rem; color: #9AB; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; }
     .legend-line { width: 32px; height: 4px; border-radius: 2px; }
-    .legend-red   { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
-    .legend-green { background: repeating-linear-gradient(to right, #00EE44 0px, #00EE44 11px, transparent 11px, transparent 17px); }
+    .legend-red { background: repeating-linear-gradient(to right, #FF2222 0px, #FF2222 8px, transparent 8px, transparent 13px); }
 
-    /* ❌ ปุ่ม GPS Navigation ถูกลบแล้ว */
+    /* status text ด้านล่าง map */
+    #mapStatus { font-size: 0.6rem; color: #7A9BB5; margin-top: 4px; min-height: 14px; }
 
     .footer { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 12px 15px; border-top: 1px solid var(--border); z-index: 1000; }
     .btn-chat { background: var(--gold); color: #060F1A; text-decoration: none; padding: 15px; border-radius: 4px; display: block; text-align: center; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
@@ -136,14 +124,15 @@
 
       <div class="info-card">
         <h2 class="section-title">Location & Navigation</h2>
+        <!-- Legend: แสดงเฉพาะ sub-district เส้นแดง (ทดสอบ) -->
         <div class="map-legend" id="mapLegend" style="display:none;">
-          <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
-          <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
+          <div class="map-legend-item"><div class="legend-line legend-red"></div> <span id="legendLabel">Sub-district boundary</span></div>
         </div>
-        <!-- ❌ ปุ่ม GPS ถูกลบออกแล้ว — map box เท่านั้น -->
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
+        <!-- Status แสดงว่าพบข้อมูลตำบลจาก admin_level ไหน -->
+        <div id="mapStatus"></div>
       </div>
 
       <div class="info-card">
@@ -234,63 +223,71 @@
     }
 
     /* ─────────────────────────────────────────
-       🗺️  LEAFLET MAP + BOUNDARY OVERLAY
+       🗺️  LEAFLET MAP
+       ทดสอบ: แสดงเฉพาะเส้นตำบล (สีแดง) อย่างเดียวก่อน
+       ลอง admin_level 8 → 9 → 10 ตามลำดับ
     ───────────────────────────────────────── */
     let leafletMap = null;
 
     async function initLeafletMap(lat, lon) {
       if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 
-      // เริ่มต้นที่ zoom 11 — เห็นอำเภอหัวหินพอดี
       leafletMap = L.map('leafletMap', {
         zoomControl: true,
         attributionControl: false,
         scrollWheelZoom: true
-      }).setView([lat, lon], 11);
+      }).setView([lat, lon], 12);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // วาดอำเภอ (สีเขียว) ก่อน และเก็บ bounds เพื่อ fitBounds ภายหลัง
-      const districtBounds = await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
+      setStatus('🔍 กำลังค้นหาขอบเขตตำบล...');
 
-      // วาดตำบล (สีแดง) ทีหลัง
-      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true);
-
-      // ซูมแผนที่ให้พอดีกับขอบเขตอำเภอ (ถ้าได้ข้อมูล)
-      if (districtBounds && districtBounds.isValid()) {
-        leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
-      }
-    }
-
-    /**
-     * ดึงขอบเขต admin boundary แล้ววาด + คืนค่า L.LatLngBounds
-     * ลอง 3 methods: is_in → around(100m) → around(5000m)
-     */
-    async function drawBoundaryGetBounds(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      const queries = [
-        // Method 1: is_in — หา relation ที่ครอบพิกัดนี้
-        `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 2: around 100m
-        `[out:json][timeout:30];\nrelation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 3: around 5000m
-        `[out:json][timeout:30];\nrelation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`
+      // ลองดึงตำบลโดย admin_level 8, 9, 10 ตามลำดับ
+      // ใช้ทั้ง is_in() และ around() สลับกัน
+      const attempts = [
+        { level: 8,  method: 'is_in',    label: 'admin_level=8 (is_in)'    },
+        { level: 9,  method: 'is_in',    label: 'admin_level=9 (is_in)'    },
+        { level: 10, method: 'is_in',    label: 'admin_level=10 (is_in)'   },
+        { level: 8,  method: 'around',   label: 'admin_level=8 (around)'   },
+        { level: 9,  method: 'around',   label: 'admin_level=9 (around)'   },
+        { level: 10, method: 'around',   label: 'admin_level=10 (around)'  },
       ];
 
-      for (const query of queries) {
-        const result = await tryFetchAndDraw(query, color, weight, dashArray, outline);
-        if (result) {
-          console.log(`✅ admin_level ${adminLevel} drawn`);
-          return result; // คืน bounds
+      let found = false;
+      for (const att of attempts) {
+        setStatus(`🔍 ลอง ${att.label}...`);
+
+        const query = att.method === 'is_in'
+          ? `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${att.level}"];\nout geom;`
+          : `[out:json][timeout:30];\nrelation(around:3000,${lat},${lon})["boundary"="administrative"]["admin_level"="${att.level}"];\nout geom;`;
+
+        const bounds = await fetchAndDraw(query, '#FF2222', 5, '9, 6', true);
+
+        if (bounds) {
+          leafletMap.fitBounds(bounds, { padding: [25, 25] });
+          document.getElementById('legendLabel').textContent = `Sub-district boundary (${att.label})`;
+          setStatus(`✅ พบขอบเขตตำบลจาก ${att.label}`);
+          found = true;
+          break;
         }
       }
-      console.warn(`❌ ไม่พบ boundary สำหรับ admin_level ${adminLevel}`);
-      return null;
+
+      if (!found) {
+        // ไม่พบข้อมูลตำบลใน OSM เลย → fallback แสดงแค่จุดพิกัด + zoom 13
+        setStatus('⚠️ ไม่พบข้อมูลขอบเขตตำบลนี้ใน OpenStreetMap');
+        leafletMap.setView([lat, lon], 13);
+        document.getElementById('mapLegend').style.display = 'none';
+      }
+    }
+
+    function setStatus(msg) {
+      document.getElementById('mapStatus').textContent = msg;
     }
 
     /**
-     * ส่ง query → วาดเส้น → คืน L.LatLngBounds (หรือ null ถ้าไม่มีข้อมูล)
+     * ส่ง Overpass query → วาดเส้นประ → คืน LatLngBounds หรือ null
      */
-    async function tryFetchAndDraw(query, color, weight, dashArray, outline) {
+    async function fetchAndDraw(query, color, weight, dashArray, withOutline) {
       try {
         const res = await fetch('https://overpass-api.de/api/interpreter', {
           method: 'POST',
@@ -302,17 +299,17 @@
         const data = await res.json();
         if (!data.elements || data.elements.length === 0) return null;
 
-        const allLatLngs = [];
+        const allPts = [];
 
         data.elements.forEach(rel => {
           if (!rel.members) return;
           rel.members.forEach(m => {
             if (m.type !== 'way' || !m.geometry || m.geometry.length < 2) return;
             const pts = m.geometry.map(p => [p.lat, p.lon]);
-            allLatLngs.push(...pts);
+            allPts.push(...pts);
 
-            // White outline รองด้านล่าง
-            if (outline) {
+            // White outline รองด้านล่าง — ช่วยให้เส้นแดงเด่นออกจากพื้นหลัง
+            if (withOutline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
                 weight: weight + 4,
@@ -333,8 +330,8 @@
           });
         });
 
-        if (allLatLngs.length === 0) return null;
-        return L.latLngBounds(allLatLngs);
+        if (allPts.length === 0) return null;
+        return L.latLngBounds(allPts);
 
       } catch(e) {
         console.warn('Overpass error:', e);
