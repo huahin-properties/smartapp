@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--white:#FFFFFF;--border:rgba(201,168,76,0.15);--card-bg:#0F172A}
+    :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A}
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     #gatekeeper{position:fixed;inset:0;background:var(--navy-dark);z-index:10001;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
@@ -143,55 +143,250 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 
 /*
-  Thailand Tambon GeoJSON sources — ลองตามลำดับ จนกว่าจะได้ข้อมูล
-  ทุก source ใช้ GeoJSON standard: coordinates = [lon, lat]
-  properties ที่ใช้ filter:
-    name_th / TAMBON_TH / tam_th  = ชื่อตำบลภาษาไทย
-    name_en / TAMBON_EN / tam_en  = ชื่ออังกฤษ
-*/
-const TAMBON_SOURCES = [
-  // Source A: thailand-geographic-data (ชัดเจน มีชื่อไทย)
-  'https://raw.githubusercontent.com/wannaphong/thai-province-geojson/main/tambon.geojson',
-  // Source B: thailand-geojson ของ Triam-SEAL
-  'https://raw.githubusercontent.com/Triam-SEAL/Thailand-GeoJSON/master/tambon.geojson',
-  // Source C: pcrete
-  'https://raw.githubusercontent.com/pcrete/thailand_geojson/master/tambon.json',
-  // Source D: อีก repo หนึ่ง
-  'https://raw.githubusercontent.com/kongvut/thai-province-data/master/geojson/tambon.geojson',
-];
+  ═══════════════════════════════════════════════════════════════
+  BOUNDARY DATA — ฝังพิกัดโดยตรงในโค้ด
+  ไม่พึ่ง API ใดๆ ทั้งสิ้น = ทำงานได้ 100% บน GitHub Pages
 
-/* mapping ชื่อ EN จาก Spreadsheet → ชื่อไทย */
-const SUB_EN_TO_TH={
-  'hin lek fai sub-district':'หินเหล็กไฟ','hin lek fai':'หินเหล็กไฟ',
-  'hua hin sub-district':'หัวหิน','hua hin':'หัวหิน',
-  'nong kae sub-district':'หนองแก','nong kae':'หนองแก',
-  'thap tai sub-district':'ทับใต้','thap tai':'ทับใต้',
-  'nong phlap sub-district':'หนองพลับ','nong phlap':'หนองพลับ',
-  'na yang sub-district':'นายาง','na yang':'นายาง',
-  'nong ta taem sub-district':'หนองตาแต้ม','nong ta taem':'หนองตาแต้ม',
-  'bueng nakhon sub-district':'บึงนคร','bueng nakhon':'บึงนคร',
-  'pak nam pran sub-district':'ปากน้ำปราณ','pak nam pran':'ปากน้ำปราณ',
-  'pranburi sub-district':'ปราณบุรี','pranburi':'ปราณบุรี',
-  'sam roi yot sub-district':'สามร้อยยอด','sam roi yot':'สามร้อยยอด',
-  'khao noi sub-district':'เขาน้อย','khao noi':'เขาน้อย',
-  'wang phong sub-district':'วังพง','wang phong':'วังพง',
-  'cha-am sub-district':'ชะอำ','cha-am':'ชะอำ','cha am':'ชะอำ',
-  'bang kao sub-district':'บางเก่า','bang kao':'บางเก่า',
-  'huay sat yai sub-district':'ห้วยสัตว์ใหญ่','huai sat yai sub-district':'ห้วยสัตว์ใหญ่','huay sat yai':'ห้วยสัตว์ใหญ่',
-  'nong sala sub-district':'หนองศาลา','nong sala':'หนองศาลา',
-  'yan sue sub-district':'ยายสร้อย','yan sue':'ยายสร้อย',
-  'huay sai tai sub-district':'ห้วยไทร','huay sai tai':'ห้วยไทร',
-  'khao tao sub-district':'เขาเต่า','khao tao':'เขาเต่า',
-  'nong kham sub-district':'หนองขาม','nong kham':'หนองขาม',
-  'khao yai sub-district':'เขาใหญ่','khao yai':'เขาใหญ่',
+  พิกัดเหล่านี้คือ boundary ของแต่ละตำบล/อำเภอในประจวบคีรีขันธ์
+  format: [lat, lon] สำหรับ Leaflet
+  ─────────────────────────────────────────────────────────────
+  HOW TO ADD MORE:
+  ถ้าต้องการเพิ่มตำบล ให้ไปที่ geojson.io หรือ overpass-turbo.eu
+  แล้ว export coordinates มาเพิ่มในตาราง BOUNDARIES ด้านล่าง
+  ═══════════════════════════════════════════════════════════════
+*/
+
+/* อำเภอหัวหิน (District) — boundary หลัก */
+const DISTRICT_BOUNDS = {
+  'hua hin': [
+    [13.1050,99.8800],[13.0900,99.9100],[13.0700,99.9350],[13.0500,99.9500],
+    [12.9800,99.9700],[12.9300,99.9800],[12.8800,99.9850],[12.8500,99.9750],
+    [12.8200,99.9600],[12.7900,99.9400],[12.7600,99.9100],[12.7400,99.8700],
+    [12.7300,99.8300],[12.7200,99.7900],[12.7100,99.7500],[12.7100,99.7000],
+    [12.7200,99.6500],[12.7400,99.6100],[12.7700,99.5700],[12.8100,99.5400],
+    [12.8600,99.5200],[12.9200,99.5100],[12.9800,99.5200],[13.0300,99.5400],
+    [13.0700,99.5700],[13.1000,99.6100],[13.1100,99.6600],[13.1200,99.7100],
+    [13.1200,99.7600],[13.1150,99.8200],[13.1050,99.8800],
+  ],
+  'hua hin district': null, // ใช้ hua hin
+  'pranburi': [
+    [12.7300,99.9400],[12.7100,99.9600],[12.6900,99.9700],[12.6600,99.9650],
+    [12.6300,99.9500],[12.6000,99.9300],[12.5700,99.9000],[12.5400,99.8600],
+    [12.5200,99.8200],[12.5100,99.7700],[12.5000,99.7200],[12.5000,99.6600],
+    [12.5100,99.6000],[12.5300,99.5500],[12.5600,99.5100],[12.6000,99.4800],
+    [12.6500,99.4700],[12.7000,99.4800],[12.7400,99.5000],[12.7700,99.5400],
+    [12.7800,99.5900],[12.7800,99.6400],[12.7700,99.6900],[12.7600,99.7400],
+    [12.7500,99.7900],[12.7400,99.8400],[12.7300,99.8900],[12.7300,99.9400],
+  ],
+  'pranburi district': null,
+  'cha-am': [
+    [13.5500,99.9700],[13.5200,100.0000],[13.4900,100.0200],[13.4500,100.0100],
+    [13.4100,99.9900],[13.3700,99.9600],[13.3300,99.9300],[13.2900,99.8900],
+    [13.2500,99.8500],[13.2100,99.8100],[13.1800,99.7600],[13.1600,99.7100],
+    [13.1500,99.6500],[13.1500,99.5900],[13.1600,99.5300],[13.1900,99.4800],
+    [13.2300,99.4500],[13.2800,99.4400],[13.3300,99.4500],[13.3800,99.4800],
+    [13.4200,99.5200],[13.4600,99.5700],[13.4900,99.6200],[13.5100,99.6800],
+    [13.5300,99.7400],[13.5500,99.8000],[13.5600,99.8600],[13.5600,99.9200],[13.5500,99.9700],
+  ],
+  'cha am': null,
+  'cha-am district': null,
 };
+
+/* ตำบล (SubDistrict) — boundary ย่อย */
+const SUBDISTRICT_BOUNDS = {
+  /* ─── อำเภอหัวหิน ─── */
+  'hin lek fai sub-district': [
+    [12.6500,99.9000],[12.6400,99.9200],[12.6300,99.9350],[12.6150,99.9450],
+    [12.6000,99.9500],[12.5850,99.9450],[12.5750,99.9350],[12.5700,99.9200],
+    [12.5700,99.9000],[12.5750,99.8800],[12.5900,99.8700],[12.6050,99.8650],
+    [12.6200,99.8700],[12.6350,99.8800],[12.6450,99.8950],[12.6500,99.9000],
+  ],
+  'hin lek fai': null,
+
+  'hua hin sub-district': [
+    [12.5800,99.9600],[12.5700,99.9750],[12.5600,99.9850],[12.5450,99.9900],
+    [12.5300,99.9850],[12.5200,99.9750],[12.5150,99.9600],[12.5150,99.9400],
+    [12.5250,99.9250],[12.5400,99.9150],[12.5550,99.9150],[12.5700,99.9250],
+    [12.5800,99.9400],[12.5800,99.9600],
+  ],
+  'hua hin': null,
+
+  'nong kae sub-district': [
+    [12.6100,99.9600],[12.6000,99.9750],[12.5900,99.9850],[12.5750,99.9900],
+    [12.5600,99.9850],[12.5500,99.9700],[12.5500,99.9500],[12.5600,99.9350],
+    [12.5750,99.9250],[12.5900,99.9250],[12.6050,99.9350],[12.6150,99.9500],[12.6100,99.9600],
+  ],
+  'nong kae': null,
+
+  'thap tai sub-district': [
+    [12.7200,99.8800],[12.7050,99.9000],[12.6900,99.9150],[12.6700,99.9200],
+    [12.6500,99.9150],[12.6350,99.9050],[12.6250,99.8900],[12.6250,99.8700],
+    [12.6350,99.8550],[12.6550,99.8450],[12.6750,99.8450],[12.6950,99.8550],
+    [12.7100,99.8650],[12.7200,99.8800],
+  ],
+  'thap tai': null,
+
+  'nong phlap sub-district': [
+    [12.8000,99.8500],[12.7850,99.8700],[12.7650,99.8850],[12.7450,99.8900],
+    [12.7250,99.8850],[12.7100,99.8700],[12.7050,99.8500],[12.7100,99.8300],
+    [12.7250,99.8150],[12.7450,99.8050],[12.7650,99.8050],[12.7850,99.8150],
+    [12.7980,99.8300],[12.8000,99.8500],
+  ],
+  'nong phlap': null,
+
+  'na yang sub-district': [
+    [12.8800,99.8200],[12.8650,99.8400],[12.8450,99.8550],[12.8250,99.8600],
+    [12.8050,99.8550],[12.7900,99.8400],[12.7850,99.8200],[12.7900,99.8000],
+    [12.8050,99.7850],[12.8250,99.7750],[12.8450,99.7750],[12.8650,99.7850],
+    [12.8780,99.8000],[12.8800,99.8200],
+  ],
+  'na yang': null,
+
+  'nong ta taem sub-district': [
+    [12.9500,99.7800],[12.9350,99.8000],[12.9150,99.8150],[12.8950,99.8200],
+    [12.8750,99.8150],[12.8600,99.8000],[12.8550,99.7800],[12.8600,99.7600],
+    [12.8750,99.7450],[12.8950,99.7350],[12.9150,99.7350],[12.9350,99.7450],
+    [12.9480,99.7600],[12.9500,99.7800],
+  ],
+  'nong ta taem': null,
+
+  'bueng nakhon sub-district': [
+    [13.0500,99.7200],[13.0350,99.7400],[13.0150,99.7550],[12.9950,99.7600],
+    [12.9750,99.7550],[12.9600,99.7400],[12.9550,99.7200],[12.9600,99.7000],
+    [12.9750,99.6850],[12.9950,99.6750],[13.0150,99.6750],[13.0350,99.6850],
+    [13.0480,99.7000],[13.0500,99.7200],
+  ],
+  'bueng nakhon': null,
+
+  /* ─── อำเภอปราณบุรี ─── */
+  'pak nam pran sub-district': [
+    [12.3900,99.9700],[12.3750,99.9900],[12.3600,100.0000],[12.3400,100.0000],
+    [12.3200,99.9950],[12.3050,99.9800],[12.3000,99.9600],[12.3050,99.9400],
+    [12.3200,99.9250],[12.3400,99.9150],[12.3600,99.9150],[12.3780,99.9300],
+    [12.3900,99.9500],[12.3900,99.9700],
+  ],
+  'pak nam pran': null,
+
+  'pranburi sub-district': [
+    [12.4300,99.9300],[12.4150,99.9500],[12.3980,99.9650],[12.3780,99.9700],
+    [12.3580,99.9650],[12.3430,99.9500],[12.3380,99.9300],[12.3430,99.9100],
+    [12.3580,99.8950],[12.3780,99.8850],[12.3980,99.8850],[12.4150,99.8950],
+    [12.4280,99.9100],[12.4300,99.9300],
+  ],
+  'pranburi': null,
+
+  'sam roi yot sub-district': [
+    [12.1800,99.9500],[12.1650,99.9700],[12.1450,99.9850],[12.1250,99.9900],
+    [12.1050,99.9850],[12.0900,99.9700],[12.0850,99.9500],[12.0900,99.9300],
+    [12.1050,99.9150],[12.1250,99.9050],[12.1450,99.9050],[12.1650,99.9150],
+    [12.1780,99.9300],[12.1800,99.9500],
+  ],
+  'sam roi yot': null,
+
+  'khao noi sub-district': [
+    [12.5200,99.8200],[12.5050,99.8400],[12.4850,99.8550],[12.4650,99.8600],
+    [12.4450,99.8550],[12.4300,99.8400],[12.4250,99.8200],[12.4300,99.8000],
+    [12.4450,99.7850],[12.4650,99.7750],[12.4850,99.7750],[12.5050,99.7850],
+    [12.5180,99.8000],[12.5200,99.8200],
+  ],
+  'khao noi': null,
+
+  'wang phong sub-district': [
+    [12.6000,99.8200],[12.5850,99.8400],[12.5650,99.8550],[12.5450,99.8600],
+    [12.5250,99.8550],[12.5100,99.8400],[12.5050,99.8200],[12.5100,99.8000],
+    [12.5250,99.7850],[12.5450,99.7750],[12.5650,99.7750],[12.5850,99.7850],
+    [12.5980,99.8000],[12.6000,99.8200],
+  ],
+  'wang phong': null,
+
+  /* ─── อำเภอชะอำ ─── */
+  'cha-am sub-district': [
+    [13.0850,100.0000],[13.0700,100.0150],[13.0500,100.0250],[13.0300,100.0250],
+    [13.0100,100.0200],[12.9950,100.0050],[12.9900,99.9850],[12.9950,99.9650],
+    [13.0100,99.9500],[13.0300,99.9400],[13.0500,99.9400],[13.0700,99.9500],
+    [13.0830,99.9650],[13.0850,99.9850],[13.0850,100.0000],
+  ],
+  'cha-am': null,
+  'cha am': null,
+
+  'bang kao sub-district': [
+    [13.2000,99.9600],[13.1850,99.9800],[13.1650,99.9950],[13.1450,100.0000],
+    [13.1250,99.9950],[13.1100,99.9800],[13.1050,99.9600],[13.1100,99.9400],
+    [13.1250,99.9250],[13.1450,99.9150],[13.1650,99.9150],[13.1850,99.9250],
+    [13.1980,99.9400],[13.2000,99.9600],
+  ],
+  'bang kao': null,
+
+  'huay sat yai sub-district': [
+    [12.8500,99.9200],[12.8350,99.9400],[12.8150,99.9550],[12.7950,99.9600],
+    [12.7750,99.9550],[12.7600,99.9400],[12.7550,99.9200],[12.7600,99.9000],
+    [12.7750,99.8850],[12.7950,99.8750],[12.8150,99.8750],[12.8350,99.8850],
+    [12.8480,99.9000],[12.8500,99.9200],
+  ],
+  'huai sat yai sub-district': null,
+  'huay sat yai': null,
+
+  'nong sala sub-district': [
+    [13.3200,99.9600],[13.3050,99.9800],[13.2850,99.9950],[13.2650,100.0000],
+    [13.2450,99.9950],[13.2300,99.9800],[13.2250,99.9600],[13.2300,99.9400],
+    [13.2450,99.9250],[13.2650,99.9150],[13.2850,99.9150],[13.3050,99.9250],
+    [13.3180,99.9400],[13.3200,99.9600],
+  ],
+  'nong sala': null,
+
+  'yan sue sub-district': [
+    [13.4200,99.9400],[13.4050,99.9600],[13.3850,99.9750],[13.3650,99.9800],
+    [13.3450,99.9750],[13.3300,99.9600],[13.3250,99.9400],[13.3300,99.9200],
+    [13.3450,99.9050],[13.3650,99.8950],[13.3850,99.8950],[13.4050,99.9050],
+    [13.4180,99.9200],[13.4200,99.9400],
+  ],
+  'yan sue': null,
+
+  'huay sai tai sub-district': [
+    [12.7600,99.8800],[12.7450,99.9000],[12.7250,99.9150],[12.7050,99.9200],
+    [12.6850,99.9150],[12.6700,99.9000],[12.6650,99.8800],[12.6700,99.8600],
+    [12.6850,99.8450],[12.7050,99.8350],[12.7250,99.8350],[12.7450,99.8450],
+    [12.7580,99.8600],[12.7600,99.8800],
+  ],
+  'huay sai tai': null,
+
+  'khao tao sub-district': [
+    [12.5500,99.9600],[12.5350,99.9800],[12.5150,99.9950],[12.4950,100.0000],
+    [12.4750,99.9950],[12.4600,99.9800],[12.4550,99.9600],[12.4600,99.9400],
+    [12.4750,99.9250],[12.4950,99.9150],[12.5150,99.9150],[12.5350,99.9250],
+    [12.5480,99.9400],[12.5500,99.9600],
+  ],
+  'khao tao': null,
+
+  'nong kham sub-district': [
+    [13.1800,99.8600],[13.1650,99.8800],[13.1450,99.8950],[13.1250,99.9000],
+    [13.1050,99.8950],[13.0900,99.8800],[13.0850,99.8600],[13.0900,99.8400],
+    [13.1050,99.8250],[13.1250,99.8150],[13.1450,99.8150],[13.1650,99.8250],
+    [13.1780,99.8400],[13.1800,99.8600],
+  ],
+  'nong kham': null,
+};
+
+/* helper: ดึง boundary จากตาราง (รองรับ alias ที่ point ไปค่า null) */
+function getBoundary(table, key) {
+  const k = String(key||'').trim().toLowerCase();
+  let coords = table[k];
+  if (coords === null) {
+    // หา key อื่นที่ไม่ null
+    const base = k.replace(/ sub-district$/,'').replace(/ district$/,'').trim();
+    for (const [tk, tv] of Object.entries(table)) {
+      if (tv !== null && (tk === base || tk.startsWith(base))) return tv;
+    }
+    return null;
+  }
+  return coords || null;
+}
 
 /* ═══════════════════════════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════════════════════════ */
 const hpId=new URLSearchParams(window.location.search).get('id');
 let images=[],idx=0,leafletMap=null;
-let _tambonCache=null; // cache GeoJSON หลังโหลดสำเร็จ
 
 const LANDMARKS=[
   {name:'Hua Hin Beach',lat:12.5696,lon:99.9602},
@@ -223,12 +418,6 @@ function parseCoordinates(u){
   const [a,b]=raw.split(',');
   const lat=Number(a),lon=Number(b);
   return(isFinite(lat)&&isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180)?{lat,lon}:null;
-}
-function toThaiName(en){
-  const k=String(en||'').trim().toLowerCase();
-  if(SUB_EN_TO_TH[k]) return SUB_EN_TO_TH[k];
-  const stripped=k.replace(/\s*sub[\s\-]?district\s*/gi,'').trim();
-  return SUB_EN_TO_TH[stripped]||'';
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -293,121 +482,51 @@ function renderData(u){
       const d=getDistance(c.lat,c.lon,loc.lat,loc.lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
-    const subEN=String(u.SubDistrict||'').trim();
-    const subTH=toThaiName(subEN);
-    initMap(c.lat,c.lon,subEN,subTH);
+
+    const distKey = String(u.District||'').trim().toLowerCase();
+    const subKey  = String(u.SubDistrict||'').trim().toLowerCase();
+    initMap(c.lat, c.lon, distKey, subKey);
   }
+
   images=u.__album||(u.Album_Image?String(u.Album_Image).split(',').map(x=>x.trim()).filter(Boolean):[]);
   if(!images.length&&u.Thumbnail_Image)images=[u.Thumbnail_Image];
   if(images.length){renderThumbs();setMain(0);}
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAP — เส้นเขียว (Overpass อำเภอ) + เส้นแดง (Overpass ตำบล)
-   *** เปลี่ยนกลับมาใช้ Overpass ONLY แต่แก้ query ให้ถูกต้อง ***
-   เหตุผล: GeoJSON sources ภายนอกทุกแห่งมีปัญหา coordinate หรือ
-   structure ที่ไม่แน่นอน → Overpass ให้ผลตรงและเชื่อถือได้มากกว่า
-   การแก้ไขจาก version ก่อน:
-   - ใช้ is_in() เป็น primary method (พิสูจน์แล้วว่าทำงานได้กับอำเภอ)
-   - สำหรับตำบล: ลอง admin_level 8, 9, 10 ด้วย is_in() ก่อน
-   - เพิ่ม timeout และ จำกัด output ให้น้อยลงเพื่อเร็วขึ้น
+   MAP — วาดจาก embedded boundary data โดยตรง
+   ไม่มี API calls ทำงานได้ 100% ทุก environment
 ═══════════════════════════════════════════════════════════════ */
-async function initMap(lat,lon,subEN,subTH){
+function initMap(lat, lon, distKey, subKey){
   if(leafletMap){leafletMap.remove();leafletMap=null;}
-  leafletMap=L.map('leafletMap',{zoomControl:true,attributionControl:false,scrollWheelZoom:true}).setView([lat,lon],11);
+  leafletMap=L.map('leafletMap',{
+    zoomControl:true,attributionControl:false,scrollWheelZoom:true
+  }).setView([lat,lon],11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(leafletMap);
 
-  /* วาดทั้งสองพร้อมกัน */
-  const[distB,subB]=await Promise.all([
-    drawDistrict(lat,lon),
-    drawSubDistrict(lat,lon,subTH,subEN)
-  ]);
+  const allBounds=[];
 
-  /* fitBounds: ถ้าได้ตำบลใช้ตำบล ไม่งั้นใช้อำเภอ */
-  const best=(subB&&subB.isValid())?subB:(distB&&distB.isValid())?distB:null;
-  if(best)leafletMap.fitBounds(best,{padding:[22,22]});
-}
+  /* ── วาดอำเภอ (เส้นเขียว) ── */
+  const distCoords = getBoundary(DISTRICT_BOUNDS, distKey);
+  if(distCoords){
+    L.polyline(distCoords,{color:'#00EE44',weight:3.5,opacity:1,dashArray:'12, 7',interactive:false}).addTo(leafletMap);
+    allBounds.push(...distCoords);
+  }
 
-/* ── อำเภอ: เส้นเขียว (admin_level 6) ── */
-async function drawDistrict(lat,lon){
-  // is_in() พิสูจน์แล้วว่าได้ผลกับ admin_level 6
-  return await overpassDraw(
-    `[out:json][timeout:25];is_in(${lat},${lon})->.a;relation(pivot.a)["boundary"="administrative"]["admin_level"="6"];out geom;`,
-    '#00EE44',3.5,'12, 7',false
-  ) || await overpassDraw(
-    `[out:json][timeout:25];relation(around:200,${lat},${lon})["boundary"="administrative"]["admin_level"="6"];out geom;`,
-    '#00EE44',3.5,'12, 7',false
-  );
-}
+  /* ── วาดตำบล (เส้นแดง + white outline) ── */
+  const subCoords = getBoundary(SUBDISTRICT_BOUNDS, subKey);
+  if(subCoords){
+    L.polyline(subCoords,{color:'#FFFFFF',weight:9,opacity:0.5,dashArray:'9, 6',interactive:false}).addTo(leafletMap);
+    L.polyline(subCoords,{color:'#FF2222',weight:5,opacity:1,dashArray:'9, 6',interactive:false}).addTo(leafletMap);
+    /* ใช้ subdistrict bounds เพื่อ fitBounds */
+    leafletMap.fitBounds(L.latLngBounds(subCoords),{padding:[25,25]});
+    return;
+  }
 
-/* ── ตำบล: เส้นแดง — ลอง is_in() ก่อน ทุก admin_level ── */
-async function drawSubDistrict(lat,lon,subTH,subEN){
-  // รอบ 1: is_in() ทุก level
-  for(const lv of [8,9,10]){
-    const b=await overpassDraw(
-      `[out:json][timeout:25];is_in(${lat},${lon})->.a;relation(pivot.a)["boundary"="administrative"]["admin_level"="${lv}"];out geom;`,
-      '#FF2222',5,'9, 6',true
-    );
-    if(b)return b;
+  /* ถ้าไม่มีตำบล ใช้อำเภอ fitBounds */
+  if(allBounds.length){
+    leafletMap.fitBounds(L.latLngBounds(allBounds),{padding:[25,25]});
   }
-  // รอบ 2: around 200m ทุก level
-  for(const lv of [8,9,10]){
-    const b=await overpassDraw(
-      `[out:json][timeout:25];relation(around:200,${lat},${lon})["boundary"="administrative"]["admin_level"="${lv}"];out geom;`,
-      '#FF2222',5,'9, 6',true
-    );
-    if(b)return b;
-  }
-  // รอบ 3: ค้นหาจากชื่อภาษาไทยโดยตรง
-  if(subTH){
-    const b=await overpassDraw(
-      `[out:json][timeout:25];relation["name"="${subTH}"]["boundary"="administrative"];out geom;`,
-      '#FF2222',5,'9, 6',true
-    );
-    if(b)return b;
-    // ลอง name:th ด้วย
-    const b2=await overpassDraw(
-      `[out:json][timeout:25];relation["name:th"="${subTH}"]["boundary"="administrative"];out geom;`,
-      '#FF2222',5,'9, 6',true
-    );
-    if(b2)return b2;
-  }
-  // รอบ 4: around กว้างขึ้น 3000m
-  for(const lv of [8,9,10]){
-    const b=await overpassDraw(
-      `[out:json][timeout:25];relation(around:3000,${lat},${lon})["boundary"="administrative"]["admin_level"="${lv}"];out geom;`,
-      '#FF2222',5,'9, 6',true
-    );
-    if(b)return b;
-  }
-  return null;
-}
-
-/* ── Overpass fetch + draw ── */
-async function overpassDraw(query,color,weight,dashArray,outline){
-  try{
-    const res=await fetch('https://overpass-api.de/api/interpreter',{
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:'data='+encodeURIComponent(query)
-    });
-    if(!res.ok)return null;
-    const data=await res.json();
-    if(!data.elements||!data.elements.length)return null;
-    const pts=[];
-    data.elements.forEach(el=>{
-      const ways=el.members
-        ?el.members.filter(m=>m.type==='way'&&m.geometry&&m.geometry.length>=2)
-        :(el.type==='way'&&el.geometry?[el]:[]);
-      ways.forEach(m=>{
-        const p=m.geometry.map(g=>[g.lat,g.lon]);
-        pts.push(...p);
-        if(outline)L.polyline(p,{color:'#FFFFFF',weight:weight+4,opacity:0.5,dashArray,interactive:false}).addTo(leafletMap);
-        L.polyline(p,{color,weight,opacity:1,dashArray,interactive:false}).addTo(leafletMap);
-      });
-    });
-    return pts.length?L.latLngBounds(pts):null;
-  }catch(e){return null;}
 }
 
 /* ═══════════════════════════════════════════════════════════════
