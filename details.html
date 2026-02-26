@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V174</title>
+  <title>Asset Details | MASTER SYSTEM V175</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
@@ -41,11 +41,11 @@
     .gold-txt { color: var(--gold); font-weight: 600; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     
-    /* 🛡️ 🎯 แผนที่ขอบเขตจริง 2 ชั้น V174 */
-    .map-insight-box { position: relative; width: 100%; height: 450px; border-radius: 20px; overflow: hidden; border: 1.5px solid var(--border); margin: 15px 0; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    #boundaryMap { width: 100%; height: 100%; z-index: 1; filter: saturate(1.2) contrast(1.1); }
-    .map-legend { position: absolute; bottom: 20px; left: 20px; z-index: 10; display: flex; flex-direction: column; gap: 5px; pointer-events: none; }
-    .leg-tag { font-size: 9px; font-weight: 800; padding: 5px 12px; border-radius: 4px; text-transform: uppercase; border: 1px solid; background: rgba(6,15,26,0.8); backdrop-filter: blur(5px); }
+    /* 🛡️ 🎯 แผนที่ขอบเขตจริง 2 ชั้น V175 */
+    .map-boundary-container { position: relative; width: 100%; height: 480px; border-radius: 20px; overflow: hidden; border: 1.5px solid var(--border); margin: 15px 0; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    #areaMap { width: 100%; height: 100%; z-index: 1; }
+    .map-ui-labels { position: absolute; bottom: 20px; left: 20px; z-index: 10; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+    .map-tag { font-size: 9px; font-weight: 800; padding: 5px 12px; border-radius: 4px; text-transform: uppercase; border: 1px solid; background: rgba(6,15,26,0.8); backdrop-filter: blur(5px); }
 
     .nearby-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
     .loc-name { font-size: 0.78rem; font-weight: 400; }
@@ -58,7 +58,7 @@
 </head>
 <body>
   <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
-  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">ASSET DETAILS</div><div style="width:40px;"></div></header>
+  <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800; color:var(--gold);">ASSET SPECIFICATIONS</div><div style="width:40px;"></div></header>
   
   <div class="gallery-container">
     <div class="gallery-card">
@@ -86,15 +86,15 @@
     </div>
 
     <div class="info-card">
-      <h2 class="section-title">Administrative Boundary Intelligence</h2>
-      <div class="map-insight-box" id="mapSection" style="display:none;">
-        <div id="boundaryMap"></div>
-        <div class="map-legend">
-          <span class="leg-tag" style="color:#EF4444; border-color:#EF4444;" id="legSub">SUB-DISTRICT Boundary (RED)</span>
-          <span class="leg-tag" style="color:#10B981; border-color:#10B981;" id="legDist">DISTRICT CONTEXT (GREEN)</span>
+      <h2 class="section-title">Administrative Area Intelligence</h2>
+      <div class="map-boundary-container" id="mapSection" style="display:none;">
+        <div id="areaMap"></div>
+        <div class="map-ui-labels">
+          <span class="map-tag" style="color:#EF4444; border-color:#EF4444;" id="tagSub">SUB-DISTRICT Boundary (RED)</span>
+          <span class="map-tag" style="color:#10B981; border-color:#10B981;" id="tagDist">DISTRICT Boundary (GREEN)</span>
         </div>
       </div>
-      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic;">* Exact property location secured. Highlighting real administrative zones.</p>
+      <p style="font-size: 0.65rem; color: #7A9BB5; text-align: center; font-style: italic;">* Precise property location secured. Displaying verified administrative zones.</p>
     </div>
 
     <div class="info-card">
@@ -128,7 +128,7 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }];
+    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }];
     
     function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.3; }
 
@@ -153,12 +153,12 @@
       document.getElementById('vTransfer').textContent = u.Transfer_Expenses || "-";
       document.getElementById('vDesc').textContent = u.Description || "-";
 
-      // 🛡️ 🎯 แผนที่เขตปกครองจริง V174
+      // 🛡️ 🎯 แผนที่ขอบเขตจริง V175
       if (u.Coordinates && u.SubDistrict) {
         document.getElementById('mapSection').style.display = 'block';
-        setupBoundaryMap(u.Coordinates, u.SubDistrict, u.District);
+        initTrueBoundaryMap(u.Coordinates, u.SubDistrict, u.District);
         
-        // Nearby Logic
+        // กู้คืน Nearby Logic
         const [la, lo] = u.Coordinates.split(',');
         document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon);
@@ -169,29 +169,29 @@
       images = u.__album || [u.Thumbnail_Image]; if (images.length > 0) { renderThumbs(); setMain(0); }
     }
 
-    // 🎯 ระบบดึงพิกัดขอบเขตจริงทางภูมิศาสตร์
-    async function setupBoundaryMap(coords, subName, distName) {
+    // 🎯 ฟังก์ชันวาดขอบเขตภูมิศาสตร์จริง 2 ชั้น
+    async function initTrueBoundaryMap(coords, subName, distName) {
       const [lat, lon] = coords.split(',').map(Number);
-      const map = L.map('boundaryMap', { zoomControl: false, attributionControl: false }).setView([lat, lon], 12);
+      const map = L.map('areaMap', { zoomControl: false, attributionControl: false }).setView([lat, lon], 12);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-      async function fetchAndDraw(query, color, dash) {
+      async function drawArea(query, color, dash) {
         try {
           const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&polygon_geojson=1`);
           const data = await res.json();
           if (data.length > 0) {
             L.geoJSON(data[0].geojson, { style: { color: color, weight: 3, dashArray: dash, fillOpacity: 0.1, fillColor: color } }).addTo(map);
           }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Map Sync Error:", e); }
       }
 
-      // 1. วาดเขตอำเภอ (เส้นเขียวประ)
-      await fetchAndDraw(`${distName}, Thailand`, '#10B981', '10, 8');
-      // 2. วาดเขตตำบล (เส้นแดงประ)
-      await fetchAndDraw(`${subName}, ${distName}, Thailand`, '#EF4444', '12, 6');
+      // 1. วาดเขตอำเภอ (เส้นเขียว)
+      await drawArea(`${distName}, Thailand`, '#10B981', '10, 8');
+      // 2. วาดเขตตำบล (เส้นแดง)
+      await drawArea(`${subName}, ${distName}, Thailand`, '#EF4444', '12, 6');
       
-      document.getElementById('legSub').innerText = `${subName} Area (Red)`;
-      document.getElementById('legDist').innerText = `${distName} District (Green)`;
+      document.getElementById('tagSub').innerText = `${subName} Area (Red)`;
+      document.getElementById('tagDist').innerText = `${distName} District (Green)`;
     }
 
     function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
