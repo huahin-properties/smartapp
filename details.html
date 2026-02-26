@@ -43,22 +43,28 @@
     .loc-name { font-size: 0.78rem; font-weight: 300; }
     .loc-dist { font-size: 0.75rem; font-weight: 400; color: var(--gold); }
 
-    /*
-      🗺️ MAP BOX:
-      - มือถือ: กว้างเต็มจอ สูง = กว้าง (สี่เหลี่ยมจัตุรัส) → ใช้ aspect-ratio: 1/1
-      - คอมพิวเตอร์: จำกัดความสูงไว้ที่ 500px ไม่ให้ใหญ่เกิน
-    */
-    .map-box {
+    /* 🗺️ MAP BOX
+       - มือถือ: สี่เหลี่ยม 1:1 เต็มกว้าง
+       - คอม: จำกัดความกว้าง/สูง ให้พอดี ไม่ใหญ่เกิน และจัดกลาง */
+    .map-box{
       width: 100%;
       aspect-ratio: 1 / 1;
-      max-height: 500px;   /* ← จำกัดบนคอมพิวเตอร์ */
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border);
       margin: 10px 0;
+      background:#0F172A;
     }
     #leafletMap { width: 100%; height: 100%; background: #0F172A; }
     .leaflet-control-attribution { display: none !important; }
+
+    @media (min-width: 900px){
+      .map-box{
+        max-width: 540px;     /* ลดความกว้างบนคอม */
+        max-height: 540px;    /* ให้เป็นจัตุรัส */
+        margin: 12px auto;    /* จัดกลาง */
+      }
+    }
 
     /* Legend */
     .map-legend { display: flex; gap: 20px; margin-bottom: 8px; }
@@ -140,7 +146,7 @@
           <div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div>
           <div class="map-legend-item"><div class="legend-line legend-green"></div> District</div>
         </div>
-        <!-- ❌ ปุ่ม GPS ถูกลบออกแล้ว — map box เท่านั้น -->
+        <!-- ❌ ไม่มีปักหมุด / ไม่มีปุ่มนำทาง -->
         <div class="map-box" id="mapBox" style="display:none;">
           <div id="leafletMap"></div>
         </div>
@@ -160,9 +166,28 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
     const hpId = new URLSearchParams(window.location.search).get('id');
     let images = [], idx = 0;
-    const LANDMARKS = [{ name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 }, { name: "Cicada Market", lat: 12.5342, lon: 99.9655 }, { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 }, { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 }, { name: "Night Market", lat: 12.5714, lon: 99.9575 }, { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 }, { name: "Market Village", lat: 12.5598, lon: 99.9602 }, { name: "Vana Nava", lat: 12.5273, lon: 99.9642 }, { name: "Railway Station", lat: 12.5674, lon: 99.9548 }, { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 }, { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 }, { name: "Water Park", lat: 12.6046, lon: 99.8897 }];
+    const LANDMARKS = [
+      { name: "Hua Hin Beach", lat: 12.5696, lon: 99.9602 },
+      { name: "Cicada Market", lat: 12.5342, lon: 99.9655 },
+      { name: "Bluport Hua Hin Mall", lat: 12.5518, lon: 99.9631 },
+      { name: "Bangkok Hospital", lat: 12.5532, lon: 99.9610 },
+      { name: "Night Market", lat: 12.5714, lon: 99.9575 },
+      { name: "Black Mountain Golf", lat: 12.6146, lon: 99.8924 },
+      { name: "Market Village", lat: 12.5598, lon: 99.9602 },
+      { name: "Vana Nava", lat: 12.5273, lon: 99.9642 },
+      { name: "Railway Station", lat: 12.5674, lon: 99.9548 },
+      { name: "Khao Takiab Beach", lat: 12.5186, lon: 99.9774 },
+      { name: "Hua Hin Airport", lat: 12.6370, lon: 99.9515 },
+      { name: "Water Park", lat: 12.6046, lon: 99.8897 }
+    ];
 
-    function getDistance(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon = (lon2-lon1)*Math.PI/180; const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35; }
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2-lat1)*Math.PI/180;
+      const dLon = (lon2-lon1)*Math.PI/180;
+      const a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+      return R*(2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)))*1.35;
+    }
 
     async function init() {
       if(!hpId) return;
@@ -182,7 +207,10 @@
       } catch(e) { hideSplash(); }
     }
 
-    function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); } }
+    function hideSplash() {
+      const s = document.getElementById('pageSplash');
+      if(s) { s.style.opacity = '0'; setTimeout(()=>s.style.display='none', 400); }
+    }
 
     function renderData(u) {
       const p = parseFloat(String(u.Sale_Price || 0).replace(/[^0-9.]/g, '')) || 0;
@@ -226,7 +254,8 @@
           return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
         }).join('');
 
-        initLeafletMap(la, lo);
+        // ✅ ใช้ชื่อ District/SubDistrict จากชีตในการหาเส้นเขต
+        initLeafletMap(la, lo, u.District || '', u.SubDistrict || '');
       }
 
       images = u.__album || [u.Thumbnail_Image];
@@ -234,14 +263,46 @@
     }
 
     /* ─────────────────────────────────────────
-       🗺️  LEAFLET MAP + BOUNDARY OVERLAY
+       🗺️  LEAFLET MAP + 2-LAYER BOUNDARY
+       - Green: District (admin_level 6)
+       - Red  : Sub-district (admin_level 7/8)
+       - จำกัดการค้นหาอยู่ใน "จังหวัดที่พิกัดอยู่" เพื่อกันไปเจอชื่อซ้ำ
+       - ไม่มี marker / ไม่มี navigation
     ───────────────────────────────────────── */
     let leafletMap = null;
 
-    async function initLeafletMap(lat, lon) {
+    function escapeRegExp(str){
+      return String(str || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function normalizeName(raw){
+      let s = String(raw || '').trim();
+      s = s.replace(/^ตำบล\s*/,'').replace(/^อำเภอ\s*/,'').replace(/^เขต\s*/,'').trim();
+      return s;
+    }
+
+    function buildNameVariants(base, prefix){
+      const n = normalizeName(base);
+      const v = new Set();
+      if (base && String(base).trim()) v.add(String(base).trim());
+      if (n) v.add(n);
+      if (n && prefix) v.add(prefix + n);
+      // บางทีใน OSM มี "ตำบลหินเหล็กไฟ" แบบไม่เว้นวรรค
+      if (n && prefix) v.add((prefix + n).replace(/\s+/g,''));
+      // และบางทีชื่อในชีตมีคำหน้าอยู่แล้ว
+      if (base && prefix) v.add((prefix + String(base).trim()).replace(/\s+/g,' '));
+      return Array.from(v).filter(Boolean);
+    }
+
+    function makeExactRegex(variants){
+      // ^(A|B|C)$
+      const parts = variants.map(v => escapeRegExp(v));
+      return `^(${parts.join('|')})$`;
+    }
+
+    async function initLeafletMap(lat, lon, districtName, subDistrictName) {
       if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 
-      // เริ่มต้นที่ zoom 11 — เห็นอำเภอหัวหินพอดี
       leafletMap = L.map('leafletMap', {
         zoomControl: true,
         attributionControl: false,
@@ -250,41 +311,48 @@
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      // วาดอำเภอ (สีเขียว) ก่อน และเก็บ bounds เพื่อ fitBounds ภายหลัง
-      const districtBounds = await drawBoundaryGetBounds(lat, lon, 6, '#00EE44', 3.5, '12, 7', false);
+      // 1) วาดอำเภอ (เขียว) + fitBounds ให้เห็นเขตอำเภอพอดีเหมือนที่คุณต้องการ
+      const districtVariants = buildNameVariants(districtName, 'อำเภอ');
+      const districtBounds = await drawBoundaryByNameInProvince(lat, lon, districtVariants, [6], '#00EE44', 3.5, '12, 7', false);
 
-      // วาดตำบล (สีแดง) ทีหลัง
-      await drawBoundaryGetBounds(lat, lon, 8, '#FF2222', 5, '9, 6', true);
+      // 2) วาดตำบล (แดง) — ลอง admin_level 8 และ 7 (fallback)
+      const subVariants = buildNameVariants(subDistrictName, 'ตำบล');
+      await drawBoundaryByNameInProvince(lat, lon, subVariants, [8,7], '#FF2222', 5, '9, 6', true);
 
-      // ซูมแผนที่ให้พอดีกับขอบเขตอำเภอ (ถ้าได้ข้อมูล)
+      // 3) Fit ให้พอดีอำเภอ (ถ้าได้)
       if (districtBounds && districtBounds.isValid()) {
-        leafletMap.fitBounds(districtBounds, { padding: [20, 20] });
+        leafletMap.fitBounds(districtBounds, { padding: [18, 18] });
+      } else {
+        // ถ้าอำเภอไม่เจอจริง ๆ ก็ยัง setView ให้ประมาณเห็นพื้นที่กว้าง
+        leafletMap.setView([lat, lon], 11);
       }
     }
 
     /**
-     * ดึงขอบเขต admin boundary แล้ววาด + คืนค่า L.LatLngBounds
-     * ลอง 3 methods: is_in → around(100m) → around(5000m)
+     * ดึง boundary โดย "ชื่อ" (หลายรูปแบบ) และจำกัดค้นหาใน "จังหวัดที่พิกัดอยู่" (admin_level=4)
+     * คืนค่า L.LatLngBounds หรือ null
      */
-    async function drawBoundaryGetBounds(lat, lon, adminLevel, color, weight, dashArray, outline) {
-      const queries = [
-        // Method 1: is_in — หา relation ที่ครอบพิกัดนี้
-        `[out:json][timeout:30];\nis_in(${lat},${lon})->.a;\nrelation(pivot.a)["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 2: around 100m
-        `[out:json][timeout:30];\nrelation(around:100,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`,
-        // Method 3: around 5000m
-        `[out:json][timeout:30];\nrelation(around:5000,${lat},${lon})["boundary"="administrative"]["admin_level"="${adminLevel}"];\nout geom;`
-      ];
+    async function drawBoundaryByNameInProvince(lat, lon, nameVariants, adminLevels, color, weight, dashArray, outline) {
+      const nameRegex = makeExactRegex(nameVariants);
+      const levelRegex = `^(${adminLevels.join('|')})$`;
 
-      for (const query of queries) {
-        const result = await tryFetchAndDraw(query, color, weight, dashArray, outline);
-        if (result) {
-          console.log(`✅ admin_level ${adminLevel} drawn`);
-          return result; // คืน bounds
-        }
+      // จำกัดด้วยจังหวัด: is_in -> area(admin_level=4) แล้วหา relation ภายในจังหวัดนั้น
+      const query = `[out:json][timeout:40];
+is_in(${lat},${lon})->.a;
+area(pivot.a)["boundary"="administrative"]["admin_level"="4"]->.prov;
+(
+  relation(area.prov)["boundary"="administrative"]["admin_level"~"${levelRegex}"]["name"~"${nameRegex}"];
+);
+out geom;`;
+
+      const bounds = await tryFetchAndDraw(query, color, weight, dashArray, outline);
+
+      if (!bounds) {
+        console.warn(`❌ boundary not found for name=${nameVariants.join(' / ')} admin_level=${adminLevels.join(',')}`);
+      } else {
+        console.log(`✅ boundary drawn: ${nameVariants[0]} (level ${adminLevels.join(',')})`);
       }
-      console.warn(`❌ ไม่พบ boundary สำหรับ admin_level ${adminLevel}`);
-      return null;
+      return bounds;
     }
 
     /**
@@ -311,18 +379,17 @@
             const pts = m.geometry.map(p => [p.lat, p.lon]);
             allLatLngs.push(...pts);
 
-            // White outline รองด้านล่าง
+            // outline (ขาวจาง) เพื่อกันเส้นแดง/เขียวทับถนนแล้วมองยาก
             if (outline) {
               L.polyline(pts, {
                 color: '#FFFFFF',
                 weight: weight + 4,
-                opacity: 0.5,
+                opacity: 0.55,
                 dashArray: dashArray,
                 interactive: false
               }).addTo(leafletMap);
             }
 
-            // เส้นสีหลัก
             L.polyline(pts, {
               color: color,
               weight: weight,
@@ -345,9 +412,22 @@
     /* ─────────────────────────────────────────
        🖼️  GALLERY (เดิม ไม่เปลี่ยนแปลง)
     ───────────────────────────────────────── */
-    function setMain(i) { idx = (i + images.length) % images.length; const mainImg = document.getElementById('mainImg'); mainImg.style.opacity = '0'; setTimeout(() => { mainImg.src = images[idx]; mainImg.style.opacity = '1'; document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx)); }, 150); }
+    function setMain(i) {
+      idx = (i + images.length) % images.length;
+      const mainImg = document.getElementById('mainImg');
+      mainImg.style.opacity = '0';
+      setTimeout(() => {
+        mainImg.src = images[idx];
+        mainImg.style.opacity = '1';
+        document.getElementById('countLabel').textContent = `${idx + 1} / ${images.length}`;
+        document.querySelectorAll('.thumb').forEach((t, k) => t.classList.toggle('active', k === idx));
+      }, 150);
+    }
     function changeSlide(n) { setMain(idx + n); }
-    function renderThumbs() { document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
+    function renderThumbs() {
+      document.getElementById('thumbStrip').innerHTML = images.map((src, i) => `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join('');
+    }
+
     init();
   </script>
 </body>
