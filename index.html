@@ -2,70 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>CoCo Hua Hin 88 | Official Site</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V166</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    /* 📐 ค่ามาตรฐาน Master V118 */
-    :root { --brand: #1A3617; --brand-dark: #0F210D; --gold: #C9A84C; --white: #FDFAF5; --border: rgba(45, 90, 39, 0.15); --row-h: 80px; --thumb-w: 105px; }
+    :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.08); --row-h: 80px; --thumb-w: 105px; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: var(--brand-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
-    header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(15, 33, 13, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
+    body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+    header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
     .hero { padding: 75px 15px 10px; text-align: center; }
-    .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 15px 10px 40px; color: #1A3617; font-weight: 600; font-size: 0.85rem; outline: none; margin-bottom: 10px; }
+    .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 15px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; margin-bottom: 10px; }
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-    .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #1A3617; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
+    .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
     .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
     .pill { white-space: nowrap; padding: 6px 14px; border-radius: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: #7A9BB5; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
-    .pill.active { background: var(--gold); color: var(--brand-dark); border-color: var(--gold); }
+    .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .card { background: rgba(26, 54, 23, 0.6); border: 1px solid var(--border); border-radius: 12px; display: flex; height: var(--row-h); overflow: hidden; text-decoration: none; color: inherit; }
-    .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; }
+    .card { background: rgba(11, 24, 41, 0.9); border: 1px solid var(--border); border-radius: 12px; display: flex; height: var(--row-h); overflow: hidden; text-decoration: none; color: inherit; transition: 0.2s; }
+    .card:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.05); }
+    .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .hp-id { position: absolute; top: 4px; left: 6px; font-size: 0.45rem; color: rgba(255,255,255,0.5); }
+    /* 🎯 ป้าย HP-ID ชัดเจน ไม่มีเครื่องหมาย # */
+    .hp-id { position: absolute; top: 4px; left: 6px; font-size: 0.5rem; color: var(--navy-dark); background: var(--gold); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
     .card-info { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
     .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 5px; }
     .prop-name { font-size: 0.82rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
-    .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid; font-weight: 800; text-transform: uppercase; }
-    .s-available { color: #2ECC8A; border-color: #2ECC8A; background: rgba(46, 204, 138, 0.1); }
-    .furnish-tag { color: var(--gold); border-color: var(--gold); background: rgba(201, 168, 76, 0.1); font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
-    .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--brand-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
+    .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
+    .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
-  <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">COCO HUA HIN 88 <span style="font-weight:300; color:#fff;">LUXURY HOME</span></a></header>
+  <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">MASTER CATALOG</a></header>
   <section class="hero">
     <div style="max-width:550px; margin:0 auto;">
       <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
       <div class="filters-grid">
-        <select id="zF" onchange="f()" class="filter-select"><option value="">All Plots</option></select>
+        <select id="zF" onchange="f()" class="filter-select"><option value="">All Zones</option></select>
         <select id="sF" onchange="f()" class="filter-select"><option value="">Price Sort</option><option value="low">Low → High</option><option value="high">High → Low</option></select>
         <select id="bF" onchange="f()" class="filter-select"><option value="">Bedrooms</option></select>
       </div>
       <div class="pill-container" id="pillBox">
         <div class="pill active" data-f="all">All</div>
-        <div class="pill" data-f="Sale">Sale</div><div class="pill" data-f="Pool Villa">Pool Villa</div>
+        <div class="pill" data-f="Sale">Sale</div><div class="pill" data-f="Rent">Rent</div>
+        <div class="pill" data-f="Pool Villa">Pool Villa</div><div class="pill" data-f="Condo">Condo</div>
         <div class="pill" data-f="House">House</div><div class="pill" data-f="Land">Land</div>
       </div>
     </div>
   </section>
   <div style="display:flex; justify-content:space-between; padding:15px; border-top:1px solid var(--border); margin-top:10px;">
-    <h2 style="font-size:0.9rem; color:var(--gold); text-transform:uppercase; font-weight:800;">Collections</h2>
+    <h2 style="font-size:0.9rem; color:var(--gold); text-transform:uppercase; font-weight:800;">Inventory Stream</h2>
     <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Loading...</span>
   </div>
   <main class="prop-list" id="propGrid"></main>
-  <a href="gateway.html" class="admin-float"><i class="fas fa-key"></i></a>
+  <a href="dashboard.html" class="admin-float"><i class="fas fa-th-large"></i></a>
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
     async function init() {
       try {
-        const res = await fetch(`${API}?mode=getListSmall&project=coco`); // 🎯 กรองเฉพาะ CoCo
+        const res = await fetch(`${API}?mode=getListSmall&project=all`);
         data = await res.json();
-        const plots = [...new Set(data.map(p => p.Plot))].filter(Boolean).sort();
-        plots.forEach(p => document.getElementById('zF').innerHTML += `<option value="${p}">Plot ${p}</option>`);
+        const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
+        zones.forEach(z => document.getElementById('zF').innerHTML += `<option value="${z}">${z}</option>`);
         const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
         beds.forEach(b => document.getElementById('bF').innerHTML += `<option value="${b}">${b} Bed</option>`);
         f();
@@ -73,23 +74,37 @@
     }
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
-      const plot = document.getElementById('zF').value;
+      const z = document.getElementById('zF').value;
       const b = document.getElementById('bF').value;
       const pill = document.querySelector('.pill.active').dataset.f;
       const sort = document.getElementById('sF').value;
-      let res = data.filter(u => (!q || `${u.HP_ID} ${u.Plot}`.toLowerCase().includes(q)) && (!plot || u.Plot === plot) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
-      if (sort === "low") res.sort((x,y) => (x.Sale_Price || 0) - (y.Sale_Price || 0));
-      else if (sort === "high") res.sort((x,y) => (y.Sale_Price || 0) - (x.Sale_Price || 0));
+      
+      // 🎯 กรอง "เด็ดขาด" แสดงเฉพาะ ONLINE เท่านั้น
+      let res = data.filter(u => 
+        u.System_Status === 'Online' &&
+        (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && 
+        (!z || u.Zone === z) && 
+        (!b || String(u.Bedrooms) === b) && 
+        (pill === 'all' || u.Listing_Type === pill || u.Type === pill)
+      );
+
+      if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
+      else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
+      
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
-      document.getElementById('propGrid').innerHTML = res.map(u => `
+      document.getElementById('propGrid').innerHTML = res.map(u => {
+        const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
+        const price = u.Listing_Type === 'Rent' ? Number(u.Monthly_Rent || 0) : Number(u.Sale_Price || 0);
+        return `
           <a href="details.html?id=${u.HP_ID}" class="card">
-            <div class="card-img"><span class="hp-id">#${u.HP_ID}</span><img src="${u.Thumbnail_Image}" loading="lazy"></div>
+            <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
             <div class="card-info">
-              <div class="info-row"><div class="prop-name">Plot ${u.Plot || 'M-XX'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
-              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} M²</div><div class="price-new">฿${Number(u.Sale_Price).toLocaleString()}</div></div>
-              <div class="info-row"><span class="status-tag s-available">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">COCO HUA HIN 88</div></div>
+              <div class="info-row"><div class="prop-name">${label} | ${u.Project_Name || 'Master'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
+              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${price.toLocaleString()}</div></div>
+              <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
             </div>
-          </a>`).join('');
+          </a>`;
+      }).join('');
     }
     document.getElementById('pillBox').addEventListener('click', (e) => { if (e.target.classList.contains('pill')) { document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); f(); } });
     window.onload = init;
