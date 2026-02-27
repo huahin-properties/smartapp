@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V166</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V167</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -22,7 +22,6 @@
     .card:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.05); }
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    /* 🎯 ป้าย HP-ID ชัดเจน ไม่มีเครื่องหมาย # */
     .hp-id { position: absolute; top: 4px; left: 6px; font-size: 0.5rem; color: var(--navy-dark); background: var(--gold); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
     .card-info { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
     .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 5px; }
@@ -30,7 +29,10 @@
     .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
+    
+    /* 🎯 Admin Float: แก้ไขลิงก์เป็น gateway.html (V167) */
     .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
@@ -57,7 +59,9 @@
     <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Loading...</span>
   </div>
   <main class="prop-list" id="propGrid"></main>
-  <a href="dashboard.html" class="admin-float"><i class="fas fa-th-large"></i></a>
+  
+  <a href="gateway.html" class="admin-float"><i class="fas fa-th-large"></i></a>
+
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
@@ -79,7 +83,6 @@
       const pill = document.querySelector('.pill.active').dataset.f;
       const sort = document.getElementById('sF').value;
       
-      // 🎯 กรอง "เด็ดขาด" แสดงเฉพาะ ONLINE เท่านั้น
       let res = data.filter(u => 
         u.System_Status === 'Online' &&
         (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && 
