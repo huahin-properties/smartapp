@@ -2,12 +2,11 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V1.0 | Final Blueprint Edit</title>
+  <title>Master Editor V1.1 | Data Sync Enabled</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    /* 🎨 NEUTRAL MASTER THEME */
     :root { --brand: #262626; --accent: #C9A84C; --bg: #F8FAF8; }
     body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
     .content-wrapper { padding: 20px 20px 200px; max-width: 1240px; margin: 0 auto; }
@@ -18,18 +17,14 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 2.2rem; border-radius: 2.2rem; margin-bottom: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.02); }
-    .field-label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 0.6rem; display: block; letter-spacing: 0.5px; }
+    .field-label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 0.6rem; display: block; }
     .field-label span { color: #2D5A27; font-size: 12px; margin-left: 10px; font-weight: 700; border-left: 2px solid #ddd; padding-left: 10px; }
     .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; transition: 0.3s; }
     .field-input:focus { border-color: var(--brand); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
-    
-    /* 📄 Professional PDF Row UI */
     .pdf-row { display: flex; align-items: center; gap: 15px; background: #F9F9F8; padding: 15px; border-radius: 1.2rem; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.03); }
     .pdf-icon { width: 45px; height: 45px; background: #fee2e2; color: #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .btn-pdf-action { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
-    .calc-hint { font-size: 13px; font-weight: 700; color: #2D5A27; margin-top: 10px; display: block; background: #e8f0e7; padding: 10px 15px; border-radius: 0.8rem; border-left: 4px solid var(--accent); }
-    
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 25px 20px; z-index: 1000; text-align: center; }
     .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; }
     .upload-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
@@ -63,6 +58,7 @@
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'album')"><input type="hidden" id="Album_Image">
         </div>
       </div>
+
       <div class="input-card">
         <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร</span></span>
         <div class="space-y-3 mt-4">
@@ -163,10 +159,10 @@
 
     // 🎯 INITIALIZATION: ดึงข้อมูลเก่ามาโชว์ 100%
     async function init() {
-      if (!hpId) return;
+      if (!hpId) { alert("ERROR: Asset ID missing in URL"); return; }
       showLoading("FETCHING ASSET DATA...");
       try {
-        // 1. ดึง Metadata (Dropdowns) ก่อน
+        // 1. ดึง Metadata (Dropdowns)
         const metaRes = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getMetadata' }) })).json();
         if (metaRes.ok) {
           document.querySelectorAll('select.dynamic-opt').forEach(el => {
@@ -175,26 +171,29 @@
           });
         }
 
-        // 2. ดึงข้อมูล Unit Detail
+        // 2. ดึงข้อมูลจริงจาก Tab Properties
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (unitRes.ok) {
           const u = unitRes.data;
-          // เติมข้อมูลลงช่อง Input และ Select
-          Object.keys(u).forEach(k => { if (document.getElementById(k)) document.getElementById(k).value = u[k]; });
+          // ✅ เติมข้อมูลลงช่อง Input และ Select อัตโนมัติ
+          Object.keys(u).forEach(k => { 
+            const el = document.getElementById(k);
+            if (el) el.value = u[k]; 
+          });
           document.getElementById('displayPlot').innerText = "EDIT MASTER: " + (u.Plot || u.HP_ID);
 
-          // จัดการ Visuals
+          // ✅ แสดงผลรูปภาพและอัลบั้มเดิม
           thumbUrl = u.Thumbnail_Image || ""; renderMainThumb(thumbUrl);
           gallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [];
           renderGallery();
 
-          // จัดการ PDFs (โชว์ชื่อไฟล์และปุ่ม)
-          if(u.FloorPlan_PDF) syncPdfUI('FloorPlan_PDF', u.FloorPlan_PDF, "Attached ✅");
-          if(u.Customer_PDF) syncPdfUI('Customer_PDF', u.Customer_PDF, "Attached ✅");
-          if(u.Agent_PDF) syncPdfUI('Agent_PDF', u.Agent_PDF, "Attached ✅");
+          // ✅ แสดงผลไฟล์ PDF เดิม
+          if(u.FloorPlan_PDF) syncPdfUI('FloorPlan_PDF', u.FloorPlan_PDF, "Current File ✅");
+          if(u.Customer_PDF) syncPdfUI('Customer_PDF', u.Customer_PDF, "Current File ✅");
+          if(u.Agent_PDF) syncPdfUI('Agent_PDF', u.Agent_PDF, "Current File ✅");
 
-          runCalc(); // คำนวณเงินทันทีที่โหลดข้อมูลเสร็จ
-        }
+          runCalc(); // คำนวณเงินทันที
+        } else { alert("Error: " + unitRes.msg); }
       } catch (e) { console.error("Init Error:", e); }
       hideLoading();
     }
@@ -246,9 +245,8 @@
     function viewFile(id) { if(pdfData[id]) window.open(pdfData[id], '_blank'); }
     function clearFile(id) { if(!confirm("Remove document?")) return; pdfData[id] = ""; syncPdfUI(id, "", ""); }
 
-    // 🚀 SAVE DATA: ใช้โหมด updateUnit เพื่อบันทึกทับข้อมูลเดิม
     async function saveData() {
-      if(!confirm("Publish updates to Master Vault?")) return;
+      if(!confirm("Update this asset in Master Vault?")) return;
       showLoading("PUBLISHING...");
       const p = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: gallery.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) p[el.id] = el.value; });
