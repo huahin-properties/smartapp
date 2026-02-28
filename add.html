@@ -2,49 +2,55 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Enrollment | Smart Properties System</title>
+  <title>Add Master | Professional PDF Suite</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root { --brand: #262626; --accent: #C9A84C; --bg: #F8FAF8; }
-    body { font-family: 'Sarabun', 'Montserrat', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
+    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
     .content-wrapper { padding: 20px 20px 200px; max-width: 1240px; margin: 0 auto; }
     .tab-bar { display: flex; gap: 2rem; margin-bottom: 2rem; border-bottom: 2px solid #eee; }
-    .tab-btn { padding: 1rem 0; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; transition: 0.3s; }
+    .tab-btn { padding: 1rem 0; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; }
     .tab-btn.active { color: var(--accent); }
     .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--accent); border-radius: 10px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 2.2rem; border-radius: 2.2rem; margin-bottom: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.02); }
-    .field-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 0.6rem; display: block; letter-spacing: 0.5px; }
-    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; transition: 0.3s; }
+    .field-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 0.6rem; display: block; }
+    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; }
     .field-input:focus { border-color: var(--brand); background: white; }
-    .thumb-stage { position: relative; width: 100%; aspect-ratio: 16/10; border-radius: 1.5rem; border: 2px dashed #eee; background: #fdfdfd; display: flex; align-items: center; justify-content: center; }
+    
+    /* 📄 Professional PDF Row UI */
+    .pdf-row { display: flex; align-items: center; gap: 15px; background: #F9F9F8; padding: 15px; border-radius: 1.2rem; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.03); }
+    .pdf-icon { width: 45px; height: 45px; background: #fee2e2; color: #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .btn-pdf-action { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.2s; border: none; cursor: pointer; }
+    
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 25px 20px; z-index: 1000; text-align: center; }
-    .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+    .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; }
     .upload-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
-  <div id="upLoading" class="upload-overlay"><div class="border-4 border-[#eee] border-t-[#262626] rounded-full w-10 h-10 animate-spin mb-4"></div><div id="loadText" class="text-xs font-800 tracking-widest uppercase">Master Registry Syncing...</div></div>
+  <div id="upLoading" class="upload-overlay"><div class="border-4 border-[#eee] border-t-[#262626] rounded-full w-10 h-10 animate-spin mb-4"></div><div id="loadText" class="text-xs font-800 uppercase tracking-widest">Master System Syncing...</div></div>
   
   <div class="content-wrapper">
-    <div class="bg-[#262626] rounded-[2.5rem] p-10 text-white flex justify-between items-center mb-8 shadow-2xl relative overflow-hidden">
-      <div class="relative z-10"><p class="text-white/60 font-800 uppercase tracking-widest text-[10px] mb-2">Master Vault | Enrollment Suite</p><h1 class="text-4xl font-800 tracking-tighter italic Sarabun uppercase">ADD NEW MASTER ASSET</h1></div>
-      <i class="fas fa-plus-circle absolute right-[-20px] bottom-[-20px] text-white/5 text-9xl"></i>
+    <div class="bg-[#262626] rounded-[2.5rem] p-10 text-white mb-8 shadow-2xl relative overflow-hidden">
+      <h1 class="text-4xl font-800 tracking-tighter italic Sarabun uppercase">ADD NEW MASTER ASSET</h1>
     </div>
 
     <div class="tab-bar">
       <button id="btn-photo" class="tab-btn active" onclick="switchTab('photo')">Visual Assets</button>
-      <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Details & Specifications</button>
+      <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Specifications</button>
     </div>
 
     <div id="tab-photo" class="tab-content active space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="input-card">
-          <span class="field-label">Cover Image <span>รูปภาพหน้าปก</span></span>
-          <div id="thumbPreview" class="thumb-stage"><i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i></div>
+          <span class="field-label">Main Image <span>รูปภาพหน้าปก</span></span>
+          <div id="thumbPreview" class="w-full aspect-video rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden">
+            <i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i>
+          </div>
           <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 mt-4 text-xs">UPLOAD COVER</button>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
@@ -55,89 +61,88 @@
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'album')"><input type="hidden" id="Album_Image">
         </div>
       </div>
+
       <div class="input-card">
-        <span class="field-label">Property Documents (PDF)</span>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-          <button onclick="document.getElementById('f_floor').click()" class="p-4 bg-slate-100 rounded-xl text-[10px] font-800">UPLOAD FLOOR PLAN</button>
-          <button onclick="document.getElementById('f_customer').click()" class="p-4 bg-slate-100 rounded-xl text-[10px] font-800">UPLOAD CUSTOMER PDF</button>
-          <button onclick="document.getElementById('f_agent').click()" class="p-4 bg-slate-100 rounded-xl text-[10px] font-800">UPLOAD AGENT PDF</button>
-          <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleUpload(this, 'floor', 'FloorPlan_PDF')">
-          <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleUpload(this, 'customer', 'Customer_PDF')">
-          <input type="file" id="f_agent" class="hidden" accept=".pdf" onchange="handleUpload(this, 'agent', 'Agent_PDF')">
+        <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร</span></span>
+        <div class="space-y-3 mt-4">
+          <div class="pdf-row">
+            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Floor Plan</span><span id="txt-FloorPlan_PDF" class="text-[11px] font-700 text-[#262626] truncate">No file attached</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('FloorPlan_PDF')" id="view-FloorPlan_PDF" class="btn-pdf-action bg-white text-emerald-600 border border-emerald-100 hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('FloorPlan_PDF')" id="del-FloorPlan_PDF" class="btn-pdf-action bg-red-50 text-red-500 border border-red-100 hidden"><i class="fas fa-trash"></i></button>
+            </div>
+            <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleUpload(this, 'floor', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
+          </div>
+          <div class="pdf-row">
+            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Customer Brochure</span><span id="txt-Customer_PDF" class="text-[11px] font-700 text-[#262626] truncate">No file attached</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('Customer_PDF')" id="view-Customer_PDF" class="btn-pdf-action bg-white text-emerald-600 border border-emerald-100 hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('Customer_PDF')" id="del-Customer_PDF" class="btn-pdf-action bg-red-50 text-red-500 border border-red-100 hidden"><i class="fas fa-trash"></i></button>
+            </div>
+            <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleUpload(this, 'customer', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
+          </div>
+          <div class="pdf-row">
+            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Agent Fact Sheet</span><span id="txt-Agent_PDF" class="text-[11px] font-700 text-[#262626] truncate">No file attached</span></div>
+            <div class="flex gap-2">
+              <button onclick="viewFile('Agent_PDF')" id="view-Agent_PDF" class="btn-pdf-action bg-white text-emerald-600 border border-emerald-100 hidden"><i class="fas fa-eye"></i></button>
+              <button onclick="document.getElementById('f_agent').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+              <button onclick="deleteFile('Agent_PDF')" id="del-Agent_PDF" class="btn-pdf-action bg-red-50 text-red-500 border border-red-100 hidden"><i class="fas fa-trash"></i></button>
+            </div>
+            <input type="file" id="f_agent" class="hidden" accept=".pdf" onchange="handleUpload(this, 'agent', 'Agent_PDF')"><input type="hidden" id="Agent_PDF">
+          </div>
         </div>
       </div>
     </div>
 
     <div id="tab-info" class="tab-content space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div><label class="field-label">HP_ID</label><input id="HP_ID" class="field-input !bg-slate-100 font-800" readonly placeholder="Auto-gen"></div>
+        <div><label class="field-label">1. HP_ID</label><input id="HP_ID" class="field-input !bg-slate-100 font-800" readonly placeholder="Auto-gen"></div>
+        <div><label class="field-label">Project Name</label><select id="Project_Name" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">Listing Type</label><select id="Listing_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">Asset Category</label><select id="Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Sales Status</label><select id="Status" class="field-input dynamic-opt"></select></div>
-
-        <div class="col-span-2"><label class="field-label">Project Name</label><select id="Project_Name" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Plot</label><input id="Plot" class="field-input"></div>
-        <div><label class="field-label">Build Stage</label><select id="Build_Stage" class="field-input dynamic-opt"></select></div>
-
-        <div class="col-span-full grid grid-cols-1 md:grid-cols-4 gap-6 p-8 rounded-[2.5rem] bg-[#F9F9F8] border-2 border-[#eee] shadow-inner my-2">
-          <div><label class="field-label text-blue-600 font-800">Sale Price (THB)</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
-          <div><label class="field-label">Living Area (m2)</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
-          <div><label class="field-label">Price/m2</label><input type="number" id="Price_sq_m" class="field-input !bg-white" readonly></div>
-          <div><label class="field-label">Common Rate (/m2)</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
-        </div>
-
+        
+        <div class="col-span-full border-t border-slate-100 my-2"></div>
+        <div><label class="field-label text-blue-600 font-800">Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+        <div><label class="field-label">Living Area (m2)</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+        <div><label class="field-label">Price/m2</label><input type="number" id="Price_sq_m" class="field-input !bg-white" readonly></div>
+        <div><label class="field-label">Common Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
+        
+        <div><label class="field-label">Status</label><select id="Status" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">District</label><select id="District" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">SubDistrict</label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Zone</label><select id="Zone" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Coordinates</label><input id="Coordinates" class="field-input" placeholder="lat, lng"></div>
-
         <div><label class="field-label">Bedrooms</label><select id="Bedrooms" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">Bathrooms</label><select id="Bathrooms" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Parking</label><select id="Parking" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">Furnishing</label><select id="Furnishing" class="field-input dynamic-opt"></select></div>
-
-        <div class="hidden">
-          <input id="Customer_PDF"><input id="Agent_PDF"><input id="FloorPlan_PDF"><input id="Material_PDF">
-          <input id="Comm_A_Rate"><input id="Pet_Friendly"><input id="Ownership_Type"><input id="Land_Title_Deed_Type">
-        </div>
-
-        <div class="col-span-full"><label class="field-label">Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
-        <div class="col-span-full bg-slate-100 p-6 rounded-2xl border-2 border-dashed border-slate-300">
-          <label class="field-label !text-blue-600">36. System Visibility</label>
-          <select id="System_Status" class="field-input !bg-white dynamic-opt"></select>
-        </div>
       </div>
     </div>
   </div>
 
-  <div class="save-bar"><button onclick="saveData()" class="btn-update shadow-2xl">PUBLISH TO MASTER VAULT</button></div>
+  <div class="save-bar"><button onclick="saveData()" class="btn-update shadow-2xl">PUBLISH MASTER ASSET</button></div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
-    let gallery = [], thumbUrl = "", currentHpId = "MASTER_ENTRY";
+    let gallery = [], thumbUrl = "", currentHpId = "MASTER_ENTRY", pdfData = {};
 
-    // 🎯 INITIALIZATION: ดึง Dropdowns ทันทีแบบ Cocoa 100%
     async function init() {
       showLoading("FETCHING DATA...");
       try {
         const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getMetadata' }) })).json();
         if (res.ok) {
-          const meta = res.data;
           document.querySelectorAll('select.dynamic-opt').forEach(el => {
-            const options = meta[el.id] || [];
-            if (options.length > 0) {
-              el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
-            }
+            const options = res.data[el.id] || [];
+            if (options.length > 0) el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
           });
         }
-      } catch (e) { console.error("Init error:", e); }
+      } catch (e) { console.error("Init Error:", e); }
       hideLoading();
     }
 
-    // 🖼️ MEDIA UPLOAD SYSTEM
     async function handleUpload(input, target, fieldId) {
       if(!input.files.length) return;
-      showLoading("UPLOADING MEDIA...");
+      showLoading("UPLOADING...");
       for(let f of input.files) {
         const base64 = await new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); });
         const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode:'uploadFile', target, hpId: currentHpId, data: base64, type: f.type, name: f.name }) })).json();
@@ -145,15 +150,30 @@
           currentHpId = res.newId; document.getElementById('HP_ID').value = currentHpId;
           if (target === 'thumb') { thumbUrl = res.url; document.getElementById('thumbPreview').innerHTML = `<img src="${res.url}" class="w-full h-full object-cover">`; document.getElementById('Thumbnail_Image').value = res.url; }
           else if (target === 'album') { gallery.push(res.url); renderGallery(); }
-          else if (fieldId) { document.getElementById(fieldId).value = res.url; alert(`${fieldId} ATTACHED ✅`); }
+          else if (fieldId) { pdfData[fieldId] = res.url; syncPdfUI(fieldId, res.url, res.fileName); }
         }
       }
       hideLoading();
     }
 
+    function syncPdfUI(id, url, name) {
+      const txt = document.getElementById('txt-'+id); const view = document.getElementById('view-'+id); const del = document.getElementById('del-'+id);
+      if (url) { txt.innerText = name || "File Attached ✅"; view.classList.remove('hidden'); del.classList.remove('hidden'); document.getElementById(id).value = url; }
+      else { txt.innerText = "No file attached"; view.classList.add('hidden'); del.classList.add('hidden'); document.getElementById(id).value = ""; }
+    }
+
     function renderGallery() {
       document.getElementById('galleryPreview').innerHTML = gallery.map(url => `<div class="img-tile"><img src="${url}" class="w-full h-full object-cover"></div>`).join('');
       document.getElementById('Album_Image').value = gallery.join(',');
+    }
+
+    function viewFile(id) { if(pdfData[id]) window.open(pdfData[id], '_blank'); }
+    async function deleteFile(id) { 
+      if(!confirm("Delete this document?")) return;
+      showLoading("DELETING...");
+      const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'deleteFile', url: pdfData[id] }) })).json();
+      if(res.ok) { pdfData[id] = ""; syncPdfUI(id, "", ""); }
+      hideLoading();
     }
 
     function runCalc() {
@@ -162,14 +182,13 @@
       if(area > 0) document.getElementById('Price_sq_m').value = price > 0 ? Math.round(price / area) : 0;
     }
 
-    // 🚀 FINAL ENROLLMENT
     async function saveData() {
-      if(!confirm("Submit this new entry?")) return;
+      if(!confirm("Submit Master Entry?")) return;
       showLoading("ENROLLING...");
       const p = { mode: "addUnit", HP_ID: currentHpId, Thumbnail_Image: thumbUrl, Album_Image: gallery.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) p[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(p) })).json();
-      if(res.ok) { alert(`SUCCESS! ASSET ID: ${res.newId} ✅`); location.href='dashboard.html'; }
+      if(res.ok) { alert(`SUCCESS! ASSET ID: ${res.newId}`); location.href='dashboard.html'; }
       hideLoading();
     }
 
