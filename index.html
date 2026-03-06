@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V167</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V168</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -29,10 +29,7 @@
     .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
-    
-    /* 🎯 Admin Float: แก้ไขลิงก์เป็น gateway.html (V167) */
     .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-    
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
@@ -56,31 +53,83 @@
   </section>
   <div style="display:flex; justify-content:space-between; padding:15px; border-top:1px solid var(--border); margin-top:10px;">
     <h2 style="font-size:0.9rem; color:var(--gold); text-transform:uppercase; font-weight:800;">Inventory Stream</h2>
-    <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Loading...</span>
+    <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Ready</span>
   </div>
   <main class="prop-list" id="propGrid"></main>
-  
   <a href="gateway.html" class="admin-float"><i class="fas fa-th-large"></i></a>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
+
+    // ✅ ฟังก์ชันแสดงข้อมูลบนหน้าจอ
+    function render(res) {
+      document.getElementById('unitCount').textContent = `${res.length} UNITS`;
+      document.getElementById('propGrid').innerHTML = res.map(u => {
+        const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
+        const price = u.Listing_Type === 'Rent' ? Number(u.Monthly_Rent || 0) : Number(u.Sale_Price || 0);
+        return `
+          <a href="details.html?id=${u.HP_ID}" class="card">
+            <div class="card-img">
+               <span class="hp-id">${u.HP_ID}</span>
+               <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy">
+            </div>
+            <div class="card-info">
+              <div class="info-row"><div class="prop-name">${label} | ${u.Project_Name || 'Master'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
+              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${price.toLocaleString()}</div></div>
+              <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
+            </div>
+          </a>`;
+      }).join('');
+    }
+
+    // ⚡ ฟังก์ชันเริ่มต้น (เพิ่มระบบจำข้อมูลปุ๊บปั๊บ)
     async function init() {
+      // 1. ดึงข้อมูลเก่าที่จำไว้ในเครื่องมาโชว์ก่อนทันที
+      const cachedData = localStorage.getItem('hp_master_data');
+      if (cachedData) {
+        data = JSON.parse(cachedData);
+        updateFilters(); // อัปเดตตัวเลือก Zone/Bedrooms จากข้อมูลเก่า
+        f(); // แสดงผลทันที
+      }
+
+      // 2. แอบไปดึงข้อมูลใหม่จาก Server เงียบๆ
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
-        data = await res.json();
-        const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
-        zones.forEach(z => document.getElementById('zF').innerHTML += `<option value="${z}">${z}</option>`);
-        const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
-        beds.forEach(b => document.getElementById('bF').innerHTML += `<option value="${b}">${b} Bed</option>`);
-        f();
-      } catch (err) { console.error(err); }
+        const newData = await res.json();
+        
+        // ถ้าข้อมูลใหม่ไม่เหมือนเดิม ให้อัปเดตหน้าจอและบันทึกลงความจำเครื่อง
+        if (JSON.stringify(newData) !== cachedData) {
+          data = newData;
+          localStorage.setItem('hp_master_data', JSON.stringify(data));
+          updateFilters();
+          f();
+        }
+      } catch (err) { console.error("Update Error:", err); }
     }
+
+    function updateFilters() {
+      const zF = document.getElementById('zF');
+      const bF = document.getElementById('bF');
+      const currentZ = zF.value;
+      const currentB = bF.value;
+
+      const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
+      zF.innerHTML = `<option value="">All Zones</option>` + zones.map(z => `<option value="${z}">${z}</option>`).join('');
+      
+      const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
+      bF.innerHTML = `<option value="">Bedrooms</option>` + beds.map(b => `<option value="${b}">${b} Bed</option>`).join('');
+      
+      zF.value = currentZ;
+      bF.value = currentB;
+    }
+
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
       const z = document.getElementById('zF').value;
       const b = document.getElementById('bF').value;
-      const pill = document.querySelector('.pill.active').dataset.f;
+      const activePill = document.querySelector('.pill.active');
+      const pill = activePill ? activePill.dataset.f : 'all';
       const sort = document.getElementById('sF').value;
       
       let res = data.filter(u => 
@@ -94,22 +143,17 @@
       if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
       else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
       
-      document.getElementById('unitCount').textContent = `${res.length} UNITS`;
-      document.getElementById('propGrid').innerHTML = res.map(u => {
-        const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
-        const price = u.Listing_Type === 'Rent' ? Number(u.Monthly_Rent || 0) : Number(u.Sale_Price || 0);
-        return `
-          <a href="details.html?id=${u.HP_ID}" class="card">
-            <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
-            <div class="card-info">
-              <div class="info-row"><div class="prop-name">${label} | ${u.Project_Name || 'Master'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
-              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${price.toLocaleString()}</div></div>
-              <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
-            </div>
-          </a>`;
-      }).join('');
+      render(res);
     }
-    document.getElementById('pillBox').addEventListener('click', (e) => { if (e.target.classList.contains('pill')) { document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); f(); } });
+
+    document.getElementById('pillBox').addEventListener('click', (e) => { 
+      if (e.target.classList.contains('pill')) { 
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); 
+        e.target.classList.add('active'); 
+        f(); 
+      } 
+    });
+
     window.onload = init;
   </script>
 </body>
