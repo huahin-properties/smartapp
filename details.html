@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V175</title>
+  <title>Asset Specifications | MASTER SYSTEM V176</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -25,13 +25,10 @@
     .thumb.active{opacity:1;border-color:var(--gold)}
     .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
     .content{padding:10px 15px 120px;max-width:900px;margin:0 auto}
-    
-    /* 🎯 สไตล์สำหรับการซ่อนหัวข้อว่างอัตโนมัติ */
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
     .field-wrap { display: none; margin-bottom: 12px; } 
     .field-wrap.has-val { display: block; }
-
     .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
     .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;letter-spacing:1.2px;margin-bottom:3px}
@@ -62,7 +59,8 @@
   <div class="gallery-container">
     <div class="gallery-card">
       <div class="main-stage">
-        <img id="mainImg" class="main-img" src="" loading="lazy"> <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
+        <img id="mainImg" class="main-img" src="" loading="lazy">
+        <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
         <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
         <div class="tag-count" id="countLabel">0 / 0</div>
       </div>
@@ -118,7 +116,6 @@
 
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigation</h2>
-      <div class="map-legend"><div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div><div class="map-legend-item"><div class="legend-line legend-green"></div> District</div></div>
       <div class="map-box"><div id="leafletMap"></div></div>
     </div>
 
@@ -139,12 +136,26 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Hua Hin Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Vana Nava',lat:12.5273,lon:99.9642} ];
+
+// 🎯 เพิ่มรายการสถานที่สำคัญให้ครบ 12 แห่ง
+const LANDMARKS=[ 
+  {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, 
+  {name:'Night Market',lat:12.5714,lon:99.9575}, 
+  {name:'Bluport Mall',lat:12.5518,lon:99.9631}, 
+  {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, 
+  {name:'Cicada Market',lat:12.5342,lon:99.9655}, 
+  {name:'Market Village',lat:12.5598,lon:99.9602}, 
+  {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, 
+  {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642},
+  // 4 สถานที่ใหม่ที่เพิ่มขึ้นมา
+  {name:'Banyan Golf Club',lat:12.5124,lon:99.9145},
+  {name:'Hua Hin Airport',lat:12.6366,lon:99.9515},
+  {name:'True Arena Sports',lat:12.5365,lon:99.9585},
+  {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582}
+];
+
 let images=[], idx=0, leafletMap=null;
 
-const SUBDISTRICT_BOUNDS = { 'hin lek fai sub-district': [[12.6500,99.9000],[12.6400,99.9200],[12.6300,99.9350],[12.6150,99.9450],[12.6000,99.9500],[12.5850,99.9450],[12.5750,99.9350],[12.5700,99.9200],[12.5700,99.9000],[12.5750,99.8800],[12.5900,99.8700],[12.6050,99.8650],[12.6200,99.8700],[12.6350,99.8800],[12.6450,99.8950],[12.6500,99.9000]] };
-
-// 🎯 ฟังก์ชันช่วยจัดข้อมูล (ซ่อนอัตโนมัติหากว่าง)
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
@@ -157,19 +168,16 @@ function syncField(valId, wrapId, value) {
   return false;
 }
 
-// ⚡ ฟังก์ชันโหลดข้อมูลทันที (Persistent Instant View)
 async function init(){
   if(!hpId) return;
   const cacheKey = `cache_detail_${hpId}`;
   const cachedData = localStorage.getItem(cacheKey);
 
-  // 1. ดึงจากลิ้นชักความจำทันที (Instant View)
   if(cachedData){
     renderData(JSON.parse(cachedData));
     hideSplash();
   }
 
-  // 2. แอบดึงข้อมูลใหม่มาอัปเดตทับ (Background Sync)
   try{
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
     const json = await res.json();
@@ -180,7 +188,7 @@ async function init(){
         hideSplash(); return;
       }
       localStorage.setItem(cacheKey, JSON.stringify(json.data));
-      renderData(json.data); // อัปเดต UI ด้วยข้อมูลล่าสุด
+      renderData(json.data);
       hideSplash();
     }
   }catch(e){ hideSplash(); }
@@ -194,19 +202,16 @@ function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=Math.max(safeNum(u.Living_Area_sq_m||1),1);
 
-  // Identity
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
 
-  // 3. Highlight Logic (Auto-Hide)
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
   if(p && u.Living_Area_sq_m) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
 
-  // 4. Specifications Logic (Auto-Hide)
   syncField('vStatus', 'w-status', u.Status);
   syncField('vFurnish', 'w-furnish', u.Furnishing);
   syncField('vDistrict', 'w-district', u.District);
@@ -219,61 +224,45 @@ function renderData(u){
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
 
-  // 5. Ownership & Finance
   syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
   if(u.Common_Fee_Rate && u.Living_Area_sq_m) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
   syncField('vOwner', 'w-owner', u.Ownership_Type);
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
-  // Description
   const desc = document.getElementById('vDesc');
   if(u.Description) { desc.textContent = u.Description; desc.closest('.info-card').classList.add('has-data'); }
 
-  // PDF Download
   if (u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
     const bar = document.getElementById('pdfBarMaster');
     bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
   }
 
-  // 6. Map & Amenities (Dashboard Persistent Control)
   const coords = String(u.Coordinates||'').split(',');
   if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
-    // 🎯 หัวใจ: ซ่อนแผนที่จาก Dashboard แต่คงระยะทางไว้
-    if(u.Map_Visibility !== 'Hide'){
+    
+    if(u.Map_Visibility !== 'Hide') {
       document.getElementById('mapSection').classList.add('has-data');
       if(!leafletMap) {
         leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
         L.marker([lat, lon]).addTo(leafletMap);
-        // ลากเส้นเขตย่อย (จาก V169)
-        const subKey = String(u.SubDistrict||'').trim().toLowerCase() + ' sub-district';
-        if(SUBDISTRICT_BOUNDS[subKey]) L.polyline(SUBDISTRICT_BOUNDS[subKey],{color:'#FF2222',weight:4,dashArray:'8,5'}).addTo(leafletMap);
       }
     }
-    // ระยะทางโชว์เสมอ (Amenities)
+
+    // ⚡ แสดงผล 12 สถานที่สำคัญ อัตโนมัติ
     document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
-      const d = getDistance(lat, lon, loc.lat, loc.lon);
+      const d = getDistance(lat, lon, loc.lat, lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
   }
 
-  // Gallery System
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
 
-function setMain(i){
-  idx=(i+images.length)%images.length;
-  const m=document.getElementById('mainImg');
-  m.style.opacity='0';
-  setTimeout(()=>{
-    m.src=images[idx]; m.style.opacity='1';
-    document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`;
-    document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx));
-  },150);
-}
+function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
 function changeSlide(n){setMain(idx+n);}
 function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})" loading="lazy">`).join(''); }
 init();
