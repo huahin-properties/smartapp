@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add Master Asset | Ultimate Speed V2.9.7</title>
+  <title>Add Master Asset | Parallel Engine V3.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -166,7 +166,7 @@
       hideLoading();
     }
 
-    // ⚡ ฟังก์ชันบีบอัดภาพฝั่ง Client
+    // ⚡ ฟังก์ชันบีบอัดรูปภาพ
     async function compressImage(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -182,47 +182,61 @@
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+            resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]); 
           };
         };
       });
     }
 
-    // 🖼️ ระบบอัปโหลด (เพิ่ม Lazy Loading ในจุด Preview)
+    // 🚀 THE FACEBOOK STRATEGY: PARALLEL UPLOAD ENGINE
     async function handleUpload(input, target, fieldId) {
       if(!input.files.length) return;
-      showLoading("OPTIMIZING & UPLOADING...");
-      for(let f of input.files) {
+      showLoading("PARALLEL SYNCING...");
+
+      const uploadTasks = Array.from(input.files).map(async (f) => {
         let base64 = "";
         if (f.type.includes("image")) {
           base64 = await compressImage(f);
         } else {
           base64 = await new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result.split(',')[1]); });
         }
-        const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode:'uploadFile', target, hpId: currentHpId, data: base64, type: f.type, name: f.name }) })).json();
-        if (res.ok) {
-          currentHpId = res.newId; document.getElementById('HP_ID').value = currentHpId;
-          if (target === 'thumb') { 
-            thumbUrl = res.url; 
-            // ✅ ใช้ Lazy Loading ในพรีวิวรูปปก
-            document.getElementById('thumbPreview').innerHTML = `<img src="${res.url}" loading="lazy" class="w-full h-full object-cover">`; 
-            document.getElementById('Thumbnail_Image').value = res.url; 
+
+        const res = await (await fetch(API, { 
+          method:'POST', 
+          body: JSON.stringify({ mode:'uploadFile', target, hpId: currentHpId, data: base64, type: f.type, name: f.name }) 
+        })).json();
+
+        return { res, target, fieldId };
+      });
+
+      try {
+        const results = await Promise.all(uploadTasks);
+        
+        results.forEach(({res, target, fieldId}) => {
+          if (res.ok) {
+            currentHpId = res.newId; 
+            document.getElementById('HP_ID').value = currentHpId;
+            if (target === 'thumb') { 
+              thumbUrl = res.url; 
+              document.getElementById('thumbPreview').innerHTML = `<img src="${res.url}" loading="lazy" class="w-full h-full object-cover">`; 
+              document.getElementById('Thumbnail_Image').value = res.url; 
+            }
+            else if (target === 'album') { gallery.push(res.url); }
+            else if (fieldId) { pdfData[fieldId] = res.url; syncPdfUI(fieldId, res.url, res.fileName); }
           }
-          else if (target === 'album') { gallery.push(res.url); renderGallery(); }
-          else if (fieldId) { pdfData[fieldId] = res.url; syncPdfUI(fieldId, res.url, res.fileName); }
-        }
+        });
+        
+        if (target === 'album') renderGallery();
+      } catch (e) {
+        console.error("Parallel Upload Failed:", e);
+      } finally {
+        hideLoading();
       }
-      hideLoading();
     }
 
-    // ✅ ใช้ Lazy Loading ในพรีวิวอัลบั้ม
     function renderGallery() {
       const box = document.getElementById('galleryPreview');
-      box.innerHTML = gallery.map((url, i) => `
-        <div class="img-tile">
-          <div class="img-x" onclick="deleteImg(${i})">✕</div>
-          <img src="${url}" loading="lazy" class="w-full h-full object-cover">
-        </div>`).join('');
+      box.innerHTML = gallery.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="deleteImg(${i})">✕</div><img src="${url}" loading="lazy" class="w-full h-full object-cover"></div>`).join('');
       document.getElementById('Album_Image').value = gallery.join(',');
     }
 
