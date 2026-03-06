@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V168</title>
+  <title>Asset Specifications | MASTER SYSTEM V169</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -43,13 +43,10 @@
     .legend-line{width:32px;height:4px;border-radius:2px}
     .legend-red{background:repeating-linear-gradient(to right,#FF2222 0,#FF2222 8px,transparent 8px,transparent 13px)}
     .legend-green{background:repeating-linear-gradient(to right,#00EE44 0,#00EE44 11px,transparent 11px,transparent 17px)}
-
-    /* 🎯 ส่วนที่เพิ่ม: สไตล์แถบบาร์ PDF เฉพาะมาสเตอร์ */
     .pdf-download-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     .pdf-download-bar:active { transform: scale(0.98); background: #F3F6F3; }
     .pdf-label { color: var(--navy); font-weight: 800; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; }
     .pdf-icon-red { color: var(--pdf-red); font-size: 1.4rem; }
-
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
@@ -72,7 +69,7 @@
   <div class="gallery-container">
     <div class="gallery-card">
       <div class="main-stage">
-        <img id="mainImg" class="main-img" src="">
+        <img id="mainImg" class="main-img" src="" loading="lazy">
         <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
         <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
         <div class="tag-count" id="countLabel">0 / 0</div>
@@ -135,7 +132,6 @@
     <div class="info-card">
       <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
-      
       <a id="pdfBarMaster" href="#" target="_blank" class="pdf-download-bar">
         <span class="pdf-label">Download Floor Plan PDF</span>
         <i class="fas fa-file-pdf pdf-icon-red"></i>
@@ -150,36 +146,48 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
-
-const DISTRICT_BOUNDS = { 'hua hin': [[13.1050,99.8800],[13.0900,99.9100],[13.0700,99.9350],[13.0500,99.9500],[12.9800,99.9700],[12.9300,99.9800],[12.8800,99.9850],[12.8500,99.9750],[12.8200,99.9600],[12.7900,99.9400],[12.7600,99.9100],[12.7400,99.8700],[12.7300,99.8300],[12.7200,99.7900],[12.7100,99.7500],[12.7100,99.7000],[12.7200,99.6500],[12.7400,99.6100],[12.7700,99.5700],[12.8100,99.5400],[12.8600,99.5200],[12.9200,99.5100],[12.9800,99.5200],[13.0300,99.5400],[13.0700,99.5700],[13.1000,99.6100],[13.1100,99.6600],[13.1200,99.7100],[13.1200,99.7600],[13.1150,99.8200],[13.1050,99.8800]], 'hua hin district': null, 'pranburi': [[12.7300,99.9400],[12.7100,99.9600],[12.6900,99.9700],[12.6600,99.9650],[12.6300,99.9500],[12.6000,99.9300],[12.5700,99.9000],[12.5400,99.8600],[12.5200,99.8200],[12.5100,99.7700],[12.5000,99.7200],[12.5000,99.6600],[12.5100,99.6000],[12.5300,99.5500],[12.5600,99.5100],[12.6000,99.4800],[12.6500,99.4700],[12.7000,99.4800],[12.7400,99.5000],[12.7700,99.5400],[12.7800,99.5900],[12.7800,99.6400],[12.7700,99.6900],[12.7600,99.7400],[12.7500,99.7900],[12.7400,99.8400],[12.7300,99.8900],[12.7300,99.9400]], 'pranburi district': null, 'cha-am': [[13.5500,99.9700],[13.5200,100.0000],[13.4900,100.0200],[13.4500,100.0100],[13.4100,99.9900],[13.3700,99.9600],[13.3300,99.9300],[13.2900,99.8900],[13.2500,99.8500],[13.2100,99.8100],[13.1800,99.7600],[13.1600,99.7100],[13.1500,99.6500],[13.1500,99.5900],[13.1600,99.5300],[13.1900,99.4800],[13.2300,99.4500],[13.2800,99.4400],[13.3300,99.4500],[13.3800,99.4800],[13.4200,99.5200],[13.4600,99.5700],[13.4900,99.6200],[13.5100,99.6800],[13.5300,99.7400],[13.5500,99.8000],[13.5600,99.8600],[13.5600,99.9200],[13.5500,99.9700]], 'cha am': null, 'cha-am district': null };
-const SUBDISTRICT_BOUNDS = { 'hin lek fai sub-district': [[12.6500,99.9000],[12.6400,99.9200],[12.6300,99.9350],[12.6150,99.9450],[12.6000,99.9500],[12.5850,99.9450],[12.5750,99.9350],[12.5700,99.9200],[12.5700,99.9000],[12.5750,99.8800],[12.5900,99.8700],[12.6050,99.8650],[12.6200,99.8700],[12.6350,99.8800],[12.6450,99.8950],[12.6500,99.9000]], 'hua hin sub-district': [[12.5800,99.9600],[12.5700,99.9750],[12.5600,99.9850],[12.5450,99.9900],[12.5300,99.9850],[12.5200,99.9750],[12.5150,99.9600],[12.5150,99.9400],[12.5250,99.9250],[12.5400,99.9150],[12.5550,99.9150],[12.5700,99.9250],[12.5800,99.9400],[12.5800,99.9600]], 'nong kae sub-district': [[12.6100,99.9600],[12.6000,99.9750],[12.5900,99.9850],[12.5750,99.9900],[12.5600,99.9850],[12.5500,99.9700],[12.5500,99.9500],[12.5600,99.9350],[12.5750,99.9250],[12.5900,99.9250],[12.6050,99.9350],[12.6150,99.9500],[12.6100,99.9600]], 'thap tai sub-district': [[12.7200,99.8800],[12.7050,99.9000],[12.6900,99.9150],[12.6700,99.9200],[12.6500,99.9150],[12.6350,99.9050],[12.6250,99.8900],[12.6250,99.8700],[12.6350,99.8550],[12.6550,99.8450],[12.6750,99.8450],[12.6950,99.8550],[12.7100,99.8650],[12.7200,99.8800]], 'nong phlap sub-district': [[12.8000,99.8500],[12.7850,99.8700],[12.7650,99.8850],[12.7450,99.8900],[12.7250,99.8850],[12.7100,99.8700],[12.7050,99.8500],[12.7100,99.8300],[12.7250,99.8150],[12.7450,99.8050],[12.7650,99.8050],[12.7850,99.8150],[12.7980,99.8300],[12.8000,99.8500]], 'na yang sub-district': [[12.8800,99.8200],[12.8650,99.8400],[12.8450,99.8550],[12.8250,99.8600],[12.8050,99.8550],[12.7900,99.8400],[12.7850,99.8200],[12.7900,99.8000],[12.8050,99.7850],[12.8250,99.7750],[12.8450,99.7750],[12.8650,99.7850],[12.8780,99.8000],[12.8800,99.8200]], 'nong ta taem sub-district': [[12.9500,99.7800],[12.9350,99.8000],[12.9150,99.8150],[12.8950,99.8200],[12.8750,99.8150],[12.8600,99.8000],[12.8550,99.7800],[12.8600,99.7600],[12.8750,99.7450],[12.8950,99.7350],[12.9150,99.7350],[12.9350,99.7450],[12.9480,99.7600],[12.9500,99.7800]], 'bueng nakhon sub-district': [[13.0500,99.7200],[13.0350,99.7400],[13.0150,99.7550],[12.9950,99.7600],[12.9750,99.7550],[12.9600,99.7400],[12.9550,99.7200],[12.9600,99.7000],[12.9750,99.6850],[12.9950,99.6750],[13.0150,99.6750],[13.0350,99.6850],[13.0480,99.7000],[13.0500,99.7200]], 'pak nam pran sub-district': [[12.3900,99.9700],[12.3750,99.9900],[12.3600,100.0000],[12.3400,100.0000],[12.3200,99.9950],[12.3050,99.9800],[12.3000,99.9600],[12.3050,99.9400],[12.3200,99.9250],[12.3400,99.9150],[12.3600,99.9150],[12.3780,99.9300],[12.3900,99.9500],[12.3900,99.9700]], 'pranburi sub-district': [[12.4300,99.9300],[12.4150,99.9500],[12.3980,99.9650],[12.3780,99.9700],[12.3580,99.9650],[12.3430,99.9500],[12.3380,99.9300],[12.3430,99.9100],[12.3580,99.8950],[12.3780,99.8850],[12.3980,99.8850],[12.4150,99.8950],[12.4280,99.9100],[12.4300,99.9300]], 'sam roi yot sub-district': [[12.1800,99.9500],[12.1650,99.9700],[12.145,99.9850],[12.125,99.9900],[12.105,99.9850],[12.09,99.9700],[12.085,99.9500],[12.09,99.9300],[12.105,99.9150],[12.125,99.9050],[12.145,99.9050],[12.165,99.9150],[12.178,99.9300],[12.1800,99.9500]], 'khao noi sub-district': [[12.5200,99.8200],[12.5050,99.8400],[12.4850,99.8550],[12.465,99.8600],[12.445,99.8550],[12.43,99.8400],[12.425,99.8200],[12.43,99.8000],[12.445,99.7850],[12.465,99.7750],[12.485,99.7750],[12.505,99.7850],[12.518,99.8000],[12.5200,99.8200]], 'wang phong sub-district': [[12.6000,99.8200],[12.585,99.8400],[12.565,99.8550],[12.545,99.8600],[12.525,99.8550],[12.51,99.8400],[12.505,99.8200],[12.51,99.8000],[12.525,99.7850],[12.545,99.7750],[12.565,99.7750],[12.585,99.7850],[12.598,99.8000],[12.6000,99.8200]], 'cha-am sub-district': [[13.0850,100.0000],[13.0700,100.0150],[13.0500,100.0250],[13.0300,100.0250],[13.0100,100.0200],[12.9950,100.0050],[12.9900,99.9850],[12.9950,99.9650],[13.0100,99.9500],[13.0300,99.9400],[13.0500,99.9400],[13.0700,99.9500],[13.0830,99.9650],[13.0850,99.9850],[13.0850,100.0000]], 'bang kao sub-district': [[13.2000,99.9600],[13.185,99.9800],[13.165,99.9950],[13.145,100.0000],[13.125,99.9950],[13.11,99.9800],[13.105,99.9600],[13.11,99.9400],[13.125,99.9250],[13.145,99.9150],[13.165,99.9150],[13.185,99.9250],[13.198,99.9400],[13.2000,99.9600]], 'huay sat yai sub-district': [[12.8500,99.9200],[12.835,99.9400],[12.815,99.9550],[12.795,99.9600],[12.775,99.9550],[12.76,99.9400],[12.755,99.9200],[12.76,99.9000],[12.775,99.8850],[12.795,99.8750],[12.815,99.8750],[12.835,99.8850],[12.848,99.9000],[12.8500,99.9200]], 'nong sala sub-district': [[13.3200,99.9600],[13.305,99.9800],[13.285,99.9950],[13.265,100.0000],[13.245,99.9950],[13.23,99.9800],[13.225,99.9600],[13.23,99.9400],[13.245,99.9250],[13.265,99.9150],[13.285,99.9150],[13.305,99.9250],[13.318,99.9400],[13.3200,99.9600]], 'yan sue sub-district': [[13.4200,99.9400],[13.405,99.9600],[13.385,99.9750],[13.365,99.9800],[13.345,99.9750],[13.33,99.9600],[13.325,99.9400],[13.33,99.9200],[13.345,99.9050],[13.365,99.8950],[13.385,99.8950],[13.405,99.9050],[13.418,99.9200],[13.4200,99.9400]], 'huay sai tai sub-district': [[12.7600,99.8800],[12.745,99.9000],[12.725,99.9150],[12.705,99.9200],[12.685,99.9150],[12.67,99.9000],[12.665,99.8800],[12.67,99.8600],[12.685,99.8450],[12.705,99.8350],[12.725,99.8350],[12.745,99.8450],[12.758,99.8600],[12.7600,99.8800]], 'khao tao sub-district': [[12.5500,99.9600],[12.535,99.9800],[12.515,99.9950],[12.495,100.0000],[12.475,99.9950],[12.46,99.9800],[12.455,99.9600],[12.46,99.9400],[12.475,99.9250],[12.495,99.9150],[12.515,99.9150],[12.535,99.9250],[12.548,99.9400],[12.5500,99.9600]], 'nong kham sub-district': [[13.1800,99.8600],[13.165,99.8800],[13.145,99.8950],[13.125,99.9000],[13.105,99.8950],[13.09,99.8800],[13.085,99.8600],[13.09,99.8400],[13.105,99.8250],[13.125,99.8150],[13.145,99.8150],[13.165,99.8250],[13.178,99.8400],[13.1800,99.8600]] };
-
-function getBoundary(table, key) { const k = String(key||'').trim().toLowerCase(); let coords = table[k]; if (coords === null) { const base = k.replace(/ sub-district$/,'').replace(/ district$/,'').trim(); for (const [tk, tv] of Object.entries(table)) { if (tv !== null && (tk === base || tk.startsWith(base))) return tv; } return null; } return coords || null; }
-
 const hpId=new URLSearchParams(window.location.search).get('id');
 let images=[],idx=0,leafletMap=null;
 
-const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Hua Hin Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Vana Nava',lat:12.5273,lon:99.9642}, {name:'Railway Station',lat:12.5674,lon:99.9548}, {name:'Khao Takiab Beach',lat:12.5186,lon:99.9774}, {name:'Hua Hin Airport',lat:12.6370,lon:99.9515}, {name:'Water Park',lat:12.6046,lon:99.8897} ];
+const DISTRICT_BOUNDS = { 'hua hin': [[13.1050,99.8800],[13.0900,99.9100],[13.0700,99.9350],[13.0500,99.9500],[12.9800,99.9700],[12.9300,99.9800],[12.8800,99.9850],[12.8500,99.9750],[12.8200,99.9600],[12.7900,99.9400],[12.7600,99.9100],[12.7400,99.8700],[12.7300,99.8300],[12.7200,99.7900],[12.7100,99.7500],[12.7100,99.7000],[12.7200,99.6500],[12.7400,99.6100],[12.7700,99.5700],[12.8100,99.5400],[12.8600,99.5200],[12.9200,99.5100],[12.9800,99.5200],[13.0300,99.5400],[13.0700,99.5700],[13.1000,99.6100],[13.1100,99.6600],[13.1200,99.7100],[13.1200,99.7600],[13.1150,99.8200],[13.1050,99.8800]], 'pranburi': [[12.7300,99.9400],[12.7100,99.9600],[12.6900,99.9700],[12.6600,99.9650],[12.6300,99.9500],[12.6000,99.9300],[12.5700,99.9000],[12.5400,99.8600],[12.5200,99.8200],[12.5100,99.7700],[12.5000,99.7200],[12.5000,99.6600],[12.5100,99.6000],[12.5300,99.5500],[12.5600,99.5100],[12.6000,99.4800],[12.6500,99.4700],[12.7000,99.4800],[12.7400,99.5000],[12.7700,99.5400],[12.7800,99.5900],[12.7800,99.6400],[12.7700,99.6900],[12.7600,99.7400],[12.7500,99.7900],[12.7400,99.8400],[12.7300,99.8900],[12.7300,99.9400]], 'cha-am': [[13.5500,99.9700],[13.5200,100.0000],[13.4900,100.0200],[13.4500,100.0100],[13.4100,99.9900],[13.3700,99.9600],[13.3300,99.9300],[13.2900,99.8900],[13.2500,99.8500],[13.2100,99.8100],[13.1800,99.7600],[13.1600,99.7100],[13.1500,99.6500],[13.1500,99.5900],[13.1600,99.5300],[13.1900,99.4800],[13.2300,99.4500],[13.2800,99.4400],[13.3300,99.4500],[13.3800,99.4800],[13.4200,99.5200],[13.4600,99.5700],[13.4900,99.6200],[13.5100,99.6800],[13.5300,99.7400],[13.5500,99.8000],[13.5600,99.8600],[13.5600,99.9200],[13.5500,99.9700]] };
+const SUBDISTRICT_BOUNDS = { 'hin lek fai sub-district': [[12.6500,99.9000],[12.6400,99.9200],[12.6300,99.9350],[12.6150,99.9450],[12.6000,99.9500],[12.5850,99.9450],[12.5750,99.9350],[12.5700,99.9200],[12.5700,99.9000],[12.5750,99.8800],[12.5900,99.8700],[12.6050,99.8650],[12.6200,99.8700],[12.6350,99.8800],[12.6450,99.8950],[12.6500,99.9000]], 'hua hin sub-district': [[12.5800,99.9600],[12.5700,99.9750],[12.5600,99.9850],[12.5450,99.9900],[12.5300,99.9850],[12.5200,99.9750],[12.5150,99.9600],[12.5150,99.9400],[12.5250,99.9250],[12.5400,99.9150],[12.5550,99.9150],[12.5700,99.9250],[12.5800,99.9400],[12.5800,99.9600]], 'nong kae sub-district': [[12.6100,99.9600],[12.6000,99.9750],[12.5900,99.9850],[12.5750,99.9900],[12.5600,99.9850],[12.5500,99.9700],[12.5500,99.9500],[12.5600,99.9350],[12.5750,99.9250],[12.5900,99.9250],[12.6050,99.9350],[12.6150,99.9500],[12.6100,99.9600]], 'thap tai sub-district': [[12.7200,99.8800],[12.7050,99.9000],[12.6900,99.9150],[12.6700,99.9200],[12.6500,99.9150],[12.6350,99.9050],[12.6250,99.8900],[12.6250,99.8700],[12.6350,99.8550],[12.6550,99.8450],[12.6750,99.8450],[12.6950,99.8550],[12.7100,99.8650],[12.7200,99.8800]] };
+const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Hua Hin Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Vana Nava',lat:12.5273,lon:99.9642} ];
 
+function getBoundary(table, key) { const k = String(key||'').trim().toLowerCase(); let coords = table[k]; if (coords === null) { const base = k.replace(/ sub-district$/,'').replace(/ district$/,'').trim(); for (const [tk, tv] of Object.entries(table)) { if (tv !== null && (tk === base || tk.startsWith(base))) return tv; } return null; } return coords || null; }
 function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
 function getDistance(lat1,lon1,lat2,lon2){ const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
 function parseCoordinates(u){ const raw=String(u.Coordinates||'').trim().replace(/[()]/g,'').replace(/\s+/g,''); if(!raw||raw==='#') return null; const [a,b]=raw.split(','); const lat=Number(a),lon=Number(b); return(isFinite(lat)&&isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180)?{lat,lon}:null; }
 
+// ⚡ ฟังก์ชันโหลดข้อมูลทันที (Persistent Detail Sync)
 async function init(){
   if(!hpId) return;
+
+  // 1. ดึงข้อมูลที่จำไว้ในเครื่องมาโชว์ก่อน (ปุ๊บปั๊บทันใจ)
+  const cacheKey = `cache_detail_${hpId}`;
+  const cachedData = localStorage.getItem(cacheKey);
+  if(cachedData){
+    renderData(JSON.parse(cachedData));
+    hideSplash();
+  }
+
+  // 2. แอบไปดึงข้อมูลใหม่มาอัปเดต (Background Sync)
   try{
     const res=await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
     const json=await res.json();
     if(json.ok){
-      if(json.data.System_Status&&json.data.System_Status!=='Online'){
+      if(json.data.System_Status && json.data.System_Status!=='Online'){
         document.getElementById('gatekeeper').style.display='flex';
         document.getElementById('mainUI').style.display='none';
-        hideSplash();return;
+        hideSplash(); return;
       }
-      renderData(json.data);hideSplash();
+      // อัปเดตข้อมูลและบันทึกความจำเครื่องใหม่
+      localStorage.setItem(cacheKey, JSON.stringify(json.data));
+      renderData(json.data);
+      hideSplash();
     }else{hideSplash();}
   }catch(e){hideSplash();}
 }
+
 function hideSplash(){ const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);} }
 
 function renderData(u){
@@ -210,11 +218,12 @@ function renderData(u){
   document.getElementById('vUtil').textContent=`Elec: ${u.Electricity || '-'} | Water: ${u.Water_Source || '-'}`;
   document.getElementById('vDesc').textContent=u.Description || '-';
 
-  // 🎯 เพิ่มฟังก์ชันแสดงแถบ PDF มาสเตอร์
   if (u.FloorPlan_PDF && u.FloorPlan_PDF !== "#" && u.FloorPlan_PDF.startsWith('http')) {
     const bar = document.getElementById('pdfBarMaster');
     bar.href = u.FloorPlan_PDF;
     bar.style.display = 'flex';
+  } else {
+    document.getElementById('pdfBarMaster').style.display = 'none';
   }
 
   const c=parseCoordinates(u);
@@ -225,9 +234,7 @@ function renderData(u){
       const d=getDistance(c.lat,c.lon,loc.lat,loc.lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
-    const distKey = String(u.District||'').trim().toLowerCase();
-    const subKey  = String(u.SubDistrict||'').trim().toLowerCase();
-    initMap(c.lat, c.lon, distKey, subKey);
+    initMap(c.lat, c.lon, String(u.District||'').trim().toLowerCase(), String(u.SubDistrict||'').trim().toLowerCase());
   }
 
   images=u.__album||(u.Album_Image?String(u.Album_Image).split(',').map(x=>x.trim()).filter(Boolean):[]);
@@ -237,14 +244,13 @@ function renderData(u){
 
 function initMap(lat, lon, distKey, subKey){
   if(leafletMap){leafletMap.remove();leafletMap=null;}
-  leafletMap=L.map('leafletMap',{ zoomControl:true,attributionControl:false,scrollWheelZoom:true }).setView([lat,lon],11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(leafletMap);
-  const allBounds=[];
-  const distCoords = getBoundary(DISTRICT_BOUNDS, distKey);
-  if(distCoords){ L.polyline(distCoords,{color:'#00EE44',weight:3.5,opacity:1,dashArray:'12, 7',interactive:false}).addTo(leafletMap); allBounds.push(...distCoords); }
+  leafletMap=L.map('leafletMap',{ zoomControl:true,attributionControl:false }).setView([lat,lon],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
   const subCoords = getBoundary(SUBDISTRICT_BOUNDS, subKey);
-  if(subCoords){ L.polyline(subCoords,{color:'#FFFFFF',weight:9,opacity:0.5,dashArray:'9, 6',interactive:false}).addTo(leafletMap); L.polyline(subCoords,{color:'#FF2222',weight:5,opacity:1,dashArray:'9, 6',interactive:false}).addTo(leafletMap); leafletMap.fitBounds(L.latLngBounds(subCoords),{padding:[25,25]}); return; }
-  if(allBounds.length){ leafletMap.fitBounds(L.latLngBounds(allBounds),{padding:[25,25]}); }
+  if(subCoords){ 
+    L.polyline(subCoords,{color:'#FF2222',weight:5,opacity:1,dashArray:'9, 6'}).addTo(leafletMap); 
+    leafletMap.fitBounds(L.latLngBounds(subCoords),{padding:[25,25]}); 
+  }
 }
 
 function setMain(i){
@@ -258,7 +264,7 @@ function setMain(i){
   },150);
 }
 function changeSlide(n){setMain(idx+n);}
-function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})">`).join(''); }
+function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})" loading="lazy">`).join(''); }
 init();
 </script>
 </body>
