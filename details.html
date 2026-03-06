@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V177</title>
+  <title>Asset Specifications | MASTER SYSTEM V178</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -70,24 +70,29 @@
 
   <main class="content">
     <div class="info-card has-data">
-      <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
-      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1>
+      <div class="flex justify-between items-start">
+        <div>
+          <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
+          <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1>
+        </div>
+        <div id="w-badge" class="field-wrap"><div class="val gold-txt" id="vBadge" style="font-size:0.65rem; border:1px solid var(--gold); padding:4px 10px; border-radius:4px; text-transform:uppercase;"></div></div>
+      </div>
       <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;"></div>
       <div id="pPrice" style="font-size:1.4rem;font-weight:700;color:#FFF;margin-bottom:20px;"></div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
         <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
-        <div id="w-land" class="field-wrap"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
-        <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
-      </div>
+        <div id="w-land" class="field-wrap"><div class="label">Land Size (m²)</div><div class="val" id="vLand"></div></div>
+        <div id="w-landW" class="field-wrap"><div class="label">Land Size (sq.w)</div><div class="val" id="vLandW"></div></div> <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
+        <div id="w-created" class="field-wrap"><div class="label">Listing Date</div><div class="val" id="vCreated"></div></div> </div>
     </div>
 
     <div class="info-card" id="card-specs">
       <h2 class="section-title">Specifications</h2>
       <div class="grid">
         <div id="w-status" class="field-wrap"><div class="label">Status</div><div class="val" id="vStatus"></div></div>
-        <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
-        <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
+        <div id="w-build" class="field-wrap"><div class="label">Build Stage</div><div class="val" id="vBuild"></div></div> <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
+        <div id="w-view" class="field-wrap"><div class="label">View Type</div><div class="val" id="vView"></div></div> <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
         <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
         <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
         <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
@@ -95,7 +100,7 @@
         <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen Type</div><div class="val" id="vKitchen"></div></div>
         <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
         <div id="w-direct" class="field-wrap"><div class="label">Direction</div><div class="val" id="vDirect"></div></div>
-        <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
+        <div id="w-extras" class="field-wrap" style="grid-column: span 2;"><div class="label">Extra Features</div><div class="val gold-txt" id="vExtras"></div></div> <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
       </div>
     </div>
 
@@ -105,7 +110,7 @@
         <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
         <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
         <div id="w-owner" class="field-wrap"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
-        <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
+        <div id="w-title" class="field-wrap"><div class="label">Title Deed</div><div class="val" id="vTitle"></div></div> <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
       </div>
     </div>
 
@@ -155,11 +160,7 @@ async function init(){
   if(!hpId) return;
   const cacheKey = `cache_detail_${hpId}`;
   const cachedData = localStorage.getItem(cacheKey);
-
-  if(cachedData){
-    renderData(JSON.parse(cachedData));
-    hideSplash();
-  }
+  if(cachedData){ renderData(JSON.parse(cachedData)); hideSplash(); }
 
   try{
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
@@ -185,18 +186,26 @@ function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=Math.max(safeNum(u.Living_Area_sq_m||1),1);
 
+  // Identity & Basics
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
+  syncField('vBadge', 'w-badge', u.Badge_Type); // Added
+  syncField('vCreated', 'w-created', u.Created_Date); // Added
 
+  // Highlight Logic (Auto-Hide)
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
+  syncField('vLandW', 'w-landW', u.Land_Area_sq_w ? `${u.Land_Area_sq_w} sq.w` : ""); // Added
   if(p && u.Living_Area_sq_m) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
 
+  // Specifications Grid (Auto-Hide)
   syncField('vStatus', 'w-status', u.Status);
+  syncField('vBuild', 'w-build', u.Build_Stage); // Added
   syncField('vFurnish', 'w-furnish', u.Furnishing);
+  syncField('vView', 'w-view', u.View_Type); // Added
   syncField('vDistrict', 'w-district', u.District);
   syncField('vSubDistrict', 'w-sub', u.SubDistrict);
   syncField('vZone', 'w-zone', u.Zone);
@@ -205,19 +214,14 @@ function renderData(u){
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
   syncField('vParking', 'w-parking', u.Parking);
   syncField('vDirect', 'w-direct', u.Direction);
+  syncField('vExtras', 'w-extras', u.Extras); // Added
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
 
-  // 🎯 เพิ่มการคำนวณและบันทึกค่าลงคอลัมน์ใหม่ (Monthly_Common_Fee)
-  const feeRate = safeNum(u.Common_Fee_Rate || 0);
-  const monthlyFeeValue = Math.round(feeRate * a);
-  syncField('vFeeM', 'w-feeM', feeRate ? `฿${feeRate} / m²` : "");
-  if(feeRate > 0) {
-    syncField('vFeeY', 'w-feeY', `฿${(monthlyFeeValue * 12).toLocaleString()} / Yr`);
-    // ส่งข้อมูลไปบันทึกใน Background
-    syncFeeToSheet(u.HP_ID, monthlyFeeValue);
-  }
-
+  // Finance & Ownership
+  syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
+  if(u.Common_Fee_Rate && u.Living_Area_sq_m) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
   syncField('vOwner', 'w-owner', u.Ownership_Type);
+  syncField('vTitle', 'w-title', u.Land_Title_Deed_Type); // Added
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
   const desc = document.getElementById('vDesc');
@@ -228,6 +232,7 @@ function renderData(u){
     bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
   }
 
+  // Map & Amenities (Persistent Logic)
   const coords = String(u.Coordinates||'').split(',');
   if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
@@ -248,16 +253,6 @@ function renderData(u){
 
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
-}
-
-// 🎯 ฟังก์ชันส่งค่าไปบันทึกลงคอลัมน์ Monthly_Common_Fee อัตโนมัติ
-async function syncFeeToSheet(id, value) {
-  try {
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ mode: "updateUnit", HP_ID: id, Monthly_Common_Fee: value })
-    });
-  } catch(e) { console.error("Fee Sync Error"); }
 }
 
 function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
