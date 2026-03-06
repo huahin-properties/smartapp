@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V175</title>
+  <title>Asset Specifications | MASTER SYSTEM V176</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -10,26 +10,21 @@
     :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;--pdf-red: #E02424;}
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
-    #gatekeeper{position:fixed;inset:0;background:var(--navy-dark);z-index:10001;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
     .splash-brand{color:var(--gold);font-size:1.2rem;font-weight:800;letter-spacing:4px;text-transform:uppercase}
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-    .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
-    .gallery-container{margin-top:65px;padding:0 15px;max-width:1100px;margin:0 auto}
-    .gallery-card{background:#000;border-radius:18px;border:1px solid var(--border);overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,0.3);margin-bottom:20px}
-    .main-stage{position:relative;width:100%;aspect-ratio:16/10;background:#000;overflow:hidden}
+    .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;}
+    .gallery-container{margin-top:55px;padding:0 15px;max-width:1100px;margin:0 auto}
+    .gallery-card{background:#000;border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px;position:relative;}
+    .main-stage{width:100%;aspect-ratio:16/10;background:#000;overflow:hidden;position:relative;}
     .main-img{width:100%;height:100%; object-fit:cover; transition:opacity 0.3s}
-    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
-    .thumb-row{display:flex;gap:10px;padding:12px;overflow-x:auto;scrollbar-width:none}
-    .thumb{width:90px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:0.2s}
-    .thumb.active{opacity:1;border-color:var(--gold)}
-    .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
+    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
     .content{padding:10px 15px 120px;max-width:900px;margin:0 auto}
     
-    /* 🎯 สไตล์สำหรับการซ่อนหัวข้อว่างอัตโนมัติ */
+    /* 🎯 สไตล์การซ่อนหัวข้ออัตโนมัติ */
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
-    .field-wrap { display: none; margin-bottom: 12px; } 
+    .field-wrap { display: none; margin-bottom: 12px; }
     .field-wrap.has-val { display: block; }
 
     .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
@@ -38,23 +33,18 @@
     .val{font-size:0.85rem;font-weight:400;color:#FFF}
     .gold-txt{color:var(--gold);font-weight:600}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-    .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
-    .loc-name{font-size:0.78rem;font-weight:300}
-    .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
+    .nearby-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:0.5px solid var(--border)}
+    .loc-name{font-size:0.78rem;font-weight:400;color:#FFF}
+    .loc-dist{font-size:0.75rem;font-weight:600;color:var(--gold)}
     .map-box{width:100%;aspect-ratio:1/1;max-height:500px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
     #leafletMap{width:100%;height:100%;background:#0F172A}
     .pdf-download-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 10px; }
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
-    .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
+    .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;text-transform:uppercase;font-weight:800}
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
   </style>
 </head>
 <body>
-<div id="gatekeeper">
-  <i class="fas fa-lock" style="font-size:50px;color:var(--gold);margin-bottom:20px;"></i>
-  <h2 style="color:var(--gold);font-weight:800;margin-bottom:10px;">ASSET UNAVAILABLE</h2>
-  <a href="index.html" style="background:var(--gold);color:#060F1A;padding:12px 30px;border-radius:50px;font-weight:800;text-decoration:none;text-transform:uppercase;font-size:11px;">Back to Catalog</a>
-</div>
 <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
 <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800;color:var(--gold);">DETAIL VIEW</div><div style="width:40px;"></div></header>
 
@@ -62,9 +52,10 @@
   <div class="gallery-container">
     <div class="gallery-card">
       <div class="main-stage">
-        <img id="mainImg" class="main-img" src="" loading="lazy"> <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
+        <img id="mainImg" class="main-img" src="" loading="lazy">
+        <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
         <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
-        <div class="tag-count" id="countLabel">0 / 0</div>
+        <div style="position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:50px;font-size:10px;" id="countLabel">0 / 0</div>
       </div>
       <div class="thumb-row" id="thumbStrip"></div>
     </div>
@@ -92,16 +83,14 @@
         <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
         <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
         <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
-        <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
         <div id="w-pool" class="field-wrap"><div class="label">Pool Info</div><div class="val" id="vPool"></div></div>
         <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen Type</div><div class="val" id="vKitchen"></div></div>
         <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
-        <div id="w-direct" class="field-wrap"><div class="label">Direction</div><div class="val" id="vDirect"></div></div>
         <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
       </div>
     </div>
 
-    <div class="info-card" id="card-finance" style="border-left:4px solid var(--gold);">
+    <div class="info-card" id="card-finance">
       <h2 class="section-title">Ownership & Fees</h2>
       <div class="grid">
         <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
@@ -111,19 +100,13 @@
       </div>
     </div>
 
-    <div class="info-card" id="card-desc">
-      <h2 class="section-title">Description</h2>
-      <p id="vDesc" style="font-size:0.82rem;line-height:1.8;color:#CCC;font-weight:300;white-space:pre-line;"></p>
-    </div>
-
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigation</h2>
-      <div class="map-legend"><div class="map-legend-item"><div class="legend-line legend-red"></div> Sub-district</div><div class="map-legend-item"><div class="legend-line legend-green"></div> District</div></div>
       <div class="map-box"><div id="leafletMap"></div></div>
     </div>
 
     <div class="info-card" id="amenitiesSection">
-      <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
+      <h2 class="section-title">Nearby Lifestyle & Amenities (12 Points)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
       <a id="pdfBarMaster" href="#" target="_blank" class="pdf-download-bar">
         <span style="color:var(--navy);font-weight:800;font-size:0.82rem;text-transform:uppercase;">Download Floor Plan PDF</span>
@@ -139,12 +122,51 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Hua Hin Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Vana Nava',lat:12.5273,lon:99.9642} ];
+
+// 🎯 รายการสถานที่สำคัญ 12 แห่งในหัวหิน
+const LANDMARKS = [
+  {name:'Hua Hin Beach', lat:12.5696, lon:99.9602},
+  {name:'Night Market', lat:12.5714, lon:99.9575},
+  {name:'Bluport Mall', lat:12.5518, lon:99.9631},
+  {name:'Market Village', lat:12.5598, lon:99.9602},
+  {name:'Cicada Market', lat:12.5342, lon:99.9655},
+  {name:'Bangkok Hospital', lat:12.5532, lon:99.9610},
+  {name:'Black Mountain Golf', lat:12.6146, lon:99.8924},
+  {name:'Banyan Golf Club', lat:12.5124, lon:99.9145},
+  {name:'Vana Nava Water Park', lat:12.5273, lon:99.9642},
+  {name:'Hua Hin Airport', lat:12.6366, lon:99.9515},
+  {name:'True Arena Sports', lat:12.5365, lon:99.9585},
+  {name:'Hua Hin Clock Tower', lat:12.5702, lon:99.9582}
+];
+
 let images=[], idx=0, leafletMap=null;
 
-const SUBDISTRICT_BOUNDS = { 'hin lek fai sub-district': [[12.6500,99.9000],[12.6400,99.9200],[12.6300,99.9350],[12.6150,99.9450],[12.6000,99.9500],[12.5850,99.9450],[12.5750,99.9350],[12.5700,99.9200],[12.5700,99.9000],[12.5750,99.8800],[12.5900,99.8700],[12.6050,99.8650],[12.6200,99.8700],[12.6350,99.8800],[12.6450,99.8950],[12.6500,99.9000]] };
+// ⚡ ฟังก์ชัน Instant View (LocalStorage)
+async function init(){
+  if(!hpId) return;
+  const cacheKey = `cache_detail_${hpId}`;
+  const cachedData = localStorage.getItem(cacheKey);
 
-// 🎯 ฟังก์ชันช่วยจัดข้อมูล (ซ่อนอัตโนมัติหากว่าง)
+  if(cachedData){
+    renderUI(JSON.parse(cachedData));
+    hideSplash();
+  }
+
+  try{
+    const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
+    const json = await res.json();
+    if(json.ok){
+      localStorage.setItem(cacheKey, JSON.stringify(json.data));
+      renderUI(json.data);
+      hideSplash();
+    }
+  }catch(e){ hideSplash(); }
+}
+
+function hideSplash(){ const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);} }
+function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
+function getDistance(lat1,lon1,lat2,lon2){ const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
+
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
@@ -157,123 +179,72 @@ function syncField(valId, wrapId, value) {
   return false;
 }
 
-// ⚡ ฟังก์ชันโหลดข้อมูลทันที (Persistent Instant View)
-async function init(){
-  if(!hpId) return;
-  const cacheKey = `cache_detail_${hpId}`;
-  const cachedData = localStorage.getItem(cacheKey);
-
-  // 1. ดึงจากลิ้นชักความจำทันที (Instant View)
-  if(cachedData){
-    renderData(JSON.parse(cachedData));
-    hideSplash();
-  }
-
-  // 2. แอบดึงข้อมูลใหม่มาอัปเดตทับ (Background Sync)
-  try{
-    const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
-    const json = await res.json();
-    if(json.ok){
-      if(json.data.System_Status && json.data.System_Status!=='Online'){
-        document.getElementById('gatekeeper').style.display='flex';
-        document.getElementById('mainUI').style.display='none';
-        hideSplash(); return;
-      }
-      localStorage.setItem(cacheKey, JSON.stringify(json.data));
-      renderData(json.data); // อัปเดต UI ด้วยข้อมูลล่าสุด
-      hideSplash();
-    }
-  }catch(e){ hideSplash(); }
-}
-
-function hideSplash(){ const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);} }
-function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
-function getDistance(lat1,lon1,lat2,lon2){ const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
-
-function renderData(u){
+function renderUI(u){
   const p=safeNum(u.Sale_Price||0);
   const a=Math.max(safeNum(u.Living_Area_sq_m||1),1);
 
-  // Identity
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
 
-  // 3. Highlight Logic (Auto-Hide)
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
   if(p && u.Living_Area_sq_m) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
 
-  // 4. Specifications Logic (Auto-Hide)
   syncField('vStatus', 'w-status', u.Status);
   syncField('vFurnish', 'w-furnish', u.Furnishing);
   syncField('vDistrict', 'w-district', u.District);
-  syncField('vSubDistrict', 'w-sub', u.SubDistrict);
   syncField('vZone', 'w-zone', u.Zone);
-  syncField('vPoolSys', 'w-poolsys', u.Pool_System);
-  syncField('vPool', 'w-pool', u.Pool_Size ? `${u.Pool_Size} (${u.Pool_Depth||''})` : "");
-  syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
-  syncField('vParking', 'w-parking', u.Parking);
-  syncField('vDirect', 'w-direct', u.Direction);
+  syncField('vPool', 'w-pool', u.Pool_Size ? `${u.Pool_Size} (${u.Pool_System||''})` : "");
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
-
-  // 5. Ownership & Finance
+  
   syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
   if(u.Common_Fee_Rate && u.Living_Area_sq_m) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
   syncField('vOwner', 'w-owner', u.Ownership_Type);
-  syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
-  // Description
-  const desc = document.getElementById('vDesc');
-  if(u.Description) { desc.textContent = u.Description; desc.closest('.info-card').classList.add('has-data'); }
-
-  // PDF Download
-  if (u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
-    const bar = document.getElementById('pdfBarMaster');
-    bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
+  if(u.Description) { 
+    const d = document.getElementById('vDesc');
+    d.textContent = u.Description; 
+    d.closest('.info-card').classList.add('has-data'); 
   }
 
-  // 6. Map & Amenities (Dashboard Persistent Control)
+  // 📍 แผนที่และระบบตรวจสอบระยะทาง 12 แห่ง
   const coords = String(u.Coordinates||'').split(',');
   if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
-    // 🎯 หัวใจ: ซ่อนแผนที่จาก Dashboard แต่คงระยะทางไว้
+    
     if(u.Map_Visibility !== 'Hide'){
       document.getElementById('mapSection').classList.add('has-data');
       if(!leafletMap) {
-        leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
+        leafletMap = L.map('leafletMap',{zoomControl:false}).setView([lat, lon], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
         L.marker([lat, lon]).addTo(leafletMap);
-        // ลากเส้นเขตย่อย (จาก V169)
-        const subKey = String(u.SubDistrict||'').trim().toLowerCase() + ' sub-district';
-        if(SUBDISTRICT_BOUNDS[subKey]) L.polyline(SUBDISTRICT_BOUNDS[subKey],{color:'#FF2222',weight:4,dashArray:'8,5'}).addTo(leafletMap);
       }
     }
-    // ระยะทางโชว์เสมอ (Amenities)
+
+    // ⚡ แสดงผล 12 ตู้ 12 สถานที่ อัตโนมัติ
     document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, loc.lon);
-      return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+      const mins = Math.ceil(d * 1.8); // คำนวณเวลาขับรถโดยประมาณ
+      return `
+        <div class="nearby-item">
+          <div>
+            <div class="loc-name">${loc.name}</div>
+            <div style="font-size:0.6rem; color:#7A9BB5;">Approx. ${mins} mins drive</div>
+          </div>
+          <div class="loc-dist">${d.toFixed(1)} km</div>
+        </div>`;
     }).join('');
   }
 
-  // Gallery System
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
 
-function setMain(i){
-  idx=(i+images.length)%images.length;
-  const m=document.getElementById('mainImg');
-  m.style.opacity='0';
-  setTimeout(()=>{
-    m.src=images[idx]; m.style.opacity='1';
-    document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`;
-    document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx));
-  },150);
-}
+function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
 function changeSlide(n){setMain(idx+n);}
 function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})" loading="lazy">`).join(''); }
 init();
