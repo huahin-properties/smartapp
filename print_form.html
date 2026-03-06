@@ -2,59 +2,60 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Master Data Collection Form | Perfect Fit A4</title>
+  <title>Master Data Collection Form | One-Page Precision</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
     
-    /* 🎯 บังคับขนาด A4 และจัดระเบียบพื้นที่ใหม่ */
+    /* 🎯 ตั้งค่าหน้ากระดาษ A4 แบบล็อกความสูงเข้มงวด */
     @page { size: A4; margin: 0; }
-    body { font-family: 'Sarabun', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #222; }
+    body { font-family: 'Sarabun', sans-serif; background: #f0f2f5; margin: 0; padding: 15px; color: #222; }
     
     .paper-a4 { 
       background: white; 
       width: 210mm; 
-      height: 297mm; 
-      padding: 15mm 15mm; /* เพิ่มระยะขอบให้ดูพรีเมียมขึ้น */
+      height: 296mm; /* ลดความสูงลง 1mm เพื่อป้องกันการเกิดหน้าที่ 2 */
+      padding: 10mm 12mm; 
       margin: 0 auto; 
-      box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+      box-shadow: 0 0 15px rgba(0,0,0,0.1); 
       box-sizing: border-box;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
-    .header { text-align: center; border-bottom: 2px solid #262626; padding-bottom: 10px; margin-bottom: 15px; }
-    .header h1 { font-size: 20pt; margin: 0; text-transform: uppercase; color: #262626; letter-spacing: 1.5px; }
-    .header p { font-size: 9pt; color: #C9A84C; margin: 4px 0 0 0; font-weight: bold; letter-spacing: 0.5px; }
+    .header { text-align: center; border-bottom: 2px solid #262626; padding-bottom: 8px; margin-bottom: 12px; }
+    .header h1 { font-size: 18pt; margin: 0; text-transform: uppercase; color: #262626; letter-spacing: 1px; }
+    .header p { font-size: 8.5pt; color: #C9A84C; margin: 3px 0 0 0; font-weight: bold; }
     
-    /* 🚀 ขยายขนาดหัวข้อและข้อมูล */
-    .section { margin-bottom: 12px; border: 1px solid #eee; border-radius: 6px; }
-    .section-title { background: #f9f9f9; padding: 6px 12px; font-weight: bold; font-size: 10.5pt; text-transform: uppercase; border-bottom: 1px solid #eee; color: #262626; display: flex; align-items: center; gap: 10px; }
-    .section-title i { color: #C9A84C; font-size: 10pt; }
+    /* 🚀 ปรับช่องว่างใหม่เพื่อให้พอดีหน้าเดียว */
+    .section { margin-bottom: 10px; border: 1px solid #eee; border-radius: 5px; }
+    .section-title { background: #f9f9f9; padding: 5px 12px; font-weight: bold; font-size: 10pt; text-transform: uppercase; border-bottom: 1px solid #eee; color: #262626; display: flex; align-items: center; gap: 10px; }
+    .section-title i { color: #C9A84C; font-size: 9pt; }
     
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
-    .field { padding: 8px 12px; border-bottom: 1px solid #f8f8f8; border-right: 1px solid #f8f8f8; display: flex; align-items: baseline; }
+    .field { padding: 6px 12px; border-bottom: 1px solid #f8f8f8; border-right: 1px solid #f8f8f8; display: flex; align-items: baseline; }
     .field:last-child { border-bottom: none; }
     .full-width { grid-column: span 2; border-right: none; }
     
-    /* 🎯 ขยายขนาด Font ตัวหนังสือ */
-    .label { font-size: 9.5pt; font-weight: bold; color: #444; width: 140px; flex-shrink: 0; }
-    .dots { flex-grow: 1; border-bottom: 1px dotted #bbb; height: 14px; margin-left: 5px; }
-    .checkbox-group { display: flex; align-items: center; gap: 12px; font-size: 9pt; }
-    .checkbox { width: 11px; height: 11px; border: 1.5px solid #262626; border-radius: 2px; }
+    /* 🎯 ปรับขนาด Font ให้สมดุลที่สุด */
+    .label { font-size: 9.2pt; font-weight: bold; color: #444; width: 135px; flex-shrink: 0; }
+    .dots { flex-grow: 1; border-bottom: 1px dotted #bbb; height: 13px; margin-left: 5px; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; font-size: 8.5pt; }
+    .checkbox { width: 10px; height: 10px; border: 1.2px solid #262626; border-radius: 2px; }
     
-    .toolbar { max-width: 210mm; margin: 0 auto 15px; display: flex; gap: 10px; justify-content: center; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+    .toolbar { max-width: 210mm; margin: 0 auto 12px; display: flex; gap: 10px; justify-content: center; }
+    .btn { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
     .btn-print { background: #262626; color: white; }
     .btn-pdf { background: #E02424; color: white; }
 
-    .footer-note { margin-top: auto; padding-top: 15px; text-align: center; font-size: 8pt; color: #aaa; border-top: 1px solid #f9f9f9; }
+    .footer-note { margin-top: auto; padding-top: 10px; text-align: center; font-size: 7.5pt; color: #aaa; border-top: 1px solid #f9f9f9; }
 
     @media print {
       body { background: white; padding: 0; }
-      .paper-a4 { box-shadow: none; margin: 0; width: 100%; border: none; }
+      .paper-a4 { box-shadow: none; margin: 0; width: 100%; border: none; height: 297mm; }
       .no-print { display: none; }
     }
   </style>
@@ -72,9 +73,9 @@
       <p>SMART PROPERTIES SYSTEM | HUA HIN PROPERTIES</p>
     </div>
 
-    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 10pt; padding: 0 5px;">
-      <div><strong>วันที่บันทึกข้อมูล:</strong> .......................................................</div>
-      <div><strong>ชื่อเจ้าหน้าที่ (Surveyor):</strong> ............................................</div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 9.5pt; padding: 0 5px;">
+      <div><strong>วันที่บันทึก:</strong> ....................................................</div>
+      <div><strong>Surveyor:</strong> ....................................................</div>
     </div>
 
     <div class="section">
@@ -133,10 +134,10 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" style="margin-bottom: 0;">
       <div class="section-title"><i class="fas fa-file-alt"></i> 5. Description & Media (รายละเอียดและสื่อ)</div>
-      <div class="field full-width" style="height: 110px; align-items: flex-start; border-bottom: 1px solid #f8f8f8;">
-        <span class="label">37. Property Desc.</span><span class="dots" style="height: 95px;"></span>
+      <div class="field full-width" style="height: 85px; align-items: flex-start; border-bottom: 1px solid #f8f8f8;">
+        <span class="label">37. Property Desc.</span><span class="dots" style="height: 75px;"></span>
       </div>
       <div class="field full-width">
         <span class="label">Media Checklist:</span>
@@ -159,7 +160,7 @@
       const element = document.getElementById('content-to-print');
       const opt = {
         margin:       0,
-        filename:     'Perfect_Fit_Property_Form.pdf',
+        filename:     'Master_Property_Collection_Form.pdf',
         image:        { type: 'jpeg', quality: 1 },
         html2canvas:  { scale: 3, useCORS: true, logging: false },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
