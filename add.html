@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add Master Asset | Structure Preserved V2.9</title>
+  <title>Add Master Asset | Ultimate Speed V2.9.7</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -166,7 +166,7 @@
       hideLoading();
     }
 
-    // ⚡ ฟังก์ชันใหม่สำหรับบีบอัดภาพ (เพิ่มเข้ามาโดยไม่กระทบส่วนอื่น)
+    // ⚡ ฟังก์ชันบีบอัดภาพฝั่ง Client
     async function compressImage(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -176,26 +176,24 @@
           img.src = e.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 1200; // ปรับขนาดเพื่อความเร็ว
-            let width = img.width;
-            let height = img.height;
+            const MAX_WIDTH = 1200; 
+            let width = img.width, height = img.height;
             if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]); // บีบอัด 70%
+            resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
           };
         };
       });
     }
 
-    // 🖼️ แก้ไขเฉพาะฟังก์ชันอัปโหลดให้เร็วขึ้น (ตรรกะเดิมครบ 100%)
+    // 🖼️ ระบบอัปโหลด (เพิ่ม Lazy Loading ในจุด Preview)
     async function handleUpload(input, target, fieldId) {
       if(!input.files.length) return;
       showLoading("OPTIMIZING & UPLOADING...");
       for(let f of input.files) {
         let base64 = "";
-        // บีบอัดเฉพาะรูปภาพ ส่วน PDF ใช้ Base64 ปกติ
         if (f.type.includes("image")) {
           base64 = await compressImage(f);
         } else {
@@ -204,7 +202,12 @@
         const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode:'uploadFile', target, hpId: currentHpId, data: base64, type: f.type, name: f.name }) })).json();
         if (res.ok) {
           currentHpId = res.newId; document.getElementById('HP_ID').value = currentHpId;
-          if (target === 'thumb') { thumbUrl = res.url; document.getElementById('thumbPreview').innerHTML = `<img src="${res.url}" class="w-full h-full object-cover">`; document.getElementById('Thumbnail_Image').value = res.url; }
+          if (target === 'thumb') { 
+            thumbUrl = res.url; 
+            // ✅ ใช้ Lazy Loading ในพรีวิวรูปปก
+            document.getElementById('thumbPreview').innerHTML = `<img src="${res.url}" loading="lazy" class="w-full h-full object-cover">`; 
+            document.getElementById('Thumbnail_Image').value = res.url; 
+          }
           else if (target === 'album') { gallery.push(res.url); renderGallery(); }
           else if (fieldId) { pdfData[fieldId] = res.url; syncPdfUI(fieldId, res.url, res.fileName); }
         }
@@ -212,16 +215,21 @@
       hideLoading();
     }
 
-    // ฟังก์ชันช่วยเหลืออื่นๆ (คงเดิม 100%)
+    // ✅ ใช้ Lazy Loading ในพรีวิวอัลบั้ม
+    function renderGallery() {
+      const box = document.getElementById('galleryPreview');
+      box.innerHTML = gallery.map((url, i) => `
+        <div class="img-tile">
+          <div class="img-x" onclick="deleteImg(${i})">✕</div>
+          <img src="${url}" loading="lazy" class="w-full h-full object-cover">
+        </div>`).join('');
+      document.getElementById('Album_Image').value = gallery.join(',');
+    }
+
     function syncPdfUI(id, url, name) {
       const txt = document.getElementById('txt-'+id); const view = document.getElementById('view-'+id); const del = document.getElementById('del-'+id);
       if (url) { txt.innerText = name || "Attached ✅"; view.classList.remove('hidden'); del.classList.remove('hidden'); document.getElementById(id).value = url; }
       else { txt.innerText = "No file selected"; view.classList.add('hidden'); del.classList.add('hidden'); document.getElementById(id).value = ""; }
-    }
-    function renderGallery() {
-      const box = document.getElementById('galleryPreview');
-      box.innerHTML = gallery.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="deleteImg(${i})">✕</div><img src="${url}" class="w-full h-full object-cover"></div>`).join('');
-      document.getElementById('Album_Image').value = gallery.join(',');
     }
     function deleteImg(i) { if(confirm("Remove?")) { gallery.splice(i, 1); renderGallery(); } }
     function viewFile(id) { if(pdfData[id]) window.open(pdfData[id], '_blank'); }
