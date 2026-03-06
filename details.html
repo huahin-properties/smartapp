@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V176</title>
+  <title>Asset Specifications | MASTER SYSTEM V177</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -136,24 +136,7 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-
-// 🎯 เพิ่มรายการสถานที่สำคัญให้ครบ 12 แห่ง
-const LANDMARKS=[ 
-  {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, 
-  {name:'Night Market',lat:12.5714,lon:99.9575}, 
-  {name:'Bluport Mall',lat:12.5518,lon:99.9631}, 
-  {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, 
-  {name:'Cicada Market',lat:12.5342,lon:99.9655}, 
-  {name:'Market Village',lat:12.5598,lon:99.9602}, 
-  {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, 
-  {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642},
-  // 4 สถานที่ใหม่ที่เพิ่มขึ้นมา
-  {name:'Banyan Golf Club',lat:12.5124,lon:99.9145},
-  {name:'Hua Hin Airport',lat:12.6366,lon:99.9515},
-  {name:'True Arena Sports',lat:12.5365,lon:99.9585},
-  {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582}
-];
-
+const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Bluport Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642}, {name:'Banyan Golf Club',lat:12.5124,lon:99.9145}, {name:'Hua Hin Airport',lat:12.6366,lon:99.9515}, {name:'True Arena Sports',lat:12.5365,lon:99.9585}, {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582} ];
 let images=[], idx=0, leafletMap=null;
 
 function syncField(valId, wrapId, value) {
@@ -224,8 +207,16 @@ function renderData(u){
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
 
-  syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
-  if(u.Common_Fee_Rate && u.Living_Area_sq_m) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
+  // 🎯 เพิ่มการคำนวณและบันทึกค่าลงคอลัมน์ใหม่ (Monthly_Common_Fee)
+  const feeRate = safeNum(u.Common_Fee_Rate || 0);
+  const monthlyFeeValue = Math.round(feeRate * a);
+  syncField('vFeeM', 'w-feeM', feeRate ? `฿${feeRate} / m²` : "");
+  if(feeRate > 0) {
+    syncField('vFeeY', 'w-feeY', `฿${(monthlyFeeValue * 12).toLocaleString()} / Yr`);
+    // ส่งข้อมูลไปบันทึกใน Background
+    syncFeeToSheet(u.HP_ID, monthlyFeeValue);
+  }
+
   syncField('vOwner', 'w-owner', u.Ownership_Type);
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
@@ -240,7 +231,6 @@ function renderData(u){
   const coords = String(u.Coordinates||'').split(',');
   if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
-    
     if(u.Map_Visibility !== 'Hide') {
       document.getElementById('mapSection').classList.add('has-data');
       if(!leafletMap) {
@@ -249,8 +239,6 @@ function renderData(u){
         L.marker([lat, lon]).addTo(leafletMap);
       }
     }
-
-    // ⚡ แสดงผล 12 สถานที่สำคัญ อัตโนมัติ
     document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, lon);
@@ -260,6 +248,16 @@ function renderData(u){
 
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
+}
+
+// 🎯 ฟังก์ชันส่งค่าไปบันทึกลงคอลัมน์ Monthly_Common_Fee อัตโนมัติ
+async function syncFeeToSheet(id, value) {
+  try {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ mode: "updateUnit", HP_ID: id, Monthly_Common_Fee: value })
+    });
+  } catch(e) { console.error("Fee Sync Error"); }
 }
 
 function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
