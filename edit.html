@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V3.4 | Bulk Delete & Cleanup</title>
+  <title>Master Editor V3.5 | Multi-Ownership Control</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,16 +22,20 @@
     .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; transition: 0.3s; }
     .field-input:focus { border-color: var(--brand); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
-    
-    /* 🎯 สไตล์รูปภาพและ Checkbox */
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 1rem; overflow: hidden; border: 1px solid #eee; }
     .img-x { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; }
     .bulk-check { position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; z-index: 10; cursor: pointer; }
-    
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 25px 20px; z-index: 1000; text-align: center; }
     .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; }
     .mini-status { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--accent); display: none; margin-top: 5px; }
     .mini-status.active { display: flex; align-items: center; gap: 5px; }
+
+    /* 🎯 Custom Style สำหรับ Multi-Select Ownership */
+    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+    .own-item:hover { background: #F0F2F0; }
+    .own-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+    .own-item span { font-size: 13px; font-weight: 600; color: #444; }
   </style>
 </head>
 <body>
@@ -141,7 +145,21 @@
         <div><label class="field-label">28. View Profile <span>วิว</span></label><select id="View_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">30. Extras <span>จุดเด่นเพิ่มเติม</span></label><select id="Extras" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">31. Ownership <span>การถือครอง</span></label><select id="Ownership_Type" class="field-input dynamic-opt"></select></div>
+        
+        <div class="col-span-1 md:col-span-2">
+          <label class="field-label">31. Ownership <span>การถือครอง (เลือกได้หลายแบบ)</span></label>
+          <div class="ownership-grid">
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Thai Freehold"> <span>Thai Freehold</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Foreign Freehold"> <span>Foreign Freehold</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Leasehold (30 Years)"> <span>Leasehold (30 Years)</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Leasehold (Renewable)"> <span>Leasehold (Renewable)</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Company Ownership"> <span>Company Ownership</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Usufruct"> <span>Usufruct</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Superficies"> <span>Superficies</span></label>
+          </div>
+          <input type="hidden" id="Ownership_Type">
+        </div>
+
         <div><label class="field-label">32. Land Title Deed <span>ประเภทโฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">33. Transfer Exp. <span>ค่าใช้จ่ายวันโอน</span></label><input id="Transfer_Expenses" class="field-input" placeholder="เช่น 50/50"></div>
         <div><label class="field-label">34. Marketing Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input dynamic-opt"></select></div>
@@ -176,7 +194,18 @@
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (unitRes.ok) {
           const u = unitRes.data;
-          Object.keys(u).forEach(k => { const el = document.getElementById(k); if (el) el.value = u[k]; });
+          Object.keys(u).forEach(k => { 
+            const el = document.getElementById(k); 
+            if (el) el.value = u[k]; 
+            
+            // 🎯 คืนค่า Checkbox สำหรับ Ownership เมื่อโหลดข้อมูล
+            if (k === 'Ownership_Type' && u[k]) {
+              const vals = u[k].split(',').map(s => s.trim());
+              document.querySelectorAll('input[name="own_opt"]').forEach(cb => {
+                if (vals.includes(cb.value)) cb.checked = true;
+              });
+            }
+          });
           document.getElementById('displayPlot').innerText = "EDIT MASTER: " + (u.Plot || u.HP_ID);
           thumbUrl = u.Thumbnail_Image || ""; renderMainThumb(thumbUrl);
           gallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
@@ -250,7 +279,6 @@
       document.getElementById('bulkDelBtn').classList.toggle('hidden', gallery.length === 0);
     }
 
-    // ⚡ ระบบลบรูปหน้าปก + ล้างไฟล์ใน Drive
     async function deleteThumb() {
       if(!confirm("Remove cover image?")) return;
       const oldUrl = thumbUrl;
@@ -259,7 +287,6 @@
       await fetch(API, { method:'POST', body: JSON.stringify({ mode:'deleteFiles', urls: [oldUrl] }) });
     }
 
-    // ⚡ ระบบลบรูปแบบกลุ่ม (Bulk Delete)
     async function bulkDelete() {
       const checked = Array.from(document.querySelectorAll('.bulk-check:checked'));
       if(!checked.length) return;
@@ -270,8 +297,6 @@
       
       indices.forEach(idx => gallery.splice(idx, 1));
       renderGallery();
-
-      // สั่งลบไฟล์ใน Drive เบื้องหลัง
       await fetch(API, { method:'POST', body: JSON.stringify({ mode:'deleteFiles', urls: urlsToDelete }) });
     }
 
@@ -283,7 +308,6 @@
 
     function viewFile(id) { if(pdfData[id]) window.open(pdfData[id], '_blank'); }
     
-    // ลบ PDF + ล้างไฟล์ใน Drive
     async function clearFile(id) {
       if(!confirm("Remove document?")) return;
       const oldUrl = pdfData[id];
@@ -306,6 +330,11 @@
 
     async function saveData() {
       if(!confirm("Update Master Entry?")) return;
+      
+      // 🎯 รวมค่า Ownership จาก Checkbox ก่อนอัปเดต
+      const selectedOwns = Array.from(document.querySelectorAll('input[name="own_opt"]:checked')).map(cb => cb.value);
+      document.getElementById('Ownership_Type').value = selectedOwns.join(', ');
+
       document.getElementById('btn_save').innerText = "SYNCING UPDATES...";
       const p = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: gallery.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) p[el.id] = el.value; });
