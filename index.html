@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V168</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V169</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -10,7 +10,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
-    .hero { padding: 75px 15px 10px; text-align: center; }
+    .hero { padding: 75px 15px 10px; text-align: center; position: relative; }
+    
+    /* 🎯 ปุ่ม Reset Filters ที่เพิ่มใหม่ */
+    .reset-btn { position: absolute; top: 75px; right: 20px; color: var(--gold); cursor: pointer; font-size: 1.1rem; transition: 0.3s; z-index: 10; }
+    .reset-btn:active { transform: rotate(-180deg); }
+
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 15px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; margin-bottom: 10px; }
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
@@ -36,6 +41,10 @@
 <body>
   <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">MASTER CATALOG</a></header>
   <section class="hero">
+    <div class="reset-btn" onclick="resetFilters()" title="Reset All Filters">
+      <i class="fas fa-sync-alt"></i>
+    </div>
+
     <div style="max-width:550px; margin:0 auto;">
       <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
       <div class="filters-grid">
@@ -62,7 +71,6 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
-    // ✅ ฟังก์ชันแสดงข้อมูลบนหน้าจอ
     function render(res) {
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
       document.getElementById('propGrid').innerHTML = res.map(u => {
@@ -70,10 +78,7 @@
         const price = u.Listing_Type === 'Rent' ? Number(u.Monthly_Rent || 0) : Number(u.Sale_Price || 0);
         return `
           <a href="details.html?id=${u.HP_ID}" class="card">
-            <div class="card-img">
-               <span class="hp-id">${u.HP_ID}</span>
-               <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy">
-            </div>
+            <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
             <div class="card-info">
               <div class="info-row"><div class="prop-name">${label} | ${u.Project_Name || 'Master'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
               <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${price.toLocaleString()}</div></div>
@@ -83,45 +88,36 @@
       }).join('');
     }
 
-    // ⚡ ฟังก์ชันเริ่มต้น (เพิ่มระบบจำข้อมูลปุ๊บปั๊บ)
-    async function init() {
-      // 1. ดึงข้อมูลเก่าที่จำไว้ในเครื่องมาโชว์ก่อนทันที
-      const cachedData = localStorage.getItem('hp_master_data');
-      if (cachedData) {
-        data = JSON.parse(cachedData);
-        updateFilters(); // อัปเดตตัวเลือก Zone/Bedrooms จากข้อมูลเก่า
-        f(); // แสดงผลทันที
-      }
+    // 🎯 ฟังก์ชันรีเซ็ตค่าเริ่มต้นทั้งหมด
+    function resetFilters() {
+      document.getElementById('sI').value = '';
+      document.getElementById('zF').value = '';
+      document.getElementById('sF').value = '';
+      document.getElementById('bF').value = '';
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      document.querySelector('.pill[data-f="all"]').classList.add('active');
+      f();
+    }
 
-      // 2. แอบไปดึงข้อมูลใหม่จาก Server เงียบๆ
+    async function init() {
+      const cached = localStorage.getItem('hp_master_data');
+      if (cached) { data = JSON.parse(cached); updateFilters(); f(); }
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
         const newData = await res.json();
-        
-        // ถ้าข้อมูลใหม่ไม่เหมือนเดิม ให้อัปเดตหน้าจอและบันทึกลงความจำเครื่อง
-        if (JSON.stringify(newData) !== cachedData) {
+        if (JSON.stringify(newData) !== cached) {
           data = newData;
           localStorage.setItem('hp_master_data', JSON.stringify(data));
-          updateFilters();
-          f();
+          updateFilters(); f();
         }
-      } catch (err) { console.error("Update Error:", err); }
+      } catch (err) { console.error(err); }
     }
 
     function updateFilters() {
-      const zF = document.getElementById('zF');
-      const bF = document.getElementById('bF');
-      const currentZ = zF.value;
-      const currentB = bF.value;
-
       const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
-      zF.innerHTML = `<option value="">All Zones</option>` + zones.map(z => `<option value="${z}">${z}</option>`).join('');
-      
+      document.getElementById('zF').innerHTML = `<option value="">All Zones</option>` + zones.map(z => `<option value="${z}">${z}</option>`).join('');
       const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
-      bF.innerHTML = `<option value="">Bedrooms</option>` + beds.map(b => `<option value="${b}">${b} Bed</option>`).join('');
-      
-      zF.value = currentZ;
-      bF.value = currentB;
+      document.getElementById('bF').innerHTML = `<option value="">Bedrooms</option>` + beds.map(b => `<option value="${b}">${b} Bed</option>`).join('');
     }
 
     function f() {
@@ -131,29 +127,13 @@
       const activePill = document.querySelector('.pill.active');
       const pill = activePill ? activePill.dataset.f : 'all';
       const sort = document.getElementById('sF').value;
-      
-      let res = data.filter(u => 
-        u.System_Status === 'Online' &&
-        (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && 
-        (!z || u.Zone === z) && 
-        (!b || String(u.Bedrooms) === b) && 
-        (pill === 'all' || u.Listing_Type === pill || u.Type === pill)
-      );
-
+      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && (!z || u.Zone === z) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
       if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
       else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
-      
       render(res);
     }
 
-    document.getElementById('pillBox').addEventListener('click', (e) => { 
-      if (e.target.classList.contains('pill')) { 
-        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); 
-        e.target.classList.add('active'); 
-        f(); 
-      } 
-    });
-
+    document.getElementById('pillBox').addEventListener('click', (e) => { if (e.target.classList.contains('pill')) { document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); f(); } });
     window.onload = init;
   </script>
 </body>
