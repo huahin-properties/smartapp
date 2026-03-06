@@ -1,69 +1,67 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Detail Specs | V173 Smart Hide Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Asset Details | V171 Complete Sync</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;}
+    #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-    .gallery-stage{margin-top:55px;width:100%;aspect-ratio:16/10;background:#000;position:relative;overflow:hidden;}
-    #mainImg{width:100%;height:100%;object-fit:cover;transition:opacity 0.3s;}
-    .content{padding:20px 15px 120px;max-width:1100px;margin:0 auto}
+    .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;}
+    .gallery-box{margin-top:65px;position:relative;width:100%;aspect-ratio:16/10;background:#000;overflow:hidden;}
+    #mainImg{width:100%;height:100%;object-fit:cover;transition:0.3s;}
+    .content{padding:20px 15px 120px;max-width:900px;margin:0 auto}
     
-    /* 🎯 ระบบ Auto-Hide: หัวข้อจะโชว์เฉพาะที่มีข้อมูล */
-    .info-card{background:var(--card-bg);border-radius:14px;padding:24px;margin-bottom:16px;border:1px solid var(--border); display:none;}
-    .info-card.has-data{display:block;}
-    .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;display:flex;align-items:center;gap:10px}
+    /* 🎯 ระบบ Auto-Hide: หัวข้อจะซ่อนถ้าไม่มีคลาส has-data */
+    .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
+    .info-card.has-data { display: block; }
+    .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
     
-    .field-item{margin-bottom:14px; display:none;} /* ซ่อนหัวข้อย่อยไว้ก่อน */
-    .field-item.has-val{display:block;}
-    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:600;margin-bottom:3px}
-    .val{font-size:0.88rem;color:#FFF;line-height:1.4;}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .field-item{margin-bottom:12px; display: none; } /* ซ่อนหัวข้อย่อยไว้ก่อน */
+    .field-item.has-val { display: block; }
+    
+    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;margin-bottom:2px}
+    .val{font-size:0.85rem;color:#FFF}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
-    .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:16px;border-radius:4px;display:block;text-align:center;font-weight:800;text-transform:uppercase;letter-spacing:2px;font-size:0.85rem;}
+    .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-weight:800}
   </style>
 </head>
 <body>
-<header><a href="index.html" style="color:var(--gold);text-decoration:none;font-size:0.75rem;font-weight:800;">✕ CLOSE</a><div style="font-weight:800;color:var(--gold);letter-spacing:2px;">SPECIFICATIONS</div><div style="width:50px;"></div></header>
+<div id="pageSplash"><div style="color:var(--gold);font-weight:800;letter-spacing:4px;">MASTER CATALOG</div></div>
+<header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800;color:var(--gold);">DETAIL VIEW</div><div style="width:40px;"></div></header>
 
-<div class="gallery-stage">
-  <img id="mainImg" src="" loading="lazy">
-  <div style="position:absolute;bottom:15px;right:15px;background:rgba(0,0,0,0.65);padding:5px 12px;border-radius:50px;font-size:11px;font-weight:700;" id="imgCount">0 / 0</div>
-  <div style="position:absolute;top:50%;left:10px;transform:translateY(-50%);font-size:24px;color:white;cursor:pointer;" onclick="changeImg(-1)">❮</div>
-  <div style="position:absolute;top:50%;right:10px;transform:translateY(-50%);font-size:24px;color:white;cursor:pointer;" onclick="changeImg(1)">❯</div>
+<div class="gallery-box">
+  <img id="mainImg" src="">
+  <div style="position:absolute;bottom:10px;right:15px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:20px;font-size:10px;" id="imgCount">0 / 0</div>
 </div>
 
 <main class="content">
-  <div class="info-card has-data">
-    <div id="pID" style="color:var(--gold);font-size:0.65rem;font-weight:800;margin-bottom:6px;"></div>
-    <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);margin-bottom:12px;font-weight:700;"></h1>
-    <div id="pPrice" style="font-size:1.6rem;font-weight:800;color:#FFF;margin-bottom:24px;"></div>
+  <div class="info-card has-data" id="card-hero">
+    <div id="pID" style="color:var(--gold);font-size:0.6rem;font-weight:800;margin-bottom:5px;"></div>
+    <h1 id="pPlot" style="font-size:1.8rem;color:var(--gold);margin-bottom:10px;font-weight:800;"></h1>
+    <div id="pPrice" style="font-size:1.4rem;font-weight:700;margin-bottom:15px;"></div>
     <div class="grid">
       <div id="f-bb" class="field-item"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
-      <div id="f-living" class="field-item"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
+      <div id="f-area" class="field-item"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
       <div id="f-land" class="field-item"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
-      <div id="f-pricesq" class="field-item"><div class="label">Price per Sq.m</div><div class="val text-[#C9A84C] font-700" id="vPriceSq"></div></div>
+      <div id="f-price-sq" class="field-item"><div class="label">Price per Sq.m</div><div class="val text-[#C9A84C]" id="vPriceSq"></div></div>
     </div>
   </div>
 
   <div class="info-card" id="card-specs">
-    <h2 class="section-title">Property Details</h2>
-    <div class="grid" id="specs-container"></div>
-  </div>
-
-  <div class="info-card" id="card-finance">
-    <h2 class="section-title">Ownership & Common Fees</h2>
-    <div class="grid" id="finance-container"></div>
+    <h2 class="section-title">Specifications</h2>
+    <div class="grid" id="specs-list"></div>
   </div>
 
   <div class="info-card" id="card-map">
     <h2 class="section-title">Location Map</h2>
-    <div style="width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;border:1px solid var(--border);"><div id="leafletMap" style="width:100%;height:100%;"></div></div>
+    <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;"><div id="leafletMap" style="width:100%;height:100%;"></div></div>
   </div>
 
   <div class="info-card" id="card-amenities">
@@ -78,80 +76,72 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Mall',lat:12.5518,lon:99.9631}, {name:'Night Market',lat:12.5714,lon:99.9575} ];
-let images=[], idx=0;
+const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Bluport Mall',lat:12.5518,lon:99.9631} ];
 
 async function init(){
   if(!hpId) return;
   try{
     const res=await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
     const json=await res.json();
-    if(json.ok) renderUI(json.data);
+    if(json.ok) renderData(json.data);
   }catch(e){}
-  document.getElementById('imgCount').parentNode.style.opacity='1';
+  document.getElementById('pageSplash').style.opacity='0';
+  setTimeout(()=>document.getElementById('pageSplash').style.display='none',400);
 }
 
-// 🎯 ฟังก์ชันเพิ่มหัวข้อเฉพาะที่มีข้อมูล
-function buildField(cardId, containerId, label, val) {
-  if(!val || val === "-" || val === "0" || val === "") return;
-  const card = document.getElementById(cardId);
-  const container = document.getElementById(containerId);
-  card.classList.add('has-data');
-  container.innerHTML += `<div class="field-item has-val"><div class="label">${label}</div><div class="val">${val}</div></div>`;
+// 🎯 ฟังก์ชันวิเศษ: แสดงหัวข้อเฉพาะที่มีค่าเท่านั้น
+function checkShow(label, val) {
+  if(!val || val === "-" || val === "0" || val === "") return "";
+  document.getElementById('card-specs').classList.add('has-data');
+  return `<div class="field-item has-val"><div class="label">${label}</div><div class="val">${val}</div></div>`;
 }
 
-function renderUI(u){
-  // 1. Gallery System
-  images = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [u.Thumbnail_Image];
-  const updateGallery = () => { document.getElementById('mainImg').src = images[idx]; document.getElementById('imgCount').textContent = `${idx+1} / ${images.length}`; };
-  window.changeImg = (n) => { idx = (idx + n + images.length) % images.length; updateGallery(); };
-  updateGallery();
+function renderData(u){
+  // 1. รูปภาพสไลด์
+  const images = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [u.Thumbnail_Image];
+  let curImg = 0;
+  const updateImg = () => {
+    document.getElementById('mainImg').src = images[curImg];
+    document.getElementById('imgCount').textContent = `${curImg + 1} / ${images.length}`;
+  };
+  updateImg();
+  document.querySelector('.gallery-box').onclick = () => { curImg = (curImg+1)%images.length; updateImg(); };
 
-  // 2. Main Info
+  // 2. ข้อมูลหลัก
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot || '-'}`;
   document.getElementById('pPrice').textContent = u.Sale_Price ? `฿${Number(u.Sale_Price).toLocaleString()}` : 'Price on Request';
 
+  // Highlights Auto-Hide
   if(u.Bedrooms) { document.getElementById('f-bb').classList.add('has-val'); document.getElementById('vBB').textContent = `${u.Bedrooms} Bed | ${u.Bathrooms||0} Bath`; }
-  if(u.Living_Area_sq_m) { document.getElementById('f-living').classList.add('has-val'); document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m} m²`; }
+  if(u.Living_Area_sq_m) { document.getElementById('f-area').classList.add('has-val'); document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m} m²`; }
   if(u.Land_Area_sq_m) { document.getElementById('f-land').classList.add('has-val'); document.getElementById('vLand').textContent = `${u.Land_Area_sq_m} m²`; }
-  if(u.Sale_Price && u.Living_Area_sq_m > 0) { document.getElementById('f-pricesq').classList.add('has-val'); document.getElementById('vPriceSq').textContent = `฿${Math.round(u.Sale_Price/u.Living_Area_sq_m).toLocaleString()} / m²`; }
+  if(u.Sale_Price && u.Living_Area_sq_m > 0) { document.getElementById('f-price-sq').classList.add('has-val'); document.getElementById('vPriceSq').textContent = `฿${Math.round(u.Sale_Price/u.Living_Area_sq_m).toLocaleString()} / m²`; }
 
-  // 3. Auto-Hide Specifications
-  const sc = 'specs-container'; const card = 'card-specs';
-  buildField(card, sc, "Listing Status", u.Status);
-  buildField(card, sc, "Furnishing", u.Furnishing);
-  buildField(card, sc, "Property Type", u.Type);
-  buildField(card, sc, "District / Sub-District", `${u.District || ''} - ${u.SubDistrict || ''}`);
-  buildField(card, sc, "Zone", u.Zone);
-  buildField(card, sc, "Pool Info", u.Pool_Size ? `${u.Pool_Size} (${u.Pool_System || ''})` : "");
-  buildField(card, sc, "Kitchen Style", u.Kitchen_Type);
-  buildField(card, sc, "Direction Facing", u.Direction);
+  // 3. Specs 38 รายการ (ซ่อนอัตโนมัติถ้าว่าง)
+  const specsGrid = document.getElementById('specs-list');
+  specsGrid.innerHTML = 
+    checkShow("Listing Type", u.Listing_Type) + checkShow("Property Type", u.Type) +
+    checkShow("District", u.District) + checkShow("Sub-District", u.SubDistrict) +
+    checkShow("Zone", u.Zone) + checkShow("Furnishing", u.Furnishing) +
+    checkShow("Pool System", u.Pool_System) + checkShow("Pool Size", u.Pool_Size) +
+    checkShow("Kitchen Style", u.Kitchen_Type) + checkShow("Facing", u.Direction) +
+    checkShow("Common Fee", u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
 
-  // 4. Financials
-  const fc = 'finance-container'; const fcard = 'card-finance';
-  buildField(fcard, fc, "Ownership", u.Ownership_Type);
-  buildField(fcard, fc, "Title Deed", u.Land_Title_Deed_Type);
-  buildField(fcard, fc, "Monthly Common Fee", u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
-  if(u.Common_Fee_Rate && u.Living_Area_sq_m) {
-    buildField(fcard, fc, "Yearly Maintenance", `฿${Math.round(u.Common_Fee_Rate * u.Living_Area_sq_m * 12).toLocaleString()} / Year`);
-  }
-
-  // 5. Map & Amenities
+  // 4. แผนที่และระยะทาง (คุมโดย Dashboard)
   if(u.Coordinates){
     const [lat, lon] = u.Coordinates.split(',').map(Number);
-    // แสดงแผนที่เฉพาะเมื่อ Dashboard สั่ง "Show"
-    if(u.Map_Visibility !== 'Hide'){
+    if(u.Map_Visibility !== 'Hide') {
       document.getElementById('card-map').classList.add('has-data');
-      const map = L.map('leafletMap',{zoomControl:false}).setView([lat, lon], 14);
+      const map = L.map('leafletMap').setView([lat, lon], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
       L.marker([lat, lon]).addTo(map);
     }
-    // ระยะทางโชว์เสมอ (Amenities)
+    // ระยะทางโชว์เสมอ
     document.getElementById('card-amenities').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, loc.lon);
-      return `<div class="flex justify-between py-3 border-b border-white/5 text-xs"><span class="text-white/40">${loc.name}</span><span class="text-[#C9A84C] font-700">${d.toFixed(1)} km</span></div>`;
+      return `<div class="flex justify-between py-2 border-b border-white/5 text-xs"><span class="text-slate-400">${loc.name}</span><span class="text-[#C9A84C]">${d.toFixed(1)} km</span></div>`;
     }).join('');
   }
 }
