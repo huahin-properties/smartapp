@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V169</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V170</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -10,13 +10,49 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
-    .hero { padding: 75px 15px 10px; text-align: center; position: relative; }
     
-    /* 🎯 ปุ่ม Reset Filters ที่เพิ่มใหม่ */
-    .reset-btn { position: absolute; top: 75px; right: 20px; color: var(--gold); cursor: pointer; font-size: 1.1rem; transition: 0.3s; z-index: 10; }
-    .reset-btn:active { transform: rotate(-180deg); }
+    .hero { padding: 75px 15px 10px; text-align: center; }
+    
+    /* 🎯 ปรับตำแหน่งช่องค้นหาให้รองรับปุ่มรีเฟรชภายใน */
+    .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
+    
+    .search-input { 
+      width: 100%; 
+      background: #FFFFFF; 
+      border: 1px solid var(--gold); 
+      border-radius: 50px; 
+      padding: 10px 45px 10px 40px; /* เพิ่ม padding ขวาเพื่อหลบปุ่มรีเฟรช */
+      color: #0B1829; 
+      font-weight: 600; 
+      font-size: 0.85rem; 
+      outline: none; 
+    }
 
-    .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 15px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; margin-bottom: 10px; }
+    /* 🎯 ปุ่ม Reset Filters แบบกึ่งกลางเป๊ะในช่องค้นหา */
+    .reset-btn { 
+      position: absolute; 
+      right: 15px; 
+      top: 50%; 
+      transform: translateY(-50%); /* จัดกึ่งกลางแนวตั้ง 100% */
+      color: var(--gold); 
+      cursor: pointer; 
+      font-size: 1rem; 
+      transition: 0.3s; 
+      z-index: 10;
+      padding: 5px; /* เพิ่มพื้นที่กด */
+    }
+    .reset-btn:active { transform: translateY(-50%) rotate(-180deg); }
+
+    /* ไอคอนแว่นขยายด้านหน้า (คงเดิม) */
+    .search-icon-fixed {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 0.9rem;
+    }
+
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
     .pill-container { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
@@ -41,12 +77,16 @@
 <body>
   <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">MASTER CATALOG</a></header>
   <section class="hero">
-    <div class="reset-btn" onclick="resetFilters()" title="Reset All Filters">
-      <i class="fas fa-sync-alt"></i>
-    </div>
-
     <div style="max-width:550px; margin:0 auto;">
-      <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
+      
+      <div class="search-box-wrapper">
+        <i class="fas fa-search search-icon-fixed"></i>
+        <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
+        <div class="reset-btn" onclick="resetFilters()" title="Reset All Filters">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+      </div>
+
       <div class="filters-grid">
         <select id="zF" onchange="f()" class="filter-select"><option value="">All Zones</option></select>
         <select id="sF" onchange="f()" class="filter-select"><option value="">Price Sort</option><option value="low">Low → High</option><option value="high">High → Low</option></select>
@@ -88,7 +128,6 @@
       }).join('');
     }
 
-    // 🎯 ฟังก์ชันรีเซ็ตค่าเริ่มต้นทั้งหมด
     function resetFilters() {
       document.getElementById('sI').value = '';
       document.getElementById('zF').value = '';
