@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Master Dashboard | V172 Stable Control</title>
+  <title>Master Dashboard | V172 Stable Map Control</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,13 +11,11 @@
     .content-wrapper { padding: 10px; max-width: 1000px; margin: 0 auto; }
     .unit-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
     
-    /* 🎯 สถานะออนไลน์/รอดำเนินการ/ออฟไลน์ */
-    .status-select { background: #0B1829; border-radius: 6px; font-size: 9px; font-weight: 800; padding: 6px; outline: none; border: 1px solid transparent; transition: 0.3s; }
-    .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4); }
-    .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4); }
-    .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.3); }
+    .status-select { background: #0B1829; border-radius: 6px; font-size: 9px; font-weight: 800; padding: 6px; outline: none; border: 1px solid transparent; }
+    .st-online { color: #10B981; border-color: rgba(16, 185, 129, 0.4); }
+    .st-offline { color: #64748B; border-color: rgba(100, 116, 139, 0.3); }
 
-    /* 🎯 ปุ่มควบคุมแผนที่แบบจำค่าถาวร */
+    /* 🎯 ปุ่มควบคุมแผนที่: ล็อกสถานะตามข้อมูลจริง */
     .map-toggle { font-size: 9px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: 0.3s; border: 1.5px solid transparent; }
     .map-show { background: rgba(201, 168, 76, 0.1); color: #C9A84C; border-color: #C9A84C; }
     .map-hide { background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: #EF4444; }
@@ -34,7 +32,7 @@
       <h1 class="text-lg font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
       <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-3 py-1.5 rounded font-800 text-[10px] uppercase shadow-lg">Add Unit</button>
     </div>
-    <input type="text" id="sI" onkeyup="render()" placeholder="Quick Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-4 outline-none text-xs focus:border-[#C9A84C]">
+    <input type="text" id="sI" onkeyup="render()" placeholder="Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-4 outline-none text-xs focus:border-[#C9A84C]">
     <div id="list"></div>
   </div>
 
@@ -58,13 +56,12 @@
       
       document.getElementById('list').innerHTML = filtered.map(u => {
         const sysStatus = u.System_Status || 'Pending';
-        const mapStatus = u.Map_Visibility || 'Show';
-        const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
+        const mapStatus = u.Map_Visibility || 'Show'; // ดึงค่าจริงจาก Sheets
         
         return `
           <div class="unit-card">
             <div class="flex items-center gap-3 mb-3">
-              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45'}" class="w-12 h-9 rounded object-cover border border-white/10">
+              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45'}" class="w-12 h-9 rounded object-cover border border-white/10 shadow-sm">
               <div class="flex-1">
                 <div class="text-[11px] font-800 text-[#C9A84C]">${u.HP_ID} <span class="text-slate-500 font-600">PLOT ${u.Plot || '-'}</span></div>
                 <div class="text-[9px] font-600 uppercase text-slate-400">${u.Project_Name || 'MASTER ASSET'}</div>
@@ -73,9 +70,8 @@
             </div>
             
             <div class="flex items-center gap-2 border-t border-white/5 pt-2">
-              <select onchange="updateRecord('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 ${colorClass}">
+              <select onchange="updateRecord('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 ${sysStatus === 'Online' ? 'st-online' : 'st-offline'}">
                 <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''}>● ONLINE</option>
-                <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''}>● PENDING</option>
                 <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''}>● OFFLINE</option>
               </select>
 
@@ -101,12 +97,10 @@
           body: JSON.stringify({ mode: "updateUnit", HP_ID: id, [fieldName]: newValue }) 
         });
         const result = await response.json();
-        
         if (result.ok) {
           const idx = data.findIndex(u => u.HP_ID === id);
           if (idx !== -1) data[idx][fieldName] = newValue;
-          // ล้างแคชเพื่อให้หน้าแสดงผลเปลี่ยนตามทันที
-          localStorage.removeItem(`cache_detail_${id}`);
+          localStorage.removeItem(`cache_detail_${id}`); // ล้างแคชเพื่อให้หน้า Detail เปลี่ยนตามทันที
           render();
         }
       } catch (err) { alert("Sync failed!"); }
