@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Master Data Collection Sheet | Smart Properties</title>
+  <style>
+    @page { size: A4; margin: 1cm; }
+    body { font-family: 'Sarabun', sans-serif; font-size: 11pt; line-height: 1.4; color: #222; }
+    .header { text-align: center; border-bottom: 2px solid #262626; padding-bottom: 10px; margin-bottom: 20px; }
+    .header h1 { font-size: 18pt; margin: 0; text-transform: uppercase; color: #262626; }
+    .header p { font-size: 9pt; color: #666; margin: 5px 0 0 0; }
+    
+    .section { margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
+    .section-title { background: #f4f4f4; padding: 5px 10px; font-weight: bold; font-size: 10pt; text-transform: uppercase; border-bottom: 1px solid #ddd; }
+    
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+    .field { padding: 8px 10px; border-bottom: 1px solid #eee; border-right: 1px solid #eee; display: flex; align-items: baseline; }
+    .field:last-child { border-bottom: none; }
+    .full-width { grid-column: span 2; }
+    
+    .label { font-size: 9pt; font-weight: bold; color: #555; width: 140px; flex-shrink: 0; }
+    .dots { flex-grow: 1; border-bottom: 1px dotted #ccc; height: 14px; margin-left: 5px; }
+    .checkbox { display: inline-block; width: 12px; height: 12px; border: 1px solid #333; margin-right: 5px; vertical-align: middle; }
+    
+    .footer { margin-top: 20px; font-size: 8pt; color: #999; text-align: center; }
+    
+    /* 🎯 สไตล์สำหรับเครื่องพิมพ์ */
+    @media print {
+      .no-print { display: none; }
+      body { margin: 0; padding: 0; }
+      .section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print" style="background: #fff3cd; padding: 15px; text-align: center; border-bottom: 1px solid #ffeeba; margin-bottom: 20px;">
+    <button onclick="window.print()" style="padding: 10px 25px; background: #262626; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🖨️ สั่งพิมพ์ใบเก็บข้อมูล (A4)</button>
+  </div>
+
+  <div class="header">
+    <h1>Master Property Collection Form</h1>
+    <p>HuaHin.Properties | Smart Properties System V3.4</p>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+    <div style="width: 45%;">วันที่เก็บข้อมูล: .......................................</div>
+    <div style="width: 45%;">ผู้เก็บข้อมูล: .......................................</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1. Basic Identity (ข้อมูลพื้นฐาน)</div>
+    <div class="grid">
+      <div class="field"><span class="label">1. HP_ID (Auto-gen)</span><span class="dots"></span></div>
+      <div class="field"><span class="label">2. Listing Type</span><div class="checkbox"></div> ขาย (Sale) <div class="checkbox" style="margin-left:10px;"></div> เช่า (Rent)</div>
+      <div class="field"><span class="label">3. Asset Category</span><span class="dots"></span></div>
+      <div class="field"><span class="label">4. Project Name</span><span class="dots"></span></div>
+      <div class="field"><span class="label">5. Plot Reference</span><span class="dots"></span></div>
+      <div class="field"><span class="label">6. Sales Status</span><span class="dots"></span></div>
+      <div class="field"><span class="label">34. Marketing Badge</span><span class="dots"></span></div>
+      <div class="field"><span class="label">35. Build Stage</span><span class="dots"></span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2. Financials & Ownership (ราคาและกรรมสิทธิ์)</div>
+    <div class="grid">
+      <div class="field"><span class="label">7. Sale Price</span><span class="dots"></span> <span style="font-size:8pt; margin-left:5px;">฿</span></div>
+      <div class="field"><span class="label">31. Ownership</span><span class="dots"></span></div>
+      <div class="field"><span class="label">10. Common Fee Rate</span><span class="dots"></span> <span style="font-size:8pt; margin-left:5px;">/m²</span></div>
+      <div class="field"><span class="label">32. Land Title Deed</span><span class="dots"></span></div>
+      <div class="field"><span class="label">33. Transfer Exp.</span><span class="dots"></span></div>
+      <div class="field"><span class="label">Created Date</span><span class="dots"></span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3. Specifications (พื้นที่และสเปก)</div>
+    <div class="grid">
+      <div class="field"><span class="label">8. Living Area (m²)</span><span class="dots"></span></div>
+      <div class="field"><span class="label">13. Land Area (m²)</span><span class="dots"></span></div>
+      <div class="field"><span class="label">14. Land Area (sq.w)</span><span class="dots"></span></div>
+      <div class="field"><span class="label">15. Furnishing</span><span class="dots"></span></div>
+      <div class="field"><span class="label">19. Bedrooms</span><span class="dots"></span></div>
+      <div class="field"><span class="label">20. Bathrooms</span><span class="dots"></span></div>
+      <div class="field"><span class="label">21. Parking Spaces</span><span class="dots"></span></div>
+      <div class="field"><span class="label">22. Kitchen Style</span><span class="dots"></span></div>
+      <div class="field"><span class="label">23. Direction Facing</span><span class="dots"></span></div>
+      <div class="field"><span class="label">25. Pool Size & Depth</span><span class="dots"></span></div>
+      <div class="field"><span class="label">27. Pool System</span><span class="dots"></span></div>
+      <div class="field"><span class="label">28. View Profile</span><span class="dots"></span></div>
+      <div class="field full-width"><span class="label">30. Extras / Features</span><span class="dots"></span></div>
+      <div class="field full-width"><span class="label">24/29. Util (Elec/Water)</span><span class="dots"></span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4. Location (ทำเลที่ตั้ง)</div>
+    <div class="grid">
+      <div class="field"><span class="label">16. District</span><span class="dots"></span></div>
+      <div class="field"><span class="label">17. Sub-District</span><span class="dots"></span></div>
+      <div class="field"><span class="label">18. Zone</span><span class="dots"></span></div>
+      <div class="field"><span class="label">36. GPS Coordinates</span><span class="dots"></span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5. Description & Media Check (คำบรรยายและสื่อ)</div>
+    <div class="field full-width" style="height: 60px; align-items: flex-start;">
+      <span class="label">37. Property Desc.</span><span class="dots" style="height: 50px;"></span>
+    </div>
+    <div class="field full-width">
+      <span class="label">Media Status:</span>
+      <div class="checkbox"></div> Cover 
+      <div class="checkbox" style="margin-left:15px;"></div> Album 
+      <div class="checkbox" style="margin-left:15px;"></div> PDF Floorplan 
+      <div class="checkbox" style="margin-left:15px;"></div> PDF Agent
+    </div>
+  </div>
+
+  <div class="footer">
+    *** เอกสารใช้ภายในเพื่อการจัดเก็บข้อมูลเข้าระบบ Master Catalog เท่านั้น ***
+  </div>
+
+</body>
+</html>
