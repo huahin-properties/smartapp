@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Details | V171 Complete Sync</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <title>Asset Details | V170 Smart Logic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
@@ -12,22 +12,22 @@
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
     .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;}
-    .gallery-box{margin-top:65px;position:relative;width:100%;aspect-ratio:16/10;background:#000;overflow:hidden;}
-    #mainImg{width:100%;height:100%;object-fit:cover;transition:0.3s;}
-    .content{padding:20px 15px 120px;max-width:900px;margin:0 auto}
+    .content{padding:65px 15px 120px;max-width:900px;margin:0 auto}
     
-    /* 🎯 ระบบ Auto-Hide: หัวข้อจะซ่อนถ้าไม่มีคลาส has-data */
-    .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
-    .info-card.has-data { display: block; }
+    /* 🎯 การจัดระเบียบหัวข้อข้อมูล */
+    .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; } /* ซ่อนไว้ก่อนเรนเดอร์ */
+    .info-card.has-data { display: block; } /* โชว์เฉพาะที่มีข้อมูล */
+    
     .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
-    
     .field-item{margin-bottom:12px; display: none; } /* ซ่อนหัวข้อย่อยไว้ก่อน */
     .field-item.has-val { display: block; }
     
     .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;margin-bottom:2px}
     .val{font-size:0.85rem;color:#FFF}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+    .map-box{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
+    #leafletMap{width:100%;height:100%;}
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-weight:800}
   </style>
@@ -36,32 +36,28 @@
 <div id="pageSplash"><div style="color:var(--gold);font-weight:800;letter-spacing:4px;">MASTER CATALOG</div></div>
 <header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800;color:var(--gold);">DETAIL VIEW</div><div style="width:40px;"></div></header>
 
-<div class="gallery-box">
-  <img id="mainImg" src="">
-  <div style="position:absolute;bottom:10px;right:15px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:20px;font-size:10px;" id="imgCount">0 / 0</div>
-</div>
-
-<main class="content">
+<main class="content" id="mainContent">
   <div class="info-card has-data" id="card-hero">
     <div id="pID" style="color:var(--gold);font-size:0.6rem;font-weight:800;margin-bottom:5px;"></div>
     <h1 id="pPlot" style="font-size:1.8rem;color:var(--gold);margin-bottom:10px;font-weight:800;"></h1>
-    <div id="pPrice" style="font-size:1.4rem;font-weight:700;margin-bottom:15px;"></div>
-    <div class="grid">
-      <div id="f-bb" class="field-item"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
-      <div id="f-area" class="field-item"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
-      <div id="f-land" class="field-item"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
-      <div id="f-price-sq" class="field-item"><div class="label">Price per Sq.m</div><div class="val text-[#C9A84C]" id="vPriceSq"></div></div>
+    <div id="pPrice" style="font-size:1.4rem;font-weight:700;"></div>
+    <div class="grid mt-4">
+      <div id="item-bb" class="field-item"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
+      <div id="item-living" class="field-item"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
+      <div id="item-land" class="field-item"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
+      <div id="item-price-sq" class="field-item"><div class="label">Price per Sq.m</div><div class="val text-[#C9A84C]" id="vPriceSq"></div></div>
     </div>
   </div>
 
   <div class="info-card" id="card-specs">
     <h2 class="section-title">Specifications</h2>
-    <div class="grid" id="specs-list"></div>
+    <div class="grid" id="specs-grid">
+      </div>
   </div>
 
   <div class="info-card" id="card-map">
     <h2 class="section-title">Location Map</h2>
-    <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;"><div id="leafletMap" style="width:100%;height:100%;"></div></div>
+    <div class="map-box"><div id="leafletMap"></div></div>
   </div>
 
   <div class="info-card" id="card-amenities">
@@ -85,59 +81,62 @@ async function init(){
     const json=await res.json();
     if(json.ok) renderData(json.data);
   }catch(e){}
-  document.getElementById('pageSplash').style.opacity='0';
-  setTimeout(()=>document.getElementById('pageSplash').style.display='none',400);
+  const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);}
 }
 
-// 🎯 ฟังก์ชันวิเศษ: แสดงหัวข้อเฉพาะที่มีค่าเท่านั้น
-function checkShow(label, val) {
-  if(!val || val === "-" || val === "0" || val === "") return "";
-  document.getElementById('card-specs').classList.add('has-data');
-  return `<div class="field-item has-val"><div class="label">${label}</div><div class="val">${val}</div></div>`;
+// 🎯 ฟังก์ชันหัวใจ: ตรวจสอบและแสดงเฉพาะที่มีข้อมูล
+function setVal(id, val, parentId = null) {
+  const el = document.getElementById(id);
+  const parent = document.getElementById(parentId || `item-${id.substring(1).toLowerCase()}`);
+  if (val && val !== "-" && val !== "0") {
+    el.textContent = val;
+    if(parent) { parent.classList.add('has-val'); parent.closest('.info-card').classList.add('has-data'); }
+    return true;
+  }
+  return false;
 }
 
 function renderData(u){
-  // 1. รูปภาพสไลด์
-  const images = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [u.Thumbnail_Image];
-  let curImg = 0;
-  const updateImg = () => {
-    document.getElementById('mainImg').src = images[curImg];
-    document.getElementById('imgCount').textContent = `${curImg + 1} / ${images.length}`;
-  };
-  updateImg();
-  document.querySelector('.gallery-box').onclick = () => { curImg = (curImg+1)%images.length; updateImg(); };
-
-  // 2. ข้อมูลหลัก
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot || '-'}`;
-  document.getElementById('pPrice').textContent = u.Sale_Price ? `฿${Number(u.Sale_Price).toLocaleString()}` : 'Price on Request';
+  document.getElementById('pPrice').textContent = u.Sale_Price ? `฿${Number(u.Sale_Price).toLocaleString()}` : '';
 
-  // Highlights Auto-Hide
-  if(u.Bedrooms) { document.getElementById('f-bb').classList.add('has-val'); document.getElementById('vBB').textContent = `${u.Bedrooms} Bed | ${u.Bathrooms||0} Bath`; }
-  if(u.Living_Area_sq_m) { document.getElementById('f-area').classList.add('has-val'); document.getElementById('vLiving').textContent = `${u.Living_Area_sq_m} m²`; }
-  if(u.Land_Area_sq_m) { document.getElementById('f-land').classList.add('has-val'); document.getElementById('vLand').textContent = `${u.Land_Area_sq_m} m²`; }
-  if(u.Sale_Price && u.Living_Area_sq_m > 0) { document.getElementById('f-price-sq').classList.add('has-val'); document.getElementById('vPriceSq').textContent = `฿${Math.round(u.Sale_Price/u.Living_Area_sq_m).toLocaleString()} / m²`; }
+  // ตรวจสอบ Highlight
+  setVal('vBB', `${u.Bedrooms || 0} Bed | ${u.Bathrooms || 0} Bath`);
+  setVal('vLiving', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : null);
+  setVal('vLand', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : null);
+  
+  if (u.Sale_Price && u.Living_Area_sq_m > 0) {
+    setVal('vPriceSq', `฿${Math.round(u.Sale_Price / u.Living_Area_sq_m).toLocaleString()} / m²`);
+  }
 
-  // 3. Specs 38 รายการ (ซ่อนอัตโนมัติถ้าว่าง)
-  const specsGrid = document.getElementById('specs-list');
-  specsGrid.innerHTML = 
-    checkShow("Listing Type", u.Listing_Type) + checkShow("Property Type", u.Type) +
-    checkShow("District", u.District) + checkShow("Sub-District", u.SubDistrict) +
-    checkShow("Zone", u.Zone) + checkShow("Furnishing", u.Furnishing) +
-    checkShow("Pool System", u.Pool_System) + checkShow("Pool Size", u.Pool_Size) +
-    checkShow("Kitchen Style", u.Kitchen_Type) + checkShow("Facing", u.Direction) +
-    checkShow("Common Fee", u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
+  // 🎯 จัดการ Specs 38 ช่อง (แบบ Auto-Hide)
+  const specs = [
+    {l: 'Furnishing', v: u.Furnishing}, {l: 'Pool System', v: u.Pool_System},
+    {l: 'District', v: u.District}, {l: 'Zone', v: u.Zone},
+    {l: 'Ownership', v: u.Ownership_Type}, {l: 'Common Fee', v: u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : null}
+  ];
+  
+  const grid = document.getElementById('specs-grid');
+  specs.forEach(s => {
+    if(s.v && s.v !== "-") {
+      grid.innerHTML += `<div class="field-item has-val"><div class="label">${s.l}</div><div class="val">${s.v}</div></div>`;
+      grid.closest('.info-card').classList.add('has-data');
+    }
+  });
 
-  // 4. แผนที่และระยะทาง (คุมโดย Dashboard)
-  if(u.Coordinates){
+  // 🎯 ระบบคุมแผนที่ (Dashboard Override)
+  if (u.Coordinates) {
     const [lat, lon] = u.Coordinates.split(',').map(Number);
-    if(u.Map_Visibility !== 'Hide') {
+    // แสดงแผนที่เฉพาะเมื่อ Dashboard สั่ง "Show"
+    if (u.Map_Visibility !== 'Hide') {
       document.getElementById('card-map').classList.add('has-data');
       const map = L.map('leafletMap').setView([lat, lon], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
       L.marker([lat, lon]).addTo(map);
     }
-    // ระยะทางโชว์เสมอ
+    
+    // ระยะทางโชว์เสมอ (Amenities)
     document.getElementById('card-amenities').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, loc.lon);
