@@ -26,7 +26,7 @@
       <p class="text-slate-500 text-[10px] uppercase tracking-[0.2em] mt-2">Identity Verification Required</p>
     </div>
     
-    <input type="email" id="email" class="field-input" placeholder="Email Address" autocomplete="email">
+    <input type="email" id="email" class="field-input" placeholder="Email Address">
     <input type="password" id="password" class="field-input" placeholder="Password">
     
     <button onclick="handleLogin()" id="loginBtn" class="btn-login">Verify & Enter</button>
@@ -60,7 +60,7 @@
         const result = await res.json();
 
         if (result.ok) {
-          // ✅ บันทึกสถานะล็อกอินสำเร็จ (เพื่อให้หน้า Index/Detail โชว์ปุ่ม Edit)
+          // ✅ ล็อกอินสำเร็จ: บันทึกข้อมูลที่ดึงมาจากชีต users จริงๆ
           localStorage.setItem('admin_session', 'active');
           localStorage.setItem('admin_role', result.role); 
           localStorage.setItem('admin_project', result.project);
@@ -72,7 +72,7 @@
           btn.disabled = false;
         }
       } catch (e) {
-        alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่");
+        alert("การเชื่อมต่อล้มเหลว: " + e.toString());
         btn.disabled = false;
       }
     }
