@@ -2,24 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Master Dashboard | V169 Map Control</title>
+  <title>Master Dashboard | V170 Persistent Control</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; padding: 0; }
+    body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; }
     .content-wrapper { padding: 10px; max-width: 1000px; margin: 0 auto; }
-    .unit-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 10px 12px; margin-bottom: 6px; }
-    .u-img { width: 50px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
-    .u-id-badge { font-size: 11px; font-weight: 800; color: #FFFFFF; background: rgba(201, 168, 76, 0.2); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(201, 168, 76, 0.3); }
-    .status-select { background: #0B1829; border-radius: 6px; font-size: 9px; font-weight: 800; padding: 4px 6px; outline: none; border: 1px solid transparent; transition: 0.3s; }
-    .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.3); }
-    .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.2); }
-    
-    /* 🎯 สไตล์ใหม่สำหรับปุ่มคุมแผนที่ */
-    .map-toggle { font-size: 9px; font-weight: 800; padding: 4px 8px; border-radius: 6px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-    .map-show { background: rgba(201, 168, 76, 0.15); color: #C9A84C; border: 1px solid #C9A84C; }
-    .map-hide { background: rgba(224, 36, 36, 0.1); color: #FF4444; border: 1px solid rgba(224, 36, 36, 0.3); }
+    .unit-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
+    .status-select { background: #0B1829; border-radius: 6px; font-size: 9px; font-weight: 800; padding: 6px; outline: none; border: 1px solid transparent; }
+    .st-online { color: #10B981; border-color: rgba(16, 185, 129, 0.4); }
+    .st-pending { color: #F59E0B; border-color: rgba(245, 158, 11, 0.4); }
+    .st-offline { color: #64748B; border-color: rgba(100, 116, 139, 0.3); }
+    .map-toggle { font-size: 9px; font-weight: 800; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+    .map-show { background: rgba(201, 168, 76, 0.1); color: #C9A84C; border: 1px solid #C9A84C; }
+    .map-hide { background: rgba(224, 36, 36, 0.1); color: #FF4444; border: 1px solid #FF4444; }
     .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; }
     .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #C9A84C; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -28,14 +25,11 @@
 <body>
   <div id="quickLoad" class="loading-overlay"><div class="loader"></div></div>
   <div class="content-wrapper">
-    <div class="flex justify-between items-center mb-4 mt-1 px-1">
+    <div class="flex justify-between items-center mb-4 mt-2 px-1">
       <h1 class="text-lg font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
-      <div class="flex gap-2">
-        <button onclick="localStorage.clear(); location.href='gateway.html';" class="text-slate-500 font-800 text-[8px] uppercase">Logout</button>
-        <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-3 py-1 rounded font-800 text-[9px] uppercase shadow-lg">Add Unit</button>
-      </div>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-3 py-1.5 rounded font-800 text-[10px] uppercase">Add Unit</button>
     </div>
-    <input type="text" id="sI" onkeyup="render()" placeholder="Search Plot or ID..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 mb-3 outline-none text-xs font-600">
+    <input type="text" id="sI" onkeyup="render()" placeholder="Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 mb-4 outline-none text-xs">
     <div id="list"></div>
   </div>
 
@@ -54,27 +48,29 @@
 
     function render() {
       const q = document.getElementById('sI').value.toLowerCase();
-      const filtered = data.filter(u => !q || u.HP_ID.toLowerCase().includes(q) || (u.Project_Name && u.Project_Name.toLowerCase().includes(q)) || (u.Plot && u.Plot.toLowerCase().includes(q)));
+      const filtered = data.filter(u => !q || u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q)));
       document.getElementById('list').innerHTML = filtered.map(u => {
         const sysStatus = u.System_Status || 'Pending';
-        const mapStatus = u.Map_Visibility || 'Show'; // ฟิลด์ที่ 39
+        const mapStatus = u.Map_Visibility || 'Show';
+        const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
         return `
           <div class="unit-card">
             <div class="flex items-center gap-3 mb-2">
-              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45'}" class="u-img shadow-md">
-              <div class="flex-1 min-width-0">
-                <div class="flex items-center gap-2 mb-1"><span class="u-id-badge">${u.HP_ID}</span><span class="text-[10px] font-700 text-[#94A3B8]">PLOT ${u.Plot || '-'}</span></div>
-                <div class="text-[9px] font-600 uppercase truncate text-slate-400">${u.Project_Name || 'NO PROJECT'}</div>
+              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45'}" class="w-12 h-9 rounded object-cover border border-white/10">
+              <div class="flex-1">
+                <div class="text-[11px] font-800 text-[#C9A84C]">${u.HP_ID} <span class="text-slate-500 font-600">PLOT ${u.Plot || '-'}</span></div>
+                <div class="text-[9px] font-600 uppercase text-slate-400">${u.Project_Name || 'NO PROJECT'}</div>
               </div>
-              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="p-2 text-slate-500"><i class="fas fa-edit text-xs"></i></button>
+              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="text-slate-500 p-2"><i class="fas fa-edit text-xs"></i></button>
             </div>
             <div class="flex items-center gap-2 border-t border-white/5 pt-2">
-              <select onchange="updateQuick('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 ${sysStatus === 'Online' ? 'st-online' : 'st-offline'}">
+              <select onchange="updateQuick('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 ${colorClass}">
                 <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''}>● ONLINE</option>
+                <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''}>● PENDING</option>
                 <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''}>● OFFLINE</option>
               </select>
               <button onclick="toggleMap('${u.HP_ID}', '${mapStatus}')" class="map-toggle ${mapStatus === 'Show' ? 'map-show' : 'map-hide'}">
-                <i class="fas ${mapStatus === 'Show' ? 'fa-map-marked-alt' : 'fa-map-marker-slash'} mr-1"></i> ${mapStatus} Map
+                <i class="fas ${mapStatus === 'Show' ? 'fa-eye' : 'fa-eye-slash'} mr-1"></i> ${mapStatus} Map
               </button>
             </div>
           </div>`;
@@ -94,9 +90,9 @@
         if(result.ok) {
           const index = data.findIndex(item => item.HP_ID === id);
           if(index !== -1) { data[index][field] = val; render(); }
-          localStorage.removeItem(`cache_detail_${id}`); // ล้างแคชเพื่อให้หน้า Detail อัปเดตตาม
+          localStorage.removeItem(`cache_detail_${id}`);
         }
-      } catch(e) { alert("Update Error!"); }
+      } catch(e) { alert("Sync Error!"); }
       finally { document.getElementById('quickLoad').style.display = 'none'; }
     }
     window.onload = init;
