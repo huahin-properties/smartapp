@@ -15,12 +15,17 @@
     .btn-login { background: var(--gold); color: var(--navy-dark); width: 100%; padding: 1.2rem; border-radius: 4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; box-shadow: 0 10px 20px rgba(201, 168, 76, 0.2); }
     .btn-login:active { transform: scale(0.96); opacity: 0.9; }
     .btn-login:disabled { background: #444; color: #888; cursor: not-allowed; }
+    
+    /* 🎯 สไตล์พิเศษสำหรับไอคอนวาร์ป */
+    .warp-icon { cursor: pointer; transition: 0.3s; }
+    .warp-icon:hover { transform: scale(1.1); filter: brightness(1.2); }
+    .warp-icon:active { transform: scale(0.9); }
   </style>
 </head>
 <body>
   <div class="login-card text-center">
     <div class="mb-10">
-      <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/20">
+      <div onclick="location.href='dashboard.html'" class="warp-icon w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/20 shadow-lg shadow-gold/10">
         <i class="fas fa-user-shield text-[#C9A84C] text-2xl"></i>
       </div>
       <h2 class="text-2xl font-800 text-[#C9A84C] tracking-tighter italic uppercase">Admin Gateway</h2>
@@ -61,11 +66,9 @@
         const result = await res.json();
 
         if (result.ok) {
-          // 🏆 บันทึก Session เพื่อใช้ปลดล็อคกุญแจในหน้าอื่นๆ
           localStorage.setItem('admin_session', 'active');
           localStorage.setItem('admin_role', result.role);
-          localStorage.setItem('admin_project', result.project); // ค่าจากชีต: All, CoCo, PynePlus
-          
+          localStorage.setItem('admin_project', result.project);
           location.href = "dashboard.html";
         } else {
           err.innerText = result.msg;
