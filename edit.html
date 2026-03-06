@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V3.3 | Ultimate Sync & Speed</title>
+  <title>Master Editor V3.4 | Bulk Delete & Cleanup</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,11 +22,12 @@
     .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; transition: 0.3s; }
     .field-input:focus { border-color: var(--brand); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
+    
+    /* 🎯 สไตล์รูปภาพและ Checkbox */
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 1rem; overflow: hidden; border: 1px solid #eee; }
     .img-x { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; }
-    .pdf-row { display: flex; align-items: center; gap: 15px; background: #F9F9F8; padding: 15px; border-radius: 1.2rem; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.03); }
-    .pdf-icon { width: 45px; height: 45px; background: #fee2e2; color: #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .btn-pdf-action { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; border: none; }
+    .bulk-check { position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; z-index: 10; cursor: pointer; }
+    
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 25px 20px; z-index: 1000; text-align: center; }
     .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; }
     .mini-status { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--accent); display: none; margin-top: 5px; }
@@ -47,20 +48,24 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="input-card">
           <span class="field-label">Main Image <span>รูปภาพหน้าปก</span></span>
-          <div id="thumbPreview" class="w-full aspect-video rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden"><i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i></div>
+          <div id="thumbPreview" class="relative w-full aspect-video rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden">
+            <i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i>
+          </div>
           <button onclick="document.getElementById('file_thumb').click()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-800 mt-4 text-xs">UPDATE COVER</button>
           <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing...</div>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
-          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
+          <div class="flex justify-between items-end mb-2">
+            <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
+            <button id="bulkDelBtn" onclick="bulkDelete()" class="text-[10px] font-800 text-red-500 uppercase border border-red-200 px-3 py-1 rounded-lg hidden">Delete Selected</button>
+          </div>
           <div id="galleryPreview" class="h-48 bg-slate-50 rounded-2xl p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
           <button onclick="document.getElementById('file_gallery').click()" class="w-full py-4 bg-purple-600 text-white rounded-xl font-800 text-xs">ADD VISUALS</button>
           <div id="status_album" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing...</div>
           <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleUpload(this, 'album')"><input type="hidden" id="Album_Image">
         </div>
       </div>
-
       <div class="input-card">
         <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร</span></span>
         <div class="space-y-3 mt-4">
@@ -158,36 +163,26 @@
     const hpId = new URLSearchParams(window.location.search).get('id');
     let gallery = [], thumbUrl = "", pdfData = {};
 
-    // 🎯 INITIALIZATION: ดึงข้อมูลเก่ามาโชว์ 100%
     async function init() {
-      if (!hpId) { alert("ERROR: Missing Asset ID"); return; }
+      if (!hpId) return;
       try {
-        // 1. ดึง Metadata (Dropdowns)
         const metaRes = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getMetadata' }) })).json();
         if (metaRes.ok) {
           document.querySelectorAll('select.dynamic-opt').forEach(el => {
             const options = metaRes.data[el.id] || [];
-            if (options.length > 0) el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
+            el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
           });
         }
-
-        // 2. ดึงข้อมูลจริงมาใส่ช่องกรอก
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (unitRes.ok) {
           const u = unitRes.data;
           Object.keys(u).forEach(k => { const el = document.getElementById(k); if (el) el.value = u[k]; });
           document.getElementById('displayPlot').innerText = "EDIT MASTER: " + (u.Plot || u.HP_ID);
-
-          // รูปปกและอัลบั้มเดิม
           thumbUrl = u.Thumbnail_Image || ""; renderMainThumb(thumbUrl);
-          gallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : [];
-          renderGallery();
-
-          // ไฟล์ PDF เดิม
+          gallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
           if(u.FloorPlan_PDF) syncPdfUI('FloorPlan_PDF', u.FloorPlan_PDF, "Current File ✅");
           if(u.Customer_PDF) syncPdfUI('Customer_PDF', u.Customer_PDF, "Current File ✅");
           if(u.Agent_PDF) syncPdfUI('Agent_PDF', u.Agent_PDF, "Current File ✅");
-
           runCalc(); 
         }
       } catch (e) { console.error("Init Error"); }
@@ -214,7 +209,6 @@
       });
     }
 
-    // 🚀 Parallel Upload (Facebook Strategy)
     async function handleUpload(input, target, fieldId) {
       if(!input.files.length) return;
       const statusEl = document.getElementById(`status_${target === 'album' ? 'album' : 'thumb'}`);
@@ -239,17 +233,46 @@
 
     function renderMainThumb(url) {
       const box = document.getElementById('thumbPreview');
-      box.innerHTML = url ? `<img src="${url}" class="w-full h-full object-cover">` : `<i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i>`;
+      box.innerHTML = url ? `
+        <div class="img-x" onclick="deleteThumb()">✕</div>
+        <img src="${url}" class="w-full h-full object-cover">` : `<i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i>`;
       document.getElementById('Thumbnail_Image').value = url;
     }
 
     function renderGallery() {
-      document.getElementById('galleryPreview').innerHTML = gallery.map((url, i) => `
+      const box = document.getElementById('galleryPreview');
+      box.innerHTML = gallery.map((url, i) => `
         <div class="img-tile">
-          <div class="img-x" onclick="deleteImg(${i})">✕</div>
-          <img src="${url}" loading="lazy" class="w-full h-full object-cover">
+          <input type="checkbox" class="bulk-check" data-idx="${i}">
+          <img src="${url}" class="w-full h-full object-cover">
         </div>`).join('');
       document.getElementById('Album_Image').value = gallery.join(',');
+      document.getElementById('bulkDelBtn').classList.toggle('hidden', gallery.length === 0);
+    }
+
+    // ⚡ ระบบลบรูปหน้าปก + ล้างไฟล์ใน Drive
+    async function deleteThumb() {
+      if(!confirm("Remove cover image?")) return;
+      const oldUrl = thumbUrl;
+      thumbUrl = "";
+      renderMainThumb("");
+      await fetch(API, { method:'POST', body: JSON.stringify({ mode:'deleteFiles', urls: [oldUrl] }) });
+    }
+
+    // ⚡ ระบบลบรูปแบบกลุ่ม (Bulk Delete)
+    async function bulkDelete() {
+      const checked = Array.from(document.querySelectorAll('.bulk-check:checked'));
+      if(!checked.length) return;
+      if(!confirm(`Delete ${checked.length} selected images?`)) return;
+
+      const indices = checked.map(c => parseInt(c.dataset.idx)).sort((a,b) => b-a);
+      const urlsToDelete = indices.map(idx => gallery[idx]);
+      
+      indices.forEach(idx => gallery.splice(idx, 1));
+      renderGallery();
+
+      // สั่งลบไฟล์ใน Drive เบื้องหลัง
+      await fetch(API, { method:'POST', body: JSON.stringify({ mode:'deleteFiles', urls: urlsToDelete }) });
     }
 
     function syncPdfUI(id, url, name) {
@@ -258,9 +281,16 @@
       else { txt.innerText = "No file attached"; view.classList.add('hidden'); del.classList.add('hidden'); document.getElementById(id).value = ""; }
     }
 
-    function deleteImg(i) { if(confirm("Remove Image?")) { gallery.splice(i, 1); renderGallery(); } }
     function viewFile(id) { if(pdfData[id]) window.open(pdfData[id], '_blank'); }
-    function clearFile(id) { if(!confirm("Remove document?")) return; pdfData[id] = ""; syncPdfUI(id, "", ""); }
+    
+    // ลบ PDF + ล้างไฟล์ใน Drive
+    async function clearFile(id) {
+      if(!confirm("Remove document?")) return;
+      const oldUrl = pdfData[id];
+      pdfData[id] = "";
+      syncPdfUI(id, "", "");
+      await fetch(API, { method:'POST', body: JSON.stringify({ mode:'deleteFiles', urls: [oldUrl] }) });
+    }
 
     function runCalc() {
       const price = parseFloat(document.getElementById('Sale_Price').value) || 0;
@@ -275,12 +305,12 @@
     }
 
     async function saveData() {
-      if(!confirm("Update this Master Entry?")) return;
+      if(!confirm("Update Master Entry?")) return;
       document.getElementById('btn_save').innerText = "SYNCING UPDATES...";
       const p = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: gallery.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) p[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(p) })).json();
-      if(res.ok) { alert("MASTER UPDATED SUCCESSFULLY! ✅"); location.href='dashboard.html'; }
+      if(res.ok) { alert("SUCCESS! ✅"); location.href='dashboard.html'; }
     }
 
     function switchTab(t) {
