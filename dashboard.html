@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Master Dashboard | V172 Stable Control</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Master Dashboard | V174 Fully Loaded</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; }
     .content-wrapper { padding: 10px; max-width: 1000px; margin: 0 auto; }
-    .unit-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
-    
-    /* 🎯 สถานะออนไลน์/รอดำเนินการ/ออฟไลน์ */
-    .status-select { background: #0B1829; border-radius: 6px; font-size: 9px; font-weight: 800; padding: 6px; outline: none; border: 1px solid transparent; transition: 0.3s; }
+    .unit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
     .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4); }
     .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4); }
     .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.3); }
-
-    /* 🎯 ปุ่มควบคุมแผนที่แบบจำค่าถาวร */
     .map-toggle { font-size: 9px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: 0.3s; border: 1.5px solid transparent; }
     .map-show { background: rgba(201, 168, 76, 0.1); color: #C9A84C; border-color: #C9A84C; }
     .map-hide { background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: #EF4444; }
-
     .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; }
-    .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #C9A84C; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
+    .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #C9A84C; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
@@ -31,10 +25,10 @@
   <div id="quickLoad" class="loading-overlay"><div class="loader"></div></div>
   <div class="content-wrapper">
     <div class="flex justify-between items-center mb-4 mt-2 px-1">
-      <h1 class="text-lg font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
-      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-3 py-1.5 rounded font-800 text-[10px] uppercase shadow-lg">Add Unit</button>
+      <h1 class="text-xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-xs">ADD UNIT</button>
     </div>
-    <input type="text" id="sI" onkeyup="render()" placeholder="Quick Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-4 outline-none text-xs focus:border-[#C9A84C]">
+    <input type="text" id="sI" onkeyup="render()" placeholder="Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-4 outline-none text-sm font-600">
     <div id="list"></div>
   </div>
 
@@ -43,77 +37,61 @@
     let data = [];
 
     async function init() {
-      showLoading(true);
+      document.getElementById('quickLoad').style.display = 'flex';
       try {
         const res = await fetch(`${API}?mode=getListSmall`);
-        data = await res.json();
-        render();
-      } catch (e) { console.error("Init Error:", e); }
-      finally { showLoading(false); }
+        data = await res.json(); render();
+      } catch (e) { console.error(e); }
+      finally { document.getElementById('quickLoad').style.display = 'none'; }
     }
 
     function render() {
       const q = document.getElementById('sI').value.toLowerCase();
       const filtered = data.filter(u => !q || u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q)));
-      
       document.getElementById('list').innerHTML = filtered.map(u => {
         const sysStatus = u.System_Status || 'Pending';
         const mapStatus = u.Map_Visibility || 'Show';
         const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
-        
         return `
           <div class="unit-card">
-            <div class="flex items-center gap-3 mb-3">
-              <img src="${u.Thumbnail_Image || 'https://via.placeholder.com/60x45'}" class="w-12 h-9 rounded object-cover border border-white/10">
+            <div class="flex items-center gap-4 mb-3">
+              <img src="${u.Thumbnail_Image || ''}" class="w-14 h-10 rounded object-cover border border-white/10 bg-black shadow-lg">
               <div class="flex-1">
-                <div class="text-[11px] font-800 text-[#C9A84C]">${u.HP_ID} <span class="text-slate-500 font-600">PLOT ${u.Plot || '-'}</span></div>
-                <div class="text-[9px] font-600 uppercase text-slate-400">${u.Project_Name || 'MASTER ASSET'}</div>
+                <div class="text-[12px] font-800 text-[#C9A84C]">${u.HP_ID} <span class="text-white/30 ml-1">PLOT ${u.Plot || '-'}</span></div>
+                <div class="text-[10px] font-600 uppercase text-slate-500">${u.Project_Name || 'NO PROJECT'}</div>
               </div>
-              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="text-slate-500 p-2"><i class="fas fa-edit text-xs"></i></button>
+              <button onclick="location.href='edit.html?id=${u.HP_ID}'" class="text-white/20 p-2"><i class="fas fa-edit"></i></button>
             </div>
-            
-            <div class="flex items-center gap-2 border-t border-white/5 pt-2">
-              <select onchange="updateRecord('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 ${colorClass}">
+            <div class="flex items-center gap-2 border-t border-white/5 pt-3">
+              <select onchange="updateQuick('${u.HP_ID}', 'System_Status', this.value)" class="status-select flex-1 bg-black p-2 rounded-lg border ${colorClass}">
                 <option value="Online" ${sysStatus === 'Online' ? 'selected' : ''}>● ONLINE</option>
                 <option value="Pending" ${sysStatus === 'Pending' ? 'selected' : ''}>● PENDING</option>
                 <option value="Offline" ${sysStatus === 'Offline' ? 'selected' : ''}>● OFFLINE</option>
               </select>
-
-              <button onclick="toggleMapVisibility('${u.HP_ID}', '${mapStatus}')" class="map-toggle ${mapStatus === 'Show' ? 'map-show' : 'map-hide'}">
-                <i class="fas ${mapStatus === 'Show' ? 'fa-eye' : 'fa-eye-slash'} mr-1"></i>
-                ${mapStatus} Map
+              <button onclick="toggleMap('${u.HP_ID}', '${mapStatus}')" class="map-toggle ${mapStatus === 'Show' ? 'map-show' : 'map-hide'}">
+                <i class="fas ${mapStatus === 'Show' ? 'fa-eye' : 'fa-eye-slash'} mr-2"></i> ${mapStatus} MAP
               </button>
             </div>
           </div>`;
       }).join('');
     }
 
-    async function toggleMapVisibility(id, currentStatus) {
-      const nextStatus = (currentStatus === 'Show') ? 'Hide' : 'Show';
-      await updateRecord(id, 'Map_Visibility', nextStatus);
-    }
+    async function toggleMap(id, current) { await updateQuick(id, 'Map_Visibility', current === 'Show' ? 'Hide' : 'Show'); }
 
-    async function updateRecord(id, fieldName, newValue) {
-      showLoading(true);
+    async function updateQuick(id, field, val) {
+      document.getElementById('quickLoad').style.display = 'flex';
       try {
-        const response = await fetch(API, { 
-          method: 'POST', 
-          body: JSON.stringify({ mode: "updateUnit", HP_ID: id, [fieldName]: newValue }) 
-        });
-        const result = await response.json();
-        
-        if (result.ok) {
+        const res = await fetch(API, { method: 'POST', body: JSON.stringify({ mode: "updateUnit", HP_ID: id, [field]: val }) });
+        const result = await res.json();
+        if(result.ok) {
           const idx = data.findIndex(u => u.HP_ID === id);
-          if (idx !== -1) data[idx][fieldName] = newValue;
-          // ล้างแคชเพื่อให้หน้าแสดงผลเปลี่ยนตามทันที
+          data[idx][field] = val;
           localStorage.removeItem(`cache_detail_${id}`);
           render();
         }
-      } catch (err) { alert("Sync failed!"); }
-      finally { showLoading(false); }
+      } catch(e) { alert("Sync Failed!"); }
+      finally { document.getElementById('quickLoad').style.display = 'none'; }
     }
-
-    function showLoading(show) { document.getElementById('quickLoad').style.display = show ? 'flex' : 'none'; }
     window.onload = init;
   </script>
 </body>
