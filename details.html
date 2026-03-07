@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V181</title>
+  <title>Asset Specifications | MASTER SYSTEM V182</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -16,7 +16,7 @@
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
     .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
 
-    /* 🎯 โซนแก้ไข CSS เฉพาะความโค้งมนของขอบบนรูปภาพ (V181) */
+    /* 🎯 โซนปรับปรุงความโค้งมนตามต้นฉบับ Coco ที่คุณส่งมา (V182) */
     .gallery-container{
       margin-top:65px;
       padding:15px 15px 0; 
@@ -25,22 +25,23 @@
     }
     .gallery-card{
       background:#000;
-      /* ปรับความมนที่ขอบบนทั้ง 2 ข้างให้ชัดเจนขึ้นเป็น 35px และขอบล่าง 12px */
-      border-radius: 35px 35px 12px 12px; 
+      /* ปรับเป็น 18px ตามโค้ดต้นฉบับ Coco ที่ส่งมาเพื่อให้โค้งมนสวยงาม */
+      border-radius: 18px; 
       border:1px solid var(--border);
-      overflow:hidden; /* บังคับให้รูปข้างในโค้งตามกรอบ */
-      box-shadow:0 15px 35px rgba(0,0,0,0.3);
+      overflow:hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       margin-bottom:20px;
     }
     .main-stage{
       position:relative;
       width:100%;
+      /* ความสูงภาพตามคำสั่งก่อนหน้า (16/14) แต่ใช้ Border Radius 18px จาก Coco */
       aspect-ratio:16/14; 
-      background:#000;
+      background:#eee;
       overflow:hidden;
-      border-radius: 35px 35px 0 0; /* เพิ่มความโค้งมนให้ส่วนแสดงผลภาพด้วย */
+      border-radius: 18px 18px 0 0; 
     }
-    /* 🎯 สิ้นสุดการแก้ไข CSS */
+    /* 🎯 สิ้นสุดการปรับแต่งเฉพาะจุด */
 
     .main-img{width:100%;height:100%; object-fit:cover; transition:opacity 0.3s}
     .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
