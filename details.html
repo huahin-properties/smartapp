@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V180</title>
+  <title>Asset Specifications | MASTER SYSTEM V181</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -16,27 +16,29 @@
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
     .back{text-decoration:none;color:var(--gold);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
 
-    /* 🎯 โซนแก้ไข CSS เฉพาะรูปภาพแนวขนาดใหญ่ (V180) */
+    /* 🎯 โซนแก้ไข CSS เฉพาะความโค้งมนของขอบบนรูปภาพ (V181) */
     .gallery-container{
       margin-top:65px;
-      padding:15px 15px 0; /* เพิ่ม padding-top 15px เพื่อให้มีระยะห่างด้านบน */
+      padding:15px 15px 0; 
       max-width:1100px;
       margin:0 auto;
     }
     .gallery-card{
       background:#000;
-      border-radius:18px 18px 12px 12px; /* เพิ่มกรอบความโค้งบนด้านบนทั้ง 2 ข้างเล็กน้อย (18px) */
+      /* ปรับความมนที่ขอบบนทั้ง 2 ข้างให้ชัดเจนขึ้นเป็น 35px และขอบล่าง 12px */
+      border-radius: 35px 35px 12px 12px; 
       border:1px solid var(--border);
-      overflow:hidden;
+      overflow:hidden; /* บังคับให้รูปข้างในโค้งตามกรอบ */
       box-shadow:0 15px 35px rgba(0,0,0,0.3);
       margin-bottom:20px;
     }
     .main-stage{
       position:relative;
       width:100%;
-      aspect-ratio:16/14; /* แก้ไขอัตราส่วนความสูงของภาพแนวขนาดใหญ่ให้มีความสูงมากขึ้น (จาก 16/10) */
+      aspect-ratio:16/14; 
       background:#000;
       overflow:hidden;
+      border-radius: 35px 35px 0 0; /* เพิ่มความโค้งมนให้ส่วนแสดงผลภาพด้วย */
     }
     /* 🎯 สิ้นสุดการแก้ไข CSS */
 
@@ -64,7 +66,6 @@
     #leafletMap{width:100%;height:100%;background:#0F172A}
     .pdf-download-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 10px; }
     
-    /* 🎯 สไตล์ใหม่: Share Stack */
     .share-stack { margin-top: 25px; text-align: center; background: rgba(255,255,255,0.03); padding: 25px 15px; border-radius: 20px; border: 1px solid var(--border); }
     .share-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 15px; }
     .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: 0.3s; }
@@ -197,7 +198,6 @@ const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Bluport Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642}, {name:'Banyan Golf Club',lat:12.5124,lon:99.9145}, {name:'Hua Hin Airport',lat:12.6366,lon:99.9515}, {name:'True Arena Sports',lat:12.5365,lon:99.9585}, {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582} ];
 let images=[], idx=0, leafletMap=null;
 
-// 🎯 ฟังก์ชันแชร์ระดับโปร (Professional Share Functions)
 function sH(p){
   const u = window.location.href; const t = `Check out this property: ${hpId}`;
   if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
