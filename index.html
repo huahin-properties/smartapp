@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V171</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V172</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -72,13 +72,11 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
-    // 🎯 แก้ไขฟังก์ชันดึงราคา: เช็กทั้งค่าเช่าและราคาขาย เพื่อป้องกันยอดเป็น 0
     function render(res) {
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
       document.getElementById('propGrid').innerHTML = res.map(u => {
         const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
         
-        // 🛠️ Logic แก้ไขราคา: ถ้าหา Monthly_Rent ไม่เจอ ให้ดึง Sale_Price มาแทนทันที
         let priceVal = 0;
         if (u.Listing_Type === 'Rent') {
           priceVal = Number(u.Monthly_Rent) || Number(u.Sale_Price) || 0;
@@ -90,7 +88,7 @@
           <a href="details.html?id=${u.HP_ID}" class="card">
             <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
             <div class="card-info">
-              <div class="info-row"><div class="prop-name">${label} | ${u.Project_Name || 'Master'}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
+              <div class="info-row"><div class="prop-name">${label}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
               <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${priceVal.toLocaleString()}</div></div>
               <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
             </div>
