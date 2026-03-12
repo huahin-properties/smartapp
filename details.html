@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V183</title>
+  <title>Asset Specifications | MASTER SYSTEM V184</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -40,7 +40,6 @@
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
     .map-box{width:100%;aspect-ratio:1/1;max-height:500px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
     #leafletMap{width:100%;height:100%;background:#0F172A}
-    .map-locked-overlay{width:100%;height:300px;display:none;align-items:center;justify-content:center;background:rgba(201,168,76,0.05);border:1px dashed var(--gold);border-radius:12px;color:var(--gold);font-weight:800;text-align:center;font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;padding:20px}
     .pdf-download-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 10px; }
     .share-stack { margin-top: 25px; text-align: center; background: rgba(255,255,255,0.03); padding: 25px 15px; border-radius: 20px; border: 1px solid var(--border); }
     .share-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 15px; }
@@ -133,22 +132,12 @@
 
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigation</h2>
-      <div id="mapContent">
-        <div class="map-box"><div id="leafletMap"></div></div>
-      </div>
-      <div id="mapLocked" class="map-locked-overlay">
-        <div><i class="fas fa-map-marked-alt mb-3" style="font-size:30px"></i><br>Contact Concierge for Location</div>
-      </div>
+      <div class="map-box"><div id="leafletMap"></div></div>
     </div>
 
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle & Amenities</h2>
-      <div id="amenitiesContent">
-        <div id="nearbyGrid" class="nearby-grid"></div>
-      </div>
-      <div id="amenitiesLocked" style="display:none; text-align:center; padding:20px; color:#7A9BB5; font-size:10px; font-weight:700; text-transform:uppercase;">
-        Detailed proximity info restricted.
-      </div>
+      <div id="nearbyGrid" class="nearby-grid"></div>
       
       <a id="pdfBarMaster" href="#" target="_blank" class="pdf-download-bar">
         <span style="color:var(--navy);font-weight:800;font-size:0.82rem;text-transform:uppercase;">Download Floor Plan PDF</span>
@@ -274,33 +263,29 @@ function renderData(u){
   const coords = String(u.Coordinates||'').split(',');
   const isMapVisible = u.Map_Visibility !== 'Hide';
 
-  if(coords.length === 2){
+  // 🎯 Logic: ถ้าซ่อนแผนที่ ให้ปิดทั้ง Section ทันที
+  if(coords.length === 2 && isMapVisible){
     const lat = Number(coords[0]), lon = Number(coords[1]);
+    document.getElementById('mapSection').style.display = 'block';
     document.getElementById('mapSection').classList.add('has-data');
+    document.getElementById('amenitiesSection').style.display = 'block';
     document.getElementById('amenitiesSection').classList.add('has-data');
 
-    if(isMapVisible) {
-      document.getElementById('mapContent').style.display = 'block';
-      document.getElementById('mapLocked').style.display = 'none';
-      document.getElementById('amenitiesContent').style.display = 'block';
-      document.getElementById('amenitiesLocked').style.display = 'none';
-
-      if(!leafletMap) {
-        leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
-        L.marker([lat, lon]).addTo(leafletMap);
-      }
-      document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
-        const d = getDistance(lat, lon, loc.lat, lon);
-        return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
-      }).join('');
-    } else {
-      document.getElementById('mapContent').style.display = 'none';
-      document.getElementById('mapLocked').style.display = 'flex';
-      document.getElementById('amenitiesContent').style.display = 'none';
-      document.getElementById('amenitiesLocked').style.display = 'block';
+    if(!leafletMap) {
+      leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
+      L.marker([lat, lon]).addTo(leafletMap);
     }
+    document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
+      const d = getDistance(lat, lon, loc.lat, lon);
+      return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+    }).join('');
+  } else {
+    // 🎯 กรณีสั่ง Hide: ซ่อนทั้งกล่อง Location และ Amenities ไม่ให้เหลือซาก
+    document.getElementById('mapSection').style.display = 'none';
+    document.getElementById('amenitiesSection').style.display = 'none';
   }
+  
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
