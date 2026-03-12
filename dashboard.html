@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Dashboard | V174 Fully Loaded</title>
+  <title>Master Dashboard | V175 Secure Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,8 +25,14 @@
   <div id="quickLoad" class="loading-overlay"><div class="loader"></div></div>
   <div class="content-wrapper">
     <div class="flex justify-between items-center mb-4 mt-2 px-1">
-      <h1 class="text-xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
-      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-xs">ADD UNIT</button>
+      <div>
+        <h1 class="text-xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
+        <p id="authBadge" class="text-[9px] text-slate-500 font-700 uppercase tracking-widest"></p>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="localStorage.clear(); location.href='gateway.html';" class="text-slate-400 font-800 text-[9px] uppercase hover:text-red-500">Logout</button>
+        <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-xs">ADD UNIT</button>
+      </div>
     </div>
     <input type="text" id="sI" onkeyup="render()" placeholder="Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-4 outline-none text-sm font-600">
     <div id="list"></div>
@@ -37,6 +43,15 @@
     let data = [];
 
     async function init() {
+      // 🔐 Check Authority
+      const session = localStorage.getItem('admin_session');
+      const role = localStorage.getItem('admin_role');
+      if (session !== 'active' || role !== 'Super Admin') { 
+        location.href = 'gateway.html'; 
+        return; 
+      }
+      document.getElementById('authBadge').innerText = `Role: ${role} | Multi-Access Enabled`;
+
       document.getElementById('quickLoad').style.display = 'flex';
       try {
         const res = await fetch(`${API}?mode=getListSmall`);
@@ -96,4 +111,3 @@
   </script>
 </body>
 </html>
- 
