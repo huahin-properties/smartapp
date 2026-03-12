@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V172</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V173</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="filters-grid">
-        <select id="zF" onchange="f()" class="filter-select"><option value="">All Zones</option></select>
+        <select id="dF" onchange="f()" class="filter-select"><option value="">All Districts</option></select>
         <select id="sF" onchange="f()" class="filter-select"><option value="">Price Sort</option><option value="low">Low → High</option><option value="high">High → Low</option></select>
         <select id="bF" onchange="f()" class="filter-select"><option value="">Bedrooms</option></select>
       </div>
@@ -98,7 +98,7 @@
 
     function resetFilters() {
       document.getElementById('sI').value = '';
-      document.getElementById('zF').value = '';
+      document.getElementById('dF').value = '';
       document.getElementById('sF').value = '';
       document.getElementById('bF').value = '';
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
@@ -121,20 +121,24 @@
     }
 
     function updateFilters() {
-      const zones = [...new Set(data.map(p => p.Zone))].filter(Boolean).sort();
-      document.getElementById('zF').innerHTML = `<option value="">All Zones</option>` + zones.map(z => `<option value="${z}">${z}</option>`).join('');
+      // 🎯 แก้ไขจากดึงข้อมูล Zone มาเป็นดึงข้อมูล District (หัวหิน, ปราณบุรี, ชะอำ)
+      const districts = [...new Set(data.map(p => p.District))].filter(Boolean).sort();
+      document.getElementById('dF').innerHTML = `<option value="">All Districts</option>` + districts.map(d => `<option value="${d}">${d}</option>`).join('');
       const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
       document.getElementById('bF').innerHTML = `<option value="">Bedrooms</option>` + beds.map(b => `<option value="${b}">${b} Bed</option>`).join('');
     }
 
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
-      const z = document.getElementById('zF').value;
+      const d = document.getElementById('dF').value;
       const b = document.getElementById('bF').value;
       const activePill = document.querySelector('.pill.active');
       const pill = activePill ? activePill.dataset.f : 'all';
       const sort = document.getElementById('sF').value;
-      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone} ${u.District}`.toLowerCase().includes(q)) && (!z || u.Zone === z) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
+
+      // 🎯 ปรับ Logic การกรองให้เช็ก District แทน Zone
+      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.District} ${u.Zone}`.toLowerCase().includes(q)) && (!d || u.District === d) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
+      
       if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
       else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
       render(res);
