@@ -16,11 +16,8 @@
     .eye-btn { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--gold); cursor: pointer; opacity: 0.6; z-index: 10; font-size: 1.1rem; padding: 5px; }
     .btn-login { background: var(--gold); color: var(--navy-dark); width: 100%; padding: 1.2rem; border-radius: 4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: 0.4s; border: none; cursor: pointer; margin-top: 0.5rem; }
     .btn-login:active { transform: scale(0.96); }
-    
-    /* ⚡ แถบทางลัดแบบนิ่งสนิท */
     .quick-access { display: none; margin-bottom: 2rem; padding: 1.2rem; background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.4); border-radius: 1.2rem; cursor: pointer; transition: 0.3s; }
     .quick-access:hover { background: rgba(201, 168, 76, 0.15); border-color: var(--gold); }
-    .quick-access:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
@@ -37,7 +34,7 @@
       <div class="flex items-center justify-between">
         <div class="text-left">
           <div class="text-[9px] font-800 text-gold uppercase tracking-widest mb-1 opacity-70">Active Session Found</div>
-          <div class="text-xs font-800 text-white">RESUME TO DASHBOARD</div>
+          <div id="sessionUser" class="text-xs font-800 text-white uppercase">RESUME TO DASHBOARD</div>
         </div>
         <i class="fas fa-chevron-right text-gold text-xs"></i>
       </div>
@@ -65,10 +62,12 @@
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
 
-    // 🚀 เช็คสิทธิ์เพื่อแสดงปุ่มทางลัดแบบทันที (ไม่กระพริบ)
+    // 🚀 เช็คสิทธิ์เดิม + แสดงชื่อผู้ใช้ถ้ามี
     if (localStorage.getItem('admin_session') === 'active') {
+      const savedName = localStorage.getItem('admin_name') || "RESUME";
       document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('quickBtn').style.display = 'block';
+        document.getElementById('sessionUser').innerText = "RESUME AS " + savedName;
       });
     }
 
@@ -101,16 +100,20 @@
         const result = await res.json();
 
         if(result.ok) {
+          // เก็บข้อมูลครบทุกมิติเพื่อใช้ในการกรองข้อมูล
           localStorage.setItem('admin_session', 'active');
           localStorage.setItem('admin_role', result.role);
           localStorage.setItem('admin_project', result.project);
+          localStorage.setItem('admin_name', result.name); // เก็บชื่อไว้ทักทาย
+          
+          alert("✅ ยินดีต้อนรับคุณ " + result.name);
           location.href = "dashboard.html";
         } else {
-          alert("❌ ไม่สำเร็จ: " + (result.msg || "ข้อมูลไม่ถูกต้อง"));
+          alert("❌ " + (result.msg || "ข้อมูลไม่ถูกต้อง"));
           st.classList.add('hidden');
         }
       } catch (e) {
-        alert("⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+        alert("⚠️ เชื่อมต่อล้มเหลว กรุณาตรวจสอบอินเทอร์เน็ต");
         st.classList.add('hidden');
       } finally {
         btn.disabled = false;
