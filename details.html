@@ -52,9 +52,12 @@
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     
-    /* 🎯 สไตล์ปุ่มลอยแก้ไขรายการ */
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
     .admin-float:active { transform: scale(0.9); }
+
+    /* 🎯 สไตล์ไอคอน Admin/Logout มุมขวาบน */
+    .admin-link { color: var(--gold); font-size: 1.2rem; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; transition: 0.3s; }
+    .admin-link:active { transform: scale(0.9); }
 
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
   </style>
@@ -66,7 +69,13 @@
   <a href="index.html" style="background:var(--gold);color:#060F1A;padding:12px 30px;border-radius:50px;font-weight:800;text-decoration:none;text-transform:uppercase;font-size:11px;">Back to Catalog</a>
 </div>
 <div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
-<header><a href="index.html" class="back">✕ Close</a><div style="font-weight:800;color:var(--gold);">DETAIL VIEW</div><div style="width:40px;"></div></header>
+<header>
+    <a href="index.html" class="back">✕ Close</a>
+    <div style="font-weight:800;color:var(--gold);">DETAIL VIEW</div>
+    <a href="gateway.html" id="adminGateBtn" class="admin-link">
+      <i class="fas fa-user-circle"></i>
+    </a>
+</header>
 
 <div id="mainUI">
   <div class="gallery-container">
@@ -179,6 +188,26 @@ const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Bluport Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642}, {name:'Banyan Golf Club',lat:12.5124,lon:99.9145}, {name:'Hua Hin Airport',lat:12.6366,lon:99.9515}, {name:'True Arena Sports',lat:12.5365,lon:99.9585}, {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582} ];
 let images=[], idx=0, leafletMap=null;
 
+// 🎯 ระบบเช็กสถานะ Login และ Logout
+function checkAuthUI() {
+  const btn = document.getElementById('adminGateBtn');
+  const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+  
+  if (isLoggedIn) {
+    btn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+    btn.onclick = function(e) {
+      e.preventDefault();
+      if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    };
+  } else {
+    btn.innerHTML = '<i class="fas fa-user-circle"></i>';
+    btn.onclick = null;
+  }
+}
+
 function sH(p){
   const u = window.location.href; const t = `Check out this property: ${hpId}`;
   if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
@@ -204,9 +233,9 @@ function syncField(valId, wrapId, value) {
 }
 
 async function init(){
+  checkAuthUI(); // 🎯 เช็กสถานะปุ่ม Admin
   if(!hpId) return;
   
-  // 🛡️ เช็คสิทธิ์ปุ่มแก้ไข
   const adminEditBtn = document.getElementById('adminEditBtn');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
   const userProject = localStorage.getItem('admin_project');
