@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V183</title>
+  <title>Asset Specifications | MASTER SYSTEM V184</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -179,7 +179,7 @@ function renderData(u){
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
-  // Specs ดึงเหมือนเดิมทุกฟิลด์
+  // ✅ ดึงข้อมูล Specs กลับมาครบถ้วนเหมือนเดิม
   syncField('vBadge', 'w-badge', u.Badge_Type);
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
@@ -190,12 +190,11 @@ function renderData(u){
     const bar = document.getElementById('pdfBarMaster'); bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
   }
 
-  // 🎯 LOGIC ซ่อน/โชว์แผนที่แบบสมบูรณ์
+  // 🎯 LOGIC ซ่อนแผนที่: เช็คสถานะ Map_Visibility และสิทธิ์ Admin
   const isAdmin = localStorage.getItem('admin_session') === 'active';
   const mapVisibility = u.Map_Visibility || 'Show';
   const coords = String(u.Coordinates||'').split(',');
 
-  // เงื่อนไข: ถ้า Admin ดู หรือ แผนที่ถูกตั้งค่าเป็น Show จึงจะแสดง
   if(coords.length === 2 && (isAdmin || mapVisibility === 'Show')){
     const lat = Number(coords[0]), lon = Number(coords[1]);
     document.getElementById('mapSection').classList.add('has-data');
@@ -211,10 +210,10 @@ function renderData(u){
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
   } else {
-    // ถ้าถูกสั่ง Hide และไม่ใช่ Admin ให้ซ่อน Section แผนที่ออกไปเลย
+    // ถ้าสถานะเป็น Hide และไม่ใช่ Admin -> ซ่อนแผนที่ถาวร
     document.getElementById('mapSection').style.display = 'none';
-    document.getElementById('amenitiesSection').classList.add('has-data'); // โชว์ส่วนแชร์ตามปกติ
-    document.getElementById('nearbyGrid').innerHTML = `<div class="text-center py-6 opacity-30 text-xs italic">Location map is hidden by agent request.</div>`;
+    document.getElementById('amenitiesSection').classList.add('has-data');
+    document.getElementById('nearbyGrid').innerHTML = `<div class="text-center py-6 opacity-30 text-xs italic">Map location hidden by agent.</div>`;
   }
 
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
