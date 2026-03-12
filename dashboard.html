@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Dashboard | V175 Stable Map Logic</title>
+  <title>Master Dashboard | V176 Strict Fix</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,7 +13,7 @@
     .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4); }
     .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4); }
     .st-offline { color: #64748B !important; border-color: rgba(100, 116, 139, 0.3); }
-    .map-toggle { font-size: 9px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: 0.3s; border: 1.5px solid transparent; }
+    .map-toggle { font-size: 9px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; text-transform: uppercase; border: 1.5px solid transparent; }
     .map-show { background: rgba(201, 168, 76, 0.1); color: #C9A84C; border-color: #C9A84C; }
     .map-hide { background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: #EF4444; }
     .loading-overlay { position: fixed; inset: 0; background: rgba(6,15,26,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; }
@@ -37,10 +37,8 @@
     let data = [];
 
     async function init() {
-      // ✅ Identity Check เพื่อความปลอดภัย
       const session = localStorage.getItem('admin_session');
       if (session !== 'active') { location.href = 'gateway.html'; return; }
-
       document.getElementById('quickLoad').style.display = 'flex';
       try {
         const res = await fetch(`${API}?mode=getListSmall`);
@@ -54,7 +52,7 @@
       const filtered = data.filter(u => !q || u.HP_ID.toLowerCase().includes(q) || (u.Plot && u.Plot.toLowerCase().includes(q)));
       document.getElementById('list').innerHTML = filtered.map(u => {
         const sysStatus = u.System_Status || 'Pending';
-        const mapStatus = u.Map_Visibility || 'Show';
+        const mapStatus = u.Map_Visibility || 'Show'; // ดึงสถานะปัจจุบันจากฐานข้อมูล
         const colorClass = sysStatus === 'Online' ? 'st-online' : (sysStatus === 'Offline' ? 'st-offline' : 'st-pending');
         return `
           <div class="unit-card">
@@ -80,7 +78,10 @@
       }).join('');
     }
 
-    async function toggleMap(id, current) { await updateQuick(id, 'Map_Visibility', current === 'Show' ? 'Hide' : 'Show'); }
+    async function toggleMap(id, current) {
+      const nextStatus = current === 'Show' ? 'Hide' : 'Show';
+      await updateQuick(id, 'Map_Visibility', nextStatus);
+    }
 
     async function updateQuick(id, field, val) {
       document.getElementById('quickLoad').style.display = 'flex';
@@ -90,8 +91,7 @@
         if(result.ok) {
           const idx = data.findIndex(u => u.HP_ID === id);
           data[idx][field] = val;
-          // ✅ ล้าง Cache ทันทีเพื่อให้หน้า Details อัปเดตการซ่อนแผนที่
-          localStorage.removeItem(`cache_detail_${id}`);
+          localStorage.removeItem(`cache_detail_${id}`); // ล้างแคชเพื่อให้หน้า Details อัปเดตพิกัดทันที
           render();
         }
       } catch(e) { alert("Sync Failed!"); }
