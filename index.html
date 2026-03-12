@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V174</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -14,6 +14,7 @@
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
     .reset-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); cursor: pointer; font-size: 1rem; transition: 0.3s; z-index: 10; padding: 5px; }
+    .reset-btn:active { transform: translateY(-50%) rotate(-180deg); }
     .search-icon-fixed { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; font-size: 0.9rem; }
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
@@ -21,105 +22,11 @@
     .pill { white-space: nowrap; padding: 6px 14px; border-radius: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: #7A9BB5; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
     .pill.active { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
     .prop-list { padding: 0 12px 40px; display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .card { background: rgba(11, 24, 41, 0.9); border: 1px solid var(--border); border-radius: 12px; display: flex; height: var(--row-h); overflow: hidden; text-decoration: none; color: inherit; }
+    .card { background: rgba(11, 24, 41, 0.9); border: 1px solid var(--border); border-radius: 12px; display: flex; height: var(--row-h); overflow: hidden; text-decoration: none; color: inherit; transition: 0.2s; }
+    .card:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.05); }
     .card-img { width: var(--thumb-w); flex-shrink: 0; position: relative; background: #000; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
     .hp-id { position: absolute; top: 4px; left: 6px; font-size: 0.5rem; color: var(--navy-dark); background: var(--gold); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
     .card-info { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
     .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 5px; }
-    .prop-name { font-size: 0.82rem; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; }
-    .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; }
-    .admin-link { color: var(--gold); font-size: 1.2rem; text-decoration: none; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
-  </style>
-</head>
-<body>
-  <header>
-    <a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">HUA HIN PROPERTIES</a>
-    <div id="adminGateBtn" class="admin-link">
-      <i class="fas fa-user-circle"></i>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="search-box-wrapper">
-      <i class="fas fa-search search-icon-fixed"></i>
-      <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
-      <div class="reset-btn" onclick="resetFilters()"><i class="fas fa-sync-alt"></i></div>
-    </div>
-    <div class="filters-grid">
-      <select id="dF" onchange="f()" class="filter-select"><option value="">All Districts</option></select>
-      <select id="sF" onchange="f()" class="filter-select"><option value="">Price Sort</option><option value="low">Low → High</option><option value="high">High → Low</option></select>
-      <select id="bF" onchange="f()" class="filter-select"><option value="">Bedrooms</option></select>
-    </div>
-    <div class="pill-container" id="pillBox">
-      <div class="pill active" data-f="all">All</div>
-      <div class="pill" data-f="Sale">Sale</div><div class="pill" data-f="Rent">Rent</div>
-      <div class="pill" data-f="Pool Villa">Pool Villa</div><div class="pill" data-f="Condo">Condo</div>
-    </div>
-  </section>
-
-  <main class="prop-list" id="propGrid"></main>
-
-  <script>
-    const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
-    let data = [];
-
-    // 🎯 ฟังก์ชันเช็กสิทธิ์หน้า Master: ต้องเป็นสิทธิ์ "All" เท่านั้นถึงจะเห็น Logout
-    function checkAuthUI() {
-      const btn = document.getElementById('adminGateBtn');
-      const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-      const userProject = localStorage.getItem('admin_project');
-
-      if (isLoggedIn && userProject === 'All') {
-        btn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-        btn.onclick = () => {
-          if(confirm("ออกจากระบบ Master?")) { localStorage.clear(); location.reload(); }
-        };
-      } else {
-        btn.innerHTML = '<i class="fas fa-user-circle"></i>';
-        btn.onclick = () => { window.location.href = 'gateway.html'; };
-      }
-    }
-
-    async function init() {
-      checkAuthUI();
-      try {
-        const res = await fetch(`${API}?mode=getListSmall&project=all`);
-        data = await res.json();
-        updateFilters();
-        f();
-      } catch (err) { console.error(err); }
-    }
-
-    function updateFilters() {
-      const districts = [...new Set(data.map(p => p.District))].filter(Boolean).sort();
-      document.getElementById('dF').innerHTML = `<option value="">All Districts</option>` + districts.map(d => `<option value="${d}">${d}</option>`).join('');
-    }
-
-    function f() {
-      const q = document.getElementById('sI').value.toLowerCase();
-      const d = document.getElementById('dF').value;
-      const activePill = document.querySelector('.pill.active').dataset.f;
-      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Plot}`.toLowerCase().includes(q)) && (!d || u.District === d) && (activePill === 'all' || u.Listing_Type === activePill || u.Type === activePill));
-      render(res);
-    }
-
-    function render(res) {
-      document.getElementById('propGrid').innerHTML = res.map(u => `
-        <a href="details.html?id=${u.HP_ID}" class="card">
-          <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || ''}"></div>
-          <div class="card-info">
-            <div class="info-row"><div class="prop-name">${u.District}</div></div>
-            <div class="info-row"><div class="price-new">฿${(u.Sale_Price || 0).toLocaleString()}</div><span class="status-tag">${u.Status}</span></div>
-          </div>
-        </a>`).join('');
-    }
-
-    function resetFilters() { document.getElementById('sI').value=''; f(); }
-    document.getElementById('pillBox').addEventListener('click', (e) => { if(e.target.classList.contains('pill')){ document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); e.target.classList.add('active'); f(); }});
-    window.onload = init;
-  </script>
-</body>
-</html>
+    .prop-name { font-size: 0.82rem; font-weight
