@@ -33,12 +33,22 @@
     .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
-    .admin-float { position: fixed; bottom: 25px; right: 20px; width: 45px; height: 45px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 18px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    
+    /* 🎯 สไตล์ไอคอน Admin/Logout มุมขวาบน */
+    .admin-link { color: var(--gold); font-size: 1.2rem; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; transition: 0.3s; }
+    .admin-link:active { transform: scale(0.9); }
+    
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
-  <header><a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">HuaHin.Properties</a></header>
+  <header>
+    <a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">HuaHin.Properties</a>
+    <a href="gateway.html" id="adminGateBtn" class="admin-link">
+      <i class="fas fa-user-circle"></i>
+    </a>
+  </header>
+
   <section class="hero">
     <div style="max-width:550px; margin:0 auto;">
       <div class="search-box-wrapper">
@@ -66,11 +76,30 @@
     <span id="unitCount" style="font-size:0.65rem; color:#7A9BB5; font-weight:700;">Ready</span>
   </div>
   <main class="prop-list" id="propGrid"></main>
-  <a href="gateway.html" class="admin-float"><i class="fas fa-th-large"></i></a>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
+
+    // 🎯 ระบบเช็กสถานะ Login และ Logout
+    function checkAuthUI() {
+      const btn = document.getElementById('adminGateBtn');
+      const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+      
+      if (isLoggedIn) {
+        btn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+        btn.onclick = function(e) {
+          e.preventDefault();
+          if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+            localStorage.clear();
+            location.reload();
+          }
+        };
+      } else {
+        btn.innerHTML = '<i class="fas fa-user-circle"></i>';
+        btn.onclick = null; // ให้ไปที่ gateway.html ตาม href ปกติ
+      }
+    }
 
     function render(res) {
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
@@ -107,6 +136,7 @@
     }
 
     async function init() {
+      checkAuthUI(); // 🎯 เช็กสถานะปุ่ม Admin
       const cached = localStorage.getItem('hp_master_data');
       if (cached) { data = JSON.parse(cached); updateFilters(); f(); }
       try {
@@ -135,7 +165,6 @@
       const pill = activePill ? activePill.dataset.f : 'all';
       const sort = document.getElementById('sF').value;
 
-      // 🎯 แก้ไข Logic การค้นหา: เพิ่ม ${u.Plot} เข้าไปเพื่อให้ค้นหาเลขแปลงได้
       let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Plot} ${u.District} ${u.Zone}`.toLowerCase().includes(q)) && (!d || u.District === d) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
       
       if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
