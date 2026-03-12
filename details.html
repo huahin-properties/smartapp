@@ -52,8 +52,8 @@
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     
-    /* 🎯 สไตล์ปุ่มลอยแก้ไขรายการ (แบบเดียวกับหน้า Index) */
-    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
+    /* 🎯 สไตล์ปุ่มลอยแก้ไขรายการ */
+    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
     .admin-float:active { transform: scale(0.9); }
 
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
@@ -205,12 +205,21 @@ function syncField(valId, wrapId, value) {
 
 async function init(){
   if(!hpId) return;
-  // 🎯 กำหนด Link ให้ปุ่มแก้ไข
-  document.getElementById('adminEditBtn').href = `edit.html?id=${hpId}`;
+  
+  // 🛡️ เช็คสิทธิ์ปุ่มแก้ไข
+  const adminEditBtn = document.getElementById('adminEditBtn');
+  const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+  const userProject = localStorage.getItem('admin_project');
+  adminEditBtn.href = `edit.html?id=${hpId}`;
 
   const cacheKey = `cache_detail_${hpId}`;
   const cachedData = localStorage.getItem(cacheKey);
-  if(cachedData){ renderData(JSON.parse(cachedData)); hideSplash(); }
+  if(cachedData){ 
+    const data = JSON.parse(cachedData);
+    renderData(data); 
+    if(isLoggedIn && (userProject === 'All' || userProject === data.Project_Name)) adminEditBtn.style.display = 'flex';
+    hideSplash(); 
+  }
   try{
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
     const json = await res.json();
@@ -222,6 +231,7 @@ async function init(){
       }
       localStorage.setItem(cacheKey, JSON.stringify(json.data));
       renderData(json.data);
+      if(isLoggedIn && (userProject === 'All' || userProject === json.data.Project_Name)) adminEditBtn.style.display = 'flex';
       hideSplash();
     }
   }catch(e){ hideSplash(); }
