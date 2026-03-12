@@ -88,7 +88,7 @@
           <a href="details.html?id=${u.HP_ID}" class="card">
             <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
             <div class="card-info">
-              <div class="info-row"><div class="prop-name">${label}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
+              <div class="info-row"><div class="prop-name">${label} | ${u.District || ''}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
               <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${priceVal.toLocaleString()}</div></div>
               <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
             </div>
@@ -134,7 +134,7 @@
       const activePill = document.querySelector('.pill.active');
       const pill = activePill ? activePill.dataset.f : 'all';
       const sort = document.getElementById('sF').value;
-      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone}`.toLowerCase().includes(q)) && (!z || u.Zone === z) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
+      let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Project_Name} ${u.Zone} ${u.District}`.toLowerCase().includes(q)) && (!z || u.Zone === z) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
       if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
       else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
       render(res);
