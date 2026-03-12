@@ -259,33 +259,33 @@ function renderData(u){
   if (u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
     const bar = document.getElementById('pdfBarMaster'); bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
   }
-  
+
   const coords = String(u.Coordinates||'').split(',');
-  const isMapVisible = u.Map_Visibility !== 'Hide';
-
-  // 🎯 Logic: ถ้าซ่อนแผนที่ ให้ปิดทั้ง Section ทันที
-  if(coords.length === 2 && isMapVisible){
+  if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
-    document.getElementById('mapSection').style.display = 'block';
-    document.getElementById('mapSection').classList.add('has-data');
-    document.getElementById('amenitiesSection').style.display = 'block';
-    document.getElementById('amenitiesSection').classList.add('has-data');
 
-    if(!leafletMap) {
-      leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
-      L.marker([lat, lon]).addTo(leafletMap);
+    // 🎯 Logic: ซ่อนหรือแสดงแผงแผนที่ Location & Navigation ตามค่า Map_Visibility
+    const mapSection = document.getElementById('mapSection');
+    if(u.Map_Visibility === 'Hide') {
+      mapSection.style.display = 'none'; // หายไปทั้งหมด 100%
+      mapSection.classList.remove('has-data');
+    } else {
+      mapSection.style.display = 'block';
+      mapSection.classList.add('has-data');
+      if(!leafletMap) {
+        leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
+        L.marker([lat, lon]).addTo(leafletMap);
+      }
     }
+
+    // 🎯 Logic: ส่วน Nearby Amenities แสดงผลเสมอ 12 รายการ (ใช้พิกัดคำนวณระยะทาง)
+    document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
-      const d = getDistance(lat, lon, loc.lat, lon);
+      const d = getDistance(lat, lon, loc.lat, loc.lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
-  } else {
-    // 🎯 กรณีสั่ง Hide: ซ่อนทั้งกล่อง Location และ Amenities ไม่ให้เหลือซาก
-    document.getElementById('mapSection').style.display = 'none';
-    document.getElementById('amenitiesSection').style.display = 'none';
   }
-  
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
