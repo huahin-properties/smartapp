@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V184</title>
+  <title>Asset Specifications | MASTER SYSTEM V185</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -44,9 +44,6 @@
     .share-stack { margin-top: 25px; text-align: center; background: rgba(255,255,255,0.03); padding: 25px 15px; border-radius: 20px; border: 1px solid var(--border); }
     .share-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 15px; }
     .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: 0.3s; }
-    .share-btn:active { transform: scale(0.9); }
-    .share-btn i { font-size: 26px; }
-    .share-btn span { font-size: 9px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
@@ -103,18 +100,7 @@
         <span style="color:var(--navy);font-weight:800;font-size:0.82rem;text-transform:uppercase;">Download Floor Plan PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
-
-      <div class="share-stack">
-        <div style="font-size: 14px; color: var(--gold); font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-          <i class="fas fa-share-nodes"></i> SHARE ASSET
-        </div>
-        <div class="share-icons">
-          <a href="#" onclick="sH('fb')" class="share-btn"><i class="fab fa-facebook" style="color:#1877F2"></i><span>Facebook</span></a>
-          <a href="#" onclick="sH('line')" class="share-btn"><i class="fab fa-line" style="color:#06C755"></i><span>LINE</span></a>
-          <a href="#" onclick="sH('copy')" class="share-btn"><i class="fas fa-link" style="color:#9AB"></i><span>Copy Link</span></a>
-        </div>
       </div>
-    </div>
   </main>
 </div>
 
@@ -126,13 +112,6 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRP
 const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:'Hua Hin Beach',lat:12.5696,lon:99.9602}, {name:'Night Market',lat:12.5714,lon:99.9575}, {name:'Bluport Mall',lat:12.5518,lon:99.9631}, {name:'Bangkok Hospital',lat:12.5532,lon:99.9610}, {name:'Cicada Market',lat:12.5342,lon:99.9655}, {name:'Market Village',lat:12.5598,lon:99.9602}, {name:'Black Mountain Golf',lat:12.6146,lon:99.8924}, {name:'Vana Nava Water Park',lat:12.5273,lon:99.9642}, {name:'Hua Hin Airport',lat:12.6366,lon:99.9515}, {name:'Hua Hin Clock Tower',lat:12.5702,lon:99.9582} ];
 let images=[], idx=0, leafletMap=null;
-
-function sH(p){
-  const u = window.location.href; const t = `Property: ${hpId}`;
-  if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
-  if(p==='line') window.open(`https://social-plugins.line.me/lineit/share?url=${u}`,'_blank');
-  if(p==='copy'){ navigator.clipboard.writeText(u); alert('Link Copied! ✅'); }
-}
 
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
@@ -179,7 +158,7 @@ function renderData(u){
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
-  // ✅ ดึงข้อมูล Specs กลับมาครบถ้วนเหมือนเดิม
+  // Specs ดึงปกติ
   syncField('vBadge', 'w-badge', u.Badge_Type);
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
@@ -190,30 +169,32 @@ function renderData(u){
     const bar = document.getElementById('pdfBarMaster'); bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
   }
 
-  // 🎯 LOGIC ซ่อนแผนที่: เช็คสถานะ Map_Visibility และสิทธิ์ Admin
+  // 🎯 LOGIC ซ่อน/โชว์แผนที่แบบใช้งานได้จริง
   const isAdmin = localStorage.getItem('admin_session') === 'active';
   const mapVisibility = u.Map_Visibility || 'Show';
   const coords = String(u.Coordinates||'').split(',');
 
+  // เงื่อนไขการแสดง: (มีพิกัด) และ (เป็น Admin หรือ สถานะเป็น Show)
   if(coords.length === 2 && (isAdmin || mapVisibility === 'Show')){
     const lat = Number(coords[0]), lon = Number(coords[1]);
+    document.getElementById('mapSection').style.display = 'block';
     document.getElementById('mapSection').classList.add('has-data');
     if(!leafletMap) {
       leafletMap = L.map('leafletMap',{zoomControl:false, attributionControl:false}).setView([lat, lon], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
       L.marker([lat, lon]).addTo(leafletMap);
     }
-    // คำนวณสถานที่ใกล้เคียง
+    // โชว์สถานที่ใกล้เคียง
     document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, lon);
       return `<div class="nearby-item"><div><div class="loc-name">${loc.name}</div><div class="loc-time">${Math.ceil(d*1.5)} mins drive</div></div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
     }).join('');
   } else {
-    // ถ้าสถานะเป็น Hide และไม่ใช่ Admin -> ซ่อนแผนที่ถาวร
+    // ซ่อน Section แผนที่ถาวรสำหรับ User ทั่วไปหากสั่ง Hide
     document.getElementById('mapSection').style.display = 'none';
     document.getElementById('amenitiesSection').classList.add('has-data');
-    document.getElementById('nearbyGrid').innerHTML = `<div class="text-center py-6 opacity-30 text-xs italic">Map location hidden by agent.</div>`;
+    document.getElementById('nearbyGrid').innerHTML = `<div class="text-center py-6 opacity-30 text-xs italic">Location map is hidden by agent.</div>`;
   }
 
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
