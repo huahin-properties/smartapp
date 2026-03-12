@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V184</title>
+  <title>Asset Specifications | MASTER SYSTEM V185</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -51,6 +51,11 @@
     .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
+    
+    /* 🎯 สไตล์ปุ่มลอยแก้ไขรายการ (แบบเดียวกับหน้า Index) */
+    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
+    .admin-float:active { transform: scale(0.9); }
+
     @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
   </style>
 </head>
@@ -163,6 +168,8 @@
   </main>
 </div>
 
+<a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-edit"></i></a>
+
 <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -198,6 +205,9 @@ function syncField(valId, wrapId, value) {
 
 async function init(){
   if(!hpId) return;
+  // 🎯 กำหนด Link ให้ปุ่มแก้ไข
+  document.getElementById('adminEditBtn').href = `edit.html?id=${hpId}`;
+
   const cacheKey = `cache_detail_${hpId}`;
   const cachedData = localStorage.getItem(cacheKey);
   if(cachedData){ renderData(JSON.parse(cachedData)); hideSplash(); }
@@ -264,10 +274,9 @@ function renderData(u){
   if(coords.length === 2){
     const lat = Number(coords[0]), lon = Number(coords[1]);
 
-    // 🎯 Logic: ซ่อนหรือแสดงแผงแผนที่ Location & Navigation ตามค่า Map_Visibility
     const mapSection = document.getElementById('mapSection');
     if(u.Map_Visibility === 'Hide') {
-      mapSection.style.display = 'none'; // หายไปทั้งหมด 100%
+      mapSection.style.display = 'none'; 
       mapSection.classList.remove('has-data');
     } else {
       mapSection.style.display = 'block';
@@ -279,7 +288,6 @@ function renderData(u){
       }
     }
 
-    // 🎯 Logic: ส่วน Nearby Amenities แสดงผลเสมอ 12 รายการ (ใช้พิกัดคำนวณระยะทาง)
     document.getElementById('amenitiesSection').classList.add('has-data');
     document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
       const d = getDistance(lat, lon, loc.lat, loc.lon);
