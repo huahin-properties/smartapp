@@ -186,6 +186,14 @@
   <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-2xl">PUBLISH UPDATES</button></div>
 
   <script>
+    // 🛡️ [Security Check] ตรวจสิทธิ์ทันที
+    (function(){
+      if(localStorage.getItem('admin_session') !== 'active'){
+        alert("🔒 กรุณาเข้าสู่ระบบก่อนจัดการข้อมูล");
+        window.location.href="gateway.html";
+      }
+    })();
+
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const hpId = new URLSearchParams(window.location.search).get('id');
     let gallery = [], thumbUrl = "", pdfData = {};
@@ -203,6 +211,15 @@
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (unitRes.ok) {
           const u = unitRes.data;
+          
+          // 🛡️ เช็คสิทธิ์ตามโครงการ (ถ้าไม่ใช่ All และโปรเจกต์ไม่ตรง ให้ดีดออก)
+          const myProject = localStorage.getItem('admin_project');
+          if(myProject !== 'All' && myProject !== u.Project_Name){
+            alert("🔒 คุณไม่มีสิทธิ์แก้ไขทรัพย์สินในโครงการนี้");
+            window.location.href="dashboard.html";
+            return;
+          }
+
           Object.keys(u).forEach(k => { 
             const el = document.getElementById(k); 
             if (el) el.value = u[k]; 
@@ -345,7 +362,7 @@
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) p[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(p) })).json();
       if(res.ok) { 
-        localStorage.removeItem(`cache_detail_${hpId}`); // ล้างแคชเพื่อให้เห็นการเปลี่ยนแปลงทันที
+        localStorage.removeItem(`cache_detail_${hpId}`);
         alert("SUCCESS! ✅"); 
         location.href='dashboard.html'; 
       }
