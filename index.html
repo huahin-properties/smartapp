@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Master Catalog | HUA HIN PROPERTIES V174</title>
+  <title>Master Catalog | HUA HIN PROPERTIES V175</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -10,7 +10,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     
-    /* 🎯 Header - ปรับชื่อเว็บไว้กลางและปุ่มเมนูไว้ซ้าย */
+    /* 🎯 Header - ปรับชื่อเว็บไว้กลางและโลโก้ไว้ขวา */
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; }
     
@@ -18,6 +18,9 @@
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; letter-spacing: 0.5px; }
+
+    /* 🎯 โลโก้ใหม่ฝั่งขวา */
+    .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
 
     /* 🎯 Sidebar Menu */
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid var(--border); }
@@ -33,7 +36,6 @@
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
     .reset-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); cursor: pointer; font-size: 1rem; transition: 0.3s; z-index: 10; padding: 5px; }
-    .reset-btn:active { transform: translateY(-50%) rotate(-180deg); }
     .search-icon-fixed { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; font-size: 0.9rem; }
     .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
     .filter-select { background: #FFFFFF; border: 1px solid var(--gold); border-radius: 8px; padding: 8px; color: #0B1829; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; appearance: none; }
@@ -53,8 +55,6 @@
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
     
-    .admin-link { color: var(--gold); font-size: 1.2rem; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; transition: 0.3s; }
-    
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
@@ -63,7 +63,11 @@
   <div class="sidebar" id="sidebar">
     <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
     <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
-    <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
+    
+    <div id="authMenuSection">
+        <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
+    </div>
+
     <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
   </div>
@@ -76,9 +80,7 @@
     
     <a href="index.html" class="brand-center">HuaHin.Properties</a>
     
-    <a href="gateway.html" id="adminGateBtn" class="admin-link">
-      <i class="fas fa-user-circle"></i>
-    </a>
+    <img src="brand-logo.png" class="brand-logo-img" alt="Logo">
   </header>
 
   <section class="hero">
@@ -113,27 +115,33 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
-    // 🎯 Toggle Sidebar
     function toggleMenu() {
       document.getElementById('sidebar').classList.toggle('active');
       document.getElementById('overlay').classList.toggle('active');
     }
 
+    // 🎯 แก้ไขฟังก์ชัน Check Auth เพื่อเปลี่ยนปุ่มใน Sidebar
     function checkAuthUI() {
-      const btn = document.getElementById('adminGateBtn');
+      const authSection = document.getElementById('authMenuSection');
       const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+      
       if (isLoggedIn) {
-        btn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-        btn.onclick = function(e) {
-          e.preventDefault();
-          if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
-            localStorage.clear();
-            location.reload();
-          }
-        };
+        authSection.innerHTML = `
+          <a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a>
+          <a href="#" onclick="handleLogout(event)" class="menu-item" style="color:var(--danger); border-bottom: 2px solid var(--danger);"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>
+        `;
       } else {
-        btn.innerHTML = '<i class="fas fa-user-circle"></i>';
-        btn.onclick = null;
+        authSection.innerHTML = `
+          <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
+        `;
+      }
+    }
+
+    function handleLogout(e) {
+      e.preventDefault();
+      if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        location.reload();
       }
     }
 
