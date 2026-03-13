@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V13.2 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V13.3 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -20,45 +20,54 @@
     .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; display: block; font-family: 'Montserrat'; }
     .field-label span { color: #2D5A27; font-size: 10px; margin-left: 5px; font-weight: 700; border-left: 2px solid #eee; padding-left: 8px; font-family: 'Sarabun'; }
     .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.8rem 1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
+    .field-input:focus { border-color: var(--accent); background: white; }
     
-    /* 🎯 สไตล์ปุ่มลบรูปหน้าปก */
     .img-container { position: relative; width: 100%; height: 100%; }
-    .img-x-cover { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; border: 2px solid white; z-index: 50; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .img-x-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
-    /* 🎯 สไตล์รูปในแกลเลอรี */
     .gallery-container { background: #fdfdfd; border: 1px dashed #eee; border-radius: 1rem; padding: 0.5rem; display: grid; gap: 0.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     @media (min-width: 1024px) { .gallery-container { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.6rem; overflow: hidden; border: 2px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
     .img-tile.selected { border: 4px solid var(--danger); }
     .img-tile.selected::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 4px; right: 4px; color: var(--danger); background: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 10; }
 
-    /* 🎯 ปุ่มลบแกลเลอรีแบบลอย (Floating Delete) */
     .btn-delete-float { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 12px 30px; border-radius: 2rem; font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 2000; box-shadow: 0 10px 30px rgba(239,68,68,0.4); display: none; border: 2px solid white; }
+    
+    .pdf-row { display: flex; align-items: center; gap: 0.75rem; background: #F9F9F8; padding: 10px 15px; border-radius: 1rem; margin-bottom: 8px; border: 1px solid #eee; }
+    .pdf-icon { width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .btn-pdf-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
 
-    /* อื่นๆ */
     .tab-bar { display: flex; gap: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; overflow-x: auto; }
     .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; font-family: 'Montserrat'; }
     .tab-btn.active { color: var(--accent); }
     .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+    
+    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
     .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; }
+
+    .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
+    .project-opt { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; color: #1A3017; font-size: 14px; }
   </style>
 </head>
 <body>
 
-  <div id="loadingOverlay"><i class="fas fa-circle-notch animate-spin text-3xl text-amber-500 mb-3"></i><div class="text-[9px] font-800 text-slate-400 uppercase tracking-widest">Processing Data...</div></div>
+  <div id="loadingOverlay">
+    <i class="fas fa-circle-notch animate-spin text-3xl text-amber-500 mb-3"></i>
+    <div class="text-[10px] font-800 text-slate-400 uppercase tracking-widest">Processing Data...</div>
+  </div>
 
   <header>
     <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left text-lg"></i></div>
-    <div class="brand-center">Master Editor V13.2</div>
+    <div class="brand-center">Master Editor V13.3</div>
     <div style="width:20px;"></div>
   </header>
 
   <div class="content-wrapper">
-    <div class="edit-banner"><div class="banner-title">EDIT MASTER: <span id="displayId">...</span></div></div>
+    <div class="edit-banner"><div class="banner-title">EDITING: <span id="displayId">...</span></div></div>
     
     <div class="tab-bar">
       <button id="btn-photo" class="tab-btn active" onclick="switchTab('photo')">Visual Assets</button>
@@ -68,27 +77,73 @@
     <div id="tab-photo" class="tab-content active space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="input-card">
-          <span class="field-label">Main Image Cover <span>รูปภาพหน้าปกหลัก</span></span>
+          <span class="field-label">Main Cover <span>รูปหน้าปก</span></span>
           <div id="thumbPreview" class="relative w-full aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-100 flex items-center justify-center overflow-hidden mb-3"></div>
-          <button onclick="document.getElementById('f_thumb').click()" class="btn-blue w-full py-2 bg-blue-600 text-white rounded-lg font-800 text-[10px]">UPDATE COVER</button>
+          <button onclick="document.getElementById('f_thumb').click()" class="w-full py-2 bg-blue-600 text-white rounded-lg font-800 text-[10px]">UPDATE COVER</button>
           <input type="file" id="f_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')">
         </div>
         <div class="input-card">
-          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
+          <span class="field-label">Gallery <span>แกลเลอรีรูปภาพ</span></span>
           <div id="galleryPreview" class="gallery-container mb-3"></div>
-          <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD TO ALBUM</button>
+          <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD IMAGES</button>
           <input type="file" id="f_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')">
         </div>
       </div>
-      
-      <button id="btnDelAlbum" onclick="executeDelete()" class="btn-delete-float">
-        <i class="fas fa-trash-alt mr-2"></i> ลบรูปที่เลือก (<span id="countSelected">0</span>)
-      </button>
+
+      <div class="input-card">
+        <span class="field-label">Master Documents <span>จัดการไฟล์เอกสาร PDF</span></span>
+        <div class="space-y-2 mt-3">
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 font-normal">None</span></div>
+             <div class="flex gap-2">
+               <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+               <button onclick="deleteDoc('FloorPlan_PDF')" id="del_floor" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             </div>
+             <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
+          </div>
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 font-normal">None</span></div>
+             <div class="flex gap-2">
+               <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+               <button onclick="deleteDoc('Customer_PDF')" id="del_customer" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             </div>
+             <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
+          </div>
+        </div>
+      </div>
+      <button id="btnDelAlbum" onclick="executeDelete()" class="btn-delete-float"><i class="fas fa-trash-alt mr-2"></i> ลบรูปที่เลือก (<span id="countSelected">0</span>)</button>
     </div>
 
     <div id="tab-info" class="tab-content space-y-4">
-      <div id="specFieldsContainer" class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
-          </div>
+      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100" readonly></div>
+        
+        <div class="col-span-full bg-blue-50 p-5 rounded-xl border border-dashed border-blue-300">
+            <label class="field-label !text-blue-700 font-800">38. System Status <span>สถานะทรัพย์สิน</span></label>
+            <select id="System_Status" class="field-input !bg-white">
+                <option value="Draft">Draft (ฉบับร่าง - ไม่ออนไลน์)</option>
+                <option value="Online">Online (ออนไลน์ - พร้อมขาย)</option>
+            </select>
+        </div>
+
+        <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
+        <div><label class="field-label">3. Project Name <span>โครงการ</span></label><input id="Project_Name" class="field-input"></div>
+        <div><label class="field-label">4. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input"></select></div>
+        <div><label class="field-label">5. Plot <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">6. Sales Status <span>สถานะการขาย</span></label><select id="Status" class="field-input"></select></div>
+        <div><label class="field-label">7. Sale Price <span>ราคาขาย</span></label><input type="number" id="Sale_Price" class="field-input" oninput="runCalc()"></div>
+        <div><label class="field-label">8. Living Area <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input" oninput="runCalc()"></div>
+        <div><label class="field-label">9. Price/m2 <span>ราคาต่อม²</span></label><input id="Price_sq_m" class="field-input" readonly></div>
+        
+        <div><label class="field-label">13. Land Area <span>ขนาดที่ดิน</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input"></select></div>
+        <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input"></select></div>
+        <div><label class="field-label">19. Bedrooms <span>ห้องนอน</span></label><select id="Bedrooms" class="field-input"></select></div>
+        <div><label class="field-label">20. Bathrooms <span>ห้องน้ำ</span></label><select id="Bathrooms" class="field-input"></select></div>
+        <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+      </div>
     </div>
   </div>
 
@@ -103,108 +158,89 @@
 
     let galleryArr = [], thumbUrl = "", selectedForDelete = [];
 
+    // 🎯 ความเร็วสูง: โหลด Metadata และ ข้อมูลพร้อมกัน
     async function init() {
-      document.getElementById('loadingOverlay').style.display = 'flex';
-      const metaRes = await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) });
-      const meta = (await metaRes.json()).options;
-      
-      // ดึงรายละเอียดทรัพย์
-      const unitRes = await fetch(`${API}?mode=getUnitDetail&id=${hpId}`);
-      const unit = (await unitRes.json());
-      if(unit.ok) fillData(unit.data);
+      try {
+        const [metaRes, unitRes] = await Promise.all([
+          fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) }),
+          fetch(`${API}?mode=getUnitDetail&id=${hpId}`)
+        ]);
+        
+        const meta = (await metaRes.json()).options;
+        const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage"];
+        dds.forEach(id => {
+          const el = document.getElementById(id);
+          if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
+        });
+
+        const unit = (await unitRes.json());
+        if(unit.ok) fillData(unit.data);
+      } catch (e) { alert("Load Error: " + e.message); }
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
     function fillData(u) {
-      document.getElementById('displayId').innerText = u.HP_ID || "...";
+      document.getElementById('displayId').innerText = u.HP_ID || "DRAFT";
+      Object.keys(u).forEach(k => { const el = document.getElementById(k); if(el) el.value = u[k]; });
       thumbUrl = u.Thumbnail_Image || ""; renderThumb();
       galleryArr = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
-      // ระบบจะเก็บข้อมูลไว้ใน Hidden Input อัตโนมัติเวลา Save
+      if(u.FloorPlan_PDF) { document.getElementById('txt-FloorPlan_PDF').innerText = "File Attached ✅"; document.getElementById('del_floor').classList.remove('hidden'); }
+      if(u.Customer_PDF) { document.getElementById('txt-Customer_PDF').innerText = "File Attached ✅"; document.getElementById('del_customer').classList.remove('hidden'); }
+      runCalc();
     }
 
-    // 🎯 Render รูปหน้าปกพร้อมปุ่มกากบาทลบ
     function renderThumb() {
       const box = document.getElementById('thumbPreview');
-      if(thumbUrl) {
-        box.innerHTML = `
-          <div class="img-container">
-            <div class="img-x-cover" onclick="deleteThumb()">✕</div>
-            <img src="${thumbUrl}" class="w-full h-full object-cover">
-          </div>`;
-      } else {
-        box.innerHTML = '<i class="fas fa-image text-3xl text-slate-200"></i>';
-      }
+      box.innerHTML = thumbUrl ? `<div class="img-container"><div class="img-x-btn" onclick="deleteThumb()">✕</div><img src="${thumbUrl}" class="w-full h-full object-cover"></div>` : '<i class="fas fa-image text-3xl text-slate-200"></i>';
     }
 
-    async function deleteThumb() {
-      if(!confirm("ลบรูปหน้าปกนี้ใช่หรือไม่?")) return;
-      thumbUrl = ""; renderThumb();
-    }
+    function deleteThumb() { if(confirm("ลบรูปหน้าปก?")) { thumbUrl = ""; renderThumb(); } }
 
-    // 🎯 Render แกลเลอรีพร้อมระบบเลือกรูป
     function renderGallery() {
-      const container = document.getElementById('galleryPreview');
-      container.innerHTML = galleryArr.map((url, i) => `
-        <div class="img-tile ${selectedForDelete.includes(url) ? 'selected' : ''}" onclick="toggleSelect('${url}')">
-          <img src="${url}" class="w-full h-full object-cover">
-        </div>
+      document.getElementById('galleryPreview').innerHTML = galleryArr.map(url => `
+        <div class="img-tile ${selectedForDelete.includes(url) ? 'selected' : ''}" onclick="toggleSelect('${url}')"><img src="${url}" class="w-full h-full object-cover"></div>
       `).join('');
-      
-      const btn = document.getElementById('btnDelAlbum');
-      btn.style.display = selectedForDelete.length > 0 ? 'block' : 'none';
+      document.getElementById('btnDelAlbum').style.display = selectedForDelete.length > 0 ? 'block' : 'none';
       document.getElementById('countSelected').innerText = selectedForDelete.length;
     }
 
-    function toggleSelect(url) {
-      if (selectedForDelete.includes(url)) selectedForDelete = selectedForDelete.filter(u => u !== url);
-      else selectedForDelete.push(url);
-      renderGallery();
-    }
+    function toggleSelect(url) { if (selectedForDelete.includes(url)) selectedForDelete = selectedForDelete.filter(u => u !== url); else selectedForDelete.push(url); renderGallery(); }
 
-    async function executeDelete() {
-      if(!confirm(`ยืนยันลบรูปภาพจำนวน ${selectedForDelete.length} รูป?`)) return;
-      document.getElementById('loadingOverlay').style.display = 'flex';
-      
-      // ลบจากตัวแปร Array (รูปจริงใน Firebase เก็บไว้ก่อนเพื่อความเร็ว หรือลบจริงก็ได้ถ้าต้องการ)
-      galleryArr = galleryArr.filter(url => !selectedForDelete.includes(url));
-      selectedForDelete = [];
-      renderGallery();
-      document.getElementById('loadingOverlay').style.display = 'none';
-    }
+    function executeDelete() { if(confirm("ลบรูปภาพ?")) { galleryArr = galleryArr.filter(u => !selectedForDelete.includes(u)); selectedForDelete = []; renderGallery(); } }
 
-    async function handleMediaUpload(input, target) {
+    function deleteDoc(id) { if(confirm("ลบไฟล์ PDF?")) { document.getElementById(id).value = ""; document.getElementById('txt-'+id).innerText = "None"; document.getElementById(id==='FloorPlan_PDF'?'del_floor':'del_customer').classList.add('hidden'); } }
+
+    async function handleMediaUpload(input, target, fieldId) {
       if(!input.files.length) return;
       document.getElementById('loadingOverlay').style.display = 'flex';
       for (let file of input.files) {
-        const path = `properties/${hpId || 'EDIT'}/${Date.now()}_${file.name}`;
+        const path = `properties/${hpId}/${Date.now()}_${file.name}`;
         const ref = storage.ref(path);
         await ref.put(file);
         const url = await ref.getDownloadURL();
         if(target === 'thumb') thumbUrl = url;
-        else galleryArr.push(url);
+        else if(target === 'album') galleryArr.push(url);
+        else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅"; document.getElementById(fieldId==='FloorPlan_PDF'?'del_floor':'del_customer').classList.remove('hidden'); }
       }
-      if(target === 'thumb') renderThumb(); else renderGallery();
+      if(target === 'thumb') renderThumb(); else if(target === 'album') renderGallery();
       document.getElementById('loadingOverlay').style.display = 'none';
+    }
+
+    function runCalc() {
+      const p = parseFloat(document.getElementById('Sale_Price').value) || 0;
+      const a = parseFloat(document.getElementById('Living_Area_sq_m').value) || 1;
+      document.getElementById('Price_sq_m').value = Math.round(p/a).toLocaleString();
     }
 
     async function saveData() {
       document.getElementById('loadingOverlay').style.display = 'flex';
-      const payload = { 
-        mode: "updateUnit", 
-        HP_ID: hpId, 
-        Thumbnail_Image: thumbUrl, 
-        Album_Image: galleryArr.join(',') 
-      };
-      // ดึงค่าจาก input อื่นๆ ตามปกติ...
+      const payload = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
+      document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
-      if(res.ok) { alert("SUCCESS! ✅"); location.href='dashboard.html'; }
+      if(res.ok) { alert("บันทึกสำเร็จ ✅"); location.href='dashboard.html'; }
     }
 
-    function switchTab(t) {
-      document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + t).classList.add('active');
-      document.getElementById('btn-' + t).classList.add('active');
-    }
+    function switchTab(t) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById('tab-' + t).classList.add('active'); document.getElementById('btn-' + t).classList.add('active'); }
     window.onload = init;
   </script>
 </body>
