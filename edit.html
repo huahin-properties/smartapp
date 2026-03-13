@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V13.0 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V13.1 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -27,22 +27,12 @@
     @media (min-width: 1024px) { .gallery-container { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.6rem; overflow: hidden; border: 2px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
     .img-tile.selected { border: 4px solid var(--danger); }
-    .img-tile.selected::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 4px; right: 4px; color: var(--danger); background: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 10; }
     .img-x { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid white; z-index: 20; }
 
     .btn-delete-float { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 12px 30px; border-radius: 2rem; font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 2000; box-shadow: 0 10px 30px rgba(239,68,68,0.4); display: none; border: 2px solid white; }
     .pdf-row { display: flex; align-items: center; gap: 0.75rem; background: #F9F9F8; padding: 10px 15px; border-radius: 1rem; margin-bottom: 8px; border: 1px solid #eee; }
-    .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .confirm-box { background: white; width: 100%; max-width: 320px; border-radius: 1.5rem; padding: 25px; text-align: center; }
-    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
-    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; letter-spacing: 1px; }
-
-    .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
-    .project-opt { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; color: #1A3017; font-size: 14px; }
-    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 5px; }
-    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid transparent; }
+    .pdf-icon { width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .btn-pdf-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
 
     .tab-bar { display: flex; gap: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; overflow-x: auto; }
     .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; font-family: 'Montserrat'; }
@@ -50,46 +40,36 @@
     .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
+    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; }
+
+    .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
+    .project-opt { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; color: #1A3017; font-size: 14px; }
+    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 5px; }
+    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid transparent; }
   </style>
 </head>
 <body>
 
-  <div id="confirmPop" class="confirm-overlay">
-    <div class="confirm-box">
-      <i class="fas fa-trash-alt text-4xl text-red-500 mb-4"></i>
-      <h3 style="font-weight:800; margin-bottom:10px;">ยืนยันการลบรูป?</h3>
-      <p style="font-size:14px; color:#666; margin-bottom:20px;">คุณต้องการลบรูปภาพจำนวน <span id="countPop">0</span> รูปถาวรหรือไม่?</p>
-      <div class="flex gap-3">
-        <button class="flex-1 bg-gray-100 py-3 rounded-xl font-800" onclick="closeConfirm()">ยกเลิก</button>
-        <button class="flex-1 bg-red-500 text-white py-3 rounded-xl font-800" onclick="executeDelete()">ยืนยันลบ</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="loadingOverlay">
-    <i class="fas fa-circle-notch animate-spin text-3xl text-amber-500 mb-3"></i>
-    <div class="text-[9px] font-800 uppercase tracking-widest text-slate-400">Syncing Master Database...</div>
-  </div>
+  <div id="loadingOverlay"><i class="fas fa-circle-notch animate-spin text-3xl text-amber-500 mb-3"></i><div class="text-[9px] font-800 text-slate-400 uppercase tracking-widest">Processing Data...</div></div>
 
   <div class="project-modal" id="pModal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="flex justify-between items-center mb-4 font-800 text-xs text-amber-600">
-        <span>SELECT PROJECT</span><i class="fas fa-times" onclick="document.getElementById('pModal').style.display='none'"></i>
-      </div>
+      <div class="flex justify-between items-center mb-4 font-800 text-xs text-amber-600"><span>SELECT PROJECT</span><i class="fas fa-times" onclick="document.getElementById('pModal').style.display='none'"></i></div>
       <div id="modal-list"></div>
     </div>
   </div>
 
   <header>
     <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left text-lg"></i></div>
-    <div class="brand-center">Master Editor V13.0</div>
+    <div class="brand-center">Master Editor V13.1</div>
     <div style="width:20px;"></div>
   </header>
 
   <div class="content-wrapper">
-    <div class="edit-banner">
-      <div class="banner-title">EDIT MASTER: <span id="displayId">...</span></div>
-    </div>
+    <div class="edit-banner"><div class="banner-title">EDIT MASTER: <span id="displayId">...</span></div></div>
     
     <div class="tab-bar">
       <button id="btn-photo" class="tab-btn active" onclick="switchTab('photo')">Visual Assets</button>
@@ -101,42 +81,117 @@
         <div class="input-card">
           <span class="field-label">Main Image Cover <span>รูปภาพหน้าปกหลัก</span></span>
           <div id="thumbPreview" class="relative w-full aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-100 flex items-center justify-center overflow-hidden mb-3"></div>
-          <button onclick="document.getElementById('f_thumb').click()" class="w-full py-2 bg-blue-600 text-white rounded-lg font-800 text-[10px]">UPDATE COVER</button>
+          <button onclick="document.getElementById('f_thumb').click()" class="btn-blue w-full py-2 bg-blue-600 text-white rounded-lg font-800 text-[10px]">UPDATE COVER</button>
           <input type="file" id="f_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
           <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
           <div id="galleryPreview" class="gallery-container mb-3"></div>
           <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD TO ALBUM</button>
-          <input type="hidden" id="Album_Image">
+          <input type="file" id="f_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')"><input type="hidden" id="Album_Image">
         </div>
       </div>
-      <button id="btnDelAlbum" onclick="openConfirm()" class="btn-delete-float"><i class="fas fa-trash-alt mr-2"></i> ลบรูปที่เลือก (<span id="countSelected">0</span>)</button>
+
+      <div class="input-card">
+        <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร (กู้คืน)</span></span>
+        <div class="space-y-2 mt-3">
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 font-normal">None</span></div>
+             <div class="flex gap-2">
+               <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+               <button onclick="deletePhysicalFile('FloorPlan_PDF')" id="del_floor" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             </div>
+             <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
+          </div>
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 font-normal">None</span></div>
+             <div class="flex gap-2">
+               <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+               <button onclick="deletePhysicalFile('Customer_PDF')" id="del_customer" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             </div>
+             <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="tab-info" class="tab-content space-y-4">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
         <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100" readonly></div>
         
-        <div class="col-span-full bg-blue-50 p-6 rounded-xl border border-dashed border-blue-300">
+        <div class="col-span-full bg-blue-50 p-5 rounded-xl border border-dashed border-blue-300">
             <label class="field-label !text-blue-700 font-800">38. System Status <span>สถานะทรัพย์สิน</span></label>
             <select id="System_Status" class="field-input !bg-white !border-blue-200">
                 <option value="Draft">Draft (ฉบับร่าง - ไม่ออนไลน์)</option>
                 <option value="Online">Online (ออนไลน์ - พร้อมขาย)</option>
             </select>
-            <p class="text-[10px] text-blue-600 mt-2 font-600">* เมื่อเปลี่ยนเป็น Online ระบบจะรันเลข HP_ID ให้ทันที (หากยังไม่มี)</p>
         </div>
 
         <div>
           <label class="field-label">3. Project Name <span>ชื่อโครงการ</span></label>
           <div class="relative flex items-center">
-            <input id="Project_Name" class="field-input font-700" placeholder="เลือกโครงการ...">
+            <input id="Project_Name" class="field-input font-700">
             <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 bg-black text-white w-7 h-7 rounded flex items-center justify-center cursor-pointer"><i class="fas fa-list-ul text-[10px]"></i></div>
           </div>
         </div>
 
         <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
+        <div><label class="field-label">4. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input"></select></div>
+        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
+
+        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border">
+           <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
+           <div class="col-span-full border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div><label class="field-label">10. Common Fee Rate <span>ค่าส่วนกลาง/ม²</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
+            <div><label class="field-label">11. Monthly Fee <span>รวมรายเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Fee <span>รวมรายปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+          </div>
         </div>
+
+        <div><label class="field-label">13. Land Area (m2) <span>ที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">14. Land Area (sq.w) <span>ที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
+        <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input"></select></div>
+        <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input"></select></div>
+        <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input"></select></div>
+        <div><label class="field-label">18. Zone <span>โซน</span></label><select id="Zone" class="field-input"></select></div>
+        <div><label class="field-label">19. Bedrooms <span>ห้องนอน</span></label><select id="Bedrooms" class="field-input"></select></div>
+        <div><label class="field-label">20. Bathrooms <span>ห้องน้ำ</span></label><select id="Bathrooms" class="field-input"></select></div>
+        <div><label class="field-label">21. Parking <span>ที่จอดรถ</span></label><select id="Parking" class="field-input"></select></div>
+        <div><label class="field-label">22. Kitchen Style <span>ครัว</span></label><select id="Kitchen_Type" class="field-input"></select></div>
+        <div><label class="field-label">23. Direction Facing <span>ทิศหน้าบ้าน</span></label><select id="Direction" class="field-input"></select></div>
+        <div><label class="field-label">24. Electricity <span>ระบบไฟฟ้า</span></label><select id="Electricity" class="field-input"></select></div>
+        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input"></div>
+        <div><label class="field-label">26. Pool Depth <span>ลึก</span></label><input id="Pool_Depth" class="field-input"></div>
+        <div><label class="field-label">27. Pool System <span>ระบบสระ</span></label><select id="Pool_System" class="field-input"></select></div>
+        <div><label class="field-label">28. View Profile <span>วิวบ้าน</span></label><select id="View_Type" class="field-input"></select></div>
+        <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input"></select></div>
+        <div><label class="field-label">30. Extras <span>สิ่งอำนวยความสะดวก</span></label><select id="Extras" class="field-input"></select></div>
+        
+        <div class="col-span-full">
+          <label class="field-label">31. Ownership <span>รูปแบบการถือครอง</span></label>
+          <div id="ownership-container" class="ownership-grid"></div>
+          <input type="hidden" id="Ownership_Type">
+        </div>
+
+        <div><label class="field-label">32. Title Deed <span>โฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
+        <div><label class="field-label">33. Transfer Exp. <span>ค่าโอน</span></label><input id="Transfer_Expenses" class="field-input"></div>
+        <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input"></select></div>
+        <div><label class="field-label">35. Build Stage <span>ก่อสร้าง</span></label><select id="Build_Stage" class="field-input"></select></div>
+        <div><label class="field-label">36. GPS Coordinates <span>พิกัด GPS</span></label><input id="Coordinates" class="field-input"></div>
+        <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+
+        <div class="col-span-full bg-amber-50 p-5 rounded-xl border border-dashed border-amber-200">
+            <label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงแผนที่</span></label>
+            <select id="Map_Visibility" class="field-input !bg-white">
+                <option value="Show">Show Map</option><option value="Hide">Hide Map</option>
+            </select>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -156,12 +211,17 @@
       const metaRes = await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) });
       const meta = (await metaRes.json()).options;
       
-      // ดึงข้อมูลตัวเลือกใส่ Dropdown รวมถึง System_Status
       const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage"];
       dds.forEach(id => {
         const el = document.getElementById(id);
         if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
       });
+
+      if(meta.Ownership_Type) {
+        document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
+          <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
+        `).join('');
+      }
 
       const unitRes = await fetch(`${API}?mode=getUnitDetail&id=${hpId}`);
       const unit = (await unitRes.json());
@@ -172,37 +232,50 @@
     function fillData(u) {
       document.getElementById('displayId').innerText = u.HP_ID || "NEW DRAFT";
       Object.keys(u).forEach(k => { const el = document.getElementById(k); if(el) el.value = u[k]; });
+      if(u.Ownership_Type) {
+        const v = u.Ownership_Type.split(',').map(s => s.trim());
+        document.querySelectorAll('input[name="own_check"]').forEach(cb => { if(v.includes(cb.value)) cb.checked = true; });
+      }
       thumbUrl = u.Thumbnail_Image || ""; renderThumb();
       galleryArr = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
+      if(u.FloorPlan_PDF) { document.getElementById('txt-FloorPlan_PDF').innerText = "File ✅"; document.getElementById('del_floor')?.classList.remove('hidden'); }
+      if(u.Customer_PDF) { document.getElementById('txt-Customer_PDF').innerText = "File ✅"; document.getElementById('del_customer')?.classList.remove('hidden'); }
+      runCalc();
     }
 
-    // ฟังก์ชันอื่นๆ คงเดิมตาม V12.9
     function renderThumb() { document.getElementById('thumbPreview').innerHTML = thumbUrl ? `<img src="${thumbUrl}" class="w-full h-full object-cover">` : '<i class="fas fa-image text-3xl text-slate-200"></i>'; }
     function renderGallery() { document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `<div class="img-tile ${selectedForDelete.includes(url) ? 'selected' : ''}" onclick="toggleSelect('${url}')"><img src="${url}" class="w-full h-full object-cover"></div>`).join(''); }
     function toggleSelect(url) { if (selectedForDelete.includes(url)) selectedForDelete = selectedForDelete.filter(u => u !== url); else selectedForDelete.push(url); renderGallery(); }
-    function openConfirm() { document.getElementById('countPop').innerText = selectedForDelete.length; document.getElementById('confirmPop').style.display = 'flex'; }
-    function closeConfirm() { document.getElementById('confirmPop').style.display = 'none'; }
-    async function executeDelete() {
-      closeConfirm(); document.getElementById('loadingOverlay').style.display = 'flex';
-      for (let url of selectedForDelete) { try { await storage.refFromURL(url).delete(); galleryArr = galleryArr.filter(i => i !== url); } catch (e) { galleryArr = galleryArr.filter(i => i !== url); } }
-      selectedForDelete = []; renderGallery(); document.getElementById('loadingOverlay').style.display = 'none';
-    }
-    async function handleMediaUpload(input, target) {
+
+    async function handleMediaUpload(input, target, fieldId) {
       if(!input.files.length) return;
       document.getElementById('loadingOverlay').style.display = 'flex';
       for (let file of input.files) {
-        const path = `properties/${hpId}/${Date.now()}_${file.name}`;
+        const path = `properties/${hpId || 'TEMP'}/${Date.now()}_${file.name}`;
         const ref = storage.ref(path);
         await ref.put(file);
         const url = await ref.getDownloadURL();
-        if(target === 'thumb') thumbUrl = url; else galleryArr.push(url);
+        if(target === 'thumb') thumbUrl = url;
+        else if(target === 'album') galleryArr.push(url);
+        else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅"; }
       }
       if(target === 'thumb') renderThumb(); else renderGallery();
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
+    function runCalc() {
+      const p = parseFloat(document.getElementById('Sale_Price').value) || 0;
+      const a = parseFloat(document.getElementById('Living_Area_sq_m').value) || 1;
+      const r = parseFloat(document.getElementById('Common_Fee_Rate').value) || 0;
+      document.getElementById('Price_sq_m').value = Math.round(p/a).toLocaleString();
+      document.getElementById('Monthly_Common_Fee').value = Math.round(a * r).toLocaleString();
+      document.getElementById('Common_Fee_Yearly').value = Math.round(a * r * 12).toLocaleString();
+    }
+
     async function saveData() {
       document.getElementById('loadingOverlay').style.display = 'flex';
+      const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
+      document.getElementById('Ownership_Type').value = owns.join(', ');
       const payload = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(','), System_Status: document.getElementById('System_Status').value };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
