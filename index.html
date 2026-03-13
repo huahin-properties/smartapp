@@ -10,14 +10,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     
-    /* 🎯 New Custom Loader Styling */
-    #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
-    .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+    /* 🎯 Custom Loader Styling (Black Background) */
+    #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.6s ease-out; }
+    .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; }
     .loader-icons span { display: inline-block; animation: bounce 0.6s infinite alternate; }
     .loader-icons span:nth-child(2) { animation-delay: 0.2s; }
     .loader-icons span:nth-child(3) { animation-delay: 0.4s; }
     .loader-text { color: #FFFFFF; font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat'; }
-    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-12px); } }
 
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; }
@@ -31,7 +31,6 @@
     .sidebar-overlay.active { display: block; }
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: var(--white); text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
-    .menu-item:active { background: rgba(201,168,76,0.1); color: var(--gold); }
     .hero { padding: 75px 15px 10px; text-align: center; }
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
@@ -112,13 +111,19 @@
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
+    const startTime = Date.now(); // ⏱️ เริ่มจับเวลาตอนโหลดหน้า
 
     function hideSplash() { 
-      const splash = document.getElementById('pageSplash');
-      if(splash) {
-        splash.style.opacity = '0';
-        setTimeout(() => splash.style.display = 'none', 500);
-      }
+      const elapsed = Date.now() - startTime;
+      const waitTime = Math.max(2000 - elapsed, 0); // 🎯 ตั้งเวลาขั้นต่ำ 2 วินาที (2000ms)
+      
+      setTimeout(() => {
+        const splash = document.getElementById('pageSplash');
+        if(splash) {
+          splash.style.opacity = '0';
+          setTimeout(() => splash.style.display = 'none', 600);
+        }
+      }, waitTime);
     }
 
     function toggleMenu() {
@@ -158,14 +163,17 @@
     async function init() {
       checkAuthUI();
       const cached = localStorage.getItem('hp_master_data');
-      if (cached) { data = JSON.parse(cached); updateFilters(); f(); hideSplash(); } // ซ่อน Loader ถ้ามีแคช
+      if (cached) { 
+        data = JSON.parse(cached); updateFilters(); f(); 
+        hideSplash(); // โหลดจากแคชก็ยังต้องโชว์แบรนด์ตามเวลาที่ตั้งไว้
+      } 
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
         const newData = await res.json();
         data = newData;
         localStorage.setItem('hp_master_data', JSON.stringify(data));
         updateFilters(); f();
-        hideSplash(); // ซ่อน Loader เมื่อโหลดสำเร็จ
+        hideSplash(); 
       } catch (err) { console.error(err); hideSplash(); }
     }
 
