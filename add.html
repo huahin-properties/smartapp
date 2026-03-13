@@ -34,8 +34,6 @@
     
     .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
     .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
-    .mini-status { font-size: 9px; font-weight: 800; color: var(--accent); display: none; margin-top: 5px; }
-    .mini-status.active { display: block; }
     .pdf-row { display: flex; align-items: center; gap: 1rem; background: #F9F9F8; padding: 12px 18px; border-radius: 1.2rem; margin-bottom: 10px; }
   </style>
 </head>
@@ -58,7 +56,7 @@
 
   <div class="content-wrapper">
     <div class="edit-banner">
-      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; font-family:'Montserrat';">Auto-Pilot V10.0 | Smart Cluster Sync</div>
+      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; font-family:'Montserrat';">Auto-Pilot V10.1 | Smart Cluster Sync</div>
       <div style="font-size:1rem; font-weight:800; font-family:'Montserrat';">ADD NEW PROPERTY</div>
     </div>
 
@@ -96,36 +94,46 @@
 
     <div id="tab-info" class="tab-content space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div><label class="field-label">1. HP_ID</label><input id="HP_ID" class="field-input !bg-amber-50 font-800" readonly></div>
-        <div><label class="field-label">2. Listing Type</label><select id="Listing_Type" class="field-input"></select></div>
-        <div><label class="field-label">3. Asset Type</label><select id="Type" class="field-input"></select></div>
+        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-amber-50 font-800" readonly></div>
         
         <div>
-          <label class="field-label">4. Project Name</label>
+          <label class="field-label">2. Project Name <span>ชื่อโครงการ</span></label>
           <div class="relative flex items-center">
             <input id="Project_Name" class="field-input font-700" placeholder="Type or Select...">
             <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 bg-black text-white w-8 h-8 rounded flex items-center justify-center cursor-pointer"><i class="fas fa-list-ul text-xs"></i></div>
           </div>
         </div>
-        <div><label class="field-label">5. Plot</label><input id="Plot" class="field-input"></div>
-        <div><label class="field-label">6. Sales Status</label><select id="Status" class="field-input"></select></div>
+
+        <div><label class="field-label">3. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
+        <div><label class="field-label">4. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input"></select></div>
+        <div><label class="field-label">5. Plot <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input" placeholder="เช่น m39"></div>
+        <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
 
         <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-xl">
            <div><label class="field-label">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
-           <div><label class="field-label">8. Living Area</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">8. Living Area (m2)</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
            <div><label class="field-label">9. Price/m2</label><input id="Price_sq_m" class="field-input bg-slate-100 font-800" readonly value="0"></div>
+           <div class="col-span-full border-t border-gray-200 pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div><label class="field-label">10. Common Fee Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
+            <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+          </div>
         </div>
 
+        <div><label class="field-label">13. Land Area (m2)</label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">14. Land Area (sq.w)</label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
+        <div><label class="field-label">15. Furnishing</label><select id="Furnishing" class="field-input"></select></div>
         <div><label class="field-label">16. District</label><select id="District" class="field-input"></select></div>
         <div><label class="field-label">17. Sub-District</label><select id="SubDistrict" class="field-input"></select></div>
         <div><label class="field-label">18. Zone</label><select id="Zone" class="field-input"></select></div>
+        
         <div><label class="field-label">24. Electricity</label><select id="Electricity" class="field-input"></select></div>
         <div><label class="field-label">29. Water Source</label><select id="Water_Source" class="field-input"></select></div>
         <div><label class="field-label">32. Title Deed</label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
         <div><label class="field-label">36. Coordinates</label><input id="Coordinates" class="field-input"></div>
 
         <div class="col-span-full">
-          <label class="field-label">31. Ownership (Auto-Select Available)</label>
+          <label class="field-label">31. Ownership (Auto-Select)</label>
           <div id="ownership-container" class="ownership-grid"></div>
           <input type="hidden" id="Ownership_Type">
         </div>
@@ -153,43 +161,34 @@
           const meta = res.options;
           projectMaster = meta._raw_projects || [];
 
-          // 🎯 Auto-Fill Dropdowns
-          const dds = ["Listing_Type", "Type", "Status", "District", "SubDistrict", "Zone", "Electricity", "Water_Source", "Land_Title_Deed_Type", "System_Status"];
+          const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Electricity", "Water_Source", "Land_Title_Deed_Type", "System_Status"];
           dds.forEach(id => {
             const el = document.getElementById(id);
             if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
           });
 
-          // 🎯 Ownership Checkboxes
           if(meta.Ownership_Type) {
             document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
               <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
             `).join('');
           }
-
           document.getElementById('modal-list').innerHTML = projectMaster.map(p => `<div class="project-opt" onclick="autoFill('${p.name}')">${p.name}</div>`).join('');
         }
       } catch (e) { console.error(e); }
     }
 
-    // 🎯 หัวใจหลัก V10.0: ดึงข้อมูลยกชุด 8 ฟิลด์
     function autoFill(name) {
       const p = projectMaster.find(item => item.name === name);
       if (p) {
         document.getElementById('Project_Name').value = p.name;
-        // 🎯 หยอดข้อมูลลงช่องต่างๆ
         const fields = ["District", "SubDistrict", "Coordinates", "Zone", "Type", "Water_Source", "Land_Title_Deed_Type"];
         fields.forEach(f => {
           const el = document.getElementById(f);
           if(el && p[f.toLowerCase()]) el.value = p[f.toLowerCase()];
         });
-
-        // 🎯 จัดการ Checkbox Ownership (ข้อ 31)
         if(p.ownership_type) {
           const vals = p.ownership_type.split(',').map(s => s.trim());
-          document.querySelectorAll('input[name="own_check"]').forEach(cb => {
-            cb.checked = vals.includes(cb.value);
-          });
+          document.querySelectorAll('input[name="own_check"]').forEach(cb => { cb.checked = vals.includes(cb.value); });
         }
       }
       document.getElementById('pModal').style.display = 'none';
@@ -217,7 +216,10 @@
     function runCalc() {
       const p = parseFloat(document.getElementById('Sale_Price').value) || 0;
       const a = parseFloat(document.getElementById('Living_Area_sq_m').value) || 1;
+      const r = parseFloat(document.getElementById('Common_Fee_Rate').value) || 0;
       document.getElementById('Price_sq_m').value = Math.round(p/a).toLocaleString();
+      document.getElementById('Monthly_Common_Fee').value = Math.round(a * r).toLocaleString();
+      document.getElementById('Common_Fee_Yearly').value = Math.round(a * r * 12).toLocaleString();
     }
 
     async function saveData() {
@@ -225,7 +227,6 @@
       document.getElementById('btn_save').innerText = "SYNCING...";
       const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
       document.getElementById('Ownership_Type').value = owns.join(', ');
-      
       let payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
