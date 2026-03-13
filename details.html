@@ -11,23 +11,27 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     
+    /* 🎯 New Custom Loader Styling */
+    #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
+    .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+    .loader-icons span { display: inline-block; animation: bounce 0.6s infinite alternate; }
+    .loader-icons span:nth-child(2) { animation-delay: 0.2s; }
+    .loader-icons span:nth-child(3) { animation-delay: 0.4s; }
+    .loader-text { color: #FFFFFF; font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat'; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.85rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
-
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; }
-
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s; padding: 60px 20px; border-right: 1px solid var(--border); }
     .sidebar.active { left: 0; }
     .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1999; display: none; }
     .sidebar-overlay.active { display: block; }
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
-
     .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-    #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
-    
     .gallery-container{margin-top:65px;padding:15px;max-width:1100px;margin:0 auto;}
     .gallery-card{background:#000;border-radius: 18px;border:1px solid var(--border);overflow:hidden;box-shadow: 0 10px 30px rgba(0,0,0,0.3);margin-bottom:20px;}
     .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#111;overflow:hidden;}
@@ -37,7 +41,6 @@
     .thumb{width:80px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
     .thumb.active{opacity:1;border-color:var(--gold)}
     .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
-    
     .content{padding:0 15px 120px;max-width:900px;margin:0 auto}
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
@@ -49,16 +52,13 @@
     .val{font-size:0.85rem;font-weight:400;color:#FFF}
     .gold-txt{color:var(--gold);font-weight:600}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-
     .map-box{width:100%;height:250px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
     #leafletMap{width:100%;height:100%;background:#0F172A}
     .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;margin-top:10px;border:1px solid var(--border);}
     .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
     .loc-name{font-size:0.78rem;font-weight:300}
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
-
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
-    
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
     .share-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 10px 0; }
@@ -68,10 +68,8 @@
     .share-btn span { font-size: 8px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
     .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; padding: 5px; }
     .arrow-left { left: 0; } .arrow-right { right: 0; }
-
     .icon-fb { color: #1877F2; } .icon-msgr { color: #0084FF; } .icon-wa { color: #25D366; } .icon-tg { color: #0088CC; }
     .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
-
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
@@ -79,6 +77,15 @@
   </style>
 </head>
 <body>
+
+<div id="pageSplash">
+  <div class="loader-icons">
+    <span>🏠</span>
+    <span>✨</span>
+    <span>🌴</span>
+  </div>
+  <div class="loader-text">HUAHIN.PROPERTIES</div>
+</div>
 
 <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
 <div class="sidebar" id="sidebar">
@@ -88,8 +95,6 @@
     <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
 </div>
-
-<div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
 
 <header>
     <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i><span>MENU</span></div>
@@ -202,6 +207,14 @@ const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 let images=[], idx=0, leafletMap=null;
 
+function hideSplash() { 
+  const splash = document.getElementById('pageSplash');
+  if(splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => splash.style.display = 'none', 500);
+  }
+}
+
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 function scrollShare(val) { document.getElementById('shareBox').scrollBy({left: val, behavior: 'smooth'}); }
 
@@ -233,7 +246,7 @@ function syncField(valId, wrapId, value) {
 
 async function init(){
   checkAuthUI();
-  if(!hpId) return;
+  if(!hpId) { hideSplash(); return; }
   const adminEditBtn = document.getElementById('adminEditBtn');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
   try{
@@ -247,42 +260,32 @@ async function init(){
   }catch(e){ hideSplash(); }
 }
 
-function hideSplash(){ const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);} }
 function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
 function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
 
 function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=safeNum(u.Living_Area_sq_m||0);
-  
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
-  
-  // 🎯 🔵 Updated Specs Ordering as per request
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLandW', 'w-landW', u.Land_Area_sq_w ? `${u.Land_Area_sq_w} sq.w` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
   syncField('vLiving', 'w-living', a ? `${a} m²` : "");
   if(p && a) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
-  
   syncField('vStatus', 'w-status', u.Status);
   syncField('vFurnish', 'w-furnish', u.Furnishing);
   syncField('vDistrict', 'w-district', u.District);
   syncField('vSubDistrict', 'w-sub', u.SubDistrict);
   syncField('vZone', 'w-zone', u.Zone);
   syncField('vPoolSys', 'w-poolsys', u.Pool_System);
-  
-  if (u.Pool_Size || u.Pool_Depth) {
-      syncField('vPoolInfo', 'w-poolinfo', `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`);
-  }
-
+  if (u.Pool_Size || u.Pool_Depth) syncField('vPoolInfo', 'w-poolinfo', `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`);
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
   syncField('vParking', 'w-parking', u.Parking);
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
-  
   const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
   if(feeRate > 0) {
       syncField('vFeeRate', 'w-feeRate', `฿${feeRate.toLocaleString()} / m²`);
@@ -292,14 +295,10 @@ function renderData(u){
           syncField('vFeeY', 'w-feeY', `฿${(monthly * 12).toLocaleString()} / Yr`);
       }
   }
-
   syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
-
   const vDesc = document.getElementById('vDesc');
   if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
-
-  // Map & Landmarks logic
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
       document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/8{la},${lo}`;
@@ -318,12 +317,10 @@ function renderData(u){
           return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
       }).join('');
   }
-
   if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
     const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex';
     document.getElementById('amenitiesSection').classList.add('has-data');
   }
-
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
