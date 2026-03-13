@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V188</title>
+  <title>Asset Specifications | MASTER SYSTEM V189</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -147,7 +147,7 @@
 
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigator</h2>
-      <div class="map-box"><div id="leafletMap"></div></div>
+      <div class="map-box" id="mapBoxUI"><div id="leafletMap"></div></div>
       <a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a>
     </div>
 
@@ -170,7 +170,6 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
 
-// 🎯 Full 12 Landmarks
 const LANDMARKS=[
     {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, 
     {name:"Bluport Mall",lat:12.5518,lon:99.9631}, 
@@ -273,31 +272,33 @@ function renderData(u){
   const vDesc = document.getElementById('vDesc');
   if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
 
-  // 🎯 Smart Visibility Map & Navigator
-  const mapSection = document.getElementById('mapSection');
-  if(u.Coordinates && u.Coordinates.includes(',') && u.Map_Visibility !== 'Hide') {
-      mapSection.classList.add('has-data');
+  // 🎯 📍 Logic: แผนที่ และ Nearby (แยกจากกัน)
+  if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
       
-      // 🎯 Fix Google Maps Link for Navigation
-      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
-      
-      if(!leafletMap) {
-          leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
-          L.marker([la, lo]).addTo(leafletMap);
+      // 1. จัดการส่วนแผนที่ (Map Section)
+      const mapSection = document.getElementById('mapSection');
+      if(u.Map_Visibility === 'Hide') {
+          mapSection.style.display = 'none'; // ซ่อนแผนที่และปุ่มนำทาง
+      } else {
+          mapSection.style.display = 'block';
+          mapSection.classList.add('has-data');
+          document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+          if(!leafletMap) {
+              leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
+              L.marker([la, lo]).addTo(leafletMap);
+          }
       }
-      
-      // 🎯 Calculate 12 Landmarks
+
+      // 2. จัดการส่วนสถานที่ใกล้เคียง (Nearby Section) - โชว์ตลอดเวลาที่มีพิกัด
+      const amenitiesSection = document.getElementById('amenitiesSection');
+      amenitiesSection.classList.add('has-data');
       const grid = document.getElementById('nearbyGrid');
       grid.innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(la, lo, loc.lat, loc.lon);
           return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
       }).join('');
-      document.getElementById('amenitiesSection').classList.add('has-data');
-  } else {
-      mapSection.classList.remove('has-data');
-      mapSection.style.display = 'none';
   }
 
   if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
