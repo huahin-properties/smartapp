@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V11.0 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V11.1 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -57,8 +57,6 @@
     .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
     .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
     .pdf-row { display: flex; align-items: center; gap: 1rem; background: #F9F9F8; padding: 12px 18px; border-radius: 1.2rem; margin-bottom: 10px; }
-    .pdf-icon { width: 36px; height: 36px; border-radius: 10px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .btn-pdf-action { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; background: #2563eb; color: white; border: none; cursor: pointer; }
     .mini-status { font-size: 9px; font-weight: 800; color: var(--accent); display: none; margin-top: 5px; }
     .mini-status.active { display: block; }
   </style>
@@ -93,7 +91,7 @@
 
   <div class="content-wrapper">
     <div class="edit-banner">
-      <div class="banner-sub">Master Vault | Editor Suite</div>
+      <div class="banner-sub">Master Vault | V11.1 Speed Optimized</div>
       <div class="banner-title">EDIT MASTER: <span id="displayId">...</span></div>
     </div>
     
@@ -110,14 +108,14 @@
             <i class="fas fa-cloud-upload-alt text-3xl text-slate-200"></i>
           </div>
           <button onclick="document.getElementById('f_thumb').click()" class="btn-blue py-3">UPDATE COVER</button>
-          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Clean Syncing...</div>
+          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Speed Uploading...</div>
           <input type="file" id="f_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
           <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
           <div id="galleryPreview" class="h-48 bg-slate-50 rounded-xl p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-4"></div>
           <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[11px] uppercase">ADD VISUALS</button>
-          <div id="status_album" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Updating Album...</div>
+          <div id="status_album" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Speed Uploading...</div>
           <input type="file" id="f_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')"><input type="hidden" id="Album_Image">
         </div>
       </div>
@@ -143,7 +141,6 @@
     <div id="tab-info" class="tab-content space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
         <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100" readonly></div>
-        
         <div>
           <label class="field-label">2. Project Name <span>ชื่อโครงการ</span></label>
           <div class="relative flex items-center">
@@ -151,25 +148,24 @@
             <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 bg-black text-white w-8 h-8 rounded flex items-center justify-center cursor-pointer"><i class="fas fa-list-ul text-xs"></i></div>
           </div>
         </div>
-
         <div><label class="field-label">3. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
         <div><label class="field-label">4. Asset Type <span>ประเภททรัพย์สิน</span></label><select id="Type" class="field-input"></select></div>
         <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
 
         <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-xl border border-gray-100">
-           <div><label class="field-label text-blue-600">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
-           <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
-           <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
+           <div><label class="field-label text-blue-600">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">8. Living Area</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">9. Price/m2</label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
            <div class="col-span-full border-t border-gray-200 pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div><label class="field-label">10. Common Fee Rate <span>ค่าส่วนกลาง</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
-            <div><label class="field-label">11. Monthly Fee <span>รวมต่อเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
-            <div><label class="field-label">12. Yearly Fee <span>รวมต่อปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">10. Common Fee Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
+            <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
           </div>
         </div>
 
-        <div><label class="field-label">13. Land Area (m2) <span>ที่ดิน (ตร.ม.)</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">14. Land Area (sq.w) <span>ที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
+        <div><label class="field-label">13. Land Area (m2)</label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">14. Land Area (sq.w)</label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
         <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input"></select></div>
         <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input"></select></div>
         <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input"></select></div>
@@ -200,19 +196,16 @@
         <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input"></select></div>
         <div><label class="field-label">35. Build Stage <span>สถานะก่อสร้าง</span></label><select id="Build_Stage" class="field-input"></select></div>
         <div><label class="field-label">36. GPS Coordinates <span>พิกัด GPS</span></label><input id="Coordinates" class="field-input"></div>
-        
         <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
-
         <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
             <label class="field-label !text-blue-600 font-800">38. System Status <span>สถานะในระบบ</span></label>
             <select id="System_Status" class="field-input !bg-white"></select>
         </div>
-
         <div class="col-span-full bg-amber-50 p-6 rounded-xl border border-dashed border-amber-200">
             <label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงผลแผนที่หน้าเว็บ</span></label>
             <select id="Map_Visibility" class="field-input !bg-white">
-                <option value="Show">Show Map (โชว์แผนที่)</option>
-                <option value="Hide">Hide Map (ซ่อนแผนที่)</option>
+                <option value="Show">Show Map</option>
+                <option value="Hide">Hide Map</option>
             </select>
         </div>
       </div>
@@ -233,23 +226,21 @@
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function handleLogout() { localStorage.clear(); location.href="gateway.html"; }
 
+    // 🚀 ระบบ Speed Cache: ดึงข้อมูลจาก LocalStorage ก่อน
     async function init() {
       if(!hpId) return;
+      
+      const cachedMetadata = localStorage.getItem('metadata_cache');
+      if(cachedMetadata) {
+         renderMetadata(JSON.parse(cachedMetadata));
+         console.log("🚀 Loaded from Cache");
+      }
+
       try {
         const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })).json();
         if (res.ok) {
-          const meta = res.options; projectMaster = meta._raw_projects || [];
-          const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage", "System_Status"];
-          dds.forEach(id => {
-            const el = document.getElementById(id);
-            if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
-          });
-          if(meta.Ownership_Type) {
-            document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
-              <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
-            `).join('');
-          }
-          document.getElementById('modal-list').innerHTML = projectMaster.map(p => `<div class="project-opt" onclick="autoFill('${p.name}')">${p.name}</div>`).join('');
+          localStorage.setItem('metadata_cache', JSON.stringify(res.options));
+          renderMetadata(res.options);
         }
 
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
@@ -267,7 +258,22 @@
           if(u.Customer_PDF) { document.getElementById('txt-Customer_PDF').innerText = "Current File ✅"; document.getElementById('del_customer').classList.remove('hidden'); }
           runCalc();
         }
-      } catch (e) { alert("Data Recall Error"); }
+      } catch (e) { console.error("Recall Error", e); }
+    }
+
+    function renderMetadata(meta) {
+      projectMaster = meta._raw_projects || [];
+      const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage", "System_Status"];
+      dds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
+      });
+      if(meta.Ownership_Type) {
+        document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
+          <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
+        `).join('');
+      }
+      document.getElementById('modal-list').innerHTML = projectMaster.map(p => `<div class="project-opt" onclick="autoFill('${p.name}')">${p.name}</div>`).join('');
     }
 
     function autoFill(name) {
@@ -283,28 +289,27 @@
       document.getElementById('pModal').style.display = 'none';
     }
 
-    // 🎯 ระบบลบไฟล์จริงใน Firebase
-    async function deletePhysicalFile(fieldId, isGallery = false, index = null) {
-      let fileUrl = "";
-      if(isGallery) { fileUrl = galleryArr[index]; }
-      else { fileUrl = document.getElementById(fieldId).value; }
-      
-      if(!fileUrl) return;
-      if(!confirm("⚠️ ลบไฟล์นี้ออกจากระบบถาวร?")) return;
-
-      try {
-        const ref = storage.refFromURL(fileUrl);
-        await ref.delete();
-        
-        if(isGallery) {
-          galleryArr.splice(index, 1); renderGallery();
-        } else {
-          document.getElementById(fieldId).value = "";
-          document.getElementById('txt-'+fieldId).innerText = "No file selected";
-          const btnDel = fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer';
-          document.getElementById(btnDel).classList.add('hidden');
-        }
-      } catch (e) { alert("File already deleted or missing."); }
+    // 🚀 ระบบบีบอัดรูปภาพก่อนอัปโหลด (Speed Booster)
+    async function compressImage(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const MAX_WIDTH = 1200; // ลดขนาดลงเพื่อความเร็ว
+            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            canvas.toBlob((blob) => { resolve(blob); }, 'image/jpeg', 0.7); // คุณภาพ 70% ชัดแต่เบา
+          };
+        };
+      });
     }
 
     async function handleMediaUpload(input, target, fieldId) {
@@ -313,33 +318,36 @@
       const statusEl = document.getElementById(statusId);
       if(statusEl) statusEl.classList.add('active');
 
-      // 🎯 ลบรูปหน้าปกเก่าก่อนทับใหม่
-      if(target === 'thumb' && thumbUrl) {
-        try { await storage.refFromURL(thumbUrl).delete(); } catch(e){}
-      }
+      if(target === 'thumb' && thumbUrl) { try { await storage.refFromURL(thumbUrl).delete(); } catch(e){} }
 
       for (let file of input.files) {
         try {
+          // ถ้าเป็นรูปภาพ ให้บีบอัดก่อน
+          const uploadFile = file.type.includes('image') ? await compressImage(file) : file;
           const path = `properties/${hpId}/${Date.now()}_${file.name}`;
           const ref = storage.ref(path);
-          await ref.put(file);
+          await ref.put(uploadFile);
           const url = await ref.getDownloadURL();
           if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
           else if(target === 'album') { galleryArr.push(url); renderGallery(); }
-          else if(fieldId) { 
-            document.getElementById(fieldId).value = url; 
-            document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; 
-            const btnDel = fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer';
-            document.getElementById(btnDel).classList.remove('hidden');
-          }
+          else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.remove('hidden'); }
         } catch (e) { alert("Upload error!"); }
       }
       if(statusEl) statusEl.classList.remove('active');
     }
 
+    async function deletePhysicalFile(fieldId, isGallery = false, index = null) {
+      let url = isGallery ? galleryArr[index] : document.getElementById(fieldId).value;
+      if(!url || !confirm("Delete file permanently?")) return;
+      try {
+        await storage.refFromURL(url).delete();
+        if(isGallery) { galleryArr.splice(index, 1); renderGallery(); }
+        else { document.getElementById(fieldId).value = ""; document.getElementById('txt-'+fieldId).innerText = "No file selected"; document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.add('hidden'); }
+      } catch (e) { console.error(e); }
+    }
+
     function renderThumb(url) { document.getElementById('thumbPreview').innerHTML = url ? `<div class="img-x" onclick="deleteThumb()">✕</div><img src="${url}" class="w-full h-full object-cover">` : '<i class="fas fa-cloud-upload-alt text-3xl"></i>'; document.getElementById('Thumbnail_Image').value = url; }
     async function deleteThumb() { if(!confirm("Delete cover permanently?")) return; try { await storage.refFromURL(thumbUrl).delete(); thumbUrl = ""; renderThumb(""); } catch(e){ thumbUrl = ""; renderThumb(""); } }
-
     function renderGallery() { document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="deletePhysicalFile(null, true, ${i})">✕</div><img src="${url}" class="w-full h-full object-cover"></div>`).join(''); document.getElementById('Album_Image').value = galleryArr.join(','); }
 
     function runCalc() {
@@ -359,7 +367,7 @@
       let payload = { mode: "updateUnit", HP_ID: hpId, Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
-      if(res.ok) { alert("SUCCESSFULLY UPDATED! ✅"); location.href='dashboard.html'; }
+      if(res.ok) { alert("UPDATED! ✅"); location.href='dashboard.html'; }
     }
 
     function switchTab(t) {
