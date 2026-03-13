@@ -12,31 +12,31 @@
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; }
+    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 2px; }
 
-    /* 🎯 ปุ่มเมนูซ้าย */
+    /* 🎯 Sidebar Styles */
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; }
 
-    /* 🎯 โลโก้ใหม่ฝั่งขวา */
-    .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-
-    /* 🎯 Sidebar */
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid var(--border); }
     .sidebar.active { left: 0; }
     .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1999; display: none; }
     .sidebar-overlay.active { display: block; }
-    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
+    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; font-family: 'Montserrat'; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
 
-    #gatekeeper{position:fixed;inset:0;background:var(--navy-dark);z-index:10001;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+    /* 🎯 🔵 โลโก้แบรนด์ ขวาบน (brand-logo.png) */
+    .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--gold); }
+
+    /* Splash Screen */
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
     .splash-brand{color:var(--gold);font-size:1.2rem;font-weight:800;letter-spacing:4px;text-transform:uppercase}
     
+    /* Gallery */
     .gallery-container{margin-top:65px;padding:15px 15px 0;max-width:1100px;margin:0 auto;}
     .gallery-card{background:#000;border-radius: 18px;border:1px solid var(--border);overflow:hidden;box-shadow: 0 10px 30px rgba(0,0,0,0.3);margin-bottom:20px;}
-    .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#eee;overflow:hidden;border-radius: 18px 18px 0 0;}
+    .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#222;overflow:hidden;}
     .main-img{width:100%;height:100%; object-fit:cover; transition:opacity 0.3s}
     .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
     .thumb-row{display:flex;gap:10px;padding:12px;overflow-x:auto;scrollbar-width:none}
@@ -44,35 +44,37 @@
     .thumb.active{opacity:1;border-color:var(--gold)}
     .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
     
+    /* Content & Cards */
     .content{padding:10px 15px 120px;max-width:900px;margin:0 auto}
-    .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
+    .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display:none;}
     .info-card.has-data { display: block; }
-    .field-wrap { display: none; margin-bottom: 12px; } 
-    .field-wrap.has-val { display: block; }
     .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    .field-wrap { display: none; margin-bottom: 12px; }
+    .field-wrap.has-val { display: block; }
     .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;letter-spacing:1.2px;margin-bottom:3px}
     .val{font-size:0.85rem;font-weight:400;color:#FFF}
     .gold-txt{color:var(--gold);font-weight:600}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+    /* Map & Nearby */
+    .map-box{width:100%;height:250px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
+    #leafletMap{width:100%;height:100%;background:#0F172A}
+    .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;margin-top:10px;border:1px solid var(--border);}
     .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
     .loc-name{font-size:0.78rem;font-weight:300}
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
-    .map-box{width:100%;aspect-ratio:1/1;max-height:500px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
-    #leafletMap{width:100%;height:100%;background:#0F172A}
-    .pdf-download-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 10px; }
-    
+
+    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
-    
-    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s; }
-
-    @media(min-width:768px){.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}}
+    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
-  <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
-  <div class="sidebar" id="sidebar">
+
+<div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="sidebar" id="sidebar">
     <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
     <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
     
@@ -82,25 +84,17 @@
 
     <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
-  </div>
-
-<div id="gatekeeper">
-  <i class="fas fa-lock" style="font-size:50px;color:var(--gold);margin-bottom:20px;"></i>
-  <h2 style="color:var(--gold);font-weight:800;margin-bottom:10px;">ASSET UNAVAILABLE</h2>
-  <a href="index.html" style="background:var(--gold);color:#060F1A;padding:12px 30px;border-radius:50px;font-weight:800;text-decoration:none;text-transform:uppercase;font-size:11px;">Back to Catalog</a>
 </div>
 
-<div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
+<div id="pageSplash"><div class="splash-brand">HUA HIN PROPERTIES</div></div>
 
 <header>
     <div class="menu-trigger" onclick="toggleMenu()">
       <i class="fas fa-bars"></i>
       <span>MENU</span>
     </div>
-
-    <a href="index.html" class="brand-center">DETAIL VIEW</a>
-
-    <img src="brand-logo.png" class="brand-logo-img" alt="Branding">
+    <a href="index.html" class="brand-center">Asset Detail</a>
+    <img src="brand-logo.png" class="brand-logo-top" alt="Logo">
 </header>
 
 <div id="mainUI">
@@ -118,85 +112,92 @@
 
   <main class="content">
     <div class="info-card has-data">
-      <div class="flex justify-between items-start">
-        <div><div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div><h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1></div>
-        <div id="w-badge" class="field-wrap"><div class="val gold-txt" id="vBadge" style="font-size:0.65rem; border:1px solid var(--border); padding:4px 10px; border-radius:4px; text-transform:uppercase;"></div></div>
-      </div>
-      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;"></div>
-      <div id="pPrice" style="font-size:1.4rem;font-weight:700;color:#FFF;margin-bottom:20px;"></div>
+      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;">Plot ...</h1>
+      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;">📍 -</div>
+      <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:25px;">฿0</div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
         <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
-        <div id="w-land" class="field-wrap"><div class="label">Land Size (m²)</div><div class="val" id="vLand"></div></div>
+        <div id="w-land" class="field-wrap"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
         <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
       </div>
     </div>
 
     <div class="info-card" id="card-specs">
       <h2 class="section-title">Specifications</h2>
-      <div class="grid" id="specsGrid"></div>
+      <div class="grid">
+        <div id="w-status" class="field-wrap"><div class="label">Status</div><div class="val" id="vStatus"></div></div>
+        <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
+        <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
+        <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
+        <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
+        <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
+        <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
+        <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
+        <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
+      </div>
+    </div>
+
+    <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
+      <h2 class="section-title">Ownership & Fees</h2>
+      <div class="grid">
+        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
+        <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
+        <div id="w-owner" class="field-wrap"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
+        <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
+      </div>
     </div>
 
     <div class="info-card" id="mapSection">
-      <h2 class="section-title">Location & Navigation</h2>
+      <h2 class="section-title">Location & Navigator</h2>
       <div class="map-box"><div id="leafletMap"></div></div>
+      <a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a>
     </div>
 
-    <div class="info-card" id="amenitiesSection">
-      <h2 class="section-title">Floor Plan</h2>
-      <a id="pdfBarMaster" href="#" target="_blank" class="pdf-download-bar">
-        <span style="color:var(--navy);font-weight:800;font-size:0.82rem;text-transform:uppercase;">Download Floor Plan PDF</span>
+    <div class="info-card" id="nearbySection">
+      <h2 class="section-title">Nearby Lifestyle</h2>
+      <div id="nearbyGrid"></div>
+      <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
+        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;">DOWNLOAD FLOOR PLAN PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
     </div>
   </main>
 </div>
 
-<a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-edit"></i></a>
+<a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-pencil-alt"></i></a>
 <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-let images=[], idx=0;
+const LANDMARKS=[{name:"Hua Hin Beach",lat:12.5696,lon:99.9602},{name:"Bluport Mall",lat:12.5518,lon:99.9631},{name:"Bangkok Hospital",lat:12.5532,lon:99.9610}];
+let images=[], idx=0, leafletMap=null;
 
 function toggleMenu() {
   document.getElementById('sidebar').classList.toggle('active');
   document.getElementById('overlay').classList.toggle('active');
 }
 
-// 🎯 ปรับปรุงระบบตรวจสอบสิทธิ์และเปลี่ยนปุ่มใน Sidebar
 function checkAuthUI() {
   const authSection = document.getElementById('authMenuSection');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-  
   if (isLoggedIn) {
-    authSection.innerHTML = `
-      <a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a>
-      <a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444; border-bottom: 2px solid #EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>
-    `;
+    authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#E02424;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
   } else {
-    authSection.innerHTML = `
-      <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
-    `;
+    authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`;
   }
 }
 
-function handleLogout(e) {
-  e.preventDefault();
-  if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
-    localStorage.clear();
-    location.reload();
-  }
-}
+function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบ?")) { localStorage.clear(); location.reload(); } }
 
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
   if (value && value !== "-" && value !== "0" && value !== "") {
-    if(el) el.textContent = value; 
-    if(wrap) wrap.classList.add('has-val');
+    el.textContent = value; wrap.classList.add('has-val');
+    wrap.closest('.info-card').classList.add('has-data');
     return true;
   }
   return false;
@@ -207,35 +208,24 @@ async function init(){
   if(!hpId) return;
   const adminEditBtn = document.getElementById('adminEditBtn');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-  const userProject = localStorage.getItem('admin_project');
-  adminEditBtn.href = `edit.html?id=${hpId}`;
 
-  const cacheKey = `cache_detail_${hpId}`;
-  const cachedData = localStorage.getItem(cacheKey);
-  if(cachedData){ 
-    const data = JSON.parse(cachedData);
-    renderData(data); 
-    if(isLoggedIn && (userProject === 'All' || userProject === data.Project_Name)) adminEditBtn.style.display = 'flex';
-    hideSplash(); 
-  }
   try{
-    const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${encodeURIComponent(hpId)}`);
+    const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
     const json = await res.json();
     if(json.ok){
-      localStorage.setItem(cacheKey, JSON.stringify(json.data));
       renderData(json.data);
-      if(isLoggedIn && (userProject === 'All' || userProject === json.data.Project_Name)) adminEditBtn.style.display = 'flex';
-      hideSplash();
+      if(isLoggedIn) { adminEditBtn.href=`edit.html?id=${hpId}`; adminEditBtn.style.display='flex'; }
     }
+    hideSplash();
   }catch(e){ hideSplash(); }
 }
 
 function hideSplash(){ const s=document.getElementById('pageSplash'); if(s){s.style.opacity='0';setTimeout(()=>s.style.display='none',400);} }
 function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
+function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
 
 function renderData(u){
   const p=safeNum(u.Sale_Price||0);
-  document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
@@ -243,10 +233,35 @@ function renderData(u){
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', u.Living_Area_sq_m ? `${u.Living_Area_sq_m} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
-  
-  if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
-    const bar = document.getElementById('pdfBarMaster'); bar.href = u.FloorPlan_PDF; bar.style.display = 'flex';
+  syncField('vStatus', 'w-status', u.Status);
+  syncField('vDistrict', 'w-district', u.District);
+  syncField('vSubDistrict', 'w-sub', u.SubDistrict);
+  syncField('vZone', 'w-zone', u.Zone);
+
+  // Navigator & Map
+  if(u.Coordinates && u.Coordinates.includes(',') && u.Map_Visibility !== 'Hide') {
+      document.getElementById('mapSection').classList.add('has-data');
+      const [la, lo] = u.Coordinates.split(',').map(Number);
+      if(!leafletMap) {
+          leafletMap = L.map('leafletMap').setView([la, lo], 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
+          L.marker([la, lo]).addTo(leafletMap);
+      }
+      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      
+      const grid = document.getElementById('nearbyGrid');
+      grid.innerHTML = LANDMARKS.map(loc => {
+          const d = getDistance(la, lo, loc.lat, loc.lon);
+          return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
+      }).join('');
+      document.getElementById('nearbySection').classList.add('has-data');
   }
+
+  if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
+    const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex';
+    document.getElementById('nearbySection').classList.add('has-data');
+  }
+
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
