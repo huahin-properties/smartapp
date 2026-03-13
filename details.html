@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V189</title>
+  <title>Asset Specifications | MASTER SYSTEM V190</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -52,14 +52,28 @@
     .gold-txt{color:var(--gold);font-weight:600}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 
-    .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
-    .loc-name{font-size:0.78rem;font-weight:300}
-    .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
     .map-box{width:100%;height:250px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
     #leafletMap{width:100%;height:100%;background:#0F172A}
     .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;margin-top:10px;border:1px solid var(--border);}
+    .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
+    .loc-name{font-size:0.78rem;font-weight:300}
+    .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
 
-    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
+    
+    /* 🎯 🔵 Share Section Styles */
+    .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.5); padding: 25px 15px; border-radius: 20px; border: 1px solid var(--border); }
+    .share-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 15px 10px; scrollbar-width: none; justify-content: center; }
+    @media (max-width: 600px) { .share-scroll { justify-content: flex-start; } }
+    .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; min-width: 65px; transition: 0.3s; }
+    .share-btn:active { transform: scale(0.9); }
+    .share-btn i { font-size: 28px; }
+    .share-btn span { font-size: 9px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
+
+    /* 🎯 App Official Colors */
+    .icon-fb { color: #1877F2; } .icon-msgr { color: #0084FF; } .icon-wa { color: #25D366; } .icon-tg { color: #0088CC; }
+    .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
+
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
@@ -116,48 +130,40 @@
 
     <div class="info-card" id="card-specs">
       <h2 class="section-title">Specifications</h2>
-      <div class="grid">
-        <div id="w-status" class="field-wrap"><div class="label">Status</div><div class="val" id="vStatus"></div></div>
-        <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
-        <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
-        <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
-        <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
-        <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
-        <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
-        <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
-        <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
-        <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
-      </div>
-    </div>
-
-    <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
-      <h2 class="section-title">Ownership & Fees</h2>
-      <div class="grid">
-        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
-        <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
-        <div id="w-owner" class="field-wrap" style="grid-column: span 2;"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
-        <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
-      </div>
-    </div>
-
-    <div class="info-card" id="card-desc">
-      <h2 class="section-title">Description</h2>
-      <p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;"></p>
+      <div class="grid" id="specsGrid"></div>
     </div>
 
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigator</h2>
-      <div class="map-box" id="mapBoxUI"><div id="leafletMap"></div></div>
+      <div class="map-box"><div id="leafletMap"></div></div>
       <a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a>
     </div>
 
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
+      
       <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
         <span style="color:var(--navy);font-weight:800;font-size:0.8rem;">DOWNLOAD FLOOR PLAN PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
+
+      <div class="share-stack">
+        <div style="font-size: 14px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+          <i class="fas fa-share-nodes"></i> SHARE THIS MASTER ASSET
+        </div>
+        <div class="share-scroll">
+          <a href="#" onclick="sH('fb')" class="share-btn"><i class="fab fa-facebook icon-fb"></i><span>Facebook</span></a>
+          <a href="#" onclick="sH('msgr')" class="share-btn"><i class="fab fa-facebook-messenger icon-msgr"></i><span>Messenger</span></a>
+          <a href="#" onclick="sH('wa')" class="share-btn"><i class="fab fa-whatsapp icon-wa"></i><span>WhatsApp</span></a>
+          <a href="#" onclick="sH('tg')" class="share-btn"><i class="fab fa-telegram icon-tg"></i><span>Telegram</span></a>
+          <a href="#" onclick="sH('line')" class="share-btn"><i class="fab fa-line icon-line"></i><span>LINE</span></a>
+          <a href="#" onclick="sH('mail')" class="share-btn"><i class="fas fa-envelope icon-mail"></i><span>Email</span></a>
+          <a href="#" onclick="sH('copy')" class="share-btn"><i class="fas fa-link icon-copy"></i><span>Copy Link</span></a>
+          <a href="#" onclick="sH('native')" class="share-btn"><i class="fas fa-share-nodes icon-share"></i><span>Share More</span></a>
+        </div>
+      </div>
+
     </div>
   </main>
 </div>
@@ -170,27 +176,11 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
 
-const LANDMARKS=[
-    {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, 
-    {name:"Bluport Mall",lat:12.5518,lon:99.9631}, 
-    {name:"Bangkok Hospital",lat:12.5532,lon:99.9610},
-    {name:"Cicada Market",lat:12.5342,lon:99.9655},
-    {name:"Market Village",lat:12.5598,lon:99.9602},
-    {name:"Night Market",lat:12.5714,lon:99.9575},
-    {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642},
-    {name:"Black Mountain Golf",lat:12.6146,lon:99.8924},
-    {name:"Banyan Golf Club",lat:12.5124,lon:99.9145},
-    {name:"True Arena Sports",lat:12.5365,lon:99.9585},
-    {name:"Hua Hin Airport",lat:12.6366,lon:99.9515},
-    {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548}
-];
+const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 
 let images=[], idx=0, leafletMap=null;
 
-function toggleMenu() {
-  document.getElementById('sidebar').classList.toggle('active');
-  document.getElementById('overlay').classList.toggle('active');
-}
+function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 
 function checkAuthUI() {
   const authSection = document.getElementById('authMenuSection');
@@ -204,13 +194,25 @@ function checkAuthUI() {
 
 function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบ?")) { localStorage.clear(); location.reload(); } }
 
+// 🎯 ฟังก์ชันการแชร์
+function sH(p){
+  const u = window.location.href; const t = `Check out this property: ${hpId}`;
+  if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
+  if(p==='msgr') window.open(`fb-messenger://share/?link=${u}`,'_blank');
+  if(p==='wa') window.open(`https://api.whatsapp.com/send?text=${t} ${u}`,'_blank');
+  if(p==='tg') window.open(`https://t.me/share/url?url=${u}&text=${t}`,'_blank');
+  if(p==='line') window.open(`https://social-plugins.line.me/lineit/share?url=${u}`,'_blank');
+  if(p==='mail') window.open(`mailto:?subject=${t}&body=${u}`);
+  if(p==='copy'){ navigator.clipboard.writeText(u); alert('Link Copied! ✅'); }
+  if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } }
+}
+
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
   if (!el || !wrap) return false;
   if (value && value !== "-" && value !== "0" && value !== "" && value !== "undefined") {
-    el.textContent = value; 
-    wrap.classList.add('has-val');
+    el.textContent = value; wrap.classList.add('has-val');
     wrap.closest('.info-card').classList.add('has-data');
     return true;
   }
@@ -223,7 +225,6 @@ async function init(){
   if(!hpId) return;
   const adminEditBtn = document.getElementById('adminEditBtn');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-
   try{
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
     const json = await res.json();
@@ -242,7 +243,6 @@ function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*
 function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=safeNum(u.Living_Area_sq_m||0);
-  
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
@@ -253,49 +253,20 @@ function renderData(u){
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
   if(p && a) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
   
-  syncField('vStatus', 'w-status', u.Status);
-  syncField('vFurnish', 'w-furnish', u.Furnishing);
-  syncField('vDistrict', 'w-district', u.District);
-  syncField('vSubDistrict', 'w-sub', u.SubDistrict);
-  syncField('vZone', 'w-zone', u.Zone);
-  syncField('vPoolSys', 'w-poolsys', u.Pool_System);
-  syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
-  syncField('vParking', 'w-parking', u.Parking);
-  syncField('vDirect', 'w-direct', u.Direction);
-  syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
-  
-  syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
-  if(u.Common_Fee_Rate && a) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
-  syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
-  syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
-
-  const vDesc = document.getElementById('vDesc');
-  if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
-
-  // 🎯 📍 Logic: แผนที่ และ Nearby (แยกจากกัน)
+  // Navigator, Nearby, PDF logic (เหมือนเดิม)
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      
-      // 1. จัดการส่วนแผนที่ (Map Section)
-      const mapSection = document.getElementById('mapSection');
-      if(u.Map_Visibility === 'Hide') {
-          mapSection.style.display = 'none'; // ซ่อนแผนที่และปุ่มนำทาง
-      } else {
-          mapSection.style.display = 'block';
-          mapSection.classList.add('has-data');
-          document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      if(u.Map_Visibility !== 'Hide') {
+          document.getElementById('mapSection').style.display = 'block';
           if(!leafletMap) {
               leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
               L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
               L.marker([la, lo]).addTo(leafletMap);
           }
       }
-
-      // 2. จัดการส่วนสถานที่ใกล้เคียง (Nearby Section) - โชว์ตลอดเวลาที่มีพิกัด
-      const amenitiesSection = document.getElementById('amenitiesSection');
-      amenitiesSection.classList.add('has-data');
-      const grid = document.getElementById('nearbyGrid');
-      grid.innerHTML = LANDMARKS.map(loc => {
+      document.getElementById('amenitiesSection').classList.add('has-data');
+      document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(la, lo, loc.lat, loc.lon);
           return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
       }).join('');
