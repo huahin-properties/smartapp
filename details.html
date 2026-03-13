@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V191</title>
+  <title>Asset Specifications | MASTER SYSTEM V192</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -26,7 +26,6 @@
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
 
     .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
     
     .gallery-container{margin-top:65px;padding:15px;max-width:1100px;margin:0 auto;}
@@ -59,14 +58,13 @@
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
 
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
-
-    /* 🎯 🔵 Share Section with Scrolling Arrows */
+    
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
     .share-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 10px 0; }
     .share-scroll::-webkit-scrollbar { display: none; }
     .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 55px; }
-    .share-btn i { font-size: 22px; } /* 🎯 ลดขนาดไอคอน */
+    .share-btn i { font-size: 22px; }
     .share-btn span { font-size: 8px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
     .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; padding: 5px; }
     .arrow-left { left: 0; } .arrow-right { right: 0; }
@@ -116,7 +114,7 @@
     <div class="info-card has-data">
       <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
       <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1>
-      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;">📍 -</div>
+      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;"></div>
       <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:25px;">฿0</div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
@@ -138,7 +136,23 @@
         <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
         <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
         <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
+        <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
       </div>
+    </div>
+
+    <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
+      <h2 class="section-title">Ownership & Fees</h2>
+      <div class="grid">
+        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
+        <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
+        <div id="w-owner" class="field-wrap" style="grid-column: span 2;"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
+        <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
+      </div>
+    </div>
+
+    <div class="info-card" id="card-desc">
+      <h2 class="section-title">Description</h2>
+      <p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;"></p>
     </div>
 
     <div class="info-card" id="mapSection">
@@ -150,6 +164,7 @@
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
+      
       <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
         <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
@@ -186,7 +201,6 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
 
-// 🎯 Full 12 Landmarks
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 
 let images=[], idx=0, leafletMap=null;
@@ -218,6 +232,7 @@ function sH(p){
   if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } }
 }
 
+// 🎯 ฟังก์ชันซิงค์ข้อมูลและดึงข้อมูลกลับมาโชว์
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
@@ -255,12 +270,13 @@ function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=safeNum(u.Living_Area_sq_m||0);
   
-  // 🎯 กู้คืนข้อมูลแสดงผล
+  // 🎯 ดึงข้อมูล Header กลับมาโชว์
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
+  // 🎯 กู้คืน Specifications ทุกช่อง
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', a ? `${a} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
@@ -275,13 +291,26 @@ function renderData(u){
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
   syncField('vParking', 'w-parking', u.Parking);
   syncField('vDirect', 'w-direct', u.Direction);
+  syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
+  
+  syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
+  if(u.Common_Fee_Rate && a) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
+  syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
+  syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
-  // 🎯 Map & Landmarks logic
+  const vDesc = document.getElementById('vDesc');
+  if(u.Description) { 
+      vDesc.textContent = u.Description; 
+      vDesc.closest('.info-card').classList.add('has-data'); 
+  }
+
+  // Map & Landmarks
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/5{la},${lo}`;
       if(u.Map_Visibility !== 'Hide') {
           document.getElementById('mapSection').style.display = 'block';
+          document.getElementById('mapSection').classList.add('has-data');
           if(!leafletMap) {
               leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
               L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
