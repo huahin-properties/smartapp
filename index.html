@@ -10,28 +10,28 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     
-    /* 🎯 Header - ปรับชื่อเว็บไว้กลางและโลโก้ไว้ขวา */
+    /* 🎯 New Custom Loader Styling */
+    #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
+    .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+    .loader-icons span { display: inline-block; animation: bounce 0.6s infinite alternate; }
+    .loader-icons span:nth-child(2) { animation-delay: 0.2s; }
+    .loader-icons span:nth-child(3) { animation-delay: 0.4s; }
+    .loader-text { color: #FFFFFF; font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat'; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; }
-    
-    /* 🎯 ปุ่มเมนูฝั่งซ้าย */
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; letter-spacing: 0.5px; }
-
-    /* 🎯 โลโก้ใหม่ฝั่งขวา */
     .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-
-    /* 🎯 Sidebar Menu */
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid var(--border); }
     .sidebar.active { left: 0; }
     .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1999; display: none; }
     .sidebar-overlay.active { display: block; }
-    
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: var(--white); text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
     .menu-item:active { background: rgba(201,168,76,0.1); color: var(--gold); }
-    
     .hero { padding: 75px 15px 10px; text-align: center; }
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
@@ -54,32 +54,32 @@
     .price-new { font-size: 0.95rem; font-weight: 800; color: #E4C46A; white-space: nowrap; }
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
-    
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
+
+  <div id="pageSplash">
+    <div class="loader-icons">
+      <span>🐚</span>
+      <span>🌊</span>
+      <span>🌴</span>
+    </div>
+    <div class="loader-text">HUAHIN.PROPERTIES</div>
+  </div>
+
   <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
   <div class="sidebar" id="sidebar">
     <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
     <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
-    
-    <div id="authMenuSection">
-        <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
-    </div>
-
+    <div id="authMenuSection"><a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a></div>
     <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
   </div>
 
   <header>
-    <div class="menu-trigger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-      <span>MENU</span>
-    </div>
-    
+    <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i><span>MENU</span></div>
     <a href="index.html" class="brand-center">HuaHin.Properties</a>
-    
     <img src="brand-logo.png" class="brand-logo-img" alt="Logo">
   </header>
 
@@ -88,9 +88,7 @@
       <div class="search-box-wrapper">
         <i class="fas fa-search search-icon-fixed"></i>
         <input type="text" id="sI" class="search-input" placeholder="Search Plot or ID..." onkeyup="f()">
-        <div class="reset-btn" onclick="resetFilters()" title="Reset All Filters">
-          <i class="fas fa-sync-alt"></i>
-        </div>
+        <div class="reset-btn" onclick="resetFilters()" title="Reset All Filters"><i class="fas fa-sync-alt"></i></div>
       </div>
       <div class="filters-grid">
         <select id="dF" onchange="f()" class="filter-select"><option value="">All Districts</option></select>
@@ -115,25 +113,26 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
+    function hideSplash() { 
+      const splash = document.getElementById('pageSplash');
+      if(splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => splash.style.display = 'none', 500);
+      }
+    }
+
     function toggleMenu() {
       document.getElementById('sidebar').classList.toggle('active');
       document.getElementById('overlay').classList.toggle('active');
     }
 
-    // 🎯 แก้ไขฟังก์ชัน Check Auth เพื่อเปลี่ยนปุ่มใน Sidebar
     function checkAuthUI() {
       const authSection = document.getElementById('authMenuSection');
       const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-      
       if (isLoggedIn) {
-        authSection.innerHTML = `
-          <a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a>
-          <a href="#" onclick="handleLogout(event)" class="menu-item" style="color:var(--danger); border-bottom: 2px solid var(--danger);"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>
-        `;
+        authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
       } else {
-        authSection.innerHTML = `
-          <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
-        `;
+        authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`;
       }
     }
 
@@ -150,33 +149,24 @@
       document.getElementById('propGrid').innerHTML = res.map(u => {
         const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
         let priceVal = u.Listing_Type === 'Rent' ? (Number(u.Monthly_Rent) || Number(u.Sale_Price) || 0) : (Number(u.Sale_Price) || 0);
-        return `
-          <a href="details.html?id=${u.HP_ID}" class="card">
-            <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
-            <div class="card-info">
-              <div class="info-row"><div class="prop-name">${label} | ${u.District || ''}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div>
-              <div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${priceVal.toLocaleString()}</div></div>
-              <div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div>
-            </div>
-          </a>`;
+        return `<a href="details.html?id=${u.HP_ID}" class="card"><div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div><div class="card-info"><div class="info-row"><div class="prop-name">${label} | ${u.District || ''}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div><div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${priceVal.toLocaleString()}</div></div><div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div></div></a>`;
       }).join('');
     }
 
-    function resetFilters() {
-      document.getElementById('sI').value = ''; f();
-    }
+    function resetFilters() { document.getElementById('sI').value = ''; f(); }
 
     async function init() {
       checkAuthUI();
       const cached = localStorage.getItem('hp_master_data');
-      if (cached) { data = JSON.parse(cached); updateFilters(); f(); }
+      if (cached) { data = JSON.parse(cached); updateFilters(); f(); hideSplash(); } // ซ่อน Loader ถ้ามีแคช
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
         const newData = await res.json();
         data = newData;
         localStorage.setItem('hp_master_data', JSON.stringify(data));
         updateFilters(); f();
-      } catch (err) { console.error(err); }
+        hideSplash(); // ซ่อน Loader เมื่อโหลดสำเร็จ
+      } catch (err) { console.error(err); hideSplash(); }
     }
 
     function updateFilters() {
