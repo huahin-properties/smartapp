@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V12.5 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V12.6 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -34,25 +34,32 @@
     .field-input:focus { border-color: var(--accent); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
 
-    /* 📸 Gallery Engine */
+    /* 📸 Gallery Layout & Selection UI */
     .gallery-container { background: #fdfdfd; border: 1px dashed #eee; border-radius: 1rem; padding: 0.5rem; display: grid; gap: 0.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     @media (min-width: 1024px) { .gallery-container { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.6rem; overflow: hidden; border: 2px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
+    /* 🎯 กรอบสีแดงชัดเจนเมื่อเลือกรูป */
     .img-tile.selected { border: 4px solid var(--danger); }
     .img-tile.selected::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 4px; right: 4px; color: var(--danger); background: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 10; }
+    
     .img-x { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid white; z-index: 20; }
 
-    /* 🎯 1. Floating Delete Button (ลอยตัวติดจอ) */
+    /* 🎯 1. Floating Delete Button (ปุ่มลบแบบลอยตัว) */
     .btn-delete-float { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 12px 30px; border-radius: 2rem; font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 2000; box-shadow: 0 10px 30px rgba(239,68,68,0.4); display: none; border: 2px solid white; }
 
-    /* PDF Engine */
+    /* PDF Row Styles */
     .pdf-row { display: flex; align-items: center; gap: 0.75rem; background: #F9F9F8; padding: 10px 15px; border-radius: 1rem; margin-bottom: 8px; border: 1px solid #eee; }
     .pdf-icon { width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .btn-pdf-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 0.8rem; }
 
+    /* 🚨 Modern Confirm Pop-up */
     .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .confirm-box { background: white; width: 100%; max-width: 320px; border-radius: 1.5rem; padding: 25px; text-align: center; }
-    
+    .confirm-box { background: white; width: 100%; max-width: 320px; border-radius: 1.5rem; padding: 25px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .confirm-box i { font-size: 3rem; color: var(--danger); margin-bottom: 15px; }
+    .btn-yes { flex: 1; background: var(--danger); color: white; padding: 12px; border-radius: 0.8rem; font-weight: 800; }
+    .btn-no { flex: 1; background: #eee; color: #333; padding: 12px; border-radius: 0.8rem; font-weight: 800; }
+
     #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
     .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; letter-spacing: 1px; }
@@ -68,12 +75,12 @@
 
   <div id="confirmPop" class="confirm-overlay">
     <div class="confirm-box">
-      <i class="fas fa-trash-alt text-4xl text-red-500 mb-4"></i>
+      <i class="fas fa-trash-alt"></i>
       <h3 style="font-weight:800; margin-bottom:10px;">ยืนยันการลบรูป?</h3>
-      <p style="font-size:14px; color:#666; margin-bottom:20px;">ลบรูปภาพจำนวน <span id="countPop">0</span> รูปถาวรหรือไม่?</p>
+      <p style="font-size:14px; color:#666; margin-bottom:20px;">คุณต้องการลบรูปภาพจำนวน <span id="countPop">0</span> รูปถาวรใช่หรือไม่?</p>
       <div class="flex gap-3">
-        <button class="flex-1 bg-gray-100 py-3 rounded-xl font-800" onclick="closeConfirm()">ยกเลิก</button>
-        <button class="flex-1 bg-red-50 text-white py-3 rounded-xl font-800" onclick="executeDelete()">ยืนยันลบ</button>
+        <button class="btn-no" onclick="closeConfirm()">ยกเลิก</button>
+        <button class="btn-yes" onclick="executeDelete()">ยืนยันลบทันที</button>
       </div>
     </div>
   </div>
@@ -94,7 +101,7 @@
 
   <header>
     <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left text-lg"></i></div>
-    <div class="brand-center">Master Editor V12.5</div>
+    <div class="brand-center">Master Editor V12.6</div>
     <div style="width:20px;"></div>
   </header>
 
@@ -118,7 +125,9 @@
         </div>
         
         <div class="input-card">
-          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
+          <div class="flex justify-between items-center mb-2">
+            <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
+          </div>
           <div id="galleryPreview" class="gallery-container mb-3"></div>
           <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD TO ALBUM</button>
           <input type="hidden" id="Album_Image">
@@ -168,49 +177,51 @@
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
 
         <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border">
-           <div><label class="field-label text-blue-600">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
-           <div><label class="field-label">8. Living Area (m2)</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
-           <div><label class="field-label">9. Price/m2</label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
+           <div><label class="field-label text-blue-600">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+           <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
            <div class="col-span-full border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div><label class="field-label">10. Common Fee Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
-            <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
-            <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">10. Common Fee Rate <span>ค่าส่วนกลาง</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
+            <div><label class="field-label">11. Monthly Fee <span>ต่อเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Fee <span>ต่อปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
           </div>
         </div>
 
-        <div><label class="field-label">13. Land Area (m2)</label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">14. Land Area (sq.w)</label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
+        <div><label class="field-label">13. Land Area (m2) <span>ม²</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">14. Land Area (sq.w) <span>ตร.ว.</span></label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
         <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input"></select></div>
         <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input"></select></div>
         <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input"></select></div>
         <div><label class="field-label">18. Zone <span>โซน</span></label><select id="Zone" class="field-input"></select></div>
+        
         <div><label class="field-label">19. Bedrooms <span>ห้องนอน</span></label><select id="Bedrooms" class="field-input"></select></div>
         <div><label class="field-label">20. Bathrooms <span>ห้องน้ำ</span></label><select id="Bathrooms" class="field-input"></select></div>
         <div><label class="field-label">21. Parking <span>ที่จอดรถ</span></label><select id="Parking" class="field-input"></select></div>
-        <div><label class="field-label">22. Kitchen Style <span>สไตล์ครัว</span></label><select id="Kitchen_Type" class="field-input"></select></div>
-        <div><label class="field-label">23. Direction Facing <span>ทิศ</span></label><select id="Direction" class="field-input"></select></div>
-        <div><label class="field-label">24. Electricity <span>ระบบไฟฟ้า</span></label><select id="Electricity" class="field-input"></select></div>
-        <div><label class="field-label">25. Pool Size</label><input id="Pool_Size" class="field-input"></div>
-        <div><label class="field-label">26. Pool Depth</label><input id="Pool_Depth" class="field-input"></div>
-        <div><label class="field-label">27. Pool System</label><select id="Pool_System" class="field-input"></select></div>
-        <div><label class="field-label">28. View Profile</label><select id="View_Type" class="field-input"></select></div>
+        <div><label class="field-label">22. Kitchen Style <span>ครัว</span></label><select id="Kitchen_Type" class="field-input"></select></div>
+        <div><label class="field-label">23. Direction <span>ทิศหน้าบ้าน</span></label><select id="Direction" class="field-input"></select></div>
+        <div><label class="field-label">24. Electricity <span>ระบบไฟ</span></label><select id="Electricity" class="field-input"></select></div>
+        
+        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input"></div>
+        <div><label class="field-label">26. Pool Depth <span>ลึก</span></label><input id="Pool_Depth" class="field-input"></div>
+        <div><label class="field-label">27. Pool System <span>ระบบสระ</span></label><select id="Pool_System" class="field-input"></select></div>
+        <div><label class="field-label">28. View Profile <span>วิวบ้าน</span></label><select id="View_Type" class="field-input"></select></div>
         <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input"></select></div>
-        <div><label class="field-label">30. Extras</label><select id="Extras" class="field-input"></select></div>
+        <div><label class="field-label">30. Extras <span>สิ่งอำนวยความสะดวก</span></label><select id="Extras" class="field-input"></select></div>
 
         <div class="col-span-full">
-          <label class="field-label">31. Ownership <span>รูปแบบการถือครอง</span></label>
+          <label class="field-label">31. Ownership <span>การถือครอง</span></label>
           <div id="ownership-container" class="ownership-grid"></div>
           <input type="hidden" id="Ownership_Type">
         </div>
 
         <div><label class="field-label">32. Title Deed <span>โฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
-        <div><label class="field-label">33. Transfer Exp.</label><input id="Transfer_Expenses" class="field-input"></div>
+        <div><label class="field-label">33. Transfer Exp. <span>ค่าโอน</span></label><input id="Transfer_Expenses" class="field-input"></div>
         <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input"></select></div>
-        <div><label class="field-label">35. Build Stage</label><select id="Build_Stage" class="field-input"></select></div>
-        <div><label class="field-label">36. GPS Coordinates</label><input id="Coordinates" class="field-input"></div>
-        <div class="col-span-full"><label class="field-label">37. Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div><label class="field-label">35. Build Stage <span>ก่อสร้าง</span></label><select id="Build_Stage" class="field-input"></select></div>
+        <div><label class="field-label">36. GPS Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input"></div>
+        <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
         <div class="col-span-full bg-slate-100 p-5 rounded-xl border border-dashed"><label class="field-label !text-blue-600 font-800">38. System Status <span>ออนไลน์</span></label><select id="System_Status" class="field-input !bg-white"></select></div>
-        <div class="col-span-full bg-amber-50 p-5 rounded-xl border border-dashed border-amber-200"><label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงแผนที่</span></label><select id="Map_Visibility" class="field-input !bg-white"><option value="Show">Show Map</option><option value="Hide">Hide Map</option></select></div>
+        <div class="col-span-full bg-amber-50 p-5 rounded-xl border border-dashed border-amber-200"><label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แผนที่หน้าเว็บ</span></label><select id="Map_Visibility" class="field-input !bg-white"><option value="Show">Show Map</option><option value="Hide">Hide Map</option></select></div>
       </div>
     </div>
   </div>
@@ -226,13 +237,13 @@
 
     let projectMaster = [], galleryArr = [], thumbUrl = "", selectedForDelete = [];
 
+    // 🚀 รักษาความเร็วเดิม: ดึงข้อมูลแบบปกติ
     async function init() {
       document.getElementById('loadingOverlay').style.display = 'flex';
       
       const cachedMeta = localStorage.getItem('metadata_cache');
       if(cachedMeta) renderMetadata(JSON.parse(cachedMeta));
 
-      // 🎯 รักษาความเร็วเดิม: ดึงข้อมูลแบบปกติ
       fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })
         .then(r => r.json()).then(res => { 
           if(res.ok) { 
@@ -294,11 +305,11 @@
       thumbUrl = ""; renderThumb();
     }
 
-    // 📸 Fixed Album Engine (รักษาการลบได้จริงจากชุด V12.1)
+    // 📸 Album Engine (ลบได้จริง 100%)
     function renderGallery() {
       const container = document.getElementById('galleryPreview');
       container.innerHTML = galleryArr.map((url, i) => `
-        <div class="img-tile" id="tile-${i}" onclick="toggleSelect('${url}', ${i})">
+        <div class="img-tile ${selectedForDelete.includes(url) ? 'selected' : ''}" id="tile-${i}" onclick="toggleSelect('${url}', ${i})">
           <img src="${url}" class="w-full h-full object-cover">
         </div>
       `).join('');
@@ -309,13 +320,10 @@
     }
 
     function toggleSelect(url, i) {
-      const tile = document.getElementById(`tile-${i}`);
       if (selectedForDelete.includes(url)) {
         selectedForDelete = selectedForDelete.filter(u => u !== url);
-        tile.classList.remove('selected');
       } else {
         selectedForDelete.push(url);
-        tile.classList.add('selected');
       }
       renderGallery();
     }
@@ -335,7 +343,7 @@
       selectedForDelete = [];
       renderGallery();
       document.getElementById('loadingOverlay').style.display = 'none';
-      alert("ลบรูปภาพที่เลือกเรียบร้อยแล้ว ✅");
+      alert("ลบรูปภาพเรียบร้อยแล้ว ✅");
     }
 
     async function handleMediaUpload(input, target, fieldId) {
@@ -349,9 +357,9 @@
         if(target === 'thumb') { thumbUrl = url; renderThumb(); }
         else if(target === 'album') { galleryArr.push(url); }
         else if(fieldId) { 
-          document.getElementById(fieldId).value = url; 
-          document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅";
-          document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.remove('hidden');
+           document.getElementById(fieldId).value = url; 
+           document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅";
+           document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.remove('hidden');
         }
       }
       if(target === 'album') renderGallery();
