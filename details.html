@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V192</title>
+  <title>Asset Specifications | MASTER SYSTEM V193</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -133,6 +133,7 @@
         <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
         <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
         <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
+        <div id="w-poolinfo" class="field-wrap"><div class="label">Pool Info</div><div class="val" id="vPoolInfo"></div></div>
         <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
         <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
         <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
@@ -232,7 +233,6 @@ function sH(p){
   if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } }
 }
 
-// 🎯 ฟังก์ชันซิงค์ข้อมูลและดึงข้อมูลกลับมาโชว์
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
@@ -270,13 +270,11 @@ function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=safeNum(u.Living_Area_sq_m||0);
   
-  // 🎯 ดึงข้อมูล Header กลับมาโชว์
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
-  // 🎯 กู้คืน Specifications ทุกช่อง
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', a ? `${a} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
@@ -288,26 +286,38 @@ function renderData(u){
   syncField('vSubDistrict', 'w-sub', u.SubDistrict);
   syncField('vZone', 'w-zone', u.Zone);
   syncField('vPoolSys', 'w-poolsys', u.Pool_System);
+  
+  // 🎯 🔵 Logic: Pool Info (Size + Depth)
+  if (u.Pool_Size || u.Pool_Depth) {
+      const info = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
+      syncField('vPoolInfo', 'w-poolinfo', info);
+  }
+
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
   syncField('vParking', 'w-parking', u.Parking);
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
   
-  syncField('vFeeM', 'w-feeM', u.Common_Fee_Rate ? `฿${u.Common_Fee_Rate} / m²` : "");
-  if(u.Common_Fee_Rate && a) syncField('vFeeY', 'w-feeY', `฿${Math.round(u.Common_Fee_Rate * a * 12).toLocaleString()} / Yr`);
+  // 🎯 🔵 Logic: Financial Info (฿3, ฿4 m² & Yearly)
+  const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
+  if(feeRate > 0) {
+      syncField('vFeeM', 'w-feeM', `฿${feeRate.toLocaleString()} / m²`);
+      if(a > 0) {
+          const yearly = Math.round(feeRate * a * 12);
+          syncField('vFeeY', 'w-feeY', `฿${yearly.toLocaleString()} / Yr`);
+      }
+  }
+
   syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
   const vDesc = document.getElementById('vDesc');
-  if(u.Description) { 
-      vDesc.textContent = u.Description; 
-      vDesc.closest('.info-card').classList.add('has-data'); 
-  }
+  if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
 
   // Map & Landmarks
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/5{la},${lo}`;
+      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/6{la},${lo}`;
       if(u.Map_Visibility !== 'Hide') {
           document.getElementById('mapSection').style.display = 'block';
           document.getElementById('mapSection').classList.add('has-data');
