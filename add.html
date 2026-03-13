@@ -23,7 +23,7 @@
     .field-input:focus { border-color: var(--accent); background: white; }
 
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.8rem; overflow: hidden; border: 1px solid #eee; background: #eee; }
-    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; font-weight: 800; }
+    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; z-index: 10; border: 2px solid white; font-size: 10px; font-weight: 800; }
     .btn-blue { background: #2563eb; color: white; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 800; font-size: 11px; text-transform: uppercase; font-family: 'Montserrat'; cursor: pointer; border: none; }
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 15px 20px; z-index: 1000; text-align: center; }
     .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 55px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; }
@@ -65,7 +65,7 @@
 
   <div class="content-wrapper">
     <div class="edit-banner">
-      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; font-family:'Montserrat';">Auto-Pilot V10.3 | Restoration Suite</div>
+      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; font-family:'Montserrat';">Auto-Pilot V10.5 | Draft System</div>
       <div style="font-size:1rem; font-weight:800; font-family:'Montserrat';">ADD NEW PROPERTY</div>
     </div>
 
@@ -110,7 +110,7 @@
 
     <div id="tab-info" class="tab-content space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-amber-50 font-800 text-amber-600" readonly></div>
+        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-amber-50 font-800 text-amber-600" readonly value="PENDING"></div>
         
         <div>
           <label class="field-label">2. Project Name <span>ชื่อโครงการ</span></label>
@@ -171,13 +171,16 @@
         
         <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
 
-        <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
-            <label class="field-label !text-blue-600 font-800">38. System Visibility <span>สถานะในระบบ</span></label>
-            <select id="System_Status" class="field-input !bg-white"></select>
+        <div class="col-span-full bg-amber-50 p-6 rounded-xl border border-dashed border-amber-300">
+            <label class="field-label !text-amber-700 font-800">38. System Visibility <span>สถานะการบันทึก</span></label>
+            <select id="System_Status" class="field-input !bg-white !border-amber-200">
+                <option value="Draft" selected>Save as Draft (บันทึกฉบับร่าง - ยังไม่ออนไลน์)</option>
+                <option value="Online">Publish Online (ส่งตรวจเพื่อออนไลน์)</option>
+            </select>
         </div>
 
-        <div class="col-span-full bg-amber-50 p-6 rounded-xl border border-dashed border-amber-200">
-            <label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงผลแผนที่หน้าเว็บ</span></label>
+        <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
+            <label class="field-label !text-slate-700 font-800">39. Map Visibility <span>แสดงผลแผนที่หน้าเว็บ</span></label>
             <select id="Map_Visibility" class="field-input !bg-white">
                 <option value="Show">Show Map (โชว์แผนที่)</option>
                 <option value="Hide">Hide Map (ซ่อนแผนที่)</option>
@@ -187,12 +190,12 @@
     </div>
   </div>
 
-  <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-xl">PUBLISH MASTER ASSET</button></div>
+  <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-xl">SAVE AS MASTER DRAFT</button></div>
 
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const firebaseConfig = { storageBucket: "huahin-properties-5f1b5.firebasestorage.app" };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
 
     let projectMaster = [], galleryArr = [], thumbUrl = "";
@@ -201,17 +204,13 @@
       try {
         const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })).json();
         if (res.ok) {
-          document.getElementById('HP_ID').value = res.nextId;
           const meta = res.options;
           projectMaster = meta._raw_projects || [];
-
-          // Fill all dropdowns correctly
-          const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage", "System_Status"];
+          const dds = ["Listing_Type", "Type", "Status", "Furnishing", "District", "SubDistrict", "Zone", "Bedrooms", "Bathrooms", "Parking", "Kitchen_Type", "Direction", "Electricity", "Pool_System", "View_Type", "Water_Source", "Extras", "Land_Title_Deed_Type", "Badge", "Build_Stage"];
           dds.forEach(id => {
             const el = document.getElementById(id);
             if(el && meta[id]) el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(v => `<option value="${v}">${v}</option>`).join('');
           });
-
           if(meta.Ownership_Type) {
             document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
               <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
@@ -231,10 +230,6 @@
           const el = document.getElementById(f);
           if(el && p[f.toLowerCase()]) el.value = p[f.toLowerCase()];
         });
-        if(p.ownership_type) {
-          const vals = p.ownership_type.split(',').map(s => s.trim());
-          document.querySelectorAll('input[name="own_check"]').forEach(cb => { cb.checked = vals.includes(cb.value); });
-        }
       }
       document.getElementById('pModal').style.display = 'none';
     }
@@ -244,26 +239,22 @@
       const statusId = target === 'pdf' ? `status_${fieldId?.split('_')[0].toLowerCase()}` : `status_${target}`;
       const statusEl = document.getElementById(statusId);
       if(statusEl) statusEl.classList.add('active');
-
-      const hpId = document.getElementById('HP_ID').value || "NEW";
       for (let file of input.files) {
         try {
-          const path = `properties/${hpId}/${Date.now()}_${file.name}`;
+          const path = `properties/NEW/${Date.now()}_${file.name}`;
           const ref = storage.ref(path);
           await ref.put(file);
           const url = await ref.getDownloadURL();
           if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
           else if(target === 'album') { galleryArr.push(url); renderGallery(); }
-          else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; }
+          else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = "File Uploaded ✅"; }
         } catch (e) { alert("Upload Failed!"); }
       }
       if(statusEl) statusEl.classList.remove('active');
     }
 
-    function renderThumb(url) { document.getElementById('thumbPreview').innerHTML = `<div class="img-x" onclick="removeThumb()">✕</div><img src="${url}" class="w-full h-full object-cover">`; document.getElementById('Thumbnail_Image').value = url; }
-    function removeThumb() { thumbUrl = ""; document.getElementById('thumbPreview').innerHTML = '<i class="fas fa-cloud-upload-alt text-3xl"></i>'; }
-    function renderGallery() { document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="removeGallery(${i})">✕</div><img src="${url}" class="w-full h-full object-cover"></div>`).join(''); document.getElementById('Album_Image').value = galleryArr.join(','); }
-    function removeGallery(i) { galleryArr.splice(i, 1); renderGallery(); }
+    function renderThumb(url) { document.getElementById('thumbPreview').innerHTML = `<img src="${url}" class="w-full h-full object-cover">`; document.getElementById('Thumbnail_Image').value = url; }
+    function renderGallery() { document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `<div class="img-tile"><img src="${url}" class="w-full h-full object-cover"></div>`).join(''); document.getElementById('Album_Image').value = galleryArr.join(','); }
 
     function runCalc() {
       const p = parseFloat(document.getElementById('Sale_Price').value) || 0;
@@ -275,23 +266,20 @@
     }
 
     async function saveData() {
-      if(!confirm("Confirm Publish?")) return;
-      document.getElementById('btn_save').innerText = "SYNCING TO DATABASE...";
+      if(!confirm("Confirm Save?")) return;
+      document.getElementById('btn_save').innerText = "SYNCING DRAFT...";
       const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
       document.getElementById('Ownership_Type').value = owns.join(', ');
-      
-      let payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
-      document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
-      payload['Project_Name'] = document.getElementById('Project_Name').value;
-      
+      let payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(','), System_Status: document.getElementById('System_Status').value };
+      document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id && el.id !== 'HP_ID') payload[el.id] = el.value; });
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
-      if(res.ok) { alert("SUCCESS! ✅ ID: " + res.id); location.reload(); }
+      if(res.ok) { alert("DRAFT SAVED SUCCESSFULLY! ✅"); location.reload(); }
     }
 
     function switchTab(t) {
       document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + t).classList.add('active');
-      document.getElementById('btn-' + (t === 'photo' ? 'photo' : 'info')).classList.add('active');
+      document.getElementById('btn-' + t).classList.add('active');
     }
     window.onload = init;
   </script>
