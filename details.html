@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V187</title>
+  <title>Asset Specifications | MASTER SYSTEM V188</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -14,7 +14,6 @@
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.85rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* 🎯 Sidebar Styles */
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; }
@@ -26,7 +25,6 @@
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
 
-    /* 🎯 Brand Logo (Right side) */
     .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
 
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
@@ -65,6 +63,7 @@
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
   </style>
 </head>
 <body>
@@ -80,7 +79,7 @@
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
 </div>
 
-<div id="pageSplash"><div class="splash-brand">MASTER DATA</div></div>
+<div id="pageSplash"><div class="splash-brand">MASTER CATALOG</div></div>
 
 <header>
     <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i><span>MENU</span></div>
@@ -103,11 +102,10 @@
 
   <main class="content">
     <div class="info-card has-data">
-      <div class="flex justify-between items-start">
-        <div><div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div><h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1></div>
-      </div>
-      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;"></div>
-      <div id="pPrice" style="font-size:1.4rem;font-weight:700;color:#FFF;margin-bottom:20px;"></div>
+      <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
+      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;">Plot ...</h1>
+      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;">📍 -</div>
+      <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:20px;">฿0</div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
         <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
@@ -125,7 +123,6 @@
         <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
         <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
         <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
-        <div id="w-pool" class="field-wrap"><div class="label">Pool Info</div><div class="val" id="vPool"></div></div>
         <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
         <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
         <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
@@ -145,7 +142,7 @@
 
     <div class="info-card" id="card-desc">
       <h2 class="section-title">Description</h2>
-      <p id="vDesc" style="font-size:0.82rem;line-height:1.8;color:#CCC;font-weight:300;white-space:pre-line;"></p>
+      <p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;"></p>
     </div>
 
     <div class="info-card" id="mapSection">
@@ -155,10 +152,10 @@
     </div>
 
     <div class="info-card" id="amenitiesSection">
-      <h2 class="section-title">Nearby Lifestyle</h2>
-      <div id="nearbyGrid"></div>
+      <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
+      <div id="nearbyGrid" class="nearby-grid"></div>
       <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
-        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
+        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;">DOWNLOAD FLOOR PLAN PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
     </div>
@@ -172,7 +169,23 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-const LANDMARKS=[{name:"Hua Hin Beach",lat:12.5696,lon:99.9602},{name:"Bluport Mall",lat:12.5518,lon:99.9631},{name:"Bangkok Hospital",lat:12.5532,lon:99.9610}];
+
+// 🎯 Full 12 Landmarks
+const LANDMARKS=[
+    {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, 
+    {name:"Bluport Mall",lat:12.5518,lon:99.9631}, 
+    {name:"Bangkok Hospital",lat:12.5532,lon:99.9610},
+    {name:"Cicada Market",lat:12.5342,lon:99.9655},
+    {name:"Market Village",lat:12.5598,lon:99.9602},
+    {name:"Night Market",lat:12.5714,lon:99.9575},
+    {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642},
+    {name:"Black Mountain Golf",lat:12.6146,lon:99.8924},
+    {name:"Banyan Golf Club",lat:12.5124,lon:99.9145},
+    {name:"True Arena Sports",lat:12.5365,lon:99.9585},
+    {name:"Hua Hin Airport",lat:12.6366,lon:99.9515},
+    {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548}
+];
+
 let images=[], idx=0, leafletMap=null;
 
 function toggleMenu() {
@@ -184,7 +197,7 @@ function checkAuthUI() {
   const authSection = document.getElementById('authMenuSection');
   const isLoggedIn = localStorage.getItem('admin_session') === 'active';
   if (isLoggedIn) {
-    authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#E02424;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
+    authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
   } else {
     authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`;
   }
@@ -192,7 +205,6 @@ function checkAuthUI() {
 
 function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบ?")) { localStorage.clear(); location.reload(); } }
 
-// 🎯 ฟังก์ชันซิงค์ข้อมูลและซ่อนถ้าไม่มีค่า
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
   const wrap = document.getElementById(wrapId);
@@ -237,7 +249,6 @@ function renderData(u){
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
-  // 🎯 ดึงข้อมูลครบ 39 รายการ
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLiving', 'w-living', a ? `${a} m²` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
@@ -249,7 +260,6 @@ function renderData(u){
   syncField('vSubDistrict', 'w-sub', u.SubDistrict);
   syncField('vZone', 'w-zone', u.Zone);
   syncField('vPoolSys', 'w-poolsys', u.Pool_System);
-  syncField('vPool', 'w-pool', u.Pool_Size ? `${u.Pool_Size} (${u.Pool_Depth||''})` : "");
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
   syncField('vParking', 'w-parking', u.Parking);
   syncField('vDirect', 'w-direct', u.Direction);
@@ -260,26 +270,34 @@ function renderData(u){
   syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
 
-  const desc = document.getElementById('vDesc');
-  if(u.Description) { desc.textContent = u.Description; desc.closest('.info-card').classList.add('has-data'); }
+  const vDesc = document.getElementById('vDesc');
+  if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
 
-  // Map & Navigator
+  // 🎯 Smart Visibility Map & Navigator
+  const mapSection = document.getElementById('mapSection');
   if(u.Coordinates && u.Coordinates.includes(',') && u.Map_Visibility !== 'Hide') {
-      document.getElementById('mapSection').classList.add('has-data');
+      mapSection.classList.add('has-data');
       const [la, lo] = u.Coordinates.split(',').map(Number);
+      
+      // 🎯 Fix Google Maps Link for Navigation
+      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      
       if(!leafletMap) {
           leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
           L.marker([la, lo]).addTo(leafletMap);
       }
-      document.getElementById('navLink').href = `https://www.google.com/maps?q=${la},${lo}`;
       
+      // 🎯 Calculate 12 Landmarks
       const grid = document.getElementById('nearbyGrid');
       grid.innerHTML = LANDMARKS.map(loc => {
           const d = getDistance(la, lo, loc.lat, loc.lon);
           return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`;
       }).join('');
       document.getElementById('amenitiesSection').classList.add('has-data');
+  } else {
+      mapSection.classList.remove('has-data');
+      mapSection.style.display = 'none';
   }
 
   if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
