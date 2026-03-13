@@ -6,7 +6,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
 
@@ -102,7 +101,7 @@
             <i class="fas fa-cloud-upload-alt text-3xl text-slate-200"></i>
           </div>
           <button onclick="document.getElementById('file_thumb').click()" class="btn-blue w-full">UPLOAD COVER</button>
-          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing to Storage...</div>
+          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing to Firebase...</div>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
@@ -119,14 +118,14 @@
         <div class="space-y-3 mt-4">
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[10px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
+            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
             <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
             <div id="status_floor" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i> Uploading...</div>
             <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
           </div>
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[10px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
+            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
             <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
             <div id="status_customer" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i> Uploading...</div>
             <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
@@ -140,23 +139,29 @@
         <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-amber-50 font-800 text-amber-600" readonly></div>
         <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">3. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label><select id="Project_Name" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input font-700" placeholder="เช่น M39"></div>
+        
+        <div>
+          <label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label>
+          <input list="project_list" id="Project_Name" class="field-input font-700" placeholder="เลือกหรือพิมพ์ชื่อใหม่...">
+          <datalist id="project_list"></datalist>
+        </div>
+
+        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input font-700" placeholder="เช่น m39"></div>
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input dynamic-opt"></select></div>
         
         <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-xl bg-[#F9F9F8] border border-[#eee]">
-          <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 9800000"></div>
-          <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 345"></div>
+          <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()" placeholder="9800000"></div>
+          <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()" placeholder="345"></div>
           <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
           <div class="col-span-full border-t border-[#eee] pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div><label class="field-label font-800">10. Common Fee Rate <span>ส่วนกลาง (/m²)</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 4"></div>
+            <div><label class="field-label font-800">10. Common Fee Rate <span>ส่วนกลาง (/m²)</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
             <div><label class="field-label">11. Monthly Fee <span>รายเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
             <div><label class="field-label">12. Yearly Fee <span>รายปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
           </div>
         </div>
 
-        <div><label class="field-label">13. Land Area (m2) <span>พื้นที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input" placeholder="เช่น 500"></div>
-        <div><label class="field-label">14. Land Area (sq.w) <span>พื้นที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input" placeholder="เช่น 125"></div>
+        <div><label class="field-label">13. Land Area (m2) <span>พื้นที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
+        <div><label class="field-label">14. Land Area (sq.w) <span>พื้นที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
         <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
@@ -167,25 +172,25 @@
         <div><label class="field-label">22. Kitchen Type <span>สไตล์ครัว</span></label><select id="Kitchen_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">23. Direction <span>ทิศหน้าบ้าน</span></label><select id="Direction" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">24. Electricity <span>ระบบไฟฟ้า</span></label><select id="Electricity" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input" placeholder="เช่น 4x8"></div>
-        <div><label class="field-label">26. Pool Depth <span>ความลึกสระ</span></label><input id="Pool_Depth" class="field-input" placeholder="เช่น 1.2"></div>
+        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input"></div>
+        <div><label class="field-label">26. Pool Depth <span>ความลึกสระ</span></label><input id="Pool_Depth" class="field-input"></div>
         <div><label class="field-label">27. Pool System <span>ระบบสระ</span></label><select id="Pool_System" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">28. View Type <span>วิว</span></label><select id="View_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">30. Extras <span>จุดเด่นเพิ่มเติม</span></label><select id="Extras" class="field-input dynamic-opt"></select></div>
 
         <div class="col-span-1 md:col-span-2">
-          <label class="field-label">31. Ownership <span>การถือครอง (จาก Settings)</span></label>
+          <label class="field-label">31. Ownership <span>การถือครอง (ดึงจาก Settings)</span></label>
           <div id="ownership-container" class="ownership-grid"></div>
           <input type="hidden" id="Ownership_Type">
         </div>
 
         <div><label class="field-label">32. Title Deed <span>ประเภทโฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">33. Transfer Exp. <span>ค่าใช้จ่ายวันโอน</span></label><input id="Transfer_Expenses" class="field-input" placeholder="เช่น 50/50"></div>
+        <div><label class="field-label">33. Transfer Exp. <span>ค่าใช้จ่ายวันโอน</span></label><input id="Transfer_Expenses" class="field-input"></div>
         <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">35. Build Stage <span>ก่อสร้าง</span></label><select id="Build_Stage" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">36. GPS Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input" placeholder="12.56, 99.95"></div>
-        <div class="col-span-full"><label class="field-label">37. Property Description <span>คำบรรยายรายละเอียด</span></label><textarea id="Description" rows="4" class="field-input" placeholder="รายละเอียดทรัพย์สิน..."></textarea></div>
+        <div><label class="field-label">36. GPS Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input"></div>
+        <div class="col-span-full"><label class="field-label">37. Property Description <span>คำบรรยายรายละเอียด</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
 
         <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
           <label class="field-label !text-blue-600 font-800">38. System Visibility <span>สถานะในระบบ</span></label>
@@ -228,6 +233,11 @@
             const options = meta[el.id] || [];
             el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
           });
+          
+          // 🎯 Populate Project List (Datalist)
+          const pList = meta.Project_Name || [];
+          document.getElementById('project_list').innerHTML = pList.map(v => `<option value="${v}">`).join('');
+
           document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
             <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
           `).join('');
@@ -244,7 +254,19 @@
       for (let file of input.files) {
         try {
           let fileToUpload = file;
-          if(target !== 'pdf') { fileToUpload = await compressImage(file); }
+          if(target !== 'pdf') {
+            const reader = new FileReader();
+            const imgBlob = await new Promise(r => { reader.readAsDataURL(file); reader.onload = (e) => {
+              const img = new Image(); img.src = e.target.result;
+              img.onload = () => {
+                const canvas = document.createElement('canvas'); const maxW = 1200; const scale = maxW / img.width;
+                canvas.width = maxW; canvas.height = img.height * scale;
+                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                canvas.toBlob(b => r(b), 'image/jpeg', 0.85);
+              };
+            };});
+            fileToUpload = imgBlob;
+          }
 
           const path = `properties/${document.getElementById('HP_ID').value}/${Date.now()}_${file.name}`;
           const ref = storage.ref(path);
@@ -253,29 +275,10 @@
 
           if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
           else if(target === 'album') { galleryArr.push(url); renderGallery(); }
-          else if(fieldId) { 
-            document.getElementById(fieldId).value = url; 
-            document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; 
-          }
+          else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; }
         } catch (e) { alert("Upload Failed!"); }
       }
       if(statusEl) statusEl.classList.remove('active');
-    }
-
-    function compressImage(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader(); reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          const img = new Image(); img.src = e.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-            const maxW = 1200; const scale = maxW / img.width;
-            canvas.width = maxW; canvas.height = img.height * scale;
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
-          };
-        };
-      });
     }
 
     function renderThumb(url) {
@@ -304,10 +307,16 @@
 
     async function saveData() {
       if(!confirm("Publish this property?")) return;
+      document.getElementById('btn_save').innerText = "PUBLISHING...";
       const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
       document.getElementById('Ownership_Type').value = owns.join(', ');
+      
       const payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
+      
+      // ดึงค่า Project Name จาก Input (พิมพ์เองหรือเลือก)
+      payload['Project_Name'] = document.getElementById('Project_Name').value;
+
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
       if(res.ok) { alert("SUCCESS! ✅ ID: " + res.id); location.href='dashboard.html'; }
     }
