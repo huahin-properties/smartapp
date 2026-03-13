@@ -10,13 +10,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
     
-    /* 🎯 Custom Loader Styling (Black Background) */
+    /* 🎯 Updated Custom Loader Styling */
     #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.6s ease-out; }
+    .loader-sub-text { color: #FFFFFF; font-size: 9px; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; opacity: 0.8; font-family: 'Montserrat'; }
     .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; }
     .loader-icons span { display: inline-block; animation: bounce 0.6s infinite alternate; }
     .loader-icons span:nth-child(2) { animation-delay: 0.2s; }
     .loader-icons span:nth-child(3) { animation-delay: 0.4s; }
-    .loader-text { color: #FFFFFF; font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat'; }
+    .loader-text { color: var(--gold); font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat'; }
     @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-12px); } }
 
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
@@ -31,6 +32,7 @@
     .sidebar-overlay.active { display: block; }
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: var(--white); text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
+    .menu-item:active { background: rgba(201,168,76,0.1); color: var(--gold); }
     .hero { padding: 75px 15px 10px; text-align: center; }
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
@@ -59,6 +61,7 @@
 <body>
 
   <div id="pageSplash">
+    <div class="loader-sub-text">Smart Property System</div>
     <div class="loader-icons">
       <span>🐚</span>
       <span>🌊</span>
@@ -111,43 +114,25 @@
   <script>
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
-    const startTime = Date.now(); // ⏱️ เริ่มจับเวลาตอนโหลดหน้า
+    const startTime = Date.now();
 
     function hideSplash() { 
       const elapsed = Date.now() - startTime;
-      const waitTime = Math.max(2000 - elapsed, 0); // 🎯 ตั้งเวลาขั้นต่ำ 2 วินาที (2000ms)
-      
+      const waitTime = Math.max(2000 - elapsed, 0); 
       setTimeout(() => {
         const splash = document.getElementById('pageSplash');
-        if(splash) {
-          splash.style.opacity = '0';
-          setTimeout(() => splash.style.display = 'none', 600);
-        }
+        if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.style.display = 'none', 600); }
       }, waitTime);
     }
 
-    function toggleMenu() {
-      document.getElementById('sidebar').classList.toggle('active');
-      document.getElementById('overlay').classList.toggle('active');
-    }
-
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function checkAuthUI() {
       const authSection = document.getElementById('authMenuSection');
       const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-      if (isLoggedIn) {
-        authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
-      } else {
-        authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`;
-      }
+      if (isLoggedIn) { authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> ADMIN DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`; } 
+      else { authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`; }
     }
-
-    function handleLogout(e) {
-      e.preventDefault();
-      if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
-        localStorage.clear();
-        location.reload();
-      }
-    }
+    function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) { localStorage.clear(); location.reload(); } }
 
     function render(res) {
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
@@ -157,23 +142,17 @@
         return `<a href="details.html?id=${u.HP_ID}" class="card"><div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div><div class="card-info"><div class="info-row"><div class="prop-name">${label} | ${u.District || ''}</div><div class="furnish-tag">${u.Furnishing || '-'}</div></div><div class="info-row"><div style="font-size:0.65rem; color:#7A9BB5;">${u.Bedrooms} Bed | ${u.Living_Area_sq_m || 0} m²</div><div class="price-new">฿${priceVal.toLocaleString()}</div></div><div class="info-row"><span class="status-tag">${u.Status}</span><div style="font-size:0.58rem; color:#7A9BB5;">${u.Zone || ''}</div></div></div></a>`;
       }).join('');
     }
-
     function resetFilters() { document.getElementById('sI').value = ''; f(); }
 
     async function init() {
       checkAuthUI();
       const cached = localStorage.getItem('hp_master_data');
-      if (cached) { 
-        data = JSON.parse(cached); updateFilters(); f(); 
-        hideSplash(); // โหลดจากแคชก็ยังต้องโชว์แบรนด์ตามเวลาที่ตั้งไว้
-      } 
+      if (cached) { data = JSON.parse(cached); updateFilters(); f(); hideSplash(); } 
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
         const newData = await res.json();
-        data = newData;
-        localStorage.setItem('hp_master_data', JSON.stringify(data));
-        updateFilters(); f();
-        hideSplash(); 
+        data = newData; localStorage.setItem('hp_master_data', JSON.stringify(data));
+        updateFilters(); f(); hideSplash(); 
       } catch (err) { console.error(err); hideSplash(); }
     }
 
@@ -183,7 +162,6 @@
       const beds = [...new Set(data.map(p => p.Bedrooms))].sort((a,b)=>a-b);
       document.getElementById('bF').innerHTML = `<option value="">Bedrooms</option>` + beds.map(b => `<option value="${b}">${b} Bed</option>`).join('');
     }
-
     function f() {
       const q = document.getElementById('sI').value.toLowerCase();
       const d = document.getElementById('dF').value;
@@ -195,7 +173,6 @@
       else if (sort === "high") res.sort((x,y) => (Number(y.Sale_Price)||0) - (Number(x.Sale_Price)||0));
       render(res);
     }
-
     document.getElementById('pillBox').addEventListener('click', (e) => { if (e.target.classList.contains('pill')) { document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); f(); } });
     window.onload = init;
   </script>
