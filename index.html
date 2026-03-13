@@ -9,7 +9,26 @@
     :root { --navy: #0B1829; --navy-dark: #060F1A; --gold: #C9A84C; --white: #FDFAF5; --border: rgba(255, 255, 255, 0.08); --row-h: 80px; --thumb-w: 105px; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background-color: var(--navy-dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+    
+    /* 🎯 Header - ปรับชื่อเว็บไว้กลางและปุ่มเมนูไว้ซ้าย */
     header { position: fixed; top: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: rgba(6, 15, 26, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
+    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.9rem; white-space: nowrap; }
+    
+    /* 🎯 ปุ่มเมนูฝั่งซ้าย */
+    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
+    .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
+    .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; letter-spacing: 0.5px; }
+
+    /* 🎯 Sidebar Menu */
+    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid var(--border); }
+    .sidebar.active { left: 0; }
+    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1999; display: none; }
+    .sidebar-overlay.active { display: block; }
+    
+    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: var(--white); text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
+    .menu-item i { color: var(--gold); width: 20px; text-align: center; }
+    .menu-item:active { background: rgba(201,168,76,0.1); color: var(--gold); }
+    
     .hero { padding: 75px 15px 10px; text-align: center; }
     .search-box-wrapper { position: relative; width: 100%; max-width: 550px; margin: 0 auto 10px; }
     .search-input { width: 100%; background: #FFFFFF; border: 1px solid var(--gold); border-radius: 50px; padding: 10px 45px 10px 40px; color: #0B1829; font-weight: 600; font-size: 0.85rem; outline: none; }
@@ -34,16 +53,29 @@
     .status-tag { font-size: 0.48rem; padding: 1.5px 5px; border-radius: 3px; border: 1px solid var(--gold); color: var(--gold); font-weight: 800; text-transform: uppercase; }
     .furnish-tag { color: var(--gold); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
     
-    /* 🎯 สไตล์ไอคอน Admin/Logout มุมขวาบน */
     .admin-link { color: var(--gold); font-size: 1.2rem; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; transition: 0.3s; }
-    .admin-link:active { transform: scale(0.9); }
     
     @media (min-width: 768px) { :root { --row-h: 90px; --thumb-w: 140px; } .prop-list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
+  <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+  <div class="sidebar" id="sidebar">
+    <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
+    <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
+    <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
+    <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
+    <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
+  </div>
+
   <header>
-    <a href="#" style="color:var(--gold); font-weight:800; text-decoration:none;">HuaHin.Properties</a>
+    <div class="menu-trigger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+      <span>MENU</span>
+    </div>
+    
+    <a href="index.html" class="brand-center">HuaHin.Properties</a>
+    
     <a href="gateway.html" id="adminGateBtn" class="admin-link">
       <i class="fas fa-user-circle"></i>
     </a>
@@ -81,11 +113,15 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
-    // 🎯 ระบบเช็กสถานะ Login และ Logout
+    // 🎯 Toggle Sidebar
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+
     function checkAuthUI() {
       const btn = document.getElementById('adminGateBtn');
       const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-      
       if (isLoggedIn) {
         btn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
         btn.onclick = function(e) {
@@ -97,7 +133,7 @@
         };
       } else {
         btn.innerHTML = '<i class="fas fa-user-circle"></i>';
-        btn.onclick = null; // ให้ไปที่ gateway.html ตาม href ปกติ
+        btn.onclick = null;
       }
     }
 
@@ -105,14 +141,7 @@
       document.getElementById('unitCount').textContent = `${res.length} UNITS`;
       document.getElementById('propGrid').innerHTML = res.map(u => {
         const label = u.Listing_Type === 'Rent' ? 'For Rent' : 'For Sale';
-        
-        let priceVal = 0;
-        if (u.Listing_Type === 'Rent') {
-          priceVal = Number(u.Monthly_Rent) || Number(u.Sale_Price) || 0;
-        } else {
-          priceVal = Number(u.Sale_Price) || 0;
-        }
-
+        let priceVal = u.Listing_Type === 'Rent' ? (Number(u.Monthly_Rent) || Number(u.Sale_Price) || 0) : (Number(u.Sale_Price) || 0);
         return `
           <a href="details.html?id=${u.HP_ID}" class="card">
             <div class="card-img"><span class="hp-id">${u.HP_ID}</span><img src="${u.Thumbnail_Image || 'https://via.placeholder.com/400x250'}" loading="lazy"></div>
@@ -126,27 +155,19 @@
     }
 
     function resetFilters() {
-      document.getElementById('sI').value = '';
-      document.getElementById('dF').value = '';
-      document.getElementById('sF').value = '';
-      document.getElementById('bF').value = '';
-      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-      document.querySelector('.pill[data-f="all"]').classList.add('active');
-      f();
+      document.getElementById('sI').value = ''; f();
     }
 
     async function init() {
-      checkAuthUI(); // 🎯 เช็กสถานะปุ่ม Admin
+      checkAuthUI();
       const cached = localStorage.getItem('hp_master_data');
       if (cached) { data = JSON.parse(cached); updateFilters(); f(); }
       try {
         const res = await fetch(`${API}?mode=getListSmall&project=all`);
         const newData = await res.json();
-        if (JSON.stringify(newData) !== cached) {
-          data = newData;
-          localStorage.setItem('hp_master_data', JSON.stringify(data));
-          updateFilters(); f();
-        }
+        data = newData;
+        localStorage.setItem('hp_master_data', JSON.stringify(data));
+        updateFilters(); f();
       } catch (err) { console.error(err); }
     }
 
@@ -161,14 +182,11 @@
       const q = document.getElementById('sI').value.toLowerCase();
       const d = document.getElementById('dF').value;
       const b = document.getElementById('bF').value;
-      const activePill = document.querySelector('.pill.active');
-      const pill = activePill ? activePill.dataset.f : 'all';
+      const pill = document.querySelector('.pill.active').dataset.f;
       const sort = document.getElementById('sF').value;
-
       let res = data.filter(u => u.System_Status === 'Online' && (!q || `${u.HP_ID} ${u.Plot} ${u.District} ${u.Zone}`.toLowerCase().includes(q)) && (!d || u.District === d) && (!b || String(u.Bedrooms) === b) && (pill === 'all' || u.Listing_Type === pill || u.Type === pill));
-      
-      if (sort === "low") res.sort((x,y) => (x.Sale_Price || x.Monthly_Rent) - (y.Sale_Price || y.Monthly_Rent));
-      else if (sort === "high") res.sort((x,y) => (y.Sale_Price || y.Monthly_Rent) - (x.Sale_Price || x.Monthly_Rent));
+      if (sort === "low") res.sort((x,y) => (Number(x.Sale_Price)||0) - (Number(y.Sale_Price)||0));
+      else if (sort === "high") res.sort((x,y) => (Number(y.Sale_Price)||0) - (Number(x.Sale_Price)||0));
       render(res);
     }
 
