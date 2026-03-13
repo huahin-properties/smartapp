@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V12.1 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V12.5 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -34,30 +34,28 @@
     .field-input:focus { border-color: var(--accent); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
 
+    /* 📸 Gallery Engine */
     .gallery-container { background: #fdfdfd; border: 1px dashed #eee; border-radius: 1rem; padding: 0.5rem; display: grid; gap: 0.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     @media (min-width: 1024px) { .gallery-container { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.6rem; overflow: hidden; border: 2px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
     .img-tile.selected { border: 4px solid var(--danger); }
     .img-tile.selected::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 4px; right: 4px; color: var(--danger); background: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 10; }
     .img-x { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid white; z-index: 20; }
 
+    /* 🎯 1. Floating Delete Button (ลอยตัวติดจอ) */
+    .btn-delete-float { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 12px 30px; border-radius: 2rem; font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 2000; box-shadow: 0 10px 30px rgba(239,68,68,0.4); display: none; border: 2px solid white; }
+
+    /* PDF Engine */
     .pdf-row { display: flex; align-items: center; gap: 0.75rem; background: #F9F9F8; padding: 10px 15px; border-radius: 1rem; margin-bottom: 8px; border: 1px solid #eee; }
     .pdf-icon { width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .btn-pdf-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 0.8rem; }
 
     .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .confirm-box { background: white; width: 100%; max-width: 320px; border-radius: 1.5rem; padding: 25px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-    .confirm-box i { font-size: 3rem; color: var(--danger); margin-bottom: 15px; }
-    .btn-yes { flex: 1; background: var(--danger); color: white; padding: 12px; border-radius: 0.8rem; font-weight: 800; }
-    .btn-no { flex: 1; background: #eee; color: #333; padding: 12px; border-radius: 0.8rem; font-weight: 800; }
-
+    .confirm-box { background: white; width: 100%; max-width: 320px; border-radius: 1.5rem; padding: 25px; text-align: center; }
+    
     #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
     .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; letter-spacing: 1px; }
-
-    /* 🎯 ส่วนที่แก้ไข: ไอคอนลบแบบลอยตัว (Floating Delete Button) */
-    .btn-delete-float { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 12px 30px; border-radius: 2rem; font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 2000; box-shadow: 0 10px 30px rgba(239,68,68,0.4); display: none; border: 2px solid white; }
 
     .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
@@ -70,12 +68,12 @@
 
   <div id="confirmPop" class="confirm-overlay">
     <div class="confirm-box">
-      <i class="fas fa-trash-alt"></i>
+      <i class="fas fa-trash-alt text-4xl text-red-500 mb-4"></i>
       <h3 style="font-weight:800; margin-bottom:10px;">ยืนยันการลบรูป?</h3>
-      <p style="font-size:14px; color:#666; margin-bottom:20px;">คุณต้องการลบรูปภาพจำนวน <span id="countPop">0</span> รูปถาวรใช่หรือไม่?</p>
+      <p style="font-size:14px; color:#666; margin-bottom:20px;">ลบรูปภาพจำนวน <span id="countPop">0</span> รูปถาวรหรือไม่?</p>
       <div class="flex gap-3">
-        <button class="btn-no" onclick="closeConfirm()">ยกเลิก</button>
-        <button class="btn-yes" onclick="executeDelete()">ยืนยันลบทันที</button>
+        <button class="flex-1 bg-gray-100 py-3 rounded-xl font-800" onclick="closeConfirm()">ยกเลิก</button>
+        <button class="flex-1 bg-red-50 text-white py-3 rounded-xl font-800" onclick="executeDelete()">ยืนยันลบ</button>
       </div>
     </div>
   </div>
@@ -96,7 +94,7 @@
 
   <header>
     <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left text-lg"></i></div>
-    <div class="brand-center">Master Editor V12.1</div>
+    <div class="brand-center">Master Editor V12.5</div>
     <div style="width:20px;"></div>
   </header>
 
@@ -120,12 +118,9 @@
         </div>
         
         <div class="input-card">
-          <div class="flex justify-between items-center mb-2">
-            <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
-          </div>
+          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
           <div id="galleryPreview" class="gallery-container mb-3"></div>
           <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD TO ALBUM</button>
-          <input type="file" id="f_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')">
           <input type="hidden" id="Album_Image">
         </div>
       </div>
@@ -159,7 +154,7 @@
 
     <div id="tab-info" class="tab-content space-y-4">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input" readonly></div>
+        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100" readonly></div>
         <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
         <div>
           <label class="field-label">3. Project Name <span>ชื่อโครงการ</span></label>
@@ -169,7 +164,7 @@
           </div>
         </div>
         <div><label class="field-label">4. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input"></select></div>
-        <div><label class="field-label">5. Plot <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
+        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
 
         <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border">
@@ -213,7 +208,7 @@
         <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input"></select></div>
         <div><label class="field-label">35. Build Stage</label><select id="Build_Stage" class="field-input"></select></div>
         <div><label class="field-label">36. GPS Coordinates</label><input id="Coordinates" class="field-input"></div>
-        <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div class="col-span-full"><label class="field-label">37. Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
         <div class="col-span-full bg-slate-100 p-5 rounded-xl border border-dashed"><label class="field-label !text-blue-600 font-800">38. System Status <span>ออนไลน์</span></label><select id="System_Status" class="field-input !bg-white"></select></div>
         <div class="col-span-full bg-amber-50 p-5 rounded-xl border border-dashed border-amber-200"><label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงแผนที่</span></label><select id="Map_Visibility" class="field-input !bg-white"><option value="Show">Show Map</option><option value="Hide">Hide Map</option></select></div>
       </div>
@@ -237,15 +232,21 @@
       const cachedMeta = localStorage.getItem('metadata_cache');
       if(cachedMeta) renderMetadata(JSON.parse(cachedMeta));
 
-      // ดึงข้อมูลพร้อมกันเพื่อความเร็ว
-      Promise.all([
-        fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) }).then(r => r.json()),
-        fetch(`${API}?mode=getUnitDetail&id=${hpId}`).then(r => r.json())
-      ]).then(([meta, unit]) => {
-        if(meta.ok) { localStorage.setItem('metadata_cache', JSON.stringify(meta.options)); renderMetadata(meta.options); }
-        if(unit.ok) fillData(unit.data);
-        document.getElementById('loadingOverlay').style.display = 'none';
-      }).catch(e => { document.getElementById('loadingOverlay').style.display = 'none'; });
+      // 🎯 รักษาความเร็วเดิม: ดึงข้อมูลแบบปกติ
+      fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })
+        .then(r => r.json()).then(res => { 
+          if(res.ok) { 
+            localStorage.setItem('metadata_cache', JSON.stringify(res.options)); 
+            renderMetadata(res.options); 
+          } 
+        });
+
+      fetch(`${API}?mode=getUnitDetail&id=${hpId}`)
+        .then(r => r.json()).then(res => { 
+          if(res.ok) fillData(res.data);
+          document.getElementById('loadingOverlay').style.display = 'none';
+        })
+        .catch(e => { document.getElementById('loadingOverlay').style.display = 'none'; });
     }
 
     function renderMetadata(meta) {
@@ -254,9 +255,9 @@
       dds.forEach(id => {
         const el = document.getElementById(id);
         if(el && meta[id]) {
-          const cur = el.value;
+          const curVal = el.value;
           el.innerHTML = '<option value="">-- Select --</option>' + meta[id].map(opt => `<option value="${opt}">${opt}</option>`).join('');
-          if(cur) el.value = cur;
+          if(curVal) el.value = curVal;
         }
       });
       if(meta.Ownership_Type) {
@@ -271,8 +272,8 @@
       document.getElementById('displayId').innerText = u.HP_ID;
       Object.keys(u).forEach(k => { const el = document.getElementById(k); if(el) el.value = u[k]; });
       if(u.Ownership_Type) {
-        const v = u.Ownership_Type.split(',').map(s => s.trim());
-        document.querySelectorAll('input[name="own_check"]').forEach(cb => { if(v.includes(cb.value)) cb.checked = true; });
+        const vals = u.Ownership_Type.split(',').map(s => s.trim());
+        document.querySelectorAll('input[name="own_check"]').forEach(cb => { if(vals.includes(cb.value)) cb.checked = true; });
       }
       thumbUrl = u.Thumbnail_Image || ""; renderThumb();
       galleryArr = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
@@ -293,8 +294,10 @@
       thumbUrl = ""; renderThumb();
     }
 
+    // 📸 Fixed Album Engine (รักษาการลบได้จริงจากชุด V12.1)
     function renderGallery() {
-      document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `
+      const container = document.getElementById('galleryPreview');
+      container.innerHTML = galleryArr.map((url, i) => `
         <div class="img-tile" id="tile-${i}" onclick="toggleSelect('${url}', ${i})">
           <img src="${url}" class="w-full h-full object-cover">
         </div>
@@ -332,6 +335,7 @@
       selectedForDelete = [];
       renderGallery();
       document.getElementById('loadingOverlay').style.display = 'none';
+      alert("ลบรูปภาพที่เลือกเรียบร้อยแล้ว ✅");
     }
 
     async function handleMediaUpload(input, target, fieldId) {
@@ -344,7 +348,7 @@
         const url = await ref.getDownloadURL();
         if(target === 'thumb') { thumbUrl = url; renderThumb(); }
         else if(target === 'album') { galleryArr.push(url); }
-        else { 
+        else if(fieldId) { 
           document.getElementById(fieldId).value = url; 
           document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅";
           document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.remove('hidden');
@@ -356,7 +360,7 @@
 
     async function deletePhysicalFile(fieldId) {
       let url = document.getElementById(fieldId).value;
-      if(!url || !confirm("ลบไฟล์ถาวร?")) return;
+      if(!url || !confirm("ลบไฟล์เอกสารนี้ถาวร?")) return;
       try { await storage.refFromURL(url).delete(); } catch(e){}
       document.getElementById(fieldId).value = ""; 
       document.getElementById('txt-'+fieldId).innerText = "None"; 
