@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V190</title>
+  <title>Asset Specifications | MASTER SYSTEM V191</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -18,9 +18,9 @@
     .menu-trigger i { font-size: 1.1rem; color: var(--gold); }
     .menu-trigger span { font-size: 9px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: 1px; }
 
-    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid var(--border); }
+    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s; padding: 60px 20px; border-right: 1px solid var(--border); }
     .sidebar.active { left: 0; }
-    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1999; display: none; }
+    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1999; display: none; }
     .sidebar-overlay.active { display: block; }
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
     .menu-item i { color: var(--gold); width: 20px; text-align: center; }
@@ -28,25 +28,24 @@
     .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
 
     #pageSplash{position:fixed;inset:0;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.4s}
-    .splash-brand{color:var(--gold);font-size:1.2rem;font-weight:800;letter-spacing:4px;text-transform:uppercase}
     
-    .gallery-container{margin-top:65px;padding:15px 15px 0;max-width:1100px;margin:0 auto;}
+    .gallery-container{margin-top:65px;padding:15px;max-width:1100px;margin:0 auto;}
     .gallery-card{background:#000;border-radius: 18px;border:1px solid var(--border);overflow:hidden;box-shadow: 0 10px 30px rgba(0,0,0,0.3);margin-bottom:20px;}
     .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#111;overflow:hidden;}
     .main-img{width:100%;height:100%; object-fit:cover; transition:opacity 0.3s}
-    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
+    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
     .thumb-row{display:flex;gap:10px;padding:12px;overflow-x:auto;scrollbar-width:none}
-    .thumb{width:90px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:0.2s}
+    .thumb{width:80px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
     .thumb.active{opacity:1;border-color:var(--gold)}
     .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
     
-    .content{padding:10px 15px 120px;max-width:900px;margin:0 auto}
+    .content{padding:0 15px 120px;max-width:900px;margin:0 auto}
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
-    .field-wrap { display: none; margin-bottom: 12px; } 
-    .field-wrap.has-val { display: block; }
     .section-title{font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    .field-wrap { display: none; margin-bottom: 12px; } 
+    .field-wrap.has-val { display: block; }
     .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;letter-spacing:1.2px;margin-bottom:3px}
     .val{font-size:0.85rem;font-weight:400;color:#FFF}
     .gold-txt{color:var(--gold);font-weight:600}
@@ -60,17 +59,18 @@
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
 
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
-    
-    /* 🎯 🔵 Share Section Styles */
-    .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.5); padding: 25px 15px; border-radius: 20px; border: 1px solid var(--border); }
-    .share-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 15px 10px; scrollbar-width: none; justify-content: center; }
-    @media (max-width: 600px) { .share-scroll { justify-content: flex-start; } }
-    .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; min-width: 65px; transition: 0.3s; }
-    .share-btn:active { transform: scale(0.9); }
-    .share-btn i { font-size: 28px; }
-    .share-btn span { font-size: 9px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
 
-    /* 🎯 App Official Colors */
+    /* 🎯 🔵 Share Section with Scrolling Arrows */
+    .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
+    .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
+    .share-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 10px 0; }
+    .share-scroll::-webkit-scrollbar { display: none; }
+    .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 55px; }
+    .share-btn i { font-size: 22px; } /* 🎯 ลดขนาดไอคอน */
+    .share-btn span { font-size: 8px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
+    .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; padding: 5px; }
+    .arrow-left { left: 0; } .arrow-right { right: 0; }
+
     .icon-fb { color: #1877F2; } .icon-msgr { color: #0084FF; } .icon-wa { color: #25D366; } .icon-tg { color: #0088CC; }
     .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
 
@@ -86,9 +86,7 @@
 <div class="sidebar" id="sidebar">
     <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
     <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
-    <div id="authMenuSection">
-        <a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>
-    </div>
+    <div id="authMenuSection"><a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a></div>
     <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
     <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
 </div>
@@ -117,9 +115,9 @@
   <main class="content">
     <div class="info-card has-data">
       <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
-      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;">Plot ...</h1>
+      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1>
       <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;">📍 -</div>
-      <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:20px;">฿0</div>
+      <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:25px;">฿0</div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
         <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
@@ -130,7 +128,17 @@
 
     <div class="info-card" id="card-specs">
       <h2 class="section-title">Specifications</h2>
-      <div class="grid" id="specsGrid"></div>
+      <div class="grid">
+        <div id="w-status" class="field-wrap"><div class="label">Status</div><div class="val" id="vStatus"></div></div>
+        <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
+        <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
+        <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
+        <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
+        <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
+        <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
+        <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
+        <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
+      </div>
     </div>
 
     <div class="info-card" id="mapSection">
@@ -142,28 +150,30 @@
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
-      
       <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
-        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;">DOWNLOAD FLOOR PLAN PDF</span>
+        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
 
       <div class="share-stack">
-        <div style="font-size: 14px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-          <i class="fas fa-share-nodes"></i> SHARE THIS MASTER ASSET
+        <div style="font-size: 11px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fas fa-share-nodes"></i> SHARE THIS ASSET
         </div>
-        <div class="share-scroll">
-          <a href="#" onclick="sH('fb')" class="share-btn"><i class="fab fa-facebook icon-fb"></i><span>Facebook</span></a>
-          <a href="#" onclick="sH('msgr')" class="share-btn"><i class="fab fa-facebook-messenger icon-msgr"></i><span>Messenger</span></a>
-          <a href="#" onclick="sH('wa')" class="share-btn"><i class="fab fa-whatsapp icon-wa"></i><span>WhatsApp</span></a>
-          <a href="#" onclick="sH('tg')" class="share-btn"><i class="fab fa-telegram icon-tg"></i><span>Telegram</span></a>
-          <a href="#" onclick="sH('line')" class="share-btn"><i class="fab fa-line icon-line"></i><span>LINE</span></a>
-          <a href="#" onclick="sH('mail')" class="share-btn"><i class="fas fa-envelope icon-mail"></i><span>Email</span></a>
-          <a href="#" onclick="sH('copy')" class="share-btn"><i class="fas fa-link icon-copy"></i><span>Copy Link</span></a>
-          <a href="#" onclick="sH('native')" class="share-btn"><i class="fas fa-share-nodes icon-share"></i><span>Share More</span></a>
+        <div class="share-wrapper">
+          <i class="fas fa-chevron-left share-arrow arrow-left" onclick="scrollShare(-100)"></i>
+          <div class="share-scroll" id="shareBox">
+            <a href="#" onclick="sH('fb')" class="share-btn"><i class="fab fa-facebook icon-fb"></i><span>Facebook</span></a>
+            <a href="#" onclick="sH('msgr')" class="share-btn"><i class="fab fa-facebook-messenger icon-msgr"></i><span>Messenger</span></a>
+            <a href="#" onclick="sH('wa')" class="share-btn"><i class="fab fa-whatsapp icon-wa"></i><span>WhatsApp</span></a>
+            <a href="#" onclick="sH('tg')" class="share-btn"><i class="fab fa-telegram icon-tg"></i><span>Telegram</span></a>
+            <a href="#" onclick="sH('line')" class="share-btn"><i class="fab fa-line icon-line"></i><span>LINE</span></a>
+            <a href="#" onclick="sH('mail')" class="share-btn"><i class="fas fa-envelope icon-mail"></i><span>Email</span></a>
+            <a href="#" onclick="sH('copy')" class="share-btn"><i class="fas fa-link icon-copy"></i><span>Copy Link</span></a>
+            <a href="#" onclick="sH('native')" class="share-btn"><i class="fas fa-share-nodes icon-share"></i><span>More</span></a>
+          </div>
+          <i class="fas fa-chevron-right share-arrow arrow-right" onclick="scrollShare(100)"></i>
         </div>
       </div>
-
     </div>
   </main>
 </div>
@@ -176,11 +186,13 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
 
+// 🎯 Full 12 Landmarks
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 
 let images=[], idx=0, leafletMap=null;
 
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+function scrollShare(val) { document.getElementById('shareBox').scrollBy({left: val, behavior: 'smooth'}); }
 
 function checkAuthUI() {
   const authSection = document.getElementById('authMenuSection');
@@ -194,9 +206,8 @@ function checkAuthUI() {
 
 function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบ?")) { localStorage.clear(); location.reload(); } }
 
-// 🎯 ฟังก์ชันการแชร์
 function sH(p){
-  const u = window.location.href; const t = `Check out this property: ${hpId}`;
+  const u = window.location.href; const t = `Hua Hin Property: ${hpId}`;
   if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
   if(p==='msgr') window.open(`fb-messenger://share/?link=${u}`,'_blank');
   if(p==='wa') window.open(`https://api.whatsapp.com/send?text=${t} ${u}`,'_blank');
@@ -243,6 +254,8 @@ function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*
 function renderData(u){
   const p=safeNum(u.Sale_Price||0);
   const a=safeNum(u.Living_Area_sq_m||0);
+  
+  // 🎯 กู้คืนข้อมูลแสดงผล
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
@@ -253,10 +266,20 @@ function renderData(u){
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
   if(p && a) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
   
-  // Navigator, Nearby, PDF logic (เหมือนเดิม)
+  syncField('vStatus', 'w-status', u.Status);
+  syncField('vFurnish', 'w-furnish', u.Furnishing);
+  syncField('vDistrict', 'w-district', u.District);
+  syncField('vSubDistrict', 'w-sub', u.SubDistrict);
+  syncField('vZone', 'w-zone', u.Zone);
+  syncField('vPoolSys', 'w-poolsys', u.Pool_System);
+  syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
+  syncField('vParking', 'w-parking', u.Parking);
+  syncField('vDirect', 'w-direct', u.Direction);
+
+  // 🎯 Map & Landmarks logic
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      document.getElementById('navLink').href = `http://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
       if(u.Map_Visibility !== 'Hide') {
           document.getElementById('mapSection').style.display = 'block';
           if(!leafletMap) {
