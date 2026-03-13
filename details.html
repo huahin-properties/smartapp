@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V194</title>
+  <title>Asset Specifications | MASTER SYSTEM V195</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -118,8 +118,9 @@
       <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:25px;">฿0</div>
       <div class="grid">
         <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
-        <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
-        <div id="w-land" class="field-wrap"><div class="label">Land Size</div><div class="val" id="vLand"></div></div>
+        <div id="w-landW" class="field-wrap"><div class="label">Land Size (sq.w)</div><div class="val" id="vLandW"></div></div>
+        <div id="w-land" class="field-wrap"><div class="label">Land Size (m²)</div><div class="val" id="vLand"></div></div>
+        <div id="w-living" class="field-wrap"><div class="label">Living Area (m²)</div><div class="val" id="vLiving"></div></div>
         <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
       </div>
     </div>
@@ -166,16 +167,12 @@
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
-      
       <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
         <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
         <i class="fas fa-file-pdf text-red-600 text-xl"></i>
       </a>
-
       <div class="share-stack">
-        <div style="font-size: 11px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <i class="fas fa-share-nodes"></i> SHARE THIS ASSET
-        </div>
+        <div style="font-size: 11px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-share-nodes"></i> SHARE THIS ASSET</div>
         <div class="share-wrapper">
           <i class="fas fa-chevron-left share-arrow arrow-left" onclick="scrollShare(-100)"></i>
           <div class="share-scroll" id="shareBox">
@@ -202,9 +199,7 @@
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
-
 let images=[], idx=0, leafletMap=null;
 
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
@@ -221,18 +216,7 @@ function checkAuthUI() {
 }
 
 function handleLogout(e) { e.preventDefault(); if(confirm("คุณต้องการออกจากระบบ?")) { localStorage.clear(); location.reload(); } }
-
-function sH(p){
-  const u = window.location.href; const t = `Hua Hin Property: ${hpId}`;
-  if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank');
-  if(p==='msgr') window.open(`fb-messenger://share/?link=${u}`,'_blank');
-  if(p==='wa') window.open(`https://api.whatsapp.com/send?text=${t} ${u}`,'_blank');
-  if(p==='tg') window.open(`https://t.me/share/url?url=${u}&text=${t}`,'_blank');
-  if(p==='line') window.open(`https://social-plugins.line.me/lineit/share?url=${u}`,'_blank');
-  if(p==='mail') window.open(`mailto:?subject=${t}&body=${u}`);
-  if(p==='copy'){ navigator.clipboard.writeText(u); alert('Link Copied! ✅'); }
-  if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } }
-}
+function sH(p){ const u = window.location.href; const t = `Hua Hin Property: ${hpId}`; if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank'); if(p==='msgr') window.open(`fb-messenger://share/?link=${u}`,'_blank'); if(p==='wa') window.open(`https://api.whatsapp.com/send?text=${t} ${u}`,'_blank'); if(p==='tg') window.open(`https://t.me/share/url?url=${u}&text=${t}`,'_blank'); if(p==='line') window.open(`https://social-plugins.line.me/lineit/share?url=${u}`,'_blank'); if(p==='mail') window.open(`mailto:?subject=${t}&body=${u}`); if(p==='copy'){ navigator.clipboard.writeText(u); alert('Link Copied! ✅'); } if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } } }
 
 function syncField(valId, wrapId, value) {
   const el = document.getElementById(valId);
@@ -276,9 +260,11 @@ function renderData(u){
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
   document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
   
+  // 🎯 🔵 Updated Specs Ordering as per request
   syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
-  syncField('vLiving', 'w-living', a ? `${a} m²` : "");
+  syncField('vLandW', 'w-landW', u.Land_Area_sq_w ? `${u.Land_Area_sq_w} sq.w` : "");
   syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
+  syncField('vLiving', 'w-living', a ? `${a} m²` : "");
   if(p && a) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
   
   syncField('vStatus', 'w-status', u.Status);
@@ -288,10 +274,8 @@ function renderData(u){
   syncField('vZone', 'w-zone', u.Zone);
   syncField('vPoolSys', 'w-poolsys', u.Pool_System);
   
-  // Logic: Pool Info
   if (u.Pool_Size || u.Pool_Depth) {
-      const info = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
-      syncField('vPoolInfo', 'w-poolinfo', info);
+      syncField('vPoolInfo', 'w-poolinfo', `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`);
   }
 
   syncField('vKitchen', 'w-kitchen', u.Kitchen_Type);
@@ -299,15 +283,13 @@ function renderData(u){
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
   
-  // 🎯 🔵 Logic: Financial Info (Rate + Monthly + Yearly)
   const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
   if(feeRate > 0) {
       syncField('vFeeRate', 'w-feeRate', `฿${feeRate.toLocaleString()} / m²`);
       if(a > 0) {
           const monthly = Math.round(feeRate * a);
-          const yearly = monthly * 12;
           syncField('vFeeM', 'w-feeM', `฿${monthly.toLocaleString()} / Mo`);
-          syncField('vFeeY', 'w-feeY', `฿${yearly.toLocaleString()} / Yr`);
+          syncField('vFeeY', 'w-feeY', `฿${(monthly * 12).toLocaleString()} / Yr`);
       }
   }
 
@@ -317,10 +299,10 @@ function renderData(u){
   const vDesc = document.getElementById('vDesc');
   if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
 
-  // Map & Landmarks
+  // Map & Landmarks logic
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/7{la},${lo}`;
+      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/8{la},${lo}`;
       if(u.Map_Visibility !== 'Hide') {
           document.getElementById('mapSection').style.display = 'block';
           document.getElementById('mapSection').classList.add('has-data');
