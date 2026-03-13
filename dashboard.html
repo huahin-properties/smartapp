@@ -8,7 +8,26 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: 'Montserrat', sans-serif; background: #060F1A; color: white; margin: 0; }
-    .content-wrapper { padding: 10px; max-width: 1000px; margin: 0 auto; }
+    
+    /* 🎯 Header - ปรับให้ชื่ออยู่กลาง ปุ่มเมนูอยู่ซ้าย */
+    header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(6,15,26,0.98); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: #C9A84C; font-size: 0.95rem; text-transform: uppercase; italic; letter-spacing: -0.5px; }
+    
+    /* 🎯 ปุ่มเมนูซ้ายมือ */
+    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
+    .menu-trigger i { font-size: 1.1rem; color: #C9A84C; }
+    .menu-trigger span { font-size: 8px; font-weight: 800; color: #C9A84C; text-transform: uppercase; margin-top: 1px; letter-spacing: 0.5px; }
+
+    /* 🎯 Sidebar Menu */
+    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0B1829; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); padding: 60px 20px; border-right: 1px solid rgba(255,255,255,0.05); }
+    .sidebar.active { left: 0; }
+    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1999; display: none; }
+    .sidebar-overlay.active { display: block; }
+    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
+    .menu-item i { color: #C9A84C; width: 20px; text-align: center; }
+    .menu-item:active { background: rgba(201,168,76,0.1); color: #C9A84C; }
+
+    .content-wrapper { padding: 80px 10px 40px; max-width: 1000px; margin: 0 auto; }
     .unit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
     .st-online { color: #10B981 !important; border-color: rgba(16, 185, 129, 0.4); }
     .st-pending { color: #F59E0B !important; border-color: rgba(245, 158, 11, 0.4); }
@@ -20,25 +39,38 @@
     .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #C9A84C; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* 🎯 สไตล์ปุ่ม Logout เฉพาะส่วน */
-    .logout-btn { position: fixed; top: 15px; right: 15px; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #EF4444; padding: 8px 16px; border-radius: 10px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 8px; transition: 0.3s; cursor: pointer; z-index: 9999; text-transform: uppercase; }
-    .logout-btn:hover { background: #EF4444; color: white; }
+    /* 🎯 สไตล์ปุ่ม Logout ขวามือบน Header */
+    .header-logout { background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #EF4444; padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
   </style>
 </head>
 <body>
-  <button onclick="handleLogout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+  <div class="sidebar" id="sidebar">
+    <div style="color:#C9A84C; font-weight:800; margin-bottom:30px; font-size:1rem; border-bottom:2px solid #C9A84C; padding-bottom:10px;">DASHBOARD MENU</div>
+    <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME CATALOG</a>
+    <a href="dashboard.html" class="menu-item"><i class="fas fa-chart-line"></i> DASHBOARD</a>
+    <a href="add.html" class="menu-item"><i class="fas fa-plus-circle"></i> ADD NEW UNIT</a>
+    <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT SUPPORT</a>
+    <a href="#" onclick="handleLogout()" class="menu-item" style="color:#EF4444; margin-top:20px;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>
+  </div>
+
+  <header>
+    <div class="menu-trigger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+      <span>MENU</span>
+    </div>
+    <div class="brand-center">Master Dashboard</div>
+    <button onclick="handleLogout()" class="header-logout">Logout</button>
+  </header>
 
   <div id="quickLoad" class="loading-overlay"><div class="loader"></div></div>
+  
   <div class="content-wrapper">
-    <div class="flex justify-between items-center mb-4 mt-2 px-1">
+    <div class="flex justify-between items-end mb-4 px-1">
       <div>
-        <h1 class="text-xl font-800 uppercase text-[#C9A84C] italic tracking-tighter">Live Dashboard</h1>
         <p id="authBadge" class="text-[9px] text-slate-500 font-700 uppercase tracking-widest"></p>
       </div>
-      <div class="flex gap-3">
-        <button onclick="handleLogout()" class="text-slate-400 font-800 text-[9px] uppercase hover:text-red-500">Exit</button>
-        <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-xs">ADD UNIT</button>
-      </div>
+      <button onclick="location.href='add.html'" class="bg-[#C9A84C] text-[#060F1A] px-4 py-2 rounded-lg font-800 text-xs">ADD UNIT</button>
     </div>
     <input type="text" id="sI" onkeyup="render()" placeholder="Search ID or Plot..." class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-4 outline-none text-sm font-600">
     <div id="list"></div>
@@ -48,7 +80,11 @@
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     let data = [];
 
-    // 🎯 ฟังก์ชัน Logout ล้างระบบ 100%
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+
     function handleLogout() {
       if(confirm("ยืนยันการออกจากระบบใช่หรือไม่?")) {
         localStorage.clear();
@@ -59,11 +95,8 @@
     async function init() {
       const session = localStorage.getItem('admin_session');
       const role = localStorage.getItem('admin_role');
-      if (session !== 'active' || role !== 'Super Admin') { 
-        location.href = 'gateway.html'; 
-        return; 
-      }
-      document.getElementById('authBadge').innerText = `Role: ${role} | Multi-Access Enabled`;
+      if (session !== 'active') { location.href = 'gateway.html'; return; }
+      document.getElementById('authBadge').innerText = `Verified: ${role}`;
 
       document.getElementById('quickLoad').style.display = 'flex';
       try {
