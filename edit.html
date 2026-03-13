@@ -2,15 +2,15 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V3.6 | Multi-Ownership Control</title>
+  <title>Master Editor V3.8 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root { --brand: #262626; --accent: #C9A84C; --bg: #F8FAF8; }
     body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
     
-    /* 🎯 Header & Sidebar Style */
+    /* 🎯 Header & Sidebar */
     header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--accent); font-size: 0.95rem; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
     .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; font-family: 'Montserrat', sans-serif; }
@@ -24,37 +24,46 @@
     .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; font-weight: 600; }
     .menu-item i { color: var(--accent); width: 20px; text-align: center; }
 
-    .content-wrapper { padding: 80px 20px 200px; max-width: 1240px; margin: 0 auto; }
-    .tab-bar { display: flex; gap: 2rem; margin-bottom: 2rem; border-bottom: 2px solid #eee; }
-    .tab-btn { padding: 1rem 0; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; transition: 0.3s; }
+    .content-wrapper { padding: 80px 15px 200px; max-width: 1100px; margin: 0 auto; }
+
+    /* 🎯 ปรับแต่งป้าย Edit Master ใหม่ให้เล็กลงและลงตัว (เหมือน Dashboard) */
+    .edit-banner { background: #262626; border-radius: 1.5rem; padding: 20px 25px; color: white; display: flex; flex-direction: column; justify-content: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.05); }
+    .banner-sub { color: rgba(255,255,255,0.5); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; font-family: 'Montserrat', sans-serif; }
+    .banner-title { font-size: 1.35rem; font-weight: 800; color: white; font-family: 'Montserrat', sans-serif; text-transform: uppercase; font-style: italic; letter-spacing: -0.5px; }
+    .banner-title span { color: var(--accent); margin-left: 8px; font-style: normal; }
+
+    .tab-bar { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; overflow-x: auto; scrollbar-width: none; }
+    .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; transition: 0.3s; white-space: nowrap; font-family: 'Montserrat', sans-serif; }
     .tab-btn.active { color: var(--accent); }
-    .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--accent); border-radius: 10px; }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+    
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 2.2rem; border-radius: 2.2rem; margin-bottom: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.02); }
-    .field-label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 0.6rem; display: block; letter-spacing: 0.5px; }
-    .field-label span { color: #2D5A27; font-size: 12px; margin-left: 10px; font-weight: 700; border-left: 2px solid #ddd; padding-left: 10px; }
-    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 1rem; font-size: 15px; outline: none; transition: 0.3s; }
-    .field-input:focus { border-color: var(--brand); background: white; }
+
+    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
+    .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.6rem; display: block; letter-spacing: 0.5px; font-family: 'Montserrat', sans-serif; }
+    .field-label span { color: #2D5A27; font-size: 11px; margin-left: 10px; font-weight: 700; border-left: 2px solid #eee; padding-left: 10px; font-family: 'Sarabun', sans-serif; }
+    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 1rem; padding: 0.9rem 1.1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
+    .field-input:focus { border-color: var(--accent); background: white; }
     .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
-    
+
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 1rem; overflow: hidden; border: 1px solid #eee; }
-    .img-x { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; }
-    .bulk-check { position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; z-index: 10; cursor: pointer; }
+    .img-x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; }
+    .bulk-check { position: absolute; top: 8px; left: 8px; width: 18px; height: 18px; z-index: 10; cursor: pointer; accent-color: var(--accent); }
     
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 25px 20px; z-index: 1000; text-align: center; }
-    .btn-update { background: var(--brand); color: white; width: 100%; max-width: 800px; height: 70px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 20px; }
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 20px; z-index: 1000; text-align: center; }
+    .btn-update { background: #000; color: white; width: 100%; max-width: 600px; height: 60px; border-radius: 50px; font-weight: 800; text-transform: uppercase; font-size: 16px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
+    
     .mini-status { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--accent); display: none; margin-top: 5px; }
     .mini-status.active { display: flex; align-items: center; gap: 5px; }
     
-    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
-    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
-    .own-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-    .own-item span { font-size: 13px; font-weight: 600; color: #444; }
+    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 10px 15px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; }
+    .own-item span { font-size: 12px; font-weight: 600; color: #444; }
     
     .pdf-row { display: flex; align-items: center; gap: 1rem; background: #F9F9F8; padding: 12px 18px; border-radius: 1.2rem; }
-    .pdf-icon { width: 40px; height: 40px; border-radius: 10px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-    .btn-pdf-action { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .pdf-icon { width: 36px; height: 36px; border-radius: 10px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .btn-pdf-action { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
   </style>
 </head>
 <body>
@@ -76,19 +85,20 @@
   </header>
 
   <div class="content-wrapper">
-    <div class="bg-[#262626] rounded-[2.5rem] p-10 text-white flex justify-between items-center mb-8 shadow-2xl relative overflow-hidden">
-      <div class="relative z-10"><p class="text-white/60 font-800 uppercase tracking-widest text-[10px] mb-2">Master Vault | Editor Suite</p><h1 id="displayPlot" class="text-4xl font-800 tracking-tighter italic Sarabun uppercase">EDIT MASTER ASSET</h1></div>
+    <div class="edit-banner">
+      <div class="banner-sub">Master Vault | Editor Suite</div>
+      <div class="banner-title">EDIT MASTER:<span id="displayPlot">...</span></div>
     </div>
     
     <div class="tab-bar">
       <button id="btn-photo" class="tab-btn active" onclick="switchTab('photo')">Visual Assets</button>
-      <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Specifications (38 Items)</button>
+      <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Specifications (39 Items)</button>
     </div>
 
     <div id="tab-photo" class="tab-content active space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="input-card">
-          <span class="field-label">Main Image <span>รูปภาพหน้าปก</span></span>
+          <span class="field-label">Main Image Cover <span>รูปภาพหน้าปก</span></span>
           <div id="thumbPreview" class="relative w-full aspect-video rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden">
             <i class="fas fa-cloud-upload-alt text-4xl text-slate-200"></i>
           </div>
@@ -113,7 +123,7 @@
         <div class="space-y-3 mt-4">
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Floor Plan</span><span id="txt-FloorPlan_PDF" class="text-[11px] font-700 text-[#262626] truncate italic">No file attached</span></div>
+            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Floor Plan</span><span id="txt-FloorPlan_PDF" class="text-[11px] font-700 text-[#262626] truncate italic font-Montserrat">No file attached</span></div>
             <div class="flex gap-2">
               <button onclick="viewFile('FloorPlan_PDF')" id="view-FloorPlan_PDF" class="btn-pdf-action bg-white text-emerald-600 border border-emerald-100 hidden"><i class="fas fa-eye"></i></button>
               <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
@@ -123,7 +133,7 @@
           </div>
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Customer Brochure</span><span id="txt-Customer_PDF" class="text-[11px] font-700 text-[#262626] truncate italic">No file attached</span></div>
+            <div class="flex-1"><span class="text-[10px] font-800 block text-slate-400 uppercase">Customer Brochure</span><span id="txt-Customer_PDF" class="text-[11px] font-700 text-[#262626] truncate italic font-Montserrat">No file attached</span></div>
             <div class="flex gap-2">
               <button onclick="viewFile('Customer_PDF')" id="view-Customer_PDF" class="btn-pdf-action bg-white text-emerald-600 border border-emerald-100 hidden"><i class="fas fa-eye"></i></button>
               <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
@@ -137,26 +147,26 @@
 
     <div id="tab-info" class="tab-content space-y-6">
       <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100 font-800" readonly></div>
+        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100 font-Montserrat font-800" readonly></div>
         <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">3. Asset Category <span>ประเภท</span></label><select id="Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label><select id="Project_Name" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input" placeholder="เช่น M17"></div>
+        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input font-Montserrat font-700" placeholder="เช่น M17"></div>
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input dynamic-opt"></select></div>
         
-        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-8 p-8 rounded-[2.5rem] bg-[#F9F9F8] border-2 border-[#eee] shadow-inner">
-          <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 7800000"></div>
-          <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 345"></div>
-          <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input type="number" id="Price_sq_m" class="field-input" readonly value="0"></div>
+        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-8 p-6 rounded-[1.5rem] bg-[#F9F9F8] border border-[#eee]">
+          <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white font-Montserrat font-700" oninput="runCalc()" placeholder="7800000"></div>
+          <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white font-Montserrat font-700" oninput="runCalc()" placeholder="345"></div>
+          <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input type="number" id="Price_sq_m" class="field-input font-Montserrat font-700" readonly value="0"></div>
           <div class="col-span-full border-t border-[#eee] pt-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div><label class="field-label font-800">10. Common Fee Rate <span>ส่วนกลาง (/m²)</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()" placeholder="เช่น 4"></div>
-            <div><label class="field-label">11. Monthly Common Fee <span>ค่าส่วนกลางรายเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
-            <div><label class="field-label">12. Yearly Common Fee <span>ค่าส่วนกลางรายปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+            <div><label class="field-label font-800">10. Common Fee Rate <span>ส่วนกลาง (/m²)</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()" placeholder="4"></div>
+            <div><label class="field-label">11. Monthly Common Fee <span>รายเดือน</span></label><input id="Monthly_Common_Fee" class="field-input font-Montserrat font-700" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Common Fee <span>รายปี</span></label><input id="Common_Fee_Yearly" class="field-input font-Montserrat font-700" readonly value="0"></div>
           </div>
         </div>
 
-        <div><label class="field-label">13. Land Area (m²) <span>พื้นที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input" placeholder="เช่น 500"></div>
-        <div><label class="field-label">14. Land Area (sq.w) <span>พื้นที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input" placeholder="เช่น 125"></div>
+        <div><label class="field-label">13. Land Area (m²) <span>พื้นที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input" placeholder="500"></div>
+        <div><label class="field-label">14. Land Area (sq.w) <span>พื้นที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input" placeholder="125"></div>
         <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
@@ -165,10 +175,10 @@
         <div><label class="field-label">20. Bathrooms <span>ห้องน้ำ</span></label><select id="Bathrooms" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">21. Parking Spaces <span>ที่จอดรถ</span></label><select id="Parking" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">22. Kitchen Style <span>สไตล์ครัว</span></label><select id="Kitchen_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">23. Direction Facing <span>ทิศหน้าบ้าน</span></label><select id="Direction" class="field-input dynamic-opt"></select></div>
+        <div><label class="field-label">23. Direction Facing <span>ทิศ</span></label><select id="Direction" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">24. Electricity <span>ระบบไฟฟ้า</span></label><select id="Electricity" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input" placeholder="เช่น 4x8"></div>
-        <div><label class="field-label">26. Pool Depth <span>ความลึกสระ</span></label><input id="Pool_Depth" class="field-input" placeholder="เช่น 1.2"></div>
+        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input" placeholder="4x8"></div>
+        <div><label class="field-label">26. Pool Depth <span>ความลึกสระ</span></label><input id="Pool_Depth" class="field-input" placeholder="1.2"></div>
         <div><label class="field-label">27. Pool System <span>ระบบสระ</span></label><select id="Pool_System" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">28. View Profile <span>วิว</span></label><select id="View_Type" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input dynamic-opt"></select></div>
@@ -177,24 +187,23 @@
         <div class="col-span-1 md:col-span-2">
           <label class="field-label">31. Ownership <span>การถือครอง</span></label>
           <div class="ownership-grid">
-            <label class="own-item"><input type="checkbox" name="own_opt" value="Thai Freehold"> <span>Thai Freehold</span></label>
-            <label class="own-item"><input type="checkbox" name="own_opt" value="Foreign Freehold"> <span>Foreign Freehold</span></label>
-            <label class="own-item"><input type="checkbox" name="own_opt" value="Leasehold (30 Years)"> <span>Leasehold (30 Years)</span></label>
-            <label class="own-item"><input type="checkbox" name="own_opt" value="Leasehold (Renewable)"> <span>Leasehold (Renewable)</span></label>
-            <label class="own-item"><input type="checkbox" name="own_opt" value="Company Ownership"> <span>Company Ownership</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Thai Freehold" class="accent-black"> <span>Thai Freehold</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Foreign Freehold" class="accent-black"> <span>Foreign Freehold</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Leasehold (30 Years)" class="accent-black"> <span>Leasehold (30 Years)</span></label>
+            <label class="own-item"><input type="checkbox" name="own_opt" value="Company Ownership" class="accent-black"> <span>Company Ownership</span></label>
           </div>
           <input type="hidden" id="Ownership_Type">
         </div>
 
-        <div><label class="field-label">32. Land Title Deed <span>ประเภทโฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">33. Transfer Exp. <span>ค่าใช้จ่ายวันโอน</span></label><input id="Transfer_Expenses" class="field-input" placeholder="เช่น 50/50"></div>
+        <div><label class="field-label">32. Land Title Deed <span>โฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input dynamic-opt"></select></div>
+        <div><label class="field-label">33. Transfer Exp. <span>ค่าโอน</span></label><input id="Transfer_Expenses" class="field-input" placeholder="50/50"></div>
         <div><label class="field-label">34. Marketing Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">35. Build Stage <span>ก่อสร้าง</span></label><select id="Build_Stage" class="field-input dynamic-opt"></select></div>
         <div><label class="field-label">36. GPS Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input" placeholder="12.56, 99.95"></div>
         <div class="col-span-full"><label class="field-label">37. Property Description <span>คำบรรยายรายละเอียด</span></label><textarea id="Description" rows="4" class="field-input" placeholder="ใส่รายละเอียดทรัพย์สิน..."></textarea></div>
 
         <div class="col-span-full bg-amber-50 p-6 rounded-2xl border-2 border-dashed border-amber-200">
-          <label class="field-label !text-amber-700 font-800">38. Map Visibility <span>การแสดงผลแผนที่</span></label>
+          <label class="field-label !text-amber-700 font-800">38. Map Visibility <span>แสดงผลแผนที่</span></label>
           <select id="Map_Visibility" class="field-input !bg-white">
             <option value="Show">Show Map (แสดงปกติ)</option>
             <option value="Hide">Hide Map (ซ่อนพิกัด)</option>
@@ -212,7 +221,7 @@
   <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-2xl">PUBLISH UPDATES</button></div>
 
   <script>
-    // 🛡️ Security Gate
+    // 🛡️ Security
     (function(){ if(localStorage.getItem('admin_session') !== 'active'){ window.location.href="gateway.html"; } })();
 
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
@@ -239,7 +248,7 @@
         const unitRes = await (await fetch(`${API}?mode=getUnitDetail&id=${hpId}`)).json();
         if (unitRes.ok) {
           const u = unitRes.data;
-          // เช็คสิทธิ์โครงการ
+          // Check Access
           const myProject = localStorage.getItem('admin_project');
           if(myProject !== 'All' && myProject !== u.Project_Name){ alert("Access Denied!"); window.location.href="dashboard.html"; return; }
 
@@ -251,7 +260,7 @@
               document.querySelectorAll('input[name="own_opt"]').forEach(cb => { if (vals.includes(cb.value)) cb.checked = true; });
             }
           });
-          document.getElementById('displayPlot').innerText = "EDIT MASTER: " + (u.Plot || u.HP_ID);
+          document.getElementById('displayPlot').innerText = (u.Plot || u.HP_ID);
           thumbUrl = u.Thumbnail_Image || ""; renderMainThumb(thumbUrl);
           gallery = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
           if(u.FloorPlan_PDF) syncPdfUI('FloorPlan_PDF', u.FloorPlan_PDF, "Current File ✅");
