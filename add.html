@@ -14,24 +14,14 @@
     body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
     header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--accent); font-size: 0.95rem; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
-    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
-    .menu-trigger i { font-size: 1.1rem; color: var(--accent); }
-    .menu-trigger span { font-size: 8px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-top: 1px; }
-
-    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #262626; z-index: 2000; transition: 0.4s; padding: 60px 20px; font-family: 'Montserrat', sans-serif; }
-    .sidebar.active { left: 0; }
-    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; display: none; }
-    .sidebar-overlay.active { display: block; }
-    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; font-weight: 600; }
-    .menu-item i { color: var(--accent); width: 20px; text-align: center; }
-
+    
     .content-wrapper { padding: 80px 15px 200px; max-width: 1100px; margin: 0 auto; }
     .edit-banner { background: #262626; border-radius: 0.8rem; padding: 15px 20px; color: white; display: flex; flex-direction: column; justify-content: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
     .banner-sub { color: rgba(255,255,255,0.4); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; font-family: 'Montserrat', sans-serif; }
-    .banner-title { font-size: 1rem; font-weight: 800; color: white; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0px; }
+    .banner-title { font-size: 1rem; font-weight: 800; color: white; font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
 
     .tab-bar { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; overflow-x: auto; scrollbar-width: none; }
-    .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; transition: 0.3s; white-space: nowrap; font-family: 'Montserrat', sans-serif; }
+    .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; font-family: 'Montserrat', sans-serif; }
     .tab-btn.active { color: var(--accent); }
     .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
     
@@ -43,13 +33,23 @@
     .field-label span { color: #2D5A27; font-size: 11px; margin-left: 10px; font-weight: 700; border-left: 2px solid #eee; padding-left: 10px; font-family: 'Sarabun', sans-serif; }
     .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.9rem 1.1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
     .field-input:focus { border-color: var(--accent); background: white; }
-    .field-input[readonly] { background: #f0f2f0; color: #2D5A27; font-weight: 700; }
+
+    /* 🎯 Project Input with Toggle Button */
+    .project-input-wrapper { position: relative; display: flex; align-items: center; }
+    .btn-list-toggle { position: absolute; right: 10px; background: var(--brand); color: white; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+    /* 🎯 Vertical Selection Modal */
+    .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .modal-header { font-weight: 800; font-size: 12px; text-transform: uppercase; color: var(--accent); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; }
+    .project-opt { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; font-size: 14px; color: #1A3017; transition: 0.2s; }
+    .project-opt:active { background: #F9F9F8; color: var(--accent); }
 
     .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.8rem; overflow: hidden; border: 1px solid #eee; background: #eee; }
-    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(239,68,68,0.95); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; font-weight: 800; }
+    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; font-weight: 800; }
     
     .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 15px 20px; z-index: 1000; text-align: center; }
-    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 55px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-size: 14px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
+    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 55px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-size: 14px; font-family: 'Montserrat', sans-serif; }
     .btn-blue { background: #2563eb; color: white; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 800; font-size: 11px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; cursor: pointer; border: none; }
 
     .mini-status { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--accent); display: none; margin-top: 5px; font-family: 'Montserrat', sans-serif; }
@@ -57,7 +57,6 @@
     
     .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
     .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 10px 15px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; font-size: 13px; font-weight: 600; }
-    .own-item span { font-size: 12px; font-weight: 600; color: #444; }
     
     .pdf-row { display: flex; align-items: center; gap: 1rem; background: #F9F9F8; padding: 12px 18px; border-radius: 1.2rem; margin-bottom: 10px; }
     .pdf-icon { width: 36px; height: 36px; border-radius: 10px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
@@ -65,6 +64,18 @@
   </style>
 </head>
 <body>
+
+  <div class="project-modal" id="pModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span>Select Existing Project</span>
+        <i class="fas fa-times cursor-pointer" onclick="document.getElementById('pModal').style.display='none'"></i>
+      </div>
+      <div id="modal-list">
+        </div>
+    </div>
+  </div>
+
   <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
   <div class="sidebar" id="sidebar">
     <div style="color:var(--accent); font-weight:800; margin-bottom:30px; font-size:1rem; border-bottom:2px solid var(--accent); padding-bottom:10px;">EDITOR MENU</div>
@@ -101,7 +112,7 @@
             <i class="fas fa-cloud-upload-alt text-3xl text-slate-200"></i>
           </div>
           <button onclick="document.getElementById('file_thumb').click()" class="btn-blue w-full">UPLOAD COVER</button>
-          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing to Firebase...</div>
+          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing...</div>
           <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
@@ -118,16 +129,16 @@
         <div class="space-y-3 mt-4">
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
+            <div class="flex-1 font-800 text-[10px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
             <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
-            <div id="status_floor" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i> Uploading...</div>
+            <div id="status_floor" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i></div>
             <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
           </div>
           <div class="pdf-row">
             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
+            <div class="flex-1 font-800 text-[10px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
             <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
-            <div id="status_customer" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i> Uploading...</div>
+            <div id="status_customer" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i></div>
             <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
           </div>
         </div>
@@ -142,8 +153,10 @@
         
         <div>
           <label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label>
-          <input list="project_list" id="Project_Name" class="field-input font-700" placeholder="เลือกหรือพิมพ์ชื่อใหม่...">
-          <datalist id="project_list"></datalist>
+          <div class="project-input-wrapper">
+            <input id="Project_Name" class="field-input font-700" placeholder="พิมพ์ชื่อใหม่ที่นี่...">
+            <div class="btn-list-toggle" onclick="openModal()"><i class="fas fa-list-ul"></i></div>
+          </div>
         </div>
 
         <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input font-700" placeholder="เช่น m39"></div>
@@ -155,42 +168,22 @@
           <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
           <div class="col-span-full border-t border-[#eee] pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div><label class="field-label font-800">10. Common Fee Rate <span>ส่วนกลาง (/m²)</span></label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
-            <div><label class="field-label">11. Monthly Fee <span>รายเดือน</span></label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
-            <div><label class="field-label">12. Yearly Fee <span>รายปี</span></label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
+            <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
           </div>
         </div>
 
-        <div><label class="field-label">13. Land Area (m2) <span>พื้นที่ดิน (ม²)</span></label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">14. Land Area (sq.w) <span>พื้นที่ดิน (ตร.ว.)</span></label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
-        <div><label class="field-label">15. Furnishing <span>การตกแต่ง</span></label><select id="Furnishing" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">18. Zone <span>โซน</span></label><select id="Zone" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">19. Bedrooms <span>ห้องนอน</span></label><select id="Bedrooms" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">20. Bathrooms <span>ห้องน้ำ</span></label><select id="Bathrooms" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">21. Parking <span>ที่จอดรถ</span></label><select id="Parking" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">22. Kitchen Type <span>สไตล์ครัว</span></label><select id="Kitchen_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">23. Direction <span>ทิศหน้าบ้าน</span></label><select id="Direction" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">24. Electricity <span>ระบบไฟฟ้า</span></label><select id="Electricity" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">25. Pool Size <span>ขนาดสระ</span></label><input id="Pool_Size" class="field-input"></div>
-        <div><label class="field-label">26. Pool Depth <span>ความลึกสระ</span></label><input id="Pool_Depth" class="field-input"></div>
-        <div><label class="field-label">27. Pool System <span>ระบบสระ</span></label><select id="Pool_System" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">28. View Type <span>วิว</span></label><select id="View_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">29. Water Source <span>แหล่งน้ำ</span></label><select id="Water_Source" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">30. Extras <span>จุดเด่นเพิ่มเติม</span></label><select id="Extras" class="field-input dynamic-opt"></select></div>
+        <div><label class="field-label">16. District</label><select id="District" class="field-input dynamic-opt"></select></div>
+        <div><label class="field-label">17. Sub-District</label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
+        <div><label class="field-label">18. Zone</label><select id="Zone" class="field-input dynamic-opt"></select></div>
 
         <div class="col-span-1 md:col-span-2">
-          <label class="field-label">31. Ownership <span>การถือครอง (ดึงจาก Settings)</span></label>
+          <label class="field-label">31. Ownership <span>การถือครอง</span></label>
           <div id="ownership-container" class="ownership-grid"></div>
           <input type="hidden" id="Ownership_Type">
         </div>
 
-        <div><label class="field-label">32. Title Deed <span>ประเภทโฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">33. Transfer Exp. <span>ค่าใช้จ่ายวันโอน</span></label><input id="Transfer_Expenses" class="field-input"></div>
-        <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">35. Build Stage <span>ก่อสร้าง</span></label><select id="Build_Stage" class="field-input dynamic-opt"></select></div>
-        <div><label class="field-label">36. GPS Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input"></div>
-        <div class="col-span-full"><label class="field-label">37. Property Description <span>คำบรรยายรายละเอียด</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div class="col-span-full"><label class="field-label">37. Property Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
 
         <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
           <label class="field-label !text-blue-600 font-800">38. System Visibility <span>สถานะในระบบ</span></label>
@@ -210,7 +203,6 @@
   <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-xl">PUBLISH MASTER ASSET</button></div>
 
   <script>
-    // 🎯 Firebase Config
     const firebaseConfig = { storageBucket: "huahin-properties-5f1b5.firebasestorage.app" };
     firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
@@ -218,10 +210,15 @@
     (function(){ if(localStorage.getItem('admin_session') !== 'active'){ window.location.href="gateway.html"; } })();
 
     const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
-    let galleryArr = [], thumbUrl = "";
+    let galleryArr = [], thumbUrl = "", projectOptions = [];
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function handleLogout() { localStorage.clear(); location.href="gateway.html"; }
+
+    // 🎯 ฟังก์ชันจัดการ Modal
+    function openModal() { document.getElementById('pModal').style.display = 'flex'; }
+    function selectProject(val) { document.getElementById('Project_Name').value = val; document.getElementById('pModal').style.display = 'none'; }
+    function closeModal(e) { if(e.target === document.getElementById('pModal')) document.getElementById('pModal').style.display='none'; }
 
     async function init() {
       try {
@@ -229,15 +226,15 @@
         if (res.ok) {
           document.getElementById('HP_ID').value = res.nextId;
           const meta = res.options;
+          
+          // เก็บชื่อโครงการเดิม
+          projectOptions = meta.Project_Name || [];
+          document.getElementById('modal-list').innerHTML = projectOptions.map(p => `<div class="project-opt" onclick="selectProject('${p}')">${p}</div>`).join('');
+
           document.querySelectorAll('select.dynamic-opt').forEach(el => {
             const options = meta[el.id] || [];
             el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
           });
-          
-          // 🎯 Populate Project List (Datalist)
-          const pList = meta.Project_Name || [];
-          document.getElementById('project_list').innerHTML = pList.map(v => `<option value="${v}">`).join('');
-
           document.getElementById('ownership-container').innerHTML = meta.Ownership_Type.map(opt => `
             <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
           `).join('');
@@ -307,16 +304,11 @@
 
     async function saveData() {
       if(!confirm("Publish this property?")) return;
-      document.getElementById('btn_save').innerText = "PUBLISHING...";
       const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
       document.getElementById('Ownership_Type').value = owns.join(', ');
-      
       const payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
       document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
-      
-      // ดึงค่า Project Name จาก Input (พิมพ์เองหรือเลือก)
       payload['Project_Name'] = document.getElementById('Project_Name').value;
-
       const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
       if(res.ok) { alert("SUCCESS! ✅ ID: " + res.id); location.href='dashboard.html'; }
     }
