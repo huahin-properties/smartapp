@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V193</title>
+  <title>Asset Specifications | MASTER SYSTEM V194</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -144,7 +144,8 @@
     <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
       <h2 class="section-title">Ownership & Fees</h2>
       <div class="grid">
-        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Fee</div><div class="val" id="vFeeM"></div></div>
+        <div id="w-feeRate" class="field-wrap"><div class="label">Common Fee Rate</div><div class="val" id="vFeeRate"></div></div>
+        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Total</div><div class="val" id="vFeeM"></div></div>
         <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
         <div id="w-owner" class="field-wrap" style="grid-column: span 2;"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
         <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
@@ -287,7 +288,7 @@ function renderData(u){
   syncField('vZone', 'w-zone', u.Zone);
   syncField('vPoolSys', 'w-poolsys', u.Pool_System);
   
-  // 🎯 🔵 Logic: Pool Info (Size + Depth)
+  // Logic: Pool Info
   if (u.Pool_Size || u.Pool_Depth) {
       const info = `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`;
       syncField('vPoolInfo', 'w-poolinfo', info);
@@ -298,12 +299,14 @@ function renderData(u){
   syncField('vDirect', 'w-direct', u.Direction);
   syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
   
-  // 🎯 🔵 Logic: Financial Info (฿3, ฿4 m² & Yearly)
+  // 🎯 🔵 Logic: Financial Info (Rate + Monthly + Yearly)
   const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
   if(feeRate > 0) {
-      syncField('vFeeM', 'w-feeM', `฿${feeRate.toLocaleString()} / m²`);
+      syncField('vFeeRate', 'w-feeRate', `฿${feeRate.toLocaleString()} / m²`);
       if(a > 0) {
-          const yearly = Math.round(feeRate * a * 12);
+          const monthly = Math.round(feeRate * a);
+          const yearly = monthly * 12;
+          syncField('vFeeM', 'w-feeM', `฿${monthly.toLocaleString()} / Mo`);
           syncField('vFeeY', 'w-feeY', `฿${yearly.toLocaleString()} / Yr`);
       }
   }
@@ -317,7 +320,7 @@ function renderData(u){
   // Map & Landmarks
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/6{la},${lo}`;
+      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/7{la},${lo}`;
       if(u.Map_Visibility !== 'Hide') {
           document.getElementById('mapSection').style.display = 'block';
           document.getElementById('mapSection').classList.add('has-data');
