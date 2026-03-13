@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Master Editor V11.6 | HUA HIN PROPERTIES</title>
+  <title>Master Editor V11.7 | HUA HIN PROPERTIES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,77 +15,89 @@
     body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; overflow-x: hidden; }
     header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--accent); font-size: 0.95rem; text-transform: uppercase; font-family: 'Montserrat'; }
-    .content-wrapper { padding: 80px 15px 200px; max-width: 1100px; margin: 0 auto; }
-    
-    /* Smart Loading Overlay */
-    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); transition: 0.4s; }
-    #loadingOverlay.hidden { opacity: 0; pointer-events: none; }
+    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
+    .menu-trigger i { font-size: 1.1rem; color: var(--accent); }
+    .menu-trigger span { font-size: 8px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-top: 1px; }
 
-    .edit-banner { background: #262626; border-radius: 0.8rem; padding: 15px 20px; color: white; margin-bottom: 20px; }
-    .tab-bar { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; overflow-x: auto; }
+    .content-wrapper { padding: 80px 10px 200px; max-width: 1100px; margin: 0 auto; } /* 🎯 ลด Padding ขอบข้าง */
+    .edit-banner { background: #262626; border-radius: 0.8rem; padding: 15px 20px; color: white; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+    .banner-sub { color: rgba(255,255,255,0.4); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; font-family: 'Montserrat'; }
+    .banner-title { font-size: 1rem; font-weight: 800; color: white; font-family: 'Montserrat'; text-transform: uppercase; }
+
+    .tab-bar { display: flex; gap: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; overflow-x: auto; padding: 0 5px; }
     .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; font-family: 'Montserrat'; }
     .tab-btn.active { color: var(--accent); }
     .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
-    .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.6rem; display: block; font-family: 'Montserrat'; }
-    .field-label span { color: #2D5A27; font-size: 11px; margin-left: 10px; font-weight: 700; border-left: 2px solid #eee; padding-left: 10px; font-family: 'Sarabun'; }
-    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.9rem 1.1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
+    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 1rem; border-radius: 1.2rem; margin-bottom: 1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+    .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; display: block; font-family: 'Montserrat'; }
+    .field-label span { color: #2D5A27; font-size: 10px; margin-left: 5px; font-weight: 700; border-left: 2px solid #eee; padding-left: 8px; font-family: 'Sarabun'; }
+    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.8rem 1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
     .field-input:focus { border-color: var(--accent); background: white; }
 
-    /* 📸 🎯 Gallery Grid: Responsive & Auto-Height */
+    /* 📸 🎯 Compact 3-Column Gallery */
     .gallery-container { 
-        background: #F9F9F8; 
+        background: #fdfdfd; 
+        border: 1px dashed #eee;
         border-radius: 1rem; 
-        padding: 1rem; 
+        padding: 0.5rem; /* 🎯 ลด Padding ในกรอบ */
         display: grid; 
-        gap: 0.75rem;
-        /* จอมือถือ: เรียง 2 คอลัมน์ (หรือปรับเป็น 1 ถ้าจอเล็กมาก) */
-        grid-template-columns: repeat(2, minmax(0, 1fr)); 
-        height: auto; /* 🎯 ความสูงอัตโนมัติตามจำนวนรูป */
-        min-height: 100px;
+        gap: 0.5rem; /* 🎯 ลดช่องว่างระหว่างรูป */
+        grid-template-columns: repeat(3, minmax(0, 1fr)); /* 🎯 3 รูปต่อแถวในมือถือ */
+        height: auto; 
     }
     
-    /* จอคอมพิวเตอร์: ขยายเป็น 4 หรือ 5 คอลัมน์ */
     @media (min-width: 1024px) {
-        .gallery-container { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .gallery-container { grid-template-columns: repeat(6, minmax(0, 1fr)); } /* จอคอม 6 รูป */
     }
 
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.8rem; overflow: hidden; border: 1px solid #eee; background: #eee; }
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.6rem; overflow: hidden; border: 1px solid #f0f0f0; }
     
-    /* 📸 🎯 Small & Micro Delete Icon */
+    /* 📸 🎯 Tiny Delete Icon */
     .img-x { 
         position: absolute; 
-        top: 4px; /* เลื่อนให้ชิดมุมมากขึ้น */
-        right: 4px; 
-        width: 18px; /* 🎯 ลดขนาดจาก 24px เหลือ 18px */
-        height: 18px; 
+        top: 3px; 
+        right: 3px; 
+        width: 16px; /* 🎯 เล็กลงกว่าเดิม */
+        height: 16px; 
         border-radius: 50%; 
-        background: rgba(239, 68, 68, 0.9); /* แดงโปร่งแสงเล็กน้อย */
+        background: rgba(239, 68, 68, 0.9); 
         color: white; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
         cursor: pointer; 
         z-index: 10; 
-        border: 1px solid white; /* 🎯 ลดขนาดขอบขาว */
-        font-size: 8px; /* 🎯 ลดขนาดตัว ✕ */
+        border: 1px solid white; 
+        font-size: 7px; 
         font-weight: 800;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    .btn-blue { background: #2563eb; color: white; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 800; font-size: 11px; text-transform: uppercase; font-family: 'Montserrat'; cursor: pointer; border: none; }
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 15px 20px; z-index: 1000; text-align: center; }
-    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 55px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; }
+    .pdf-row { display: flex; align-items: center; gap: 0.75rem; background: #F9F9F8; padding: 10px 15px; border-radius: 1rem; margin-bottom: 8px; border: 1px solid #eee; }
+    .pdf-icon { width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .btn-pdf-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 0.8rem; }
+
+    #loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); transition: 0.4s; }
+    #loadingOverlay.hidden { opacity: 0; pointer-events: none; }
+
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
+    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat'; letter-spacing: 1px; }
+    .btn-blue { background: #2563eb; color: white; width: 100%; padding: 10px; border-radius: 0.8rem; font-weight: 800; font-size: 10px; text-transform: uppercase; border: none; cursor: pointer; }
+
+    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 5px; }
+    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid transparent; }
+    .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
+    .project-opt { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; color: #1A3017; font-size: 14px; }
   </style>
 </head>
 <body>
 
   <div id="loadingOverlay">
-    <i class="fas fa-circle-notch animate-spin text-4xl text-amber-500 mb-4"></i>
-    <div class="text-[10px] font-800 uppercase tracking-widest text-slate-400">Loading High-Speed Data...</div>
+    <i class="fas fa-circle-notch animate-spin text-3xl text-amber-500 mb-3"></i>
+    <div class="text-[9px] font-800 uppercase tracking-widest text-slate-400">Syncing Master Database...</div>
   </div>
 
   <div class="project-modal" id="pModal" onclick="this.style.display='none'">
@@ -98,14 +110,14 @@
   </div>
 
   <header>
-    <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left"></i></div>
+    <div onclick="history.back()" style="cursor:pointer; color:var(--accent);"><i class="fas fa-chevron-left text-lg"></i></div>
     <div class="brand-center">Master Editor</div>
     <div style="width:20px;"></div>
   </header>
 
   <div class="content-wrapper">
     <div class="edit-banner">
-      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; font-family:'Montserrat';">Structure Perfect V11.6</div>
+      <div class="banner-sub">Master Vault | Compact Sync V11.7</div>
       <div class="banner-title">EDIT MASTER: <span id="displayId">...</span></div>
     </div>
     
@@ -114,33 +126,53 @@
       <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Specifications (39 Items)</button>
     </div>
 
-    <div id="tab-photo" class="tab-content active space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div id="tab-photo" class="tab-content active space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="input-card">
           <span class="field-label">Main Image Cover <span>รูปภาพหน้าปกหลัก</span></span>
-          <div id="thumbPreview" class="relative w-full aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden mb-4">
+          <div id="thumbPreview" class="relative w-full aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-100 flex items-center justify-center overflow-hidden mb-3">
             <i class="fas fa-image text-3xl text-slate-200"></i>
           </div>
-          <button onclick="document.getElementById('f_thumb').click()" class="btn-blue py-3">UPDATE COVER</button>
+          <button onclick="document.getElementById('f_thumb').click()" class="btn-blue w-full">UPDATE COVER</button>
           <input type="file" id="f_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
         </div>
         <div class="input-card">
-          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
-          <div id="galleryPreview" class="gallery-container mb-4"></div>
-          <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[11px] uppercase">ADD VISUALS</button>
+          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ (3 คอลัมน์)</span></span>
+          <div id="galleryPreview" class="gallery-container mb-3"></div>
+          <button onclick="document.getElementById('f_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[10px] uppercase">ADD IMAGES</button>
           <input type="file" id="f_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')"><input type="hidden" id="Album_Image">
+        </div>
+      </div>
+
+      <div class="input-card">
+        <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร</span></span>
+        <div class="space-y-2 mt-3">
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 font-normal">None</span></div>
+             <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+             <button onclick="deletePhysicalFile('FloorPlan_PDF')" id="del_floor" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
+          </div>
+          <div class="pdf-row">
+             <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+             <div class="flex-1 font-800 text-[9px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 font-normal">None</span></div>
+             <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action bg-blue-600 text-white"><i class="fas fa-upload"></i></button>
+             <button onclick="deletePhysicalFile('Customer_PDF')" id="del_customer" class="btn-pdf-action bg-red-50 text-red-500 hidden"><i class="fas fa-trash"></i></button>
+             <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="tab-info" class="tab-content space-y-6">
-      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div id="tab-info" class="tab-content space-y-4">
+      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
         <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-slate-100" readonly></div>
         <div>
           <label class="field-label">2. Project Name <span>ชื่อโครงการ</span></label>
           <div class="relative flex items-center">
-            <input id="Project_Name" class="field-input font-700" placeholder="เลือกหรือพิมพ์โครงการ...">
-            <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 bg-black text-white w-8 h-8 rounded flex items-center justify-center cursor-pointer"><i class="fas fa-list-ul text-xs"></i></div>
+            <input id="Project_Name" class="field-input font-700" placeholder="เลือกโครงการ...">
+            <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 bg-black text-white w-7 h-7 rounded flex items-center justify-center cursor-pointer"><i class="fas fa-list-ul text-[10px]"></i></div>
           </div>
         </div>
         <div><label class="field-label">3. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
@@ -148,11 +180,11 @@
         <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
         <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
 
-        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-xl border border-gray-100">
-           <div><label class="field-label text-blue-600 font-800">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border">
+           <div><label class="field-label text-blue-600">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
            <div><label class="field-label">8. Living Area</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
            <div><label class="field-label">9. Price/m2</label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
-           <div class="col-span-full border-t border-gray-200 pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+           <div class="col-span-full border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div><label class="field-label">10. Common Fee Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
             <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
             <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
@@ -176,28 +208,28 @@
         <div><label class="field-label">25. Pool Size</label><input id="Pool_Size" class="field-input"></div>
         <div><label class="field-label">26. Pool Depth</label><input id="Pool_Depth" class="field-input"></div>
         <div><label class="field-label">27. Pool System</label><select id="Pool_System" class="field-input"></select></div>
-        <div><label class="field-label">28. View Type <span>วิวบ้าน</span></label><select id="View_Type" class="field-input"></select></div>
+        <div><label class="field-label">28. View Type</label><select id="View_Type" class="field-input"></select></div>
         <div><label class="field-label">29. Water Source</label><select id="Water_Source" class="field-input"></select></div>
-        <div><label class="field-label">30. Extras <span>สิ่งอำนวยความสะดวก</span></label><select id="Extras" class="field-input"></select></div>
+        <div><label class="field-label">30. Extras</label><select id="Extras" class="field-input"></select></div>
 
         <div class="col-span-full">
-          <label class="field-label">31. Ownership (Auto-Select) <span>รูปแบบการถือครอง</span></label>
+          <label class="field-label">31. Ownership <span>รูปแบบการถือครอง</span></label>
           <div id="ownership-container" class="ownership-grid"></div>
           <input type="hidden" id="Ownership_Type">
         </div>
 
-        <div><label class="field-label">32. Title Deed</label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
+        <div><label class="field-label">32. Title Deed <span>โฉนด</span></label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
         <div><label class="field-label">33. Transfer Exp.</label><input id="Transfer_Expenses" class="field-input"></div>
-        <div><label class="field-label">34. Badge</label><select id="Badge" class="field-input"></select></div>
+        <div><label class="field-label">34. Badge <span>ป้ายกำกับ</span></label><select id="Badge" class="field-input"></select></div>
         <div><label class="field-label">35. Build Stage</label><select id="Build_Stage" class="field-input"></select></div>
         <div><label class="field-label">36. GPS Coordinates</label><input id="Coordinates" class="field-input"></div>
-        <div class="col-span-full"><label class="field-label">37. Description <span>คำบรรยาย</span></label><textarea id="Description" rows="4" class="field-input"></textarea></div>
+        <div class="col-span-full"><label class="field-label">37. Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
         
-        <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
+        <div class="col-span-full bg-slate-100 p-5 rounded-xl border border-dashed">
             <label class="field-label !text-blue-600 font-800">38. System Status <span>สถานะในระบบ</span></label>
             <select id="System_Status" class="field-input !bg-white"></select>
         </div>
-        <div class="col-span-full bg-amber-50 p-6 rounded-xl border border-dashed border-amber-200">
+        <div class="col-span-full bg-amber-50 p-5 rounded-xl border border-dashed border-amber-200">
             <label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงผลแผนที่หน้าเว็บ</span></label>
             <select id="Map_Visibility" class="field-input !bg-white">
                 <option value="Show">Show Map</option>
@@ -265,6 +297,8 @@
       }
       thumbUrl = u.Thumbnail_Image || ""; renderThumb(thumbUrl);
       galleryArr = u.Album_Image ? u.Album_Image.split(',').filter(Boolean) : []; renderGallery();
+      if(u.FloorPlan_PDF) { document.getElementById('txt-FloorPlan_PDF').innerText = "Current File ✅"; document.getElementById('del_floor').classList.remove('hidden'); }
+      if(u.Customer_PDF) { document.getElementById('txt-Customer_PDF').innerText = "Current File ✅"; document.getElementById('del_customer').classList.remove('hidden'); }
       runCalc();
     }
 
@@ -279,7 +313,7 @@
             if (w > 1200) { h *= 1200 / w; w = 1200; }
             canvas.width = w; canvas.height = h;
             const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-            canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.6);
+            canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.65);
           };
         };
       });
@@ -298,6 +332,11 @@
           const url = await ref.getDownloadURL();
           if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
           else if(target === 'album') { galleryArr.push(url); renderGallery(); }
+          else if(fieldId) { 
+            document.getElementById(fieldId).value = url; 
+            document.getElementById('txt-'+fieldId).innerText = "Uploaded ✅";
+            document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.remove('hidden');
+          }
         } catch (e) { alert("Upload Failed!"); }
       }
       document.getElementById('loadingOverlay').classList.add('hidden');
@@ -310,6 +349,11 @@
       try {
         await storage.refFromURL(url).delete();
         if(isGallery) { galleryArr.splice(index, 1); renderGallery(); }
+        else { 
+            document.getElementById(fieldId).value = ""; 
+            document.getElementById('txt-'+fieldId).innerText = "None"; 
+            document.getElementById(fieldId === 'FloorPlan_PDF' ? 'del_floor' : 'del_customer').classList.add('hidden');
+        }
       } catch (e) { console.error(e); }
       document.getElementById('loadingOverlay').classList.add('hidden');
     }
@@ -317,7 +361,7 @@
     function renderThumb(url) { document.getElementById('thumbPreview').innerHTML = url ? `<div class="img-x" onclick="deleteThumb()">✕</div><img src="${url}" class="w-full h-full object-cover">` : '<i class="fas fa-image text-3xl text-slate-200"></i>'; document.getElementById('Thumbnail_Image').value = url; }
     async function deleteThumb() { if(!confirm("Delete cover?")) return; try { await storage.refFromURL(thumbUrl).delete(); thumbUrl = ""; renderThumb(""); } catch(e){ thumbUrl = ""; renderThumb(""); } }
     
-    // 🎯 📸 Render Gallery with Tiny Icons
+    // 🎯 📸 Render Gallery with Tiny Icons (3 Columns Mobile)
     function renderGallery() { 
         document.getElementById('galleryPreview').innerHTML = galleryArr.map((url, i) => `
             <div class="img-tile">
