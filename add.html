@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add New Master Asset | HUA HIN PROPERTIES</title>
+  <title>Add Master Asset | Auto-Pilot V9.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,351 +11,176 @@
 
   <style>
     :root { --brand: #262626; --accent: #C9A84C; --bg: #F8FAF8; }
-    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; overflow-x: hidden; }
-    header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
-    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--accent); font-size: 0.95rem; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
-    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
-    .menu-trigger i { font-size: 1.1rem; color: var(--accent); }
-    .menu-trigger span { font-size: 8px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-top: 1px; }
-
-    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #262626; z-index: 2000; transition: 0.4s; padding: 60px 20px; font-family: 'Montserrat', sans-serif; box-shadow: 10px 0 30px rgba(0,0,0,0.2); }
-    .sidebar.active { left: 0; }
-    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; display: none; backdrop-filter: blur(2px); }
-    .sidebar-overlay.active { display: block; }
-    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; font-weight: 600; }
-    .menu-item i { color: var(--accent); width: 20px; text-align: center; }
-
-    .content-wrapper { padding: 80px 15px 200px; max-width: 1100px; margin: 0 auto; }
-    .edit-banner { background: #262626; border-radius: 0.8rem; padding: 15px 20px; color: white; display: flex; flex-direction: column; justify-content: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
-    .banner-sub { color: rgba(255,255,255,0.4); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; font-family: 'Montserrat', sans-serif; }
-    .banner-title { font-size: 1rem; font-weight: 800; color: white; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0px; }
-
-    .tab-bar { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; overflow-x: auto; scrollbar-width: none; }
-    .tab-btn { padding: 0.8rem 0; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #999; cursor: pointer; position: relative; background: none; border: none; transition: 0.3s; white-space: nowrap; font-family: 'Montserrat', sans-serif; }
-    .tab-btn.active { color: var(--accent); }
-    .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: #1A3017; margin: 0; padding: 0; }
+    header { position: fixed; top: 0; width: 100%; height: 60px; background: white; z-index: 1000; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--accent); font-family: 'Montserrat'; text-transform: uppercase; font-size: 0.9rem; }
+    .content-wrapper { padding: 80px 15px 150px; max-width: 1000px; margin: 0 auto; }
     
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
-    .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.6rem; display: block; letter-spacing: 0.5px; font-family: 'Montserrat', sans-serif; }
-    .field-label span { color: #2D5A27; font-size: 11px; margin-left: 10px; font-weight: 700; border-left: 2px solid #eee; padding-left: 10px; font-family: 'Sarabun', sans-serif; }
-    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.9rem 1.1rem; font-size: 14px; outline: none; transition: 0.3s; color: #1A3017; font-weight: 500; }
+    .edit-banner { background: var(--brand); border-radius: 0.8rem; padding: 15px 20px; color: white; margin-bottom: 20px; }
+    .input-card { background: white; border: 1px solid rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+    .field-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; display: block; font-family: 'Montserrat'; }
+    .field-label span { color: #2D5A27; font-size: 11px; margin-left: 10px; font-weight: 700; border-left: 2px solid #eee; padding-left: 10px; font-family: 'Sarabun'; }
+    .field-input { width: 100%; background: #F9F9F8; border: 1.5px solid transparent; border-radius: 0.8rem; padding: 0.9rem; font-size: 14px; outline: none; transition: 0.3s; }
     .field-input:focus { border-color: var(--accent); background: white; }
 
-    /* Project Input & Vertical Modal */
-    .project-input-wrapper { position: relative; display: flex; align-items: center; }
-    .btn-list-toggle { position: absolute; right: 10px; background: var(--brand); color: white; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-
+    /* Modal Styles */
     .project-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-    .modal-header { font-weight: 800; font-size: 12px; text-transform: uppercase; color: var(--accent); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; font-family: 'Montserrat', sans-serif; }
-    .project-opt { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; font-size: 14px; color: #1A3017; transition: 0.2s; }
-    .project-opt:active { background: #F9F9F8; color: var(--accent); }
+    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 1.5rem; max-height: 70vh; overflow-y: auto; padding: 20px; }
+    .project-opt { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 700; }
+    .project-opt:active { color: var(--accent); }
 
-    .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.8rem; overflow: hidden; border: 1px solid #eee; background: #eee; }
-    .img-x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; border: 2px solid white; font-size: 10px; font-weight: 800; }
-    
-    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.98); border-top: 1px solid #eee; padding: 15px 20px; z-index: 1000; text-align: center; }
-    .btn-update { background: #111; color: white; width: 100%; max-width: 600px; height: 55px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; font-size: 14px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
-    .btn-blue { background: #2563eb; color: white; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 800; font-size: 11px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; cursor: pointer; border: none; }
-
-    .mini-status { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--accent); display: none; margin-top: 5px; font-family: 'Montserrat', sans-serif; }
-    .mini-status.active { display: block; }
-    
-    .ownership-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
-    .own-item { display: flex; align-items: center; gap: 10px; background: #F9F9F8; padding: 10px 15px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; font-size: 13px; font-weight: 600; }
-    
-    .pdf-row { display: flex; align-items: center; gap: 1rem; background: #F9F9F8; padding: 12px 18px; border-radius: 1.2rem; margin-bottom: 10px; }
-    .pdf-icon { width: 36px; height: 36px; border-radius: 10px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .btn-pdf-action { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; background: #2563eb; color: white; border: none; cursor: pointer; }
+    .img-tile { position: relative; aspect-ratio: 1; border-radius: 0.8rem; overflow: hidden; background: #eee; }
+    .img-x { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; background: #EF4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid white; z-index: 5; }
+    .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px; z-index: 1000; text-align: center; }
+    .btn-update { background: #111; color: white; width: 100%; max-width: 500px; height: 50px; border-radius: 0.8rem; font-weight: 800; text-transform: uppercase; }
   </style>
 </head>
 <body>
 
-  <div class="project-modal" id="pModal" onclick="closeModal(event)">
+  <div class="project-modal" id="pModal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <span>Select Existing Project</span>
-        <i class="fas fa-times cursor-pointer" onclick="document.getElementById('pModal').style.display='none'"></i>
+      <div style="font-weight:800; font-size:12px; color:var(--accent); margin-bottom:15px; display:flex; justify-content:space-between;">
+        <span>SELECT PROJECT</span><i class="fas fa-times" onclick="document.getElementById('pModal').style.display='none'"></i>
       </div>
       <div id="modal-list"></div>
     </div>
   </div>
 
-  <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
-  <div class="sidebar" id="sidebar">
-    <div style="color:var(--accent); font-weight:800; margin-bottom:30px; font-size:1rem; border-bottom:2px solid var(--accent); padding-bottom:10px;">EDITOR MENU</div>
-    <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME CATALOG</a>
-    <a href="dashboard.html" class="menu-item"><i class="fas fa-chart-line"></i> BACK TO DASHBOARD</a>
-    <a href="#" onclick="handleLogout()" class="menu-item" style="color:#EF4444; margin-top:20px;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>
-  </div>
-
   <header>
-    <div class="menu-trigger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-      <span>MENU</span>
-    </div>
+    <div style="width:40px;"></div>
     <div class="brand-center">New Master Asset</div>
     <div style="width:40px;"></div>
   </header>
 
   <div class="content-wrapper">
     <div class="edit-banner">
-      <div class="banner-sub">Master Vault | Enrollment Suite</div>
-      <div class="banner-title">ADD NEW PROPERTY</div>
-    </div>
-    
-    <div class="tab-bar">
-      <button id="btn-photo" class="tab-btn active" onclick="switchTab('photo')">Visual Assets</button>
-      <button id="btn-info" class="tab-btn" onclick="switchTab('info')">Specifications (39 Items)</button>
+      <div style="font-size:8px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase;">Master Vault | Auto-Pilot</div>
+      <div style="font-size:1rem; font-weight:800; font-family:'Montserrat';">ADD NEW PROPERTY</div>
     </div>
 
-    <div id="tab-photo" class="tab-content active space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="input-card">
-          <span class="field-label">Main Image Cover <span>รูปภาพหน้าปก</span></span>
-          <div id="thumbPreview" class="relative w-full aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden mb-4">
-            <i class="fas fa-cloud-upload-alt text-3xl text-slate-200"></i>
-          </div>
-          <button onclick="document.getElementById('file_thumb').click()" class="btn-blue w-full">UPLOAD COVER</button>
-          <div id="status_thumb" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing to Storage...</div>
-          <input type="file" id="file_thumb" class="hidden" accept="image/*" onchange="handleMediaUpload(this, 'thumb')"><input type="hidden" id="Thumbnail_Image">
-        </div>
-        <div class="input-card">
-          <span class="field-label">Visual Gallery <span>อัลบั้มรูปภาพ</span></span>
-          <div id="galleryPreview" class="h-48 bg-slate-50 rounded-xl p-3 grid grid-cols-4 gap-2 overflow-y-auto mb-4"></div>
-          <button onclick="document.getElementById('file_gallery').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-800 text-[11px] uppercase">ADD IMAGES</button>
-          <div id="status_album" class="mini-status"><i class="fas fa-circle-notch animate-spin"></i> Syncing Album...</div>
-          <input type="file" id="file_gallery" class="hidden" multiple accept="image/*" onchange="handleMediaUpload(this, 'album')"><input type="hidden" id="Album_Image">
-        </div>
-      </div>
-      
+    <div class="flex gap-6 border-bottom border-gray-200 mb-6 overflow-x-auto">
+      <button class="pb-2 border-b-2 border-amber-500 font-800 text-[10px] text-amber-600 uppercase">Visuals & Specs</button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div class="input-card">
-        <span class="field-label">Master Documents (PDF) <span>จัดการไฟล์เอกสาร</span></span>
-        <div class="space-y-3 mt-4">
-          <div class="pdf-row">
-            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Floor Plan: <span id="txt-FloorPlan_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
-            <button onclick="document.getElementById('f_floor').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
-            <div id="status_floor" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i></div>
-            <input type="file" id="f_floor" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'FloorPlan_PDF')"><input type="hidden" id="FloorPlan_PDF">
-          </div>
-          <div class="pdf-row">
-            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="flex-1 font-800 text-[11px] text-slate-400 uppercase">Brochure: <span id="txt-Customer_PDF" class="text-slate-700 italic font-normal">No file selected</span></div>
-            <button onclick="document.getElementById('f_customer').click()" class="btn-pdf-action"><i class="fas fa-upload"></i></button>
-            <div id="status_customer" class="mini-status" style="margin-left: 10px;"><i class="fas fa-spinner animate-spin"></i></div>
-            <input type="file" id="f_customer" class="hidden" accept=".pdf" onchange="handleMediaUpload(this, 'pdf', 'Customer_PDF')"><input type="hidden" id="Customer_PDF">
-          </div>
+        <label class="field-label">Thumbnail <span>รูปหน้าปก</span></label>
+        <div id="thumbPreview" class="w-full aspect-video rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden mb-3">
+          <i class="fas fa-cloud-upload-alt text-2xl text-gray-200"></i>
         </div>
+        <button onclick="document.getElementById('f_thumb').click()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-[11px] font-800 uppercase">Upload Cover</button>
+        <input type="file" id="f_thumb" class="hidden" onchange="handleMedia(this, 'thumb')">
+      </div>
+      <div class="input-card">
+        <label class="field-label">Album <span>อัลบั้มรูป</span></label>
+        <div id="albumPreview" class="h-[120px] bg-gray-50 rounded-xl p-2 grid grid-cols-4 gap-2 overflow-y-auto mb-3"></div>
+        <button onclick="document.getElementById('f_album').click()" class="w-full py-3 bg-purple-600 text-white rounded-xl text-[11px] font-800 uppercase">Add Images</button>
+        <input type="file" id="f_album" class="hidden" multiple onchange="handleMedia(this, 'album')">
       </div>
     </div>
 
-    <div id="tab-info" class="tab-content space-y-6">
-      <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div><label class="field-label">1. HP_ID <span>รหัสทรัพย์สิน</span></label><input id="HP_ID" class="field-input !bg-amber-50 font-800 text-amber-600" readonly></div>
-        <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input"></select></div>
-        <div><label class="field-label">3. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input"></select></div>
-        
-        <div>
-          <label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label>
-          <div class="project-input-wrapper">
-            <input id="Project_Name" class="field-input font-700" placeholder="พิมพ์ชื่อใหม่หรือกดเลือก...">
-            <div class="btn-list-toggle" onclick="openModal()"><i class="fas fa-list-ul"></i></div>
+    <div class="input-card grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div><label class="field-label">1. HP_ID</label><input id="HP_ID" class="field-input !bg-amber-50 font-800" readonly></div>
+      <div><label class="field-label">2. Listing Type <span>ประกาศ</span></label><select id="Listing_Type" class="field-input dynamic-opt"></select></div>
+      <div><label class="field-label">3. Asset Type <span>ประเภท</span></label><select id="Type" class="field-input dynamic-opt"></select></div>
+      
+      <div>
+        <label class="field-label">4. Project Name <span>ชื่อโครงการ</span></label>
+        <div class="relative">
+          <input id="Project_Name" class="field-input font-700" placeholder="พิมพ์ใหม่หรือกดเลือก...">
+          <div onclick="document.getElementById('pModal').style.display='flex'" class="absolute right-2 top-2 bg-black text-white w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer">
+            <i class="fas fa-list-ul text-xs"></i>
           </div>
-        </div>
-
-        <div><label class="field-label">5. Plot Reference <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input font-700" placeholder="เช่น m39"></div>
-        <div><label class="field-label">6. Sales Status <span>สถานะขาย</span></label><select id="Status" class="field-input"></select></div>
-        
-        <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-xl bg-[#F9F9F8] border border-[#eee]">
-          <div><label class="field-label text-blue-600 font-800">7. Sale Price <span>ราคาขายสุทธิ</span></label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()" placeholder="9800000"></div>
-          <div><label class="field-label">8. Living Area (m2) <span>พื้นที่ใช้สอย</span></label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()" placeholder="345"></div>
-          <div><label class="field-label">9. Price/m2 <span>ราคาต่อ ตร.ม.</span></label><input id="Price_sq_m" class="field-input bg-slate-100 font-800 text-green-700" readonly value="0"></div>
-          <div class="col-span-full border-t border-[#eee] pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div><label class="field-label font-800">10. Common Fee Rate</label><input type="number" id="Common_Fee_Rate" class="field-input !bg-white" oninput="runCalc()"></div>
-            <div><label class="field-label">11. Monthly Fee</label><input id="Monthly_Common_Fee" class="field-input" readonly value="0"></div>
-            <div><label class="field-label">12. Yearly Fee</label><input id="Common_Fee_Yearly" class="field-input" readonly value="0"></div>
-          </div>
-        </div>
-
-        <div><label class="field-label">13. Land Area (m2)</label><input type="number" id="Land_Area_sq_m" class="field-input"></div>
-        <div><label class="field-label">14. Land Area (sq.w)</label><input type="number" id="Land_Area_sq_w" class="field-input"></div>
-        <div><label class="field-label">15. Furnishing</label><select id="Furnishing" class="field-input"></select></div>
-        <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input"></select></div>
-        <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input"></select></div>
-        <div><label class="field-label">18. Zone <span>โซน</span></label><select id="Zone" class="field-input"></select></div>
-        <div><label class="field-label">19. Bedrooms</label><select id="Bedrooms" class="field-input"></select></div>
-        <div><label class="field-label">20. Bathrooms</label><select id="Bathrooms" class="field-input"></select></div>
-        <div><label class="field-label">21. Parking</label><select id="Parking" class="field-input"></select></div>
-        <div><label class="field-label">22. Kitchen Type</label><select id="Kitchen_Type" class="field-input"></select></div>
-        <div><label class="field-label">23. Direction</label><select id="Direction" class="field-input"></select></div>
-        <div><label class="field-label">24. Electricity</label><select id="Electricity" class="field-input"></select></div>
-        <div><label class="field-label">25. Pool Size</label><input id="Pool_Size" class="field-input"></div>
-        <div><label class="field-label">26. Pool Depth</label><input id="Pool_Depth" class="field-input"></div>
-        <div><label class="field-label">27. Pool System</label><select id="Pool_System" class="field-input"></select></div>
-        <div><label class="field-label">28. View Type</label><select id="View_Type" class="field-input"></select></div>
-        <div><label class="field-label">29. Water Source</label><select id="Water_Source" class="field-input"></select></div>
-        <div><label class="field-label">30. Extras</label><select id="Extras" class="field-input"></select></div>
-
-        <div class="col-span-1 md:col-span-2">
-          <label class="field-label">31. Ownership (Real-time Sync)</label>
-          <div id="ownership-container" class="ownership-grid"></div>
-          <input type="hidden" id="Ownership_Type">
-        </div>
-
-        <div><label class="field-label">32. Title Deed</label><select id="Land_Title_Deed_Type" class="field-input"></select></div>
-        <div><label class="field-label">33. Transfer Exp.</label><input id="Transfer_Expenses" class="field-input"></div>
-        <div><label class="field-label">34. Badge</label><select id="Badge" class="field-input"></select></div>
-        <div><label class="field-label">35. Build Stage</label><select id="Build_Stage" class="field-input"></select></div>
-        <div><label class="field-label">36. GPS Coordinates</label><input id="Coordinates" class="field-input"></div>
-        <div class="col-span-full"><label class="field-label">37. Property Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
-
-        <div class="col-span-full bg-slate-100 p-6 rounded-xl border border-dashed border-slate-300">
-          <label class="field-label !text-blue-600 font-800">38. System Visibility <span>สถานะในระบบ</span></label>
-          <select id="System_Status" class="field-input !bg-white"></select>
-        </div>
-        <div class="col-span-full bg-amber-50 p-6 rounded-xl border border-dashed border-amber-200">
-          <label class="field-label !text-amber-700 font-800">39. Map Visibility <span>แสดงผลแผนที่หน้าเว็บ</span></label>
-          <select id="Map_Visibility" class="field-input !bg-white">
-            <option value="Show">Show Map</option>
-            <option value="Hide">Hide Map</option>
-          </select>
         </div>
       </div>
+
+      <div><label class="field-label">5. Plot <span>หมายเลขแปลง</span></label><input id="Plot" class="field-input"></div>
+      <div><label class="field-label">6. Sales Status <span>สถานะ</span></label><select id="Status" class="field-input dynamic-opt"></select></div>
+
+      <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4 p-5 bg-gray-50 rounded-2xl border">
+        <div><label class="field-label">7. Sale Price</label><input type="number" id="Sale_Price" class="field-input !bg-white" oninput="runCalc()"></div>
+        <div><label class="field-label">8. Living Area</label><input type="number" id="Living_Area_sq_m" class="field-input !bg-white" oninput="runCalc()"></div>
+        <div><label class="field-label">9. Price/m2</label><input id="Price_sq_m" class="field-input font-800 text-green-700" readonly value="0"></div>
+      </div>
+
+      <div><label class="field-label">16. District <span>อำเภอ</span></label><select id="District" class="field-input dynamic-opt"></select></div>
+      <div><label class="field-label">17. Sub-District <span>ตำบล</span></label><select id="SubDistrict" class="field-input dynamic-opt"></select></div>
+      <div><label class="field-label">36. Coordinates <span>พิกัด</span></label><input id="Coordinates" class="field-input" placeholder="ระบบจะดึงให้อัตโนมัติ"></div>
+      
+      <div class="col-span-full"><label class="field-label">37. Description</label><textarea id="Description" rows="4" class="field-input"></textarea></div>
     </div>
   </div>
 
-  <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-xl">PUBLISH MASTER ASSET</button></div>
+  <div class="save-bar"><button id="btn_save" onclick="saveData()" class="btn-update shadow-xl">Publish Master Asset</button></div>
 
   <script>
+    const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
     const firebaseConfig = { storageBucket: "huahin-properties-5f1b5.firebasestorage.app" };
     firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
 
-    (function(){ if(localStorage.getItem('admin_session') !== 'active'){ window.location.href="gateway.html"; } })();
+    let projectMaster = [], galleryArr = [], thumbUrl = "";
 
-    const API = "https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec";
-    let galleryArr = [], thumbUrl = "";
-
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function handleLogout() { localStorage.clear(); location.href="gateway.html"; }
-
-    function openModal() { document.getElementById('pModal').style.display = 'flex'; }
-    function selectProject(val) { document.getElementById('Project_Name').value = val; document.getElementById('pModal').style.display = 'none'; }
-    function closeModal(e) { if(e.target === document.getElementById('pModal')) document.getElementById('pModal').style.display='none'; }
-
-    // 🎯 Real-time Auto-Discovery Init
     async function init() {
-      try {
-        const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })).json();
-        if (res.ok) {
-          document.getElementById('HP_ID').value = res.nextId;
-          const meta = res.options;
-          
-          // Auto-Populate all Select Dropdowns
-          Object.keys(meta).forEach(key => {
-            const el = document.getElementById(key);
-            if (el && el.tagName === "SELECT") {
-              const options = meta[key] || [];
-              el.innerHTML = `<option value="">-- Select --</option>` + options.map(v => `<option value="${v}">${v}</option>`).join('');
-            }
-          });
-
-          // Modal Vertical List
-          const pList = meta.Project_Name || [];
-          document.getElementById('modal-list').innerHTML = pList.map(p => `<div class="project-opt" onclick="selectProject('${p}')">${p}</div>`).join('');
-
-          // Ownership Checkboxes
-          const ownList = meta.Ownership_Type || [];
-          document.getElementById('ownership-container').innerHTML = ownList.map(opt => `
-            <label class="own-item"><input type="checkbox" name="own_check" value="${opt}" class="w-4 h-4 accent-black"> <span>${opt}</span></label>
-          `).join('');
-        }
-      } catch (e) { console.error("Init Error"); }
-    }
-
-    async function handleMediaUpload(input, target, fieldId) {
-      if(!input.files.length) return;
-      const statusId = target === 'pdf' ? `status_${fieldId.split('_')[0].toLowerCase()}` : `status_${target}`;
-      const statusEl = document.getElementById(statusId);
-      if(statusEl) statusEl.classList.add('active');
-
-      for (let file of input.files) {
-        try {
-          let fileToUpload = file;
-          if(target !== 'pdf') {
-            const reader = new FileReader();
-            const imgBlob = await new Promise(r => { reader.readAsDataURL(file); reader.onload = (e) => {
-              const img = new Image(); img.src = e.target.result;
-              img.onload = () => {
-                const canvas = document.createElement('canvas'); const maxW = 1200; const scale = maxW / img.width;
-                canvas.width = maxW; canvas.height = img.height * scale;
-                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                canvas.toBlob(b => r(b), 'image/jpeg', 0.85);
-              };
-            };});
-            fileToUpload = imgBlob;
+      const res = await (await fetch(API, { method:'POST', body: JSON.stringify({ mode: 'getAddContext' }) })).json();
+      if (res.ok) {
+        document.getElementById('HP_ID').value = res.nextId;
+        projectMaster = res.options._raw_projects;
+        
+        // Auto-Discovery: เติมตัวเลือก Dropdown ทั้งหมด
+        Object.keys(res.options).forEach(key => {
+          const el = document.getElementById(key);
+          if (el && el.tagName === "SELECT") {
+            el.innerHTML = '<option value="">-- Select --</option>' + res.options[key].map(v => `<option value="${v}">${v}</option>`).join('');
           }
+        });
 
-          const path = `properties/${document.getElementById('HP_ID').value}/${Date.now()}_${file.name}`;
-          const ref = storage.ref(path);
-          await ref.put(fileToUpload);
-          const url = await ref.getDownloadURL();
-
-          if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
-          else if(target === 'album') { galleryArr.push(url); renderGallery(); }
-          else if(fieldId) { document.getElementById(fieldId).value = url; document.getElementById('txt-'+fieldId).innerText = file.name + " ✅"; }
-        } catch (e) { alert("Upload Failed!"); }
+        // สร้าง Modal List
+        document.getElementById('modal-list').innerHTML = projectMaster.map(p => `<div class="project-opt" onclick="autoFill('${p.name}')">${p.name}</div>`).join('');
       }
-      if(statusEl) statusEl.classList.remove('active');
     }
 
-    function renderThumb(url) {
-      document.getElementById('thumbPreview').innerHTML = `<div class="img-x" onclick="removeThumb()">✕</div><img src="${url}" class="w-full h-full object-cover">`;
-      document.getElementById('Thumbnail_Image').value = url;
+    // 🎯 หัวใจหลัก: Auto-Fill เมื่อเลือกโครงการ
+    function autoFill(name) {
+      const p = projectMaster.find(item => item.name === name);
+      if (p) {
+        document.getElementById('Project_Name').value = p.name;
+        if(p.district) document.getElementById('District').value = p.district;
+        if(p.subdistrict) document.getElementById('SubDistrict').value = p.subdistrict;
+        if(p.coordinates) document.getElementById('Coordinates').value = p.coordinates;
+      }
+      document.getElementById('pModal').style.display = 'none';
     }
-    function removeThumb() { thumbUrl = ""; document.getElementById('thumbPreview').innerHTML = '<i class="fas fa-cloud-upload-alt text-3xl text-slate-200"></i>'; }
 
-    function renderGallery() {
-      const box = document.getElementById('galleryPreview');
-      box.innerHTML = galleryArr.map((url, i) => `<div class="img-tile"><div class="img-x" onclick="removeGallery(${i})">✕</div><img src="${url}" class="w-full h-full object-cover"></div>`).join('');
-      document.getElementById('Album_Image').value = galleryArr.join(',');
+    async function handleMedia(input, target) {
+      const hpId = document.getElementById('HP_ID').value;
+      for (let f of input.files) {
+        const path = `properties/${hpId}/${Date.now()}_${f.name}`;
+        const ref = storage.ref(path);
+        await ref.put(f);
+        const url = await ref.getDownloadURL();
+        if(target === 'thumb') { thumbUrl = url; renderThumb(url); }
+        else { galleryArr.push(url); renderAlbum(); }
+      }
     }
-    function removeGallery(idx) { galleryArr.splice(idx, 1); renderGallery(); }
+
+    function renderThumb(url) { document.getElementById('thumbPreview').innerHTML = `<img src="${url}" class="w-full h-full object-cover">`; }
+    function renderAlbum() { document.getElementById('albumPreview').innerHTML = galleryArr.map(url => `<div class="img-tile"><img src="${url}" class="w-full h-full object-cover"></div>`).join(''); }
 
     function runCalc() {
       const p = parseFloat(document.getElementById('Sale_Price').value) || 0;
-      const a = parseFloat(document.getElementById('Living_Area_sq_m').value) || 0;
-      const r = parseFloat(document.getElementById('Common_Fee_Rate').value) || 0;
-      if (a > 0) {
-        document.getElementById('Price_sq_m').value = Math.round(p / a).toLocaleString();
-        document.getElementById('Monthly_Common_Fee').value = Math.round(a * r).toLocaleString();
-        document.getElementById('Common_Fee_Yearly').value = Math.round(a * r * 12).toLocaleString();
-      }
+      const a = parseFloat(document.getElementById('Living_Area_sq_m').value) || 1;
+      document.getElementById('Price_sq_m').value = Math.round(p/a).toLocaleString();
     }
 
     async function saveData() {
-      if(!confirm("Publish Master Asset?")) return;
-      document.getElementById('btn_save').innerText = "SYNCING TO DATABASE...";
-      const owns = Array.from(document.querySelectorAll('input[name="own_check"]:checked')).map(c => c.value);
-      document.getElementById('Ownership_Type').value = owns.join(', ');
-      
-      const payload = { mode: "addUnit", Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
-      document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) payload[el.id] = el.value; });
-      payload['Project_Name'] = document.getElementById('Project_Name').value;
-      
-      const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
-      if(res.ok) { alert("SUCCESS! ✅ ID: " + res.id); location.href='dashboard.html'; }
+      if(!confirm("Publish?")) return;
+      let data = { mode: 'addUnit', Thumbnail_Image: thumbUrl, Album_Image: galleryArr.join(',') };
+      document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) data[el.id] = el.value; });
+      const res = await (await fetch(API, { method:'POST', body: JSON.stringify(data) })).json();
+      if(res.ok) { alert("Success!"); location.reload(); }
     }
 
-    function switchTab(t) {
-      document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + t).classList.add('active');
-      document.getElementById('btn-' + (t === 'photo' ? 'photo' : 'info')).classList.add('active');
-    }
     window.onload = init;
   </script>
 </body>
