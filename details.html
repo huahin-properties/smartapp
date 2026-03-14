@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V210</title>
+  <title>Asset Specifications | MASTER SYSTEM V211</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -23,7 +23,7 @@
     .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; }
     .menu-trigger { cursor: pointer; color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1001; }
     .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-    
+
     .gallery-container{margin-top:65px;padding:15px;max-width:1100px;margin:0 auto;}
     .gallery-card{background:#000;border-radius: 18px;border:1px solid var(--border);overflow:hidden;box-shadow: 0 10px 30px rgba(0,0,0,0.3);margin-bottom:20px;}
     .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#111;overflow:hidden;}
@@ -32,7 +32,7 @@
     .thumb{width:80px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;}
     .thumb.active{opacity:1;border-color:var(--gold)}
     .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;}
-    
+
     .content{padding:0 15px 120px;max-width:900px;margin:0 auto}
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
@@ -40,32 +40,27 @@
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
     .field-wrap { display: none; margin-bottom: 12px; } 
     .field-wrap.has-val { display: block; }
-    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;margin-bottom:3px}
+    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;margin-bottom:3px;letter-spacing:1px;}
     .val{font-size:0.85rem;color:#FFF}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
     
-    .map-box{width:100%;height:250px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
-    #leafletMap{width:100%;height:100%;background:#0F172A}
+    #leafletMap{width:100%;height:250px;background:#0F172A;border-radius:12px;border:1px solid var(--border);margin:10px 0}
     .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;border:1px solid var(--border);}
     
-    .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
-    .loc-name{font-size:0.78rem;}
-    .loc-dist{font-size:0.75rem;color:var(--gold)}
-    
     .pdf-bar { display: none; background: #FFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
-    .pdf-summary-bar { background: #FFF; border: 2.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-top: 20px; }
+    .pdf-summary-bar { background: #FFF; border: 2.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-top: 20px; }
 
-    /* 🎯 POPUP MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 11000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    /* 🎯 POPUP MODAL - ปรับปรุงให้รองรับมือถือ (Responsive) */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 11000; display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-overlay.active { display: flex; }
-    .modal-card { background: var(--navy); border: 2px solid var(--gold); border-radius: 25px; width: 100%; max-width: 400px; padding: 30px; text-align: center; }
-    .modal-title { color: var(--gold); font-weight: 800; font-size: 1.1rem; margin-bottom: 25px; text-transform: uppercase; }
-    .opt-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 20px; border-radius: 15px; color: #FFF; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-    .opt-btn i { font-size: 1.5rem; color: var(--gold); }
+    .modal-card { background: var(--navy); border: 2px solid var(--gold); border-radius: 20px; width: 95%; max-width: 400px; padding: 25px; text-align: center; }
+    .modal-title { color: var(--gold); font-weight: 800; font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; }
+    .opt-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: #FFF; cursor: pointer; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; transition: 0.2s; }
+    .opt-btn i { font-size: 1.3rem; color: var(--gold); }
     .opt-text { text-align: left; }
-    .opt-text strong { display: block; font-size: 0.9rem; }
-    .opt-text span { font-size: 0.65rem; color: #7A9BB5; }
-    .close-modal { color: #7A9BB5; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; border-bottom: 1px solid #7A9BB5; }
+    .opt-text strong { display: block; font-size: 0.85rem; }
+    .opt-text span { font-size: 0.6rem; color: #7A9BB5; }
+    .close-modal { color: #7A9BB5; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; border-bottom: 1px solid #7A9BB5; margin-top: 10px; display: inline-block; }
 
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
@@ -73,22 +68,16 @@
     .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 55px; }
     .share-btn i { font-size: 22px; }
     .share-btn span { font-size: 8px; color: #7A9BB5; font-weight: 700; text-transform: uppercase; }
-    .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; }
 
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
-    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; }
-    
-    .print-identity-container { display: none; }
-    .floorplan-print-preview { display: none; }
 
     @media print {
       body { background: #fff !important; color: #000 !important; }
-      header, .sidebar, .nav-arrow, .tag-count, #mapSection, .footer, .admin-float, .pdf-bar, .pdf-summary-bar, .modal-overlay, #pageSplash, .share-stack { display: none !important; }
-      .print-identity-container { display: block !important; text-align: center; border-bottom: 2.5px solid var(--gold); margin-bottom: 25px; padding-bottom: 15px; }
+      header, .footer, .pdf-bar, .pdf-summary-bar, .modal-overlay, #pageSplash, .share-stack, #mapSection { display: none !important; }
       .info-card { background: #fff !important; border: 1px solid #eee !important; display: block !important; page-break-inside: avoid; border-radius: 8px; color: #000 !important; }
-      .section-title { color: var(--gold) !important; border-bottom: 1.5px solid var(--gold) !important; }
     }
+    @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
   </style>
 </head>
 <body>
@@ -97,10 +86,10 @@
     <div class="modal-card">
         <div class="modal-title" id="modalTitle">Export Options</div>
         <div class="modal-options">
-            <div class="opt-btn" onclick="executeDownload()"><i class="fas fa-file-download"></i><div class="opt-text"><strong>Save as PDF File</strong><span>ดาวน์โหลดลงเครื่องทันที</span></div></div>
-            <div class="opt-btn" onclick="executePrint()"><i class="fas fa-print"></i><div class="opt-text"><strong>Print Report</strong><span>ส่งคำสั่งไปยังพริ้นเตอร์</span></div></div>
+            <div class="opt-btn" onclick="executeDownload()"><i class="fas fa-file-download"></i><div class="opt-text"><strong>Save as PDF File</strong><span>บันทึกไฟล์ลงเครื่องทันที</span></div></div>
+            <div class="opt-btn" onclick="executePrint()"><i class="fas fa-print"></i><div class="opt-text"><strong>Print Report</strong><span>สั่งพริ้นเอกสาร</span></div></div>
         </div>
-        <div class="close-modal" onclick="closePDFModal()">Close / ปิดหน้าต่าง</div>
+        <div class="close-modal" onclick="closePDFModal()">Close / ปิด</div>
     </div>
 </div>
 
@@ -138,7 +127,7 @@
             <div id="w-landW" class="field-wrap"><div class="label">Land Size (sq.w)</div><div class="val" id="vLandW"></div></div>
             <div id="w-land" class="field-wrap"><div class="label">Land Size (m²)</div><div class="val" id="vLand"></div></div>
             <div id="w-living" class="field-wrap"><div class="label">Living Area (m²)</div><div class="val" id="vLiving"></div></div>
-            <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val" id="vPriceSq"></div></div>
+            <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
           </div>
         </div>
 
@@ -149,7 +138,7 @@
             <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
             <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
             <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
-            <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val" id="vZone"></div></div>
+            <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
             <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
             <div id="w-poolinfo" class="field-wrap"><div class="label">Pool Info</div><div class="val" id="vPoolInfo"></div></div>
             <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
@@ -158,13 +147,24 @@
             <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
           </div>
         </div>
+        
+        <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
+          <h2 class="section-title">Ownership & Fees</h2>
+          <div class="grid">
+            <div id="w-feeRate" class="field-wrap"><div class="label">Common Fee Rate</div><div class="val" id="vFeeRate"></div></div>
+            <div id="w-feeM" class="field-wrap"><div class="label">Monthly Total</div><div class="val" id="vFeeM"></div></div>
+            <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
+            <div id="w-owner" class="field-wrap" style="grid-column: span 2;"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
+            <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
+          </div>
+        </div>
     </div>
 
     <div class="info-card" id="card-desc"><h2 class="section-title">Description</h2><p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; white-space: pre-line;"></p></div>
 
     <div class="info-card" id="mapSection">
       <h2 class="section-title">Location & Navigator</h2>
-      <div class="map-box"><div id="leafletMap"></div></div>
+      <div id="leafletMap"></div>
       <a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a>
     </div>
 
@@ -195,7 +195,7 @@ function closePDFModal(){ document.getElementById('pdfModal').classList.remove('
 function executeDownload(){
     closePDFModal();
     if(modalMode==='floorplan' && currentFPUrl){
-        const link=document.createElement('a'); link.href=currentFPUrl; link.download=`FloorPlan_${hpId}.pdf`; link.target="_blank"; link.click();
+        window.open(currentFPUrl, '_blank');
     } else {
         const element=document.getElementById('pdfCaptureData');
         const opt={ margin:0.5, filename:`Summary_${hpId}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'in',format:'letter',orientation:'portrait'} };
@@ -220,17 +220,21 @@ async function init(){
 
 function syncField(valId, wrapId, value) {
   const el=document.getElementById(valId), wrap=document.getElementById(wrapId);
-  if(el && wrap && value && value!=="-" && value!=="0"){ el.textContent=value; wrap.classList.add('has-val'); wrap.closest('.info-card').classList.add('has-data'); }
+  if(el && wrap && value && value!=="-" && value!=="0" && value!=="" && value!=="undefined"){ 
+      el.textContent=value; wrap.classList.add('has-val'); wrap.closest('.info-card').classList.add('has-data'); 
+  }
 }
 
 function renderData(u){
-  const p=safeNum(u.Sale_Price), a=safeNum(u.Living_Area_sq_m);
+  const p=parseFloat(String(u.Sale_Price||'').replace(/[^0-9.-]/g,''))||0;
+  const a=parseFloat(String(u.Living_Area_sq_m||'').replace(/[^0-9.-]/g,''))||0;
+  
   document.getElementById('pID').textContent = u.HP_ID;
   document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
   document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''}`;
   document.getElementById('pPrice').textContent = p ? `฿${p.toLocaleString()}` : 'Price on Request';
   
-  syncField('vBB','w-bb',`${u.Bedrooms} Bed | ${u.Bathrooms} Bath`);
+  syncField('vBB','w-bb',`${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
   syncField('vLandW','w-landW',u.Land_Area_sq_w?`${u.Land_Area_sq_w} sq.w`:"");
   syncField('vLand','w-land',u.Land_Area_sq_m?`${u.Land_Area_sq_m} m²`:"");
   syncField('vLiving','w-living',a?`${a} m²`:"");
@@ -239,14 +243,26 @@ function renderData(u){
   syncField('vStatus','w-status',u.Status); syncField('vFurnish','w-furnish',u.Furnishing);
   syncField('vDistrict','w-district',u.District); syncField('vSubDistrict','w-sub',u.SubDistrict);
   syncField('vZone','w-zone',u.Zone); syncField('vPoolSys','w-poolsys',u.Pool_System);
+  if(u.Pool_Size) syncField('vPoolInfo','w-poolinfo', u.Pool_Size);
   syncField('vKitchen','w-kitchen',u.Kitchen_Type); syncField('vParking','w-parking',u.Parking);
   syncField('vDirect','w-direct',u.Direction); syncField('vUtil','w-util',u.Electricity?`Elec: ${u.Electricity}`:"");
+
+  // Fees Section
+  const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
+  if(feeRate > 0 && a > 0) {
+      syncField('vFeeRate', 'w-feeRate', `฿${feeRate.toLocaleString()} / m²`);
+      const m = Math.round(feeRate * a); syncField('vFeeM', 'w-feeM', `฿${m.toLocaleString()} / Mo`); syncField('vFeeY', 'w-feeY', `฿${(m * 12).toLocaleString()} / Yr`);
+  }
+  syncField('vOwner', 'w-owner', u.Ownership_Type);
+  syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
+
   if(u.Description) { document.getElementById('vDesc').textContent=u.Description; document.getElementById('vDesc').closest('.info-card').classList.add('has-data'); }
 
   if(u.Coordinates && u.Coordinates.includes(',')){
-      const [la, lo] = u.Coordinates.split(',').map(v=>v.trim());
-      // ✅ NAVIGATOR LINK FIXED - No Brackets, Professional Format
-      document.getElementById('navLink').href = `https://www.google.com/maps/dir/?api=1&destination=${la},${lo}`;
+      const coords = u.Coordinates.split(',');
+      const la = coords[0].trim(), lo = coords[1].trim();
+      // ✅ NAVIGATOR LINK - สะอาดและใช้ได้จริง 100%
+      document.getElementById('navLink').href = "https://www.google.com/maps/dir/?api=1&destination=" + la + "," + lo + "&travelmode=driving";
       
       if(!leafletMap){
           leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15);
@@ -254,7 +270,7 @@ function renderData(u){
           L.marker([la, lo]).addTo(leafletMap);
       }
       document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => {
-          const d = getDistance(la, lo, loc.lat, loc.lon);
+          const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon);
           return `<div class="nearby-item"><span>${loc.name}</span><span class="loc-dist">${d.toFixed(1)} km</span></div>`;
       }).join('');
   }
@@ -262,7 +278,6 @@ function renderData(u){
   document.getElementById('mainImg').src = images[0];
 }
 
-function safeNum(x){ return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0; }
 function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
 init();
 </script>
