@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V215</title>
+  <title>Asset Specifications | MASTER SYSTEM V216</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -56,7 +56,8 @@
     .gold-txt{color:var(--gold);font-weight:600}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
     
-    #leafletMap{width:100%;height:250px;background:#0F172A;border-radius:12px;border:1px solid var(--border);margin:10px 0}
+    .map-box{width:100%;height:250px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
+    #leafletMap{width:100%;height:100%;background:#0F172A}
     .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;margin-top:10px;border:1px solid var(--border);}
     .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
     .loc-name{font-size:0.78rem;}
@@ -70,7 +71,7 @@
     .qr-img-display { width: 120px; height: 120px; border: 2.5px solid var(--gold); border-radius: 15px; margin-bottom: 8px; background: white; padding: 5px; }
     .qr-label-txt { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
 
-    /* 🎯 POPUP MODAL */
+    /* 🎯 POPUP MODAL (Responsive Fixed) */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 11000; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal-card { background: var(--navy); border: 2px solid var(--gold); border-radius: 25px; width: 95%; max-width: 400px; padding: 30px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
@@ -280,65 +281,29 @@ let images=[], idx=0, leafletMap=null, currentFPUrl="", modalMode="";
 function openPDFModal(m){ modalMode=m; document.getElementById('modalTitle').textContent=m==='floorplan'?'Floor Plan Options':'PDF Export Options'; document.getElementById('pdfModal').classList.add('active'); }
 function closePDFModal(){ document.getElementById('pdfModal').classList.remove('active'); }
 
-// ✅ จุดที่ 1 (แก้ไข): ปรับปรุงตรรกะให้สร้าง PDF จากสำเนาหน้าจอที่สมบูรณ์ 100%
+// ✅ จุดที่ 1 [แก้ไข]: ใช้ Logic จับภาพแบบ Full-Capture เพื่อป้องกันหน้าขาว
 function executeDownload(){
     closePDFModal();
     if(modalMode==='floorplan' && currentFPUrl){ 
         window.open(currentFPUrl, '_blank'); 
     } 
     else {
-        // สร้างหน้ากระดาษชั่วคราวเพื่อ Capture
-        const tempContainer = document.createElement('div');
-        tempContainer.style.padding = "40px";
-        tempContainer.style.backgroundColor = "#ffffff";
-        tempContainer.style.color = "#000000";
-        tempContainer.style.width = "750px"; // บังคับความกว้างให้พอดีกระดาษ
-
-        // ดึง Header และ Content จริงจากหน้าจอมาใส่
-        const header = document.querySelector('.print-only-identity').cloneNode(true);
-        header.style.display = "block";
-        header.style.marginBottom = "30px";
-        
-        const content = document.getElementById('pdfCaptureData').cloneNode(true);
-        
-        // ปรับแต่งสีข้อความในสำเนา PDF ให้เป็นสีดำ (เพื่อความชัดเจน)
-        content.querySelectorAll('.info-card').forEach(card => {
-            card.style.backgroundColor = "#fdfdfd";
-            card.style.color = "#000000";
-            card.style.border = "1px solid #eee";
-            card.style.display = "block";
-            card.style.marginBottom = "15px";
-            card.style.padding = "20px";
-        });
-        content.querySelectorAll('.val').forEach(v => v.style.color = "#000000");
-        content.querySelectorAll('.label').forEach(l => l.style.color = "#666666");
-        content.querySelectorAll('.section-title').forEach(t => t.style.color = "#C9A84C");
-
-        tempContainer.appendChild(header);
-        tempContainer.appendChild(content);
-        
-        // แนบท้ายด้วย QR Code ใน PDF
-        const qr = document.querySelector('.qr-section').cloneNode(true);
-        qr.style.marginTop = "30px";
-        tempContainer.appendChild(qr);
-
-        document.body.appendChild(tempContainer); // ต้องเพิ่มเข้า DOM ชั่วคราวเพื่อให้ Library จับภาพได้
-
+        const element = document.getElementById('pdfCaptureData');
         const opt = { 
-            margin: 0, 
+            margin: [0.5, 0.5], 
             filename: `Summary_${hpId}.pdf`, 
-            image: { type: 'jpeg', quality: 1.0 }, 
-            html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true }, 
-            jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' } 
+            image: { type: 'jpeg', quality: 0.98 }, 
+            html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 }, 
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
         };
-
-        html2pdf().set(opt).from(tempContainer).toPdf().get('pdf').then(function (pdf) {
-            document.body.removeChild(tempContainer); // ลบทิ้งเมื่อเสร็จ
-        }).save();
+        // สั่งให้รอเสี้ยววินาทีเพื่อให้ข้อมูลเสถียรก่อน Capture
+        setTimeout(() => {
+            html2pdf().set(opt).from(element).save();
+        }, 300);
     }
 }
-function executePrint(){ closePDFModal(); if(modalMode==='floorplan' && currentFPUrl) window.open(currentFPUrl,'_blank').print(); else window.print(); }
 
+function executePrint(){ closePDFModal(); if(modalMode==='floorplan' && currentFPUrl) window.open(currentFPUrl,'_blank').print(); else window.print(); }
 function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 500); } }
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 function scrollShare(val) { document.getElementById('shareBox').scrollBy({left: val, behavior: 'smooth'}); }
@@ -407,10 +372,19 @@ function renderData(u){
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
   if(u.Description) { document.getElementById('vDesc').textContent = u.Description; document.getElementById('vDesc').closest('.info-card').classList.add('has-data'); }
   
+  // ✅ จุดที่ 2 [กู้คืน]: แสดงผลแผนที่และระบบนำทาง
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(v => v.trim());
-      document.getElementById('navLink').href = "https://www.google.com/maps?q=LAT,LON0" + la + "," + lo + "&travelmode=driving";
-      if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
+      document.getElementById('navLink').href = "http://googleusercontent.com/maps.google.com/9" + la + "," + lo + "&travelmode=driving";
+      const mapBox = document.getElementById('mapSection');
+      if(u.Map_Visibility !== 'Hide') {
+          mapBox.style.display = 'block'; mapBox.classList.add('has-data');
+          if(!leafletMap) { 
+              leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); 
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); 
+              L.marker([la, lo]).addTo(leafletMap); 
+          }
+      }
       document.getElementById('amenitiesSection').classList.add('has-data');
       document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(parseFloat(la), parseFloat(lo), loc.lat, loc.lon); return `<div class="nearby-item"><span>${loc.name}</span><span class="loc-dist">${d.toFixed(1)} km</span></div>`; }).join('');
   }
