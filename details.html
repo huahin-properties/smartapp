@@ -61,8 +61,9 @@
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
     
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; margin-bottom: 10px; }
-    /* 🎯 ปุ่มใหม่สำหรับพิมพ์ใบสรุป */
-    .print-bar { background: var(--gold); border: 1.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy-dark); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; }
+    /* 🎯 ปรับปรุงปุ่มดาวน์โหลด/พิมพ์ ให้เหมือนปุ่ม PDF เดิมแต่เป็นสีทอง */
+    .print-bar { background: #FFFFFF; border: 2px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; }
+    .print-bar i { color: var(--gold); font-size: 1.2rem; }
 
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
@@ -78,31 +79,55 @@
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    
+    /* 🎯 ส่วนที่โชว์เฉพาะตอนพิมพ์ (Hidden on Screen) */
+    .print-only { display: none; }
+
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
 
-    /* 🎯 PRINT ENGINE - ตั้งค่าสำหรับตอนพิมพ์ PDF */
+    /* 🎯 PRINT ENGINE - ปรับปรุง Layout เอกสาร */
     @media print {
-      @page { size: A4; margin: 1cm; }
-      body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+      @page { size: A4; margin: 1.5cm; }
+      body { background: #fff !important; color: #000 !important; }
       header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, 
-      #mapSection, .share-stack, .footer, .admin-float, .print-bar, .pdf-bar { display: none !important; }
+      #mapSection, .share-stack, .footer, .admin-float, .print-bar, .pdf-bar, .loader-sub-text, #pageSplash { display: none !important; }
+      
+      .print-only { display: block !important; }
       .gallery-container { margin-top: 0 !important; padding: 0 !important; }
-      .gallery-card { border: 1px solid #ccc !important; box-shadow: none !important; border-radius: 10px !important; }
-      .main-stage { aspect-ratio: 16/9 !important; }
-      .content { padding: 0 !important; margin-top: 20px !important; }
-      .info-card { background: #fff !important; border: 1px solid #ddd !important; padding: 15px !important; margin-bottom: 15px !important; display: block !important; page-break-inside: avoid; }
-      .section-title { color: var(--gold) !important; font-size: 10pt !important; border-bottom: 2px solid var(--gold) !important; }
-      .val { color: #000 !important; font-size: 11pt !important; font-weight: 700 !important; }
-      .label { color: #666 !important; font-size: 8pt !important; }
-      /* หัวกระดาษเอกสาร */
-      body::before {
-        content: "HUAHIN.PROPERTIES - PROPERTY FACT SHEET";
-        display: block; text-align: center; color: var(--gold); font-weight: 800; font-size: 16pt; margin-bottom: 10px;
-      }
+      .gallery-card { border: none !important; box-shadow: none !important; margin-bottom: 30px; }
+      .main-stage { aspect-ratio: 16/9 !important; border-radius: 10px !important; overflow: hidden; }
+      
+      .content { padding: 0 !important; }
+      .info-card { background: #fff !important; border: 1px solid #eee !important; padding: 20px !important; margin-bottom: 20px !important; display: block !important; page-break-inside: avoid; border-radius: 10px; }
+      .section-title { color: var(--gold) !important; font-size: 11pt !important; border-bottom: 2px solid var(--gold) !important; margin-bottom: 15px !important; }
+      .val { color: #000 !important; font-size: 10pt !important; font-weight: 700 !important; }
+      .label { color: #777 !important; font-size: 8pt !important; }
+      .gold-txt { color: var(--gold) !important; }
+
+      /* หัวกระดาษพรีเมียม */
+      .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); padding-bottom: 15px; margin-bottom: 25px; }
+      .print-brand { color: var(--gold); font-weight: 800; font-size: 18pt; }
+      .print-contact { text-align: right; font-size: 9pt; color: #444; line-height: 1.4; }
+      
+      /* ท้ายกระดาษ */
+      .print-footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-end; }
+      .qr-placeholder { width: 80px; height: 80px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 8px; text-align: center; }
     }
   </style>
 </head>
 <body>
+
+<div class="print-only">
+  <div class="print-header">
+    <div class="print-brand">HUAHIN.PROPERTIES</div>
+    <div class="print-contact">
+      <strong>Contact us:</strong><br>
+      📞 +66 (0) 81 234 5678<br>
+      🌐 www.huahin.properties<br>
+      📧 info@huahin.properties
+    </div>
+  </div>
+</div>
 
 <div id="pageSplash">
   <div class="loader-sub-text">Smart Property System</div>
@@ -197,18 +222,18 @@
     </div>
 
     <div class="info-card" id="amenitiesSection">
-      <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
+      <h2 class="section-title">Nearby Lifestyle</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
       
-      <div style="margin-top: 20px;">
+      <div style="margin-top: 25px;">
         <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
           <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
           <i class="fas fa-file-pdf text-red-600 text-xl"></i>
         </a>
         
         <div class="print-bar" onclick="window.print()">
-          <span>Save as Property Fact Sheet (PDF)</span>
-          <i class="fas fa-file-invoice"></i>
+          <span>Download Property Summary (PDF)</span>
+          <i class="fas fa-file-download"></i>
         </div>
       </div>
 
@@ -231,6 +256,18 @@
       </div>
     </div>
   </main>
+
+  <div class="print-only">
+    <div class="print-footer">
+      <div style="font-size: 8pt; color: #888;">
+        &copy; 2026 HuaHin.Properties. All rights reserved.<br>
+        This summary was automatically generated on <span id="printDate"></span>
+      </div>
+      <div class="qr-placeholder">
+        [ Scan to view<br>Online listing ]
+      </div>
+    </div>
+  </div>
 </div>
 
 <a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-pencil-alt"></i></a>
@@ -242,6 +279,8 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRP
 const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 let images=[], idx=0, leafletMap=null;
+
+document.getElementById('printDate').textContent = new Date().toLocaleDateString();
 
 function hideSplash() { 
   const splash = document.getElementById('pageSplash');
@@ -324,6 +363,7 @@ function renderData(u){
           document.getElementById('mapSection').style.display = 'block'; document.getElementById('mapSection').classList.add('has-data');
           if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
       }
+      document.getElementById('amenitiesSection').classList.add('has-data');
       document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(la, lo, loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
   }
   if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) { const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex'; document.getElementById('amenitiesSection').classList.add('has-data'); }
