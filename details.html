@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V202</title>
+  <title>Asset Specifications | MASTER SYSTEM V203</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -11,7 +11,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     
-    /* 🎯 Loader กลับมาเป็นแบบดุ๊กดิ๊กเหมือนเดิม */
+    /* 🏠 Loader ดุ๊กดิ๊ก 100% */
     #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
     .loader-sub-text { color: #FFFFFF; font-size: 9px; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; opacity: 0.8; font-family: 'Montserrat'; }
     .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; }
@@ -63,59 +63,28 @@
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
     
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
-    .print-bar { background: #FFFFFF; border: 2.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-top: 20px; }
+    
+    /* 💠 Share Stack - คืนค่าดีไซน์เดิม 100% */
+    .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
+    .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
+    .share-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 10px 0; }
+    .share-scroll::-webkit-scrollbar { display: none; }
+    .share-btn { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 55px; }
+    .share-btn i { font-size: 22px; }
+    .share-btn span { font-size: 8px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
+    .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; padding: 5px; }
+    .arrow-left { left: 0; } .arrow-right { right: 0; }
+    .icon-fb { color: #1877F2; } .icon-msgr { color: #0084FF; } .icon-wa { color: #25D366; } .icon-tg { color: #0088CC; }
+    .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
 
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     
-    /* 🎯 PRINT ENGINE V202 */
-    .print-identity-container { display: none; text-align: center; }
-    .floorplan-print-box { display: none; text-align: center; page-break-before: always; margin-top: 20px; }
-    .floorplan-print-box img { max-width: 100%; border-radius: 10px; border: 1px solid #ddd; }
-
-    @media print {
-      @page { size: A4; margin: 1cm; }
-      body { background: #fff !important; color: #000 !important; font-size: 11pt; }
-      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, #mapSection, .footer, .admin-float, .print-bar, .pdf-bar, #pageSplash, .share-stack { display: none !important; }
-      
-      .print-identity-container { display: block !important; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2.5px solid var(--gold); }
-      .p-logo-c { height: 85px; width: auto; margin: 0 auto 10px; display: block; }
-      .p-brand-c { color: var(--gold) !important; font-weight: 800; font-size: 16pt; letter-spacing: 3px; margin-bottom: 12px; }
-      
-      .print-contact-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 0; border-top: 1px solid #f0f0f0; }
-      .p-unit { font-size: 8.5pt; color: #333; display: flex; align-items: center; gap: 6px; }
-      .p-unit i { color: var(--gold); font-size: 9pt; }
-
-      .gallery-container { margin-top: 0 !important; padding: 0 !important; }
-      .gallery-card { border: none !important; box-shadow: none !important; }
-      .main-stage { aspect-ratio: 16/9 !important; border-radius: 6px !important; margin-bottom: 15px; }
-      .info-card { background: #fff !important; border: 1px solid #eee !important; padding: 15px !important; margin-bottom: 15px !important; display: block !important; page-break-inside: avoid; border-radius: 8px; color: #000 !important; }
-      .section-title { color: var(--gold) !important; font-size: 9pt !important; border-bottom: 1.5px solid var(--gold) !important; margin-bottom: 10px !important; }
-      .val { color: #000 !important; font-size: 9pt !important; font-weight: 700 !important; }
-      .label { color: #888 !important; font-size: 7pt !important; }
-      
-      .floorplan-print-box { display: block !important; }
-
-      .p-footer-c { display: flex !important; flex-direction: column; align-items: center; margin-top: 30px; border-top: 2px solid var(--gold); padding-top: 20px; page-break-inside: avoid; }
-      .qr-c { width: 100px; height: 100px; margin-bottom: 5px; border: 1px solid #eee; }
-      .qr-t { font-size: 8pt; font-weight: 800; color: var(--gold); }
-    }
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
   </style>
 </head>
 <body>
-
-<div class="print-identity-container">
-  <img src="brand-logo.png" class="p-logo-c" alt="Logo">
-  <div class="p-brand-c">HUAHIN.PROPERTIES</div>
-  <div class="print-contact-row">
-    <div class="p-unit"><i class="fas fa-phone-alt"></i> <span class="c-phone">...</span></div>
-    <div class="p-unit"><i class="fas fa-envelope"></i> <span class="c-email">...</span></div>
-    <div class="p-unit"><i class="fab fa-line"></i> Line: <span class="c-line">...</span></div>
-    <div class="p-unit"><i class="fab fa-whatsapp"></i> WhatsApp: <span class="c-wa">...</span></div>
-  </div>
-</div>
 
 <div id="pageSplash">
   <div class="loader-sub-text">Smart Property System</div>
@@ -183,11 +152,6 @@
       </div>
     </div>
 
-    <div class="floorplan-print-box" id="fpPrintBox">
-      <h2 class="section-title" style="text-align: left;">Property Floor Plan</h2>
-      <img id="fpImgPrint" src="">
-    </div>
-
     <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
       <h2 class="section-title">Ownership & Fees</h2>
       <div class="grid">
@@ -199,24 +163,14 @@
       </div>
     </div>
 
-    <div class="info-card" id="card-desc">
-      <h2 class="section-title">Description</h2>
-      <p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;"></p>
-    </div>
-
-    <div class="info-card" id="mapSection">
-      <h2 class="section-title">Location & Navigator</h2>
-      <div class="map-box"><div id="leafletMap"></div></div>
-      <a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a>
-    </div>
+    <div class="info-card" id="card-desc"><h2 class="section-title">Description</h2><p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; white-space: pre-line;"></p></div>
+    <div class="info-card" id="mapSection"><h2 class="section-title">Location & Navigator</h2><div class="map-box"><div id="leafletMap"></div></div><a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a></div>
 
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
-      <div style="margin-top: 25px;">
-        <a id="pdfBar" href="#" target="_blank" class="pdf-bar"><span style="color:var(--navy);font-weight:800;font-size:0.8rem;">Download Floor Plan PDF</span><i class="fas fa-file-pdf text-red-600 text-xl"></i></a>
-        <div class="print-bar" onclick="window.print()"><span>Download Summary (PDF)</span><i class="fas fa-file-download"></i></div>
-      </div>
+      <a id="pdfBar" href="#" target="_blank" class="pdf-bar"><span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span><i class="fas fa-file-pdf text-red-600 text-xl"></i></a>
+      
       <div class="share-stack">
         <div style="font-size: 11px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-share-nodes"></i> SHARE THIS ASSET</div>
         <div class="share-wrapper">
@@ -236,21 +190,6 @@
       </div>
     </div>
   </main>
-
-  <div class="print-identity-container p-footer-c">
-    <div class="qr-block" style="text-align: center; margin-bottom: 15px;">
-      <img src="line-qr.png" class="qr-c" onerror="this.style.display='none'">
-      <div class="qr-t">SCAN FOR LINE CONTACT</div>
-    </div>
-    <img src="brand-logo.png" style="height:40px; margin-bottom:10px;">
-    <div class="p-brand-c" style="font-size:12pt;">HUAHIN.PROPERTIES</div>
-    <div class="print-contact-row" style="border:none;">
-      <div class="p-unit"><i class="fas fa-phone-alt"></i> <span class="c-phone">...</span></div>
-      <div class="p-unit"><i class="fas fa-envelope"></i> <span class="c-email">...</span></div>
-      <div class="p-unit"><i class="fab fa-line"></i> <span class="c-line">...</span></div>
-    </div>
-    <div style="font-size: 7pt; color: #999; margin-top: 15px;">Asset ID: <span id="pID-f"></span> | Printed on <span id="printDate"></span></div>
-  </div>
 </div>
 
 <a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-pencil-alt"></i></a>
@@ -263,40 +202,30 @@ const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 let images=[], idx=0, leafletMap=null;
 
-document.getElementById('printDate').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
-
 function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 500); } }
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 function scrollShare(val) { document.getElementById('shareBox').scrollBy({left: val, behavior: 'smooth'}); }
 
 async function init(){
-  const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+  checkAuthUI();
   if(!hpId) { hideSplash(); return; }
   try{
-    // 1. ดึงข้อมูลยูนิต
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
     const json = await res.json();
-    if(json.ok){
-      renderData(json.data);
-      document.getElementById('pID-f').textContent = json.data.HP_ID;
-      
-      // 2. ดึงข้อมูลติดต่อ (แก้ไขวิธีเรียกเพื่อให้หน้าไม่ค้าง)
-      fetch(`${SCRIPT_URL}?mode=getAddContext`)
-        .then(r => r.json())
-        .then(meta => {
-           if(meta.ok && meta.options) {
-             const opt = meta.options;
-             document.querySelectorAll('.c-phone').forEach(el => el.textContent = opt.Contact_Phone || "-");
-             document.querySelectorAll('.c-email').forEach(el => el.textContent = opt.Contact_Email || "-");
-             document.querySelectorAll('.c-line').forEach(el => el.textContent = opt.Contact_Line || "-");
-             document.querySelectorAll('.c-wa').forEach(el => el.textContent = opt.Contact_WhatsApp || "-");
-           }
-        });
-
-      if(isLoggedIn) { const eb = document.getElementById('adminEditBtn'); eb.href=`edit.html?id=${hpId}`; eb.style.display='flex'; }
-    }
+    if(json.ok){ renderData(json.data); }
     hideSplash();
-  }catch(e){ hideSplash(); console.error(e); }
+  }catch(e){ hideSplash(); }
+}
+
+function checkAuthUI() {
+  const authSection = document.getElementById('authMenuSection');
+  const isLoggedIn = localStorage.getItem('admin_session') === 'active';
+  if (isLoggedIn) {
+    authSection.innerHTML = `<a href="dashboard.html" class="menu-item"><i class="fas fa-columns"></i> DASHBOARD</a><a href="#" onclick="handleLogout(event)" class="menu-item" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> SIGN OUT</a>`;
+    const eb = document.getElementById('adminEditBtn'); eb.href=`edit.html?id=${hpId}`; eb.style.display='flex';
+  } else {
+    authSection.innerHTML = `<a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a>`;
+  }
 }
 
 function syncField(valId, wrapId, value) {
@@ -335,21 +264,17 @@ function renderData(u){
   syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
   if(u.Description) { document.getElementById('vDesc').textContent = u.Description; document.getElementById('vDesc').closest('.info-card').classList.add('has-data'); }
-  
-  // Floor Plan Logic
-  if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) {
-      document.getElementById('fpImgPrint').src = u.FloorPlan_PDF;
-      const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex';
-  } else { document.getElementById('fpPrintBox').style.display='none'; }
-
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/8{la},${lo}`;
-      document.getElementById('mapSection').style.display = 'block'; document.getElementById('mapSection').classList.add('has-data');
-      if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
+      document.getElementById('navLink').href = `https://www.google.com/maps?q=${la},${lo}`;
+      if(u.Map_Visibility !== 'Hide') {
+          document.getElementById('mapSection').style.display = 'block'; document.getElementById('mapSection').classList.add('has-data');
+          if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
+      }
       document.getElementById('amenitiesSection').classList.add('has-data');
       document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(la, lo, loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
   }
+  if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) { const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex'; document.getElementById('amenitiesSection').classList.add('has-data'); }
   images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
@@ -361,6 +286,7 @@ function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*
 function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
 function changeSlide(n){setMain(idx+n);}
 function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})" loading="lazy">`).join(''); }
+
 init();
 </script>
 </body>
