@@ -1,15 +1,11 @@
-คำสั่ง "ห้ามแก้ไขโครงสร้างเดิม" (The Anchor Command)
-"ใช้โค้ดล่าสุดที่ฉันส่งให้เป็นฐาน 100% 
-( <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V220</title>
+  <title>Asset Specifications | MASTER SYSTEM V221</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <style>
     :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -68,14 +64,6 @@
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
     .pdf-summary-bar { background: #FFFFFF; border: 2.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-top: 20px; }
 
-    /* 🎯 PREVIEW MODAL STYLING */
-    .preview-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 11000; display: none; flex-direction: column; align-items: center; overflow-y: auto; padding: 20px 10px; }
-    .preview-modal.active { display: flex; }
-    .preview-paper { background: #fff; width: 100%; max-width: 800px; padding: 40px 30px; color: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 4px; margin-bottom: 100px; }
-    .preview-controls { position: fixed; bottom: 0; width: 100%; background: #060F1A; padding: 15px; border-top: 2px solid var(--gold); display: flex; justify-content: center; gap: 10px; }
-    .preview-btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 4px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; }
-    .close-preview { position: fixed; top: 15px; right: 15px; background: #fff; color: #000; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; cursor: pointer; z-index: 11001; }
-
     .qr-section { margin-top: 30px; text-align: center; padding: 20px; border-top: 1px solid var(--border); }
     .qr-img-display { width: 120px; height: 120px; border: 2.5px solid var(--gold); border-radius: 15px; margin-bottom: 8px; background: white; padding: 5px; }
     .qr-label-txt { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
@@ -89,6 +77,8 @@
     .share-btn span { font-size: 8px; font-weight: 700; color: #7A9BB5; text-transform: uppercase; }
     .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; cursor: pointer; opacity: 0.6; padding: 5px; }
     .arrow-left { left: 0; } .arrow-right { right: 0; }
+    
+    /* ✅ SHARE ICONS REAL COLORS */
     .icon-fb { color: #1877F2; } .icon-msgr { color: #0084FF; } .icon-wa { color: #25D366; } .icon-tg { color: #0088CC; }
     .icon-line { color: #06C755; } .icon-mail { color: #EA4335; } .icon-copy { color: #9AB; } .icon-share { color: var(--gold); }
 
@@ -96,10 +86,10 @@
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; }
 
-    /* 🎯 PRINT IDENTITY */
+    /* 🎯 PRINT IDENTITY ENGINE */
     .print-only-identity { display: none; }
     @media print {
-      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, #mapSection, .footer, .admin-float, .pdf-bar, .pdf-summary-bar, #pageSplash, .share-stack, .qr-section, .preview-modal { display: none !important; }
+      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, .footer, .admin-float, .pdf-bar, .pdf-summary-bar, #pageSplash, .share-stack, .qr-section { display: none !important; }
       .print-only-identity { display: block !important; text-align: center; border-bottom: 2.5px solid var(--gold); margin-bottom: 25px; padding-bottom: 15px; }
       .p-logo-print { height: 90px; margin-bottom: 10px; margin: 0 auto; display: block; }
       .p-brand-print { color: var(--gold) !important; font-weight: 800; font-size: 18pt; letter-spacing: 3px; }
@@ -110,22 +100,15 @@
       .section-title { color: var(--gold) !important; border-bottom: 1.5px solid var(--gold) !important; font-size: 9pt !important; }
       .val { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
       .label { color: #888 !important; font-size: 7.5pt !important; }
-      .qr-print-box { display: flex !important; flex-direction: column; align-items: center; margin-top: 30px; border-top: 2px solid var(--gold); padding-top: 20px; }
+      #mapSection { display: block !important; background: #fff !important; border: 1px solid #eee !important; page-break-inside: avoid; }
+      .map-box { height: 300px !important; border: 1px solid #ddd !important; }
+      .btn-nav { display: none !important; }
+      .qr-print-box { display: flex !important; flex-direction: column; align-items: center; margin-top: 30px; border-top: 2px solid var(--gold); padding-top: 20px; page-break-inside: avoid; }
     }
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
   </style>
 </head>
 <body>
-
-<div class="preview-modal" id="pModal">
-    <div class="close-preview" onclick="togglePreview(false)">×</div>
-    <div class="preview-paper" id="pPaper">
-        </div>
-    <div class="preview-controls">
-        <button class="preview-btn" onclick="savePDF()"><i class="fas fa-file-download"></i> Save PDF</button>
-        <button class="preview-btn" onclick="window.print()"><i class="fas fa-print"></i> Print Now</button>
-    </div>
-</div>
 
 <div class="print-only-identity" id="fullPrintSource">
   <img src="brand-logo.png" class="p-logo-print">
@@ -232,7 +215,7 @@
       <div id="pdfBar" class="pdf-bar" onclick="handleFloorPlan()">
           <span>Download Floor Plan PDF</span><i class="fas fa-file-pdf text-red-600"></i>
       </div>
-      <div class="pdf-summary-bar" onclick="togglePreview(true)">
+      <div class="pdf-summary-bar" onclick="window.print()">
           <span>Download Property Summary (PDF)</span><i class="fas fa-file-download"></i>
       </div>
 
@@ -261,7 +244,7 @@
     </div>
   </main>
 
-  <div class="print-onlyqr qr-print-box" id="printFooterQR">
+  <div class="print-only-identity qr-print-box" id="printFooterQR">
      <div id="footerContactClone" class="p-contact-row" style="border-top:none; border-bottom:1px solid #f0f0f0; margin-bottom:15px; padding-bottom:15px;"></div>
      <div id="footerQRClone"></div>
      <div style="font-size: 7pt; color: #999; margin-top: 15px;">Asset ID: <span id="pID-f"></span> | Printed on <span id="printDate"></span></div>
@@ -277,43 +260,6 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRP
 const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
 let images=[], idx=0, leafletMap=null, currentFPUrl="";
-
-// ✅ Preview Modal Logic
-function togglePreview(show) {
-    const modal = document.getElementById('pModal');
-    const paper = document.getElementById('pPaper');
-    if(show) {
-        paper.innerHTML = "";
-        const header = document.getElementById('fullPrintSource').cloneNode(true);
-        header.style.display = "block";
-        header.style.marginBottom = "30px";
-        const content = document.getElementById('pdfCaptureData').cloneNode(true);
-        content.querySelectorAll('.info-card').forEach(c => {
-            c.style.display = "block"; c.style.backgroundColor = "#fff"; c.style.color = "#000"; c.style.border = "1px solid #eee";
-        });
-        content.querySelectorAll('.val').forEach(v => v.style.color = "#000");
-        content.querySelectorAll('.label').forEach(l => l.style.color = "#888");
-        content.querySelectorAll('.section-title').forEach(t => t.style.color = "#C9A84C");
-        const qr = document.getElementById('qrContainer').cloneNode(true);
-        qr.style.marginTop = "30px"; qr.style.borderTop = "1px solid #eee"; qr.style.paddingTop = "20px";
-        
-        paper.appendChild(header);
-        paper.appendChild(content);
-        paper.appendChild(qr);
-        modal.classList.add('active');
-        document.body.style.overflow = "hidden";
-    } else {
-        modal.classList.remove('active');
-        document.body.style.overflow = "auto";
-    }
-}
-
-function savePDF() {
-    const element = document.getElementById('pPaper');
-    const opt = { margin: 0.5, filename: `Summary_${hpId}.pdf`, image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
-    html2pdf().set(opt).from(element).save();
-}
 
 function handleFloorPlan() { if(currentFPUrl) window.open(currentFPUrl, '_blank'); }
 
@@ -420,23 +366,3 @@ init();
 </script>
 </body>
 </html>
- )
-ห้ามเปลี่ยนแปลงตรรกะ (Logic) หรือชื่อตัวแปร (Variables) ในส่วนอื่นเด็ดขาด ให้ทำหน้าที่เพียง 'สอดแทรก' โค้ดใหม่เข้าไปในตำแหน่งที่เกี่ยวข้องเท่านั้น"
-
-
-1. "ขอบเขตการแก้ไข" (Scoped Instruction)
-**"งานนี้มี 3 จุดที่อนุญาตให้แก้ไขคือ:
-จากรูปที่ฉันส่งให้มาจะเป็นรูปการเปิดทั้งหน้าจอมือถือและเปิดจากคอมพิวเตอร์จะเห็นว่าเมื่อกดเพื่อจะดูก่อนตัดสินใจว่าจะเซฟหรือจะปริ้นมันจะเป็นภาพโลโก้ที่ใหญ่จนล้นและมองไม่เห็นข้อความที่ควรจะโชว์เลยและเมื่อกดเสียบแล้วก็จะเป็นหน้าจอสีขาวเหมือนปัญหาเก่าที่เราเคยเจอ
-จุดที่ 1 ตัดระบบ Preview ออก (ทางเลือกที่ปลอดภัยที่สุด 100%)ย้อนกลับไปใช้ระบบของเวอร์ชัน V219 (ระบบมาตรฐาน) คือเมื่อกดป้ายที่ 2 ปั๊บ ให้ระบบเปิดหน้าต่าง Print Preview ของเบราว์เซอร์ ขึ้นมาทันที และลบโค้ดที่เกี่ยวข้องก่อนหน้าที่เราสร้างระบบ Pop Up ขึ้นมาออกให้สะอาดคงเหลือ Code หลักที่เราจะใช้กันเท่านั้น
-
-2. "ตรวจสอบความครบถ้วน" ก่อนส่ง (Integrity Check)
-"ก่อนส่งโค้ดให้ฉัน ให้คุณตรวจสอบซ้ำว่าฟังก์ชัน [ระบุชื่อฟังก์ชันสำคัญ เช่น การดึงข้อมูล 39 ช่อง] ยังอยู่ครบถ้วนเหมือนต้นฉบับที่ฉันส่งให้หรือไม่ หากมีการหายไปให้ดึงกลับมาให้ครบก่อนส่ง"
-
-
-3. กฎการบังคับส่งตัวเต็ม" (Full Code Only)
-ย้ำ "ต้องส่งกลับมาเป็น Full Code ฉบับเต็มสมบูรณ์ 100% เท่านั้น เพื่อให้ฉันก๊อปปี้วางทับได้ทันที"
-
-
-
-
-
