@@ -2,12 +2,10 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V218</title>
+  <title>Asset Specifications | MASTER SYSTEM V219</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <style>
     :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -63,25 +61,13 @@
     .loc-name{font-size:0.78rem;}
     .loc-dist{font-size:0.75rem;color:var(--gold)}
     
+    /* 🎯 PDF BARS (No more modal) */
     .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
     .pdf-summary-bar { background: #FFFFFF; border: 2.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-top: 20px; }
 
     .qr-section { margin-top: 30px; text-align: center; padding: 20px; border-top: 1px solid var(--border); }
     .qr-img-display { width: 120px; height: 120px; border: 2.5px solid var(--gold); border-radius: 15px; margin-bottom: 8px; background: white; padding: 5px; }
     .qr-label-txt { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
-
-    /* 🎯 POPUP MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 11000; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal-card { background: var(--navy); border: 2px solid var(--gold); border-radius: 25px; width: 95%; max-width: 400px; padding: 30px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    .modal-title { color: var(--gold); font-weight: 800; font-size: 1.1rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-    .modal-options { display: grid; gap: 15px; }
-    .opt-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 18px 15px; border-radius: 15px; color: #FFF; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; }
-    .opt-btn i { font-size: 1.4rem; color: var(--gold); }
-    .opt-text { text-align: left; }
-    .opt-text strong { display: block; font-size: 0.85rem; margin-bottom: 2px; }
-    .opt-text span { font-size: 0.6rem; color: #7A9BB5; }
-    .close-modal { margin-top: 20px; color: #7A9BB5; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; border-bottom: 1px solid #7A9BB5; display: inline-block; padding-bottom: 2px; }
 
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
@@ -99,19 +85,19 @@
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; }
 
-    /* 🎯 PRINT LAYOUT - IDENTITY */
+    /* 🎯 PRINT IDENTITY */
     .print-only-identity { display: none; }
     @media print {
-      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, #mapSection, .footer, .admin-float, .pdf-bar, .pdf-summary-bar, .modal-overlay, #pageSplash, .share-stack, .qr-section { display: none !important; }
+      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, #mapSection, .footer, .admin-float, .pdf-bar, .pdf-summary-bar, #pageSplash, .share-stack, .qr-section { display: none !important; }
       .print-only-identity { display: block !important; text-align: center; border-bottom: 2.5px solid var(--gold); margin-bottom: 25px; padding-bottom: 15px; }
       .p-logo-print { height: 90px; margin-bottom: 10px; margin: 0 auto; display: block; }
-      .p-brand-print { color: var(--gold) !important; font-weight: 800; font-size: 18pt; }
-      .p-contact-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; padding: 10px 0; border-top: 1px solid #f0f0f0; margin-top: 10px; }
+      .p-brand-print { color: var(--gold) !important; font-weight: 800; font-size: 18pt; letter-spacing: 3px; }
+      .p-contact-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; padding: 10px 0; border-top: 1px solid #f0f0f0; margin-top: 10px; }
       .p-unit { font-size: 8.5pt; color: #333; display: flex; align-items: center; gap: 6px; }
       .p-unit i { color: var(--gold); font-size: 9pt; }
       .info-card { background: #fff !important; border: 1px solid #eee !important; display: block !important; page-break-inside: avoid; border-radius: 8px; color: #000 !important; }
       .section-title { color: var(--gold) !important; border-bottom: 1.5px solid var(--gold) !important; font-size: 9pt !important; }
-      .val { color: #000 !important; font-size: 9pt !important; font-weight: 700 !important; }
+      .val { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
       .label { color: #888 !important; font-size: 7.5pt !important; }
       .qr-print-box { display: flex !important; flex-direction: column; align-items: center; margin-top: 30px; border-top: 2px solid var(--gold); padding-top: 20px; }
     }
@@ -135,17 +121,6 @@
   <div class="loader-sub-text">Smart Property System</div>
   <div class="loader-icons"><span>🏠</span><span>✨</span><span>🌴</span></div>
   <div class="loader-text">HUAHIN.PROPERTIES</div>
-</div>
-
-<div class="modal-overlay" id="pdfModal">
-    <div class="modal-card">
-        <div class="modal-title" id="modalTitle">Export Options</div>
-        <div class="modal-options">
-            <div class="opt-btn" onclick="executeDownload()"><i class="fas fa-file-download"></i><div class="opt-text"><strong>Save as PDF File</strong><span>บันทึกไฟล์ลงเครื่องทันที</span></div></div>
-            <div class="opt-btn" onclick="executePrint()"><i class="fas fa-print"></i><div class="opt-text"><strong>Print Report</strong><span>สั่งพริ้นเอกสาร</span></div></div>
-        </div>
-        <div class="close-modal" onclick="closePDFModal()">Close / ปิดหน้าต่าง</div>
-    </div>
 </div>
 
 <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
@@ -233,10 +208,10 @@
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
       
-      <div id="pdfBar" class="pdf-bar" onclick="openPDFModal('floorplan')">
+      <div id="pdfBar" class="pdf-bar" onclick="handleFloorPlan()">
           <span>Download Floor Plan PDF</span><i class="fas fa-file-pdf text-red-600"></i>
       </div>
-      <div class="pdf-summary-bar" onclick="openPDFModal('summary')">
+      <div class="pdf-summary-bar" onclick="window.print()">
           <span>Download Property Summary (PDF)</span><i class="fas fa-file-download"></i>
       </div>
 
@@ -265,7 +240,7 @@
     </div>
   </main>
 
-  <div class="print-only-identity qr-print-box" id="printFooterQR"></div>
+  <div class="print-onlyqr qr-print-box" id="printFooterQR"></div>
 </div>
 
 <a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-pencil-alt"></i></a>
@@ -276,78 +251,13 @@
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
 const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
-let images=[], idx=0, leafletMap=null, currentFPUrl="", modalMode="";
+let images=[], idx=0, leafletMap=null, currentFPUrl="";
 
-function openPDFModal(m){ modalMode=m; document.getElementById('modalTitle').textContent=m==='floorplan'?'Floor Plan Options':'PDF Export Options'; document.getElementById('pdfModal').classList.add('active'); }
-function closePDFModal(){ document.getElementById('pdfModal').classList.remove('active'); }
+function handleFloorPlan() { if(currentFPUrl) window.open(currentFPUrl, '_blank'); }
 
-// ✅ จุดที่ 1 [Unified PDF Engine]: ใช้แหล่งไฟล์เดียวกับ Print เพื่อแก้ปัญหาหน้าว่าง
-function executeDownload(){
-    closePDFModal();
-    if(modalMode==='floorplan' && currentFPUrl){ 
-        window.open(currentFPUrl, '_blank'); 
-    } 
-    else {
-        const paper = document.createElement('div');
-        paper.style.padding = "40px";
-        paper.style.backgroundColor = "#ffffff";
-        paper.style.width = "800px";
-
-        const header = document.getElementById('fullPrintSource').cloneNode(true);
-        header.style.display = "block";
-        header.style.marginBottom = "30px";
-        
-        const content = document.getElementById('pdfCaptureData').cloneNode(true);
-        content.querySelectorAll('.info-card').forEach(card => {
-            card.style.backgroundColor = "#fff";
-            card.style.color = "#000";
-            card.style.border = "1px solid #eee";
-            card.style.display = "block";
-            card.style.marginBottom = "15px";
-            card.style.padding = "20px";
-            card.style.borderRadius = "8px";
-        });
-        content.querySelectorAll('.val').forEach(v => { v.style.color = "#000"; v.style.fontSize = "10pt"; });
-        content.querySelectorAll('.label').forEach(l => { l.style.color = "#888"; l.style.fontSize = "8pt"; });
-        content.querySelectorAll('.section-title').forEach(t => { 
-            t.style.color = "#C9A84C"; 
-            t.style.borderBottom = "1.5px solid #C9A84C";
-            t.style.paddingBottom = "5px";
-            t.style.fontSize = "11pt";
-        });
-
-        const footer = document.getElementById('qrContainer').cloneNode(true);
-        footer.style.marginTop = "40px";
-        footer.style.borderTop = "2px solid #C9A84C";
-        footer.style.paddingTop = "20px";
-
-        paper.appendChild(header);
-        paper.appendChild(content);
-        paper.appendChild(footer);
-
-        document.body.appendChild(paper);
-
-        const opt = { 
-            margin: 0.5, 
-            filename: `Summary_${hpId}.pdf`, 
-            image: { type: 'jpeg', quality: 1.0 }, 
-            html2canvas: { scale: 2, useCORS: true, logging: false }, 
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
-        };
-
-        html2pdf().set(opt).from(paper).toPdf().get('pdf').then(function(pdf){
-            document.body.removeChild(paper);
-        }).save();
-    }
-}
-
-function executePrint(){ 
-    closePDFModal(); 
-    // ย้าย QR ไปไว้ที่ Footer สำหรับ Print
+window.onbeforeprint = function() {
     document.getElementById('printFooterQR').innerHTML = document.getElementById('qrContainer').innerHTML;
-    if(modalMode==='floorplan' && currentFPUrl) window.open(currentFPUrl,'_blank').print(); 
-    else window.print(); 
-}
+};
 
 function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 500); } }
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
@@ -417,7 +327,6 @@ function renderData(u){
   syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
   if(u.Description) { document.getElementById('vDesc').textContent = u.Description; document.getElementById('vDesc').closest('.info-card').classList.add('has-data'); }
   
-  // ✅ จุดที่ 2 [Map Restore]: กู้คืนแผนที่และ Navigator
   if(u.Coordinates && u.Coordinates.includes(',')) {
       const [la, lo] = u.Coordinates.split(',').map(v => v.trim());
       document.getElementById('navLink').href = "https://www.google.com/maps/dir/?api=1&destination=" + la + "," + lo + "&travelmode=driving";
