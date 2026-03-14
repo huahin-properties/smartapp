@@ -2,42 +2,34 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>Asset Specifications | MASTER SYSTEM V200</title>
+  <title>Property Details | MASTER V200</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;--pdf-red: #E02424;}
+    :root{--navy:#0B1829;--navy-dark:#060F1A;--gold:#C9A84C;--border:rgba(201,168,76,0.15);--card-bg:#0F172A;}
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     
-    #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
-    .loader-sub-text { color: #FFFFFF; font-size: 9px; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; opacity: 0.8; }
-    .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; }
-    .loader-icons span { display: inline-block; animation: bounce 0.6s infinite alternate; }
-    .loader-text { color: var(--gold); font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; }
-    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+    #pageSplash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: 0.5s; }
+    .loader-text { color: var(--gold); font-weight: 800; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 15px; }
 
     header{position:fixed;top:0;width:100%;height:55px;background:rgba(11,24,41,0.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.85rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
-    .menu-trigger { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1001; }
-    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--navy); z-index: 2000; transition: 0.4s; padding: 60px 20px; border-right: 1px solid var(--border); }
-    .sidebar.active { left: 0; }
-    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1999; display: none; }
-    .sidebar-overlay.active { display: block; }
-    .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #FFF; text-decoration: none; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
-    .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.2px solid var(--gold); }
-    
+    .brand-center { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; color: var(--gold); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; }
+    .menu-trigger { cursor: pointer; color: var(--gold); display: flex; flex-direction: column; align-items: center; }
+    .menu-trigger span { font-size: 8px; font-weight: 700; margin-top: 2px; }
+    .brand-logo-top { width: 38px; height: 38px; border-radius: 50%; border: 1.2px solid var(--gold); object-fit: cover; }
+
     .gallery-container{margin-top:65px;padding:15px;max-width:1100px;margin:0 auto;}
     .gallery-card{background:#000;border-radius: 18px;border:1px solid var(--border);overflow:hidden;box-shadow: 0 10px 30px rgba(0,0,0,0.3);margin-bottom:20px;}
     .main-stage{position:relative;width:100%;aspect-ratio:16/14;background:#111;overflow:hidden;}
-    .main-img{width:100%;height:100%; object-fit:cover; transition:opacity 0.3s}
-    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,0.3);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
+    .main-img{width:100%;height:100%; object-fit:cover;}
+    .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;background:rgba(0,0,0,0.3);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border-radius:50%;}
     .thumb-row{display:flex;gap:10px;padding:12px;overflow-x:auto;scrollbar-width:none}
-    .thumb{width:80px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
+    .thumb{width:80px;aspect-ratio:16/10;border-radius:8px;object-fit:cover;opacity:0.5;cursor:pointer;border:2px solid transparent;}
     .thumb.active{opacity:1;border-color:var(--gold)}
-    .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;font-weight:600}
-    
+    .tag-count{position:absolute;right:15px;bottom:15px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:10px;}
+
     .content{padding:0 15px 120px;max-width:900px;margin:0 auto}
     .info-card{background:var(--card-bg);border-radius:12px;padding:22px;margin-bottom:15px;border:1px solid var(--border); display: none; }
     .info-card.has-data { display: block; }
@@ -45,99 +37,72 @@
     .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
     .field-wrap { display: none; margin-bottom: 12px; } 
     .field-wrap.has-val { display: block; }
-    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;font-weight:500;letter-spacing:1.2px;margin-bottom:3px}
-    .val{font-size:0.85rem;font-weight:400;color:#FFF}
-    .gold-txt{color:var(--gold);font-weight:600}
+    .label{font-size:0.55rem;color:#7A9BB5;text-transform:uppercase;margin-bottom:3px}
+    .val{font-size:0.85rem;color:#FFF}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
     
-    #leafletMap{width:100%;height:250px;background:#0F172A;border-radius:12px;border:1px solid var(--border);margin:10px 0}
-    .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;margin-top:10px;border:1px solid var(--border);}
-    .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
-    .loc-name{font-size:0.78rem;font-weight:300}
-    .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
-    
-    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; margin-bottom: 10px; }
-    .print-bar { background: #FFFFFF; border: 2px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; }
-    .print-bar i { color: var(--gold); font-size: 1.2rem; }
+    #leafletMap{width:100%;height:250px;border-radius:12px;border:1px solid var(--border);margin:10px 0}
+    .btn-nav{width:100%;background:var(--navy);color:#FFF;text-decoration:none;padding:14px;border-radius:8px;display:flex;justify-content:center;align-items:center;gap:10px;font-weight:600;font-size:0.85rem;border:1px solid var(--border);}
+    .print-bar { background: #FFFFFF; border: 2px solid var(--gold); padding: 18px 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-top: 25px; }
 
     .footer{position:fixed;bottom:0;width:100%;background:#060F1A;padding:12px 15px;border-top:1px solid var(--border);z-index:1000}
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
-    .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-    
-    /* 🎯 PRINT LAYOUT CONTROL */
-    .print-identity-container { display: none; text-align: center; }
-    .pdf-floorplan-preview { display: none; margin-top: 20px; text-align: center; page-break-before: always; }
-    .pdf-floorplan-preview img { max-width: 100%; border-radius: 8px; border: 1px solid #ddd; }
+
+    /* 🎯 PRINT ENGINE V200 */
+    .print-only { display: none; text-align: center; }
+    #pdfFPBox { display: none; margin-top: 20px; page-break-before: always; }
+    #pdfFPBox img { max-width: 100%; border-radius: 10px; border: 1px solid #ddd; }
 
     @media print {
       @page { size: A4; margin: 1cm; }
-      body { background: #fff !important; color: #000 !important; font-size: 11pt; }
-      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, #mapSection, .footer, .admin-float, .print-bar, .pdf-bar, #pageSplash { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      header, .footer, .print-bar, #pageSplash, .nav-arrow, .thumb-row, .tag-count, #leafletMap, .btn-nav { display: none !important; }
       
-      .print-identity-container { display: block !important; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2.5px solid var(--gold); }
-      .print-logo-center { height: 85px; width: auto; margin: 0 auto 10px; display: block; }
-      .print-brand-center { color: var(--gold) !important; font-weight: 800; font-size: 18pt; letter-spacing: 3px; margin-bottom: 12px; }
+      .print-only { display: block !important; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--gold); }
+      .p-logo { height: 80px; margin-bottom: 10px; }
+      .p-brand { color: var(--gold) !important; font-weight: 800; font-size: 18pt; margin-bottom: 10px; }
+      .p-contact-row { display: flex; justify-content: center; gap: 15px; font-size: 8pt; color: #333; border-top: 1px solid #eee; padding-top: 10px; }
       
-      .print-contact-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 0; border-top: 1px solid #f0f0f0; }
-      .p-unit { font-size: 8.5pt; color: #333; display: flex; align-items: center; gap: 6px; }
-      .p-unit i { color: var(--gold); font-size: 9pt; }
-
       .gallery-container { margin-top: 0 !important; padding: 0 !important; }
-      .gallery-card { border: none !important; box-shadow: none !important; }
-      .main-stage { aspect-ratio: 16/9 !important; border-radius: 6px !important; margin-bottom: 15px; }
-      .info-card { background: #fff !important; border: 1px solid #eee !important; padding: 15px !important; margin-bottom: 15px !important; display: block !important; page-break-inside: avoid; border-radius: 8px; }
-      .section-title { color: var(--gold) !important; font-size: 9pt !important; border-bottom: 1.5px solid var(--gold) !important; margin-bottom: 10px !important; }
-      .val { color: #000 !important; font-size: 9pt !important; font-weight: 700 !important; }
-      .label { color: #888 !important; font-size: 7pt !important; }
+      .main-stage { aspect-ratio: 16/9 !important; }
+      .info-card { background: #fff !important; border: 1px solid #eee !important; display: block !important; page-break-inside: avoid; color: #000 !important; }
+      .section-title { color: var(--gold) !important; border-bottom: 1.5px solid var(--gold) !important; }
+      .val { color: #000 !important; font-weight: 700 !important; }
       
-      .pdf-floorplan-preview { display: block !important; }
-
-      .print-footer-v4 { display: flex !important; flex-direction: column; align-items: center; margin-top: 30px; border-top: 2px solid var(--gold); padding-top: 20px; page-break-inside: avoid; }
-      .qr-block { text-align: center; margin-bottom: 15px; }
-      .qr-img-file { width: 100px; height: 100px; margin-bottom: 5px; border: 1px solid #eee; }
-      .qr-tag { font-size: 8pt; font-weight: 700; color: var(--gold); }
+      #pdfFPBox { display: block !important; }
+      
+      .p-footer { display: flex !important; flex-direction: column; align-items: center; margin-top: 40px; border-top: 2px solid var(--gold); padding-top: 20px; }
+      .qr-img { width: 110px; height: 110px; margin-bottom: 5px; }
+      .qr-txt { font-size: 9pt; font-weight: 800; color: var(--gold); }
     }
   </style>
 </head>
 <body>
 
-<div class="print-identity-container">
-  <img src="brand-logo.png" class="print-logo-center" alt="HuaHin Properties">
-  <div class="print-brand-center">HUAHIN.PROPERTIES</div>
-  <div class="print-contact-row">
-    <div class="p-unit"><i class="fas fa-phone-alt"></i> <span class="d-phone">...</span></div>
-    <div class="p-unit"><i class="fas fa-envelope"></i> <span class="d-email">...</span></div>
-    <div class="p-unit"><i class="fab fa-line"></i> Line: <span class="d-line">...</span></div>
-    <div class="p-unit"><i class="fab fa-whatsapp"></i> WhatsApp: <span class="d-wa">...</span></div>
+<div class="print-only">
+  <img src="brand-logo.png" class="p-logo">
+  <div class="p-brand">HUAHIN.PROPERTIES</div>
+  <div class="p-contact-row">
+    <span><i class="fas fa-phone-alt"></i> <span class="get-phone">...</span></span>
+    <span><i class="fas fa-envelope"></i> <span class="get-email">...</span></span>
+    <span><i class="fab fa-line"></i> <span class="get-line">...</span></span>
+    <span><i class="fab fa-whatsapp"></i> <span class="get-wa">...</span></span>
   </div>
 </div>
 
-<div id="pageSplash">
-  <div class="loader-sub-text">Smart Property System</div>
-  <div class="loader-icons"><span>🏠</span><span>✨</span><span>🌴</span></div>
-  <div class="loader-text">HUAHIN.PROPERTIES</div>
-</div>
-
-<div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
-<div class="sidebar" id="sidebar">
-    <div style="color:var(--gold); font-weight:800; margin-bottom:30px; font-size:1.1rem; border-bottom:2px solid var(--gold); padding-bottom:10px;">NAVIGATION</div>
-    <a href="index.html" class="menu-item"><i class="fas fa-home"></i> HOME</a>
-    <div id="authMenuSection"><a href="gateway.html" class="menu-item"><i class="fas fa-user-shield"></i> ADMIN LOGIN</a></div>
-    <a href="https://line.me/R/ti/p/@qap7218t" class="menu-item"><i class="fab fa-line"></i> CONTACT US</a>
-    <a href="#" onclick="toggleMenu()" class="menu-item" style="color:#7A9BB5; border-bottom:none;"><i class="fas fa-times"></i> CLOSE MENU</a>
-</div>
+<div id="pageSplash"><div class="loader-text">HUAHIN.PROPERTIES</div></div>
 
 <header>
-    <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i><span>MENU</span></div>
+    <div class="menu-trigger"><i class="fas fa-bars"></i><span>MENU</span></div>
     <a href="index.html" class="brand-center">ASSET DETAIL</a>
-    <img src="brand-logo.png" class="brand-logo-top" alt="Logo">
+    <img src="brand-logo.png" class="brand-logo-top">
 </header>
 
 <div id="mainUI">
   <div class="gallery-container">
     <div class="gallery-card">
       <div class="main-stage">
-        <img id="mainImg" class="main-img" src="" loading="lazy">
+        <img id="mainImg" class="main-img" src="">
         <div class="nav-arrow" style="left:10px" onclick="changeSlide(-1)">❮</div>
         <div class="nav-arrow" style="right:10px" onclick="changeSlide(1)">❯</div>
         <div class="tag-count" id="countLabel">0 / 0</div>
@@ -148,189 +113,117 @@
 
   <main class="content">
     <div class="info-card has-data">
-      <div style="font-size:0.6rem;color:var(--gold);font-weight:800;margin-bottom:5px;" id="pID"></div>
-      <h1 id="pPlot" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:5px;font-weight:800;"></h1>
-      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:20px;"></div>
-      <div id="pPrice" style="font-size:1.5rem;font-weight:700;color:#FFF;margin-bottom:25px;">฿0</div>
+      <div style="font-size:0.6rem;color:var(--gold);font-weight:800;" id="pID"></div>
+      <h1 id="pPlot" style="font-family:'Playfair Display';font-size:1.8rem;color:var(--gold);"></h1>
+      <div id="pLocText" style="font-size:0.75rem;color:#7A9BB5;margin-bottom:15px;"></div>
+      <div id="pPrice" style="font-size:1.5rem;font-weight:700;">฿0</div>
       <div class="grid">
-        <div id="w-bb" class="field-wrap"><div class="label">Bed / Bath</div><div class="val" id="vBB"></div></div>
-        <div id="w-landW" class="field-wrap"><div class="label">Land Size (sq.w)</div><div class="val" id="vLandW"></div></div>
-        <div id="w-land" class="field-wrap"><div class="label">Land Size (m²)</div><div class="val" id="vLand"></div></div>
-        <div id="w-living" class="field-wrap"><div class="label">Living Area (m²)</div><div class="val" id="vLiving"></div></div>
-        <div id="w-pricesq" class="field-wrap"><div class="label">Price per Sq.m</div><div class="val gold-txt" id="vPriceSq"></div></div>
+        <div id="w-bb" class="field-wrap"><div class="label">Bed/Bath</div><div class="val" id="vBB"></div></div>
+        <div id="w-living" class="field-wrap"><div class="label">Living Area</div><div class="val" id="vLiving"></div></div>
       </div>
     </div>
 
     <div class="info-card" id="card-specs">
       <h2 class="section-title">Specifications</h2>
-      <div class="grid">
+      <div class="grid" id="specsGrid">
         <div id="w-status" class="field-wrap"><div class="label">Status</div><div class="val" id="vStatus"></div></div>
         <div id="w-furnish" class="field-wrap"><div class="label">Furnishing</div><div class="val" id="vFurnish"></div></div>
-        <div id="w-district" class="field-wrap"><div class="label">District</div><div class="val" id="vDistrict"></div></div>
-        <div id="w-sub" class="field-wrap"><div class="label">Sub-district</div><div class="val" id="vSubDistrict"></div></div>
-        <div id="w-zone" class="field-wrap"><div class="label">Zone</div><div class="val gold-txt" id="vZone"></div></div>
-        <div id="w-poolsys" class="field-wrap"><div class="label">Pool System</div><div class="val" id="vPoolSys"></div></div>
-        <div id="w-poolinfo" class="field-wrap"><div class="label">Pool Info</div><div class="val" id="vPoolInfo"></div></div>
-        <div id="w-kitchen" class="field-wrap"><div class="label">Kitchen</div><div class="val" id="vKitchen"></div></div>
-        <div id="w-parking" class="field-wrap"><div class="label">Parking</div><div class="val" id="vParking"></div></div>
-        <div id="w-direct" class="field-wrap"><div class="label">Facing</div><div class="val" id="vDirect"></div></div>
-        <div id="w-util" class="field-wrap" style="grid-column: span 2;"><div class="label">Utility Info</div><div class="val" id="vUtil"></div></div>
       </div>
     </div>
 
-    <div id="pdfFloorPlan" class="pdf-floorplan-preview">
-      <h2 class="section-title" style="text-align: left; margin-bottom: 15px;">Asset Floor Plan</h2>
-      <img id="pdfFPImg" src="" alt="Floor Plan">
+    <div id="pdfFPBox">
+      <h2 class="section-title">Floor Plan</h2>
+      <img id="fpImg" src="">
     </div>
 
-    <div class="info-card" id="card-fees" style="border-left:4px solid var(--gold);">
-      <h2 class="section-title">Ownership & Fees</h2>
-      <div class="grid">
-        <div id="w-feeRate" class="field-wrap"><div class="label">Common Fee Rate</div><div class="val" id="vFeeRate"></div></div>
-        <div id="w-feeM" class="field-wrap"><div class="label">Monthly Total</div><div class="val" id="vFeeM"></div></div>
-        <div id="w-feeY" class="field-wrap"><div class="label">Yearly Total</div><div class="val gold-txt" id="vFeeY"></div></div>
-        <div id="w-owner" class="field-wrap" style="grid-column: span 2;"><div class="label">Ownership</div><div class="val" id="vOwner"></div></div>
-        <div id="w-transfer" class="field-wrap"><div class="label">Transfer Exp.</div><div class="val" id="vTransfer"></div></div>
-      </div>
+    <div class="info-card" id="card-desc"><h2 class="section-title">Description</h2><p id="vDesc" style="font-size:0.85rem;white-space:pre-line;"></p></div>
+
+    <div class="info-card" id="mapSection">
+      <h2 class="section-title">Location</h2>
+      <div id="leafletMap"></div>
+      <a id="navLink" href="" target="_blank" class="btn-nav">Start GPS Navigation</a>
     </div>
 
-    <div class="info-card" id="card-desc"><h2 class="section-title">Description</h2><p id="vDesc" style="font-size: 0.82rem; line-height: 1.8; color: #CCC; font-weight: 300; white-space: pre-line;"></p></div>
-    <div class="info-card" id="mapSection"><h2 class="section-title">Location & Navigator</h2><div id="leafletMap"></div><a id="navLink" href="" target="_blank" class="btn-nav"><i class="fas fa-location-arrow"></i> Start GPS Navigation</a></div>
-
-    <div class="info-card" id="amenitiesSection">
-      <h2 class="section-title">Nearby Lifestyle</h2>
-      <div id="nearbyGrid" class="nearby-grid"></div>
-      <div style="margin-top: 25px;">
-        <a id="pdfBar" href="#" target="_blank" class="pdf-bar"><span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span><i class="fas fa-file-pdf text-red-600 text-xl"></i></a>
-        <div class="print-bar" onclick="window.print()"><span>Download Property Summary (PDF)</span><i class="fas fa-file-download"></i></div>
-      </div>
+    <div class="print-bar" onclick="window.print()">
+      <span>Download Summary (PDF)</span>
+      <i class="fas fa-file-download"></i>
     </div>
   </main>
 
-  <div class="print-identity-container print-footer-v4">
-    <div class="qr-block">
-      <img src="line-qr.png" class="qr-img-file" onerror="this.style.display='none'">
-      <div class="qr-tag">SCAN FOR LINE CONTACT</div>
+  <div class="print-only p-footer">
+    <img src="line-qr.png" class="qr-img" onerror="this.style.display='none'">
+    <div class="qr-txt">SCAN FOR LINE CONTACT</div>
+    <img src="brand-logo.png" style="height:35px; margin-top:15px;">
+    <div class="p-brand" style="font-size:12pt;">HUAHIN.PROPERTIES</div>
+    <div class="p-contact-row" style="border:none;">
+      <span class="get-phone">...</span> | <span class="get-email">...</span> | <span class="get-line">...</span>
     </div>
-    <img src="brand-logo.png" style="height:40px; margin-bottom:8px;">
-    <div class="print-brand-center" style="font-size:12pt; margin-bottom:10px;">HUAHIN.PROPERTIES</div>
-    <div class="print-contact-row" style="border-bottom:none;">
-      <div class="p-unit"><i class="fas fa-phone-alt"></i> <span class="d-phone">...</span></div>
-      <div class="p-unit"><i class="fas fa-envelope"></i> <span class="d-email">...</span></div>
-      <div class="p-unit"><i class="fab fa-line"></i> <span class="d-line">...</span></div>
-    </div>
-    <div style="font-size: 7pt; color: #aaa; margin-top: 15px;">&copy; 2026 HuaHin.Properties | Asset: <span id="pID-f"></span> | Printed on <span id="printDate"></span></div>
+    <div style="font-size:7pt; color:#999; margin-top:10px;">&copy; 2026 HuaHin.Properties | Printed on <span id="printDate"></span></div>
   </div>
 </div>
 
-<a id="adminEditBtn" href="#" class="admin-float"><i class="fas fa-pencil-alt"></i></a>
 <div class="footer"><a href="https://line.me/R/ti/p/@qap7218t" class="btn-chat">💬 Live Chat Concierge</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyOnZc6s05eGvHR5XmRnRPAat8vNZpf8cFhL2GiAFjWld-2OBf2OqgP07RU07UTZgDXxA/exec';
 const hpId=new URLSearchParams(window.location.search).get('id');
-const LANDMARKS=[ {name:"Hua Hin Beach",lat:12.5696,lon:99.9602}, {name:"Bluport Mall",lat:12.5518,lon:99.9631}, {name:"Bangkok Hospital",lat:12.5532,lon:99.9610}, {name:"Cicada Market",lat:12.5342,lon:99.9655}, {name:"Market Village",lat:12.5598,lon:99.9602}, {name:"Night Market",lat:12.5714,lon:99.9575}, {name:"Vana Nava Water Park",lat:12.5273,lon:99.9642}, {name:"Black Mountain Golf",lat:12.6146,lon:99.8924}, {name:"Banyan Golf Club",lat:12.5124,lon:99.9145}, {name:"True Arena Sports",lat:12.5365,lon:99.9585}, {name:"Hua Hin Airport",lat:12.6366,lon:99.9515}, {name:"Hua Hin Railway St.",lat:12.5674,lon:99.9548} ];
-let images=[], idx=0, leafletMap=null;
+let images=[], idx=0;
 
-document.getElementById('printDate').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
-
-function hideSplash() { const s = document.getElementById('pageSplash'); if(s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 500); } }
-function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+document.getElementById('printDate').textContent = new Date().toLocaleDateString();
 
 async function init(){
-  const isLoggedIn = localStorage.getItem('admin_session') === 'active';
-  if(!hpId) { hideSplash(); return; }
+  if(!hpId) return;
   try{
     const res = await fetch(`${SCRIPT_URL}?mode=getUnitDetail&id=${hpId}`);
     const json = await res.json();
-    if(json.ok){
-      renderData(json.data);
-      document.getElementById('pID-f').textContent = json.data.HP_ID;
-      
-      // 🎯 Sync Floor Plan Image to PDF Preview
-      if(json.data.FloorPlan_PDF && json.data.FloorPlan_PDF.startsWith('http')) {
-          document.getElementById('pdfFPImg').src = json.data.FloorPlan_PDF;
-      } else {
-          document.getElementById('pdfFloorPlan').style.display = 'none';
-      }
+    if(json.ok) renderData(json.data);
 
-      // 🎯 ดึงข้อมูลติดต่อจาก Metadata (Sheet Settings)
-      const metaRes = await fetch(`${SCRIPT_URL}?mode=getAddContext`);
-      const metaJson = await metaRes.json();
-      if(metaJson.ok) {
-        const opt = metaJson.options;
-        const ph = opt.Contact_Phone || "-";
-        const em = opt.Contact_Email || "-";
-        const li = opt.Contact_Line || "-";
-        const wa = opt.Contact_WhatsApp || "-";
-        
-        document.querySelectorAll('.d-phone').forEach(el => el.textContent = ph);
-        document.querySelectorAll('.d-email').forEach(el => el.textContent = em);
-        document.querySelectorAll('.d-line').forEach(el => el.textContent = li);
-        document.querySelectorAll('.d-wa').forEach(el => el.textContent = wa);
-      }
-      if(isLoggedIn) { const eb = document.getElementById('adminEditBtn'); eb.href=`edit.html?id=${hpId}`; eb.style.display='flex'; }
+    // 🎯 ดึงข้อมูลติดต่อจาก Settings
+    const metaRes = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({mode:'getAddContext'}) });
+    const metaJson = await metaRes.json();
+    if(metaJson.ok){
+      const o = metaJson.options;
+      document.querySelectorAll('.get-phone').forEach(el => el.textContent = o.Contact_Phone);
+      document.querySelectorAll('.get-email').forEach(el => el.textContent = o.Contact_Email);
+      document.querySelectorAll('.get-line').forEach(el => el.textContent = o.Contact_Line);
+      document.querySelectorAll('.get-wa').forEach(el => el.textContent = o.Contact_WhatsApp);
     }
-    hideSplash();
-  }catch(e){ hideSplash(); }
+    document.getElementById('pageSplash').style.display='none';
+  }catch(e){ document.getElementById('pageSplash').style.display='none'; }
 }
 
 function syncField(valId, wrapId, value) {
-  const el = document.getElementById(valId), wrap = document.getElementById(wrapId);
-  if (!el || !wrap) return false;
-  if (value && value !== "-" && value !== "0" && value !== "" && value !== "undefined") {
-    el.textContent = value; wrap.classList.add('has-val');
+  const el=document.getElementById(valId), wrap=document.getElementById(wrapId);
+  if(value && value!=="-" && value!==""){
+    el.textContent=value; wrap.classList.add('has-val');
     wrap.closest('.info-card').classList.add('has-data');
-    return true;
   }
-  wrap.classList.remove('has-val'); return false;
 }
 
 function renderData(u){
-  const p=safeNum(u.Sale_Price||0), a=safeNum(u.Living_Area_sq_m||0);
   document.getElementById('pID').textContent = u.HP_ID;
-  document.getElementById('pPlot').textContent = `Plot ${u.Plot||'-'}`;
-  document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict||''}, ${u.District||''} (${u.Zone||''})`;
-  document.getElementById('pPrice').textContent = p ? `฿${Math.round(p).toLocaleString()}` : 'Price on Request';
-  syncField('vBB', 'w-bb', `${u.Bedrooms||''} Bed | ${u.Bathrooms||''} Bath`);
-  syncField('vLandW', 'w-landW', u.Land_Area_sq_w ? `${u.Land_Area_sq_w} sq.w` : "");
-  syncField('vLand', 'w-land', u.Land_Area_sq_m ? `${u.Land_Area_sq_m} m²` : "");
-  syncField('vLiving', 'w-living', a ? `${a} m²` : "");
-  if(p && a) syncField('vPriceSq', 'w-pricesq', `฿${Math.round(p/a).toLocaleString()} / m²`);
-  syncField('vStatus', 'w-status', u.Status); syncField('vFurnish', 'w-furnish', u.Furnishing);
-  syncField('vDistrict', 'w-district', u.District); syncField('vSubDistrict', 'w-sub', u.SubDistrict);
-  syncField('vZone', 'w-zone', u.Zone); syncField('vPoolSys', 'w-poolsys', u.Pool_System);
-  if (u.Pool_Size || u.Pool_Depth) syncField('vPoolInfo', 'w-poolinfo', `${u.Pool_Size || '-'} (${u.Pool_Depth || '-'})`);
-  syncField('vKitchen', 'w-kitchen', u.Kitchen_Type); syncField('vParking', 'w-parking', u.Parking);
-  syncField('vDirect', 'w-direct', u.Direction); syncField('vUtil', 'w-util', u.Electricity ? `Elec: ${u.Electricity} | Water: ${u.Water_Source||''}` : "");
-  const feeRate = parseFloat(u.Common_Fee_Rate) || 0;
-  if(feeRate > 0 && a > 0) {
-      syncField('vFeeRate', 'w-feeRate', `฿${feeRate.toLocaleString()} / m²`);
-      const m = Math.round(feeRate * a); syncField('vFeeM', 'w-feeM', `฿${m.toLocaleString()} / Mo`); syncField('vFeeY', 'w-feeY', `฿${(m * 12).toLocaleString()} / Yr`);
-  }
-  syncField('vOwner', 'w-owner', u.Ownership_Type ? `${u.Ownership_Type} (${u.Land_Title_Deed_Type||''})` : "");
-  syncField('vTransfer', 'w-transfer', u.Transfer_Expenses);
-  const vDesc = document.getElementById('vDesc'); if(u.Description) { vDesc.textContent = u.Description; vDesc.closest('.info-card').classList.add('has-data'); }
-  if(u.Coordinates && u.Coordinates.includes(',')) {
-      const [la, lo] = u.Coordinates.split(',').map(Number);
-      document.getElementById('navLink').href = `http://googleusercontent.com/maps.google.com/8{la},${lo}`;
-      if(u.Map_Visibility !== 'Hide') {
-          document.getElementById('mapSection').style.display = 'block'; document.getElementById('mapSection').classList.add('has-data');
-          if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
-      }
-      document.getElementById('amenitiesSection').classList.add('has-data');
-      document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(la, lo, loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
-  }
-  if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) { const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex'; document.getElementById('amenitiesSection').classList.add('has-data'); }
-  images = u.Album_Image ? u.Album_Image.split(',').map(x=>x.trim()).filter(Boolean) : [u.Thumbnail_Image];
+  document.getElementById('pPlot').textContent = `Plot ${u.Plot}`;
+  document.getElementById('pLocText').textContent = `📍 ${u.SubDistrict}, ${u.District}`;
+  document.getElementById('pPrice').textContent = `฿${Number(u.Sale_Price).toLocaleString()}`;
+  syncField('vBB','w-bb', `${u.Bedrooms} Bed | ${u.Bathrooms} Bath`);
+  syncField('vLiving','w-living', `${u.Living_Area_sq_m} m²`);
+  syncField('vStatus','w-status', u.Status);
+  syncField('vFurnish','w-furnish', u.Furnishing);
+  document.getElementById('vDesc').textContent = u.Description;
+  
+  // Floor Plan Image
+  if(u.FloorPlan_PDF) document.getElementById('fpImg').src = u.FloorPlan_PDF;
+  else document.getElementById('pdfFPBox').style.display='none';
+
+  images = u.Album_Image ? u.Album_Image.split(',').map(s=>s.trim()) : [u.Thumbnail_Image];
   renderThumbs(); setMain(0);
 }
-function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
-function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
-function setMain(i){ idx=(i+images.length)%images.length; document.getElementById('mainImg').src=images[idx]; document.getElementById('countLabel').textContent=`${idx+1} / ${images.length}`; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===idx)); }
-function changeSlide(n){setMain(idx+n);}
-function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((src,i)=> `<img class="thumb" src="${src}" onclick="setMain(${i})" loading="lazy">`).join(''); }
+
+function renderThumbs(){ document.getElementById('thumbStrip').innerHTML=images.map((img,i)=>`<img class="thumb" src="${img}" onclick="setMain(${i})">`).join(''); }
+function setMain(i){ idx=i; document.getElementById('mainImg').src=images[idx]; document.querySelectorAll('.thumb').forEach((t,k)=>t.classList.toggle('active',k===i)); document.getElementById('countLabel').textContent=`${i+1}/${images.length}`; }
+function changeSlide(n){ idx=(idx+n+images.length)%images.length; setMain(idx); }
+
 init();
 </script>
 </body>
