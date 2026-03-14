@@ -11,7 +11,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{background-color:var(--navy-dark);color:#FDFAF5;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
     
-    /* 🎯 Updated Custom Loader Styling */
+    /* 🎯 New Custom Loader Styling */
     #pageSplash { position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.5s ease-out; }
     .loader-sub-text { color: #FFFFFF; font-size: 9px; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; opacity: 0.8; font-family: 'Montserrat'; }
     .loader-icons { font-size: 2.2rem; margin-bottom: 15px; display: flex; gap: 10px; }
@@ -59,7 +59,11 @@
     .nearby-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
     .loc-name{font-size:0.78rem;font-weight:300}
     .loc-dist{font-size:0.75rem;font-weight:400;color:var(--gold)}
-    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; }
+    
+    .pdf-bar { display: none; background: #FFFFFF; border: 1.5px solid var(--border); padding: 18px 20px; border-radius: 15px; text-decoration: none; align-items: center; justify-content: space-between; margin-top: 15px; margin-bottom: 10px; }
+    /* 🎯 ปุ่มใหม่สำหรับพิมพ์ใบสรุป */
+    .print-bar { background: var(--gold); border: 1.5px solid var(--gold); padding: 18px 20px; border-radius: 15px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--navy-dark); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; }
+
     .share-stack { margin-top: 25px; text-align: center; background: rgba(11, 24, 41, 0.8); padding: 20px 10px; border-radius: 20px; border: 1px solid var(--border); position: relative; }
     .share-wrapper { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 30px; }
     .share-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 10px 0; }
@@ -75,6 +79,27 @@
     .btn-chat{background:var(--gold);color:#060F1A;text-decoration:none;padding:15px;border-radius:4px;display:block;text-align:center;font-size:0.88rem;letter-spacing:2px;text-transform:uppercase;font-weight:800}
     .admin-float { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; background: var(--gold); border: 2px solid var(--navy-dark); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--navy-dark); font-size: 20px; z-index: 9999; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     @media (min-width: 768px) { .nearby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; } }
+
+    /* 🎯 PRINT ENGINE - ตั้งค่าสำหรับตอนพิมพ์ PDF */
+    @media print {
+      @page { size: A4; margin: 1cm; }
+      body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+      header, .sidebar, .sidebar-overlay, .nav-arrow, .thumb-row, .tag-count, 
+      #mapSection, .share-stack, .footer, .admin-float, .print-bar, .pdf-bar { display: none !important; }
+      .gallery-container { margin-top: 0 !important; padding: 0 !important; }
+      .gallery-card { border: 1px solid #ccc !important; box-shadow: none !important; border-radius: 10px !important; }
+      .main-stage { aspect-ratio: 16/9 !important; }
+      .content { padding: 0 !important; margin-top: 20px !important; }
+      .info-card { background: #fff !important; border: 1px solid #ddd !important; padding: 15px !important; margin-bottom: 15px !important; display: block !important; page-break-inside: avoid; }
+      .section-title { color: var(--gold) !important; font-size: 10pt !important; border-bottom: 2px solid var(--gold) !important; }
+      .val { color: #000 !important; font-size: 11pt !important; font-weight: 700 !important; }
+      .label { color: #666 !important; font-size: 8pt !important; }
+      /* หัวกระดาษเอกสาร */
+      body::before {
+        content: "HUAHIN.PROPERTIES - PROPERTY FACT SHEET";
+        display: block; text-align: center; color: var(--gold); font-weight: 800; font-size: 16pt; margin-bottom: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -174,10 +199,19 @@
     <div class="info-card" id="amenitiesSection">
       <h2 class="section-title">Nearby Lifestyle (12 Locations)</h2>
       <div id="nearbyGrid" class="nearby-grid"></div>
-      <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
-        <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
-        <i class="fas fa-file-pdf text-red-600 text-xl"></i>
-      </a>
+      
+      <div style="margin-top: 20px;">
+        <a id="pdfBar" href="#" target="_blank" class="pdf-bar">
+          <span style="color:var(--navy);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Download Floor Plan PDF</span>
+          <i class="fas fa-file-pdf text-red-600 text-xl"></i>
+        </a>
+        
+        <div class="print-bar" onclick="window.print()">
+          <span>Save as Property Fact Sheet (PDF)</span>
+          <i class="fas fa-file-invoice"></i>
+        </div>
+      </div>
+
       <div class="share-stack">
         <div style="font-size: 11px; color: var(--gold); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-share-nodes"></i> SHARE THIS ASSET</div>
         <div class="share-wrapper">
@@ -253,10 +287,11 @@ async function init(){
   }catch(e){ hideSplash(); }
 }
 init();
-// Rest of helper functions remain 100% same as original...
+
 function sH(p){ const u = window.location.href; const t = `Hua Hin Property: ${hpId}`; if(p==='fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank'); if(p==='msgr') window.open(`fb-messenger://share/?link=${u}`,'_blank'); if(p==='wa') window.open(`https://api.whatsapp.com/send?text=${t} ${u}`,'_blank'); if(p==='tg') window.open(`https://t.me/share/url?url=${u}&text=${t}`,'_blank'); if(p==='line') window.open(`https://social-plugins.line.me/lineit/share?url=${u}`,'_blank'); if(p==='mail') window.open(`mailto:?subject=${t}&body=${u}`); if(p==='copy'){ navigator.clipboard.writeText(u); alert('Link Copied! ✅'); } if(p==='native'){ if(navigator.share){ navigator.share({title:t, url:u}); } } }
 function safeNum(x){return parseFloat(String(x||'').replace(/[^0-9.\-]/g,''))||0;}
 function getDistance(lat1,lon1,lat2,lon2){ const R=6371; const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.35; }
+
 function renderData(u){
   const p=safeNum(u.Sale_Price||0); const a=safeNum(u.Living_Area_sq_m||0);
   document.getElementById('pID').textContent = u.HP_ID;
@@ -289,7 +324,6 @@ function renderData(u){
           document.getElementById('mapSection').style.display = 'block'; document.getElementById('mapSection').classList.add('has-data');
           if(!leafletMap) { leafletMap = L.map('leafletMap',{zoomControl:false}).setView([la, lo], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap); L.marker([la, lo]).addTo(leafletMap); }
       }
-      document.getElementById('amenitiesSection').classList.add('has-data');
       document.getElementById('nearbyGrid').innerHTML = LANDMARKS.map(loc => { const d = getDistance(la, lo, loc.lat, loc.lon); return `<div class="nearby-item"><div class="loc-name">${loc.name}</div><div class="loc-dist">${d.toFixed(1)} km</div></div>`; }).join('');
   }
   if(u.FloorPlan_PDF && u.FloorPlan_PDF.startsWith('http')) { const pb = document.getElementById('pdfBar'); pb.href = u.FloorPlan_PDF; pb.style.display = 'flex'; document.getElementById('amenitiesSection').classList.add('has-data'); }
